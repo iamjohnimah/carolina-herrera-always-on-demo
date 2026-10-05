@@ -17131,7 +17131,7 @@ function _u() {
 			"size",
 			"compare",
 			"look"
-		].includes(e) ? r(e === "vto" && !ce ? "profile" : e) : a(e);
+		].includes(e) ? r(e) : a(e);
 	}
 	(0, d.useEffect)(() => {
 		if (ce) {
@@ -17417,7 +17417,7 @@ function _u() {
 						})]
 					}), /* @__PURE__ */ (0, y.jsxs)("div", {
 						className: "partner-dialog-body",
-						children: [n !== "profile" && /* @__PURE__ */ (0, y.jsx)("div", {
+						children: [n !== "profile" && n !== "vto" && n !== "size" && /* @__PURE__ */ (0, y.jsx)("div", {
 							className: "partner-connection-status",
 							children: ie ? "Connecting your live demo model…" : ce ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("span", { children: [
 								"Viewing on ",
@@ -17469,7 +17469,7 @@ function _u() {
 							product: M,
 							selectedSize: fe,
 							onSize: pe
-						}) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("nav", {
+						}) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [G.theme !== "ch" && /* @__PURE__ */ (0, y.jsxs)("nav", {
 							className: "partner-tabs",
 							children: [
 								/* @__PURE__ */ (0, y.jsx)("button", {
@@ -17502,7 +17502,7 @@ function _u() {
 								size: fe,
 								onSize: pe
 							}, M.id),
-							/* @__PURE__ */ (0, y.jsx)(Ql, {
+							G.theme !== "ch" && /* @__PURE__ */ (0, y.jsx)(Ql, {
 								product: M,
 								size: fe,
 								onSize: pe
@@ -17514,10 +17514,14 @@ function _u() {
 							})
 						] }) : /* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "partner-product-view",
-							children: [/* @__PURE__ */ (0, y.jsx)(Ni, {
+							children: [ce ? /* @__PURE__ */ (0, y.jsx)(Ni, {
 								product: M,
 								selectedSize: fe
-							}), /* @__PURE__ */ (0, y.jsxs)("div", {
+							}) : /* @__PURE__ */ (0, y.jsxs)("div", {
+								className: "ch-tryon-connecting",
+								role: "status",
+								children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: "Preparing your try-on…" }), /* @__PURE__ */ (0, y.jsx)("p", { children: oe || "Connecting your demo model." })]
+							}), G.theme !== "ch" && /* @__PURE__ */ (0, y.jsxs)("div", {
 								className: "partner-product-copy",
 								children: [
 									/* @__PURE__ */ (0, y.jsx)("small", { children: "YOUR PERSPECTIVE" }),
