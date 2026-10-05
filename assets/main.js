@@ -686,21 +686,21 @@ function A(e, t, n = !1) {
 	let i = typeof t == "string" ? t : le(t);
 	return i = i.replace(/ $/, "%20"), !n && D.test(i) && (i = r + i), new URL(i, r);
 }
-function j(e, t, n = "/") {
-	return M(e, t, n, !1);
+function fe(e, t, n = "/") {
+	return j(e, t, n, !1);
 }
-function M(e, t, n, r, i) {
-	let a = De((typeof t == "string" ? ue(t) : t).pathname || "/", n);
+function j(e, t, n, r, i) {
+	let a = Oe((typeof t == "string" ? ue(t) : t).pathname || "/", n);
 	if (a == null) return null;
-	let o = i ?? fe(e), s = null, c = Ee(a);
-	for (let e = 0; s == null && e < o.length; ++e) s = Se(o[e], c, r);
+	let o = i ?? pe(e), s = null, c = De(a);
+	for (let e = 0; s == null && e < o.length; ++e) s = Ce(o[e], c, r);
 	return s;
 }
-function fe(e) {
-	let t = pe(e);
-	return he(t), t;
+function pe(e) {
+	let t = me(e);
+	return ge(t), t;
 }
-function pe(e, t = [], n = [], r = "", i = !1) {
+function me(e, t = [], n = [], r = "", i = !1) {
 	let a = (e, a, o = i, s) => {
 		let c = {
 			relativePath: s === void 0 ? e.path || "" : s,
@@ -712,12 +712,12 @@ function pe(e, t = [], n = [], r = "", i = !1) {
 			if (!c.relativePath.startsWith(r) && o) return;
 			O(c.relativePath.startsWith(r), `Absolute route path "${c.relativePath}" nested under path "${r}" is not valid. An absolute child route path must start with the combined path of all its parent routes.`), c.relativePath = c.relativePath.slice(r.length);
 		}
-		let l = Fe([r, c.relativePath]), u = n.concat(c);
-		e.children && e.children.length > 0 && (O(e.index !== !0, `Index routes must not have child routes. Please remove all child routes from route path "${l}".`), pe(e.children, t, u, l, o)), (e.path != null || e.index) && t.push({
+		let l = Ie([r, c.relativePath]), u = n.concat(c);
+		e.children && e.children.length > 0 && (O(e.index !== !0, `Index routes must not have child routes. Please remove all child routes from route path "${l}".`), me(e.children, t, u, l, o)), (e.path != null || e.index) && t.push({
 			path: l,
-			score: F(l, e.index),
+			score: P(l, e.index),
 			routesMeta: u.map((e, t) => {
-				let [n, r] = Te(e.relativePath, e.caseSensitive, t === u.length - 1);
+				let [n, r] = Ee(e.relativePath, e.caseSensitive, t === u.length - 1);
 				return {
 					...e,
 					matcher: n,
@@ -728,68 +728,68 @@ function pe(e, t = [], n = [], r = "", i = !1) {
 	};
 	return e.forEach((e, t) => {
 		if (e.path === "" || !e.path?.includes("?")) a(e, t);
-		else for (let n of me(e.path)) a(e, t, !0, n);
+		else for (let n of he(e.path)) a(e, t, !0, n);
 	}), t;
 }
-function me(e) {
+function he(e) {
 	let t = e.split("/");
 	if (t.length === 0) return [];
 	let [n, ...r] = t, i = n.endsWith("?"), a = n.replace(/\?$/, "");
 	if (r.length === 0) return i ? [a, ""] : [a];
-	let o = me(r.join("/")), s = [];
+	let o = he(r.join("/")), s = [];
 	return s.push(...o.map((e) => e === "" ? a : [a, e].join("/"))), i && s.push(...o), s.map((t) => e.startsWith("/") && t === "" ? "/" : t);
 }
-function he(e) {
-	e.sort((e, t) => e.score === t.score ? xe(e.routesMeta.map((e) => e.childrenIndex), t.routesMeta.map((e) => e.childrenIndex)) : t.score - e.score);
+function ge(e) {
+	e.sort((e, t) => e.score === t.score ? Se(e.routesMeta.map((e) => e.childrenIndex), t.routesMeta.map((e) => e.childrenIndex)) : t.score - e.score);
 }
-var N = /^:[\w-]+$/, P = 3, ge = 2, _e = 1, ve = 10, ye = -2, be = (e) => e === "*";
-function F(e, t) {
+var M = /^:[\w-]+$/, N = 3, _e = 2, ve = 1, ye = 10, be = -2, xe = (e) => e === "*";
+function P(e, t) {
 	let n = e.split("/"), r = n.length;
-	return n.some(be) && (r += ye), t && (r += ge), n.filter((e) => !be(e)).reduce((e, t) => e + (N.test(t) ? P : t === "" ? _e : ve), r);
+	return n.some(xe) && (r += be), t && (r += _e), n.filter((e) => !xe(e)).reduce((e, t) => e + (M.test(t) ? N : t === "" ? ve : ye), r);
 }
-function xe(e, t) {
+function Se(e, t) {
 	return e.length === t.length && e.slice(0, -1).every((e, n) => e === t[n]) ? e[e.length - 1] - t[t.length - 1] : 0;
 }
-function Se(e, t, n = !1) {
+function Ce(e, t, n = !1) {
 	let { routesMeta: r } = e, i = {}, a = "/", o = [];
 	for (let e = 0; e < r.length; ++e) {
 		let s = r[e], c = e === r.length - 1, l = a === "/" ? t : t.slice(a.length) || "/", u = {
 			path: s.relativePath,
 			caseSensitive: s.caseSensitive,
 			end: c
-		}, d = s.matcher && s.compiledParams ? we(u, l, s.matcher, s.compiledParams) : Ce(u, l), f = s.route;
-		if (!d && c && n && !r[r.length - 1].route.index && (d = Ce({
+		}, d = s.matcher && s.compiledParams ? Te(u, l, s.matcher, s.compiledParams) : we(u, l), f = s.route;
+		if (!d && c && n && !r[r.length - 1].route.index && (d = we({
 			path: s.relativePath,
 			caseSensitive: s.caseSensitive,
 			end: !1
 		}, l)), !d) return null;
 		Object.assign(i, d.params), o.push({
 			params: i,
-			pathname: Fe([a, d.pathname]),
-			pathnameBase: Le(Fe([a, d.pathnameBase])),
+			pathname: Ie([a, d.pathname]),
+			pathnameBase: Re(Ie([a, d.pathnameBase])),
 			route: f
-		}), d.pathnameBase !== "/" && (a = Fe([a, d.pathnameBase]));
+		}), d.pathnameBase !== "/" && (a = Ie([a, d.pathnameBase]));
 	}
 	return o;
 }
-function Ce(e, t) {
+function we(e, t) {
 	typeof e == "string" && (e = {
 		path: e,
 		caseSensitive: !1,
 		end: !0
 	});
-	let [n, r] = Te(e.path, e.caseSensitive, e.end);
-	return we(e, t, n, r);
+	let [n, r] = Ee(e.path, e.caseSensitive, e.end);
+	return Te(e, t, n, r);
 }
-function we(e, t, n, r) {
+function Te(e, t, n, r) {
 	let i = t.match(n);
 	if (!i) return null;
-	let a = i[0], o = Ie(a, 1), s = i.slice(1);
+	let a = i[0], o = Le(a, 1), s = i.slice(1);
 	return {
 		params: r.reduce((e, { paramName: t, isOptional: n }, r) => {
 			if (t === "*") {
 				let e = s[r] || "";
-				o = Ie(a.slice(0, a.length - e.length), 1);
+				o = Le(a.slice(0, a.length - e.length), 1);
 			}
 			let i = s[r];
 			return e[t] = n && !i ? void 0 : (i || "").replace(/%2F/g, "/"), e;
@@ -799,7 +799,7 @@ function we(e, t, n, r) {
 		pattern: e
 	};
 }
-function Te(e, t = !1, n = !0) {
+function Ee(e, t = !1, n = !0) {
 	oe(e === "*" || !e.endsWith("*") || e.endsWith("/*"), `Route path "${e}" will be treated as if it were "${e.replace(/\*$/, "/*")}" because the \`*\` character must always follow a \`/\` in the pattern. To get rid of this warning, please change the route path to "${e.replace(/\*$/, "/*")}".`);
 	let r = [], i = "^" + e.replace(/\/*\*?$/, "").replace(/^\/*/, "/").replace(/[\\.*+^${}|()[\]]/g, "\\$&").replace(/\/:([\w-]+)(\?)?/g, (e, t, n, i, a) => {
 		if (r.push({
@@ -813,46 +813,46 @@ function Te(e, t = !1, n = !0) {
 	}).replace(/\/([\w-]+)\?(\/|$)/g, "(/$1)?$2");
 	return e.endsWith("*") ? (r.push({ paramName: "*" }), i += e === "*" || e === "/*" ? "(.*)$" : "(?:\\/(.+)|\\/*)$") : n ? i += "\\/*$" : e !== "" && e !== "/" && (i += "(?:(?=\\/|$))"), [new RegExp(i, t ? void 0 : "i"), r];
 }
-function Ee(e) {
+function De(e) {
 	try {
 		return e.split("/").map((e) => decodeURIComponent(e).replace(/\//g, "%2F")).join("/");
 	} catch (t) {
 		return oe(!1, `The URL path "${e}" could not be decoded because it is a malformed URL segment. This is probably due to a bad percent encoding (${t}).`), e;
 	}
 }
-function De(e, t) {
+function Oe(e, t) {
 	if (t === "/") return e;
 	if (!e.toLowerCase().startsWith(t.toLowerCase())) return null;
 	let n = t.endsWith("/") ? t.length - 1 : t.length, r = e.charAt(n);
 	return r && r !== "/" ? null : e.slice(n) || "/";
 }
-function Oe(e, t = "/") {
+function ke(e, t = "/") {
 	let { pathname: n, search: r = "", hash: i = "" } = typeof e == "string" ? ue(e) : e, a;
-	return n ? (n = Pe(n), a = n.startsWith("/") || n.startsWith("\\") ? ke(n.substring(1), "/") : ke(n, t)) : a = t, {
+	return n ? (n = Fe(n), a = n.startsWith("/") || n.startsWith("\\") ? Ae(n.substring(1), "/") : Ae(n, t)) : a = t, {
 		pathname: a,
-		search: Re(r),
-		hash: ze(i)
+		search: ze(r),
+		hash: Be(i)
 	};
 }
-function ke(e, t) {
-	let n = Ie(t).split("/");
+function Ae(e, t) {
+	let n = Le(t).split("/");
 	return e.split("/").forEach((e) => {
 		e === ".." ? n.length > 1 && n.pop() : e !== "." && n.push(e);
 	}), n.length > 1 ? n.join("/") : "/";
 }
-function Ae(e, t, n, r) {
+function je(e, t, n, r) {
 	return `Cannot include a '${e}' character in a manually specified \`to.${t}\` field [${JSON.stringify(r)}].  Please separate it out to the \`to.${n}\` field. Alternatively you may provide the full path as a string in <Link to="..."> and the router will parse it for you.`;
 }
-function je(e) {
+function Me(e) {
 	return e.filter((e, t) => t === 0 || e.route.path && e.route.path.length > 0);
 }
-function Me(e) {
-	let t = je(e);
+function Ne(e) {
+	let t = Me(e);
 	return t.map((e, n) => n === t.length - 1 ? e.pathname : e.pathnameBase);
 }
-function Ne(e, t, n, r = !1) {
+function Pe(e, t, n, r = !1) {
 	let i;
-	typeof e == "string" ? i = ue(e) : (i = { ...e }, O(!i.pathname || !i.pathname.includes("?"), Ae("?", "pathname", "search", i)), O(!i.pathname || !i.pathname.includes("#"), Ae("#", "pathname", "hash", i)), O(!i.search || !i.search.includes("#"), Ae("#", "search", "hash", i)));
+	typeof e == "string" ? i = ue(e) : (i = { ...e }, O(!i.pathname || !i.pathname.includes("?"), je("?", "pathname", "search", i)), O(!i.pathname || !i.pathname.includes("#"), je("#", "pathname", "hash", i)), O(!i.search || !i.search.includes("#"), je("#", "search", "hash", i)));
 	let a = e === "" || i.pathname === "", o = a ? "/" : i.pathname, s;
 	if (o == null) s = n;
 	else {
@@ -864,28 +864,28 @@ function Ne(e, t, n, r = !1) {
 		}
 		s = e >= 0 ? t[e] : "/";
 	}
-	let c = Oe(i, s), l = o && o !== "/" && o.endsWith("/"), u = (a || o === ".") && n.endsWith("/");
+	let c = ke(i, s), l = o && o !== "/" && o.endsWith("/"), u = (a || o === ".") && n.endsWith("/");
 	return !c.pathname.endsWith("/") && (l || u) && (c.pathname += "/"), c;
 }
-var Pe = (e) => e.replace(/[\\/]{2,}/g, "/"), Fe = (e) => Pe(e.join("/"));
-function Ie(e, t = 0) {
+var Fe = (e) => e.replace(/[\\/]{2,}/g, "/"), Ie = (e) => Fe(e.join("/"));
+function Le(e, t = 0) {
 	let n = e.length;
 	for (; n > t && e.charCodeAt(n - 1) === 47;) n--;
 	return n === e.length ? e : e.slice(0, n);
 }
-var Le = (e) => Ie(e).replace(/^\/*/, "/"), Re = (e) => !e || e === "?" ? "" : e.startsWith("?") ? e : "?" + e, ze = (e) => !e || e === "#" ? "" : e.startsWith("#") ? e : "#" + e, Be = class {
+var Re = (e) => Le(e).replace(/^\/*/, "/"), ze = (e) => !e || e === "?" ? "" : e.startsWith("?") ? e : "?" + e, Be = (e) => !e || e === "#" ? "" : e.startsWith("#") ? e : "#" + e, Ve = class {
 	constructor(e, t, n, r = !1) {
 		this.status = e, this.statusText = t || "", this.internal = r, n instanceof Error ? (this.data = n.toString(), this.error = n) : this.data = n;
 	}
 };
-function Ve(e) {
+function He(e) {
 	return e != null && typeof e.status == "number" && typeof e.statusText == "string" && typeof e.internal == "boolean" && "data" in e;
 }
-function He(e) {
-	return Fe(e.map((e) => e.route.path).filter(Boolean)) || "/";
+function Ue(e) {
+	return Ie(e.map((e) => e.route.path).filter(Boolean)) || "/";
 }
-var Ue = typeof window < "u" && window.document !== void 0 && window.document.createElement !== void 0;
-function We(e, t) {
+var We = typeof window < "u" && window.document !== void 0 && window.document.createElement !== void 0;
+function Ge(e, t) {
 	let n = e;
 	if (typeof n != "string" || !E.test(n)) return {
 		absoluteURL: void 0,
@@ -893,8 +893,8 @@ function We(e, t) {
 		to: n
 	};
 	let r = n, i = !1;
-	if (Ue) try {
-		let e = new URL(window.location.href), r = D.test(n) ? new URL(ne(n, e.protocol)) : new URL(n), a = De(r.pathname, t);
+	if (We) try {
+		let e = new URL(window.location.href), r = D.test(n) ? new URL(ne(n, e.protocol)) : new URL(n), a = Oe(r.pathname, t);
 		r.origin === e.origin && a != null ? n = a + r.search + r.hash : i = !0;
 	} catch {
 		oe(!1, `<Link to="${n}"> contains an invalid URL which will probably break when clicked - please update to a valid URL path.`);
@@ -906,43 +906,43 @@ function We(e, t) {
 	};
 }
 Object.getOwnPropertyNames(Object.prototype).sort().join("\0");
-var Ge = new URL("http://localhost");
-function Ke(e) {
+var Ke = new URL("http://localhost");
+function qe(e) {
 	if (e.createURL) return e.createURL("/");
 	try {
-		return new URL(e.createHref("/"), Ge);
+		return new URL(e.createHref("/"), Ke);
 	} catch {
-		return Ge;
+		return Ke;
 	}
 }
-function qe(e, t) {
+function Je(e, t) {
 	return e.origin === t.origin && (e.origin !== "null" || e.protocol === t.protocol && e.host === t.host);
 }
-function Je(e, t) {
+function Ye(e, t) {
 	if (e.startsWith("//")) return !0;
 	let n = t.protocol.toLowerCase();
 	return e.toLowerCase().startsWith(n) ? t.host === "" || e.slice(n.length).startsWith("//") : !1;
 }
-function Ye(e, t, n, r) {
+function Xe(e, t, n, r) {
 	let i = null;
 	try {
 		i = e == null ? null : new URL(e, n);
 	} catch {}
-	let a = new URL(t, n), o = i != null && !qe(i, n), s = !qe(a, n);
+	let a = new URL(t, n), o = i != null && !Je(i, n), s = !Je(a, n);
 	if (r === "reject") {
 		if (o || s) throw Error("External navigation is not allowed");
-	} else if (s && (i == null || !Je(e, i) || !qe(i, a))) throw Error("External navigation is not allowed");
+	} else if (s && (i == null || !Ye(e, i) || !Je(i, a))) throw Error("External navigation is not allowed");
 }
-var Xe = [
+var Ze = [
 	"POST",
 	"PUT",
 	"PATCH",
 	"DELETE"
 ];
-new Set(Xe);
-var Ze = ["GET", ...Xe];
 new Set(Ze);
-var Qe = [
+var Qe = ["GET", ...Ze];
+new Set(Qe);
+var $e = [
 	"about:",
 	"blob:",
 	"chrome:",
@@ -954,88 +954,88 @@ var Qe = [
 	"filesystem:",
 	"javascript:"
 ];
-function $e(e) {
+function et(e) {
 	try {
-		return Qe.includes(new URL(e).protocol);
+		return $e.includes(new URL(e).protocol);
 	} catch {
 		return !1;
 	}
 }
-var et = d.createContext(null);
-et.displayName = "DataRouter";
 var tt = d.createContext(null);
-tt.displayName = "DataRouterState";
-var nt = d.createContext(!1);
-function rt() {
-	return d.useContext(nt);
+tt.displayName = "DataRouter";
+var nt = d.createContext(null);
+nt.displayName = "DataRouterState";
+var rt = d.createContext(!1);
+function it() {
+	return d.useContext(rt);
 }
-var it = d.createContext({ isTransitioning: !1 });
-it.displayName = "ViewTransition";
-var at = d.createContext(/* @__PURE__ */ new Map());
-at.displayName = "Fetchers";
-var ot = d.createContext(null);
-ot.displayName = "Await";
+var at = d.createContext({ isTransitioning: !1 });
+at.displayName = "ViewTransition";
+var ot = d.createContext(/* @__PURE__ */ new Map());
+ot.displayName = "Fetchers";
 var st = d.createContext(null);
-st.displayName = "Navigation";
+st.displayName = "Await";
 var ct = d.createContext(null);
-ct.displayName = "Location";
-var lt = d.createContext({
+ct.displayName = "Navigation";
+var lt = d.createContext(null);
+lt.displayName = "Location";
+var ut = d.createContext({
 	outlet: null,
 	matches: [],
 	isDataRoute: !1
 });
-lt.displayName = "Route";
-var ut = d.createContext(null);
-ut.displayName = "RouteError";
-var dt = "REACT_ROUTER_ERROR", ft = "REDIRECT", pt = "ROUTE_ERROR_RESPONSE";
-function mt(e) {
-	if (e.startsWith(`${dt}:${ft}:{`)) try {
+ut.displayName = "Route";
+var dt = d.createContext(null);
+dt.displayName = "RouteError";
+var ft = "REACT_ROUTER_ERROR", pt = "REDIRECT", mt = "ROUTE_ERROR_RESPONSE";
+function ht(e) {
+	if (e.startsWith(`${ft}:${pt}:{`)) try {
 		let t = JSON.parse(e.slice(28));
 		if (typeof t == "object" && t && typeof t.status == "number" && typeof t.statusText == "string" && typeof t.location == "string" && typeof t.reloadDocument == "boolean" && typeof t.replace == "boolean") return t;
 	} catch {}
 }
-function ht(e) {
-	if (e.startsWith(`${dt}:${pt}:{`)) try {
+function gt(e) {
+	if (e.startsWith(`${ft}:${mt}:{`)) try {
 		let t = JSON.parse(e.slice(40));
-		if (typeof t == "object" && t && typeof t.status == "number" && typeof t.statusText == "string") return new Be(t.status, t.statusText, t.data);
+		if (typeof t == "object" && t && typeof t.status == "number" && typeof t.statusText == "string") return new Ve(t.status, t.statusText, t.data);
 	} catch {}
 }
-function gt(e, { relative: t } = {}) {
-	O(_t(), "useHref() may be used only in the context of a <Router> component.");
-	let { basename: n, navigator: r } = d.useContext(st), { hash: i, pathname: a, search: o } = Ct(e, { relative: t }), s = a;
-	return n !== "/" && (s = a === "/" ? n : Fe([n, a])), r.createHref({
+function _t(e, { relative: t } = {}) {
+	O(vt(), "useHref() may be used only in the context of a <Router> component.");
+	let { basename: n, navigator: r } = d.useContext(ct), { hash: i, pathname: a, search: o } = wt(e, { relative: t }), s = a;
+	return n !== "/" && (s = a === "/" ? n : Ie([n, a])), r.createHref({
 		pathname: s,
 		search: o,
 		hash: i
 	});
 }
-function _t() {
-	return d.useContext(ct) != null;
-}
 function vt() {
-	return O(_t(), "useLocation() may be used only in the context of a <Router> component."), d.useContext(ct).location;
+	return d.useContext(lt) != null;
 }
-var yt = "You should call navigate() in a React.useEffect(), not when your component is first rendered.";
-function bt(e) {
-	d.useContext(st).static || d.useLayoutEffect(e);
+function yt() {
+	return O(vt(), "useLocation() may be used only in the context of a <Router> component."), d.useContext(lt).location;
 }
-function xt() {
-	let { isDataRoute: e } = d.useContext(lt);
-	return e ? zt() : St();
+var bt = "You should call navigate() in a React.useEffect(), not when your component is first rendered.";
+function xt(e) {
+	d.useContext(ct).static || d.useLayoutEffect(e);
 }
 function St() {
-	O(_t(), "useNavigate() may be used only in the context of a <Router> component.");
-	let e = d.useContext(et), { basename: t, navigator: n } = d.useContext(st), { matches: r } = d.useContext(lt), { pathname: i } = vt(), a = JSON.stringify(Me(r)), o = d.useRef(!1);
-	return bt(() => {
+	let { isDataRoute: e } = d.useContext(ut);
+	return e ? Bt() : Ct();
+}
+function Ct() {
+	O(vt(), "useNavigate() may be used only in the context of a <Router> component.");
+	let e = d.useContext(tt), { basename: t, navigator: n } = d.useContext(ct), { matches: r } = d.useContext(ut), { pathname: i } = yt(), a = JSON.stringify(Ne(r)), o = d.useRef(!1);
+	return xt(() => {
 		o.current = !0;
 	}), d.useCallback((r, s = {}) => {
-		if (oe(o.current, yt), !o.current) return;
+		if (oe(o.current, bt), !o.current) return;
 		if (typeof r == "number") {
 			n.go(r);
 			return;
 		}
-		let c = Ne(r, JSON.parse(a), i, s.relative === "path");
-		e == null && t !== "/" && (c.pathname = c.pathname === "/" ? t : Fe([t, c.pathname])), Ye(typeof r == "string" ? r : le(r), n.createHref(c), Ke(n), "reject"), (s.replace ? n.replace : n.push)(c, s.state, s);
+		let c = Pe(r, JSON.parse(a), i, s.relative === "path");
+		e == null && t !== "/" && (c.pathname = c.pathname === "/" ? t : Ie([t, c.pathname])), Xe(typeof r == "string" ? r : le(r), n.createHref(c), qe(n), "reject"), (s.replace ? n.replace : n.push)(c, s.state, s);
 	}, [
 		t,
 		n,
@@ -1045,25 +1045,25 @@ function St() {
 	]);
 }
 d.createContext(null);
-function Ct(e, { relative: t } = {}) {
-	let { matches: n } = d.useContext(lt), { pathname: r } = vt(), i = JSON.stringify(Me(n));
-	return d.useMemo(() => Ne(e, JSON.parse(i), r, t === "path"), [
+function wt(e, { relative: t } = {}) {
+	let { matches: n } = d.useContext(ut), { pathname: r } = yt(), i = JSON.stringify(Ne(n));
+	return d.useMemo(() => Pe(e, JSON.parse(i), r, t === "path"), [
 		e,
 		i,
 		r,
 		t
 	]);
 }
-function wt(e, t, n) {
-	O(_t(), "useRoutes() may be used only in the context of a <Router> component.");
-	let { navigator: r } = d.useContext(st), { matches: i } = d.useContext(lt), a = i[i.length - 1], o = a ? a.params : {}, s = a ? a.pathname : "/", c = a ? a.pathnameBase : "/", l = a && a.route;
+function Tt(e, t, n) {
+	O(vt(), "useRoutes() may be used only in the context of a <Router> component.");
+	let { navigator: r } = d.useContext(ct), { matches: i } = d.useContext(ut), a = i[i.length - 1], o = a ? a.params : {}, s = a ? a.pathname : "/", c = a ? a.pathnameBase : "/", l = a && a.route;
 	{
 		let e = l && l.path || "";
-		Vt(s, !l || e.endsWith("*") || e.endsWith("*?"), `You rendered descendant <Routes> (or called \`useRoutes()\`) at "${s}" (under <Route path="${e}">) but the parent route path has no trailing "*". This means if you navigate deeper, the parent won't match anymore and therefore the child routes will never render.
+		Ht(s, !l || e.endsWith("*") || e.endsWith("*?"), `You rendered descendant <Routes> (or called \`useRoutes()\`) at "${s}" (under <Route path="${e}">) but the parent route path has no trailing "*". This means if you navigate deeper, the parent won't match anymore and therefore the child routes will never render.
 
 Please change the parent <Route path="${e}"> to <Route path="${e === "/" ? "*" : `${e}/*`}">.`);
 	}
-	let u = vt(), f;
+	let u = yt(), f;
 	if (t) {
 		let e = typeof t == "string" ? ue(t) : t;
 		O(c === "/" || e.pathname?.startsWith(c), `When overriding the location using \`<Routes location>\` or \`useRoutes(routes, location)\`, the location pathname must begin with the portion of the URL pathname that was matched by all parent routes. The current pathname base is "${c}" but pathname "${e.pathname}" was given in the \`location\` prop.`), f = e;
@@ -1073,14 +1073,14 @@ Please change the parent <Route path="${e}"> to <Route path="${e === "/" ? "*" :
 		let e = c.replace(/^\//, "").split("/");
 		m = "/" + p.replace(/^\//, "").split("/").slice(e.length).join("/");
 	}
-	let h = n && n.state.matches.length ? n.state.matches.map((e) => Object.assign(e, { route: n.manifest[e.route.id] || e.route })) : j(e, { pathname: m });
+	let h = n && n.state.matches.length ? n.state.matches.map((e) => Object.assign(e, { route: n.manifest[e.route.id] || e.route })) : fe(e, { pathname: m });
 	oe(l || h != null, `No routes matched location "${f.pathname}${f.search}${f.hash}" `), oe(h == null || h[h.length - 1].route.element !== void 0 || h[h.length - 1].route.Component !== void 0 || h[h.length - 1].route.lazy !== void 0, `Matched leaf route at location "${f.pathname}${f.search}${f.hash}" does not have an element or Component. This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.`);
-	let g = jt(h && h.map((e) => Object.assign({}, e, {
+	let g = Mt(h && h.map((e) => Object.assign({}, e, {
 		params: Object.assign({}, o, e.params),
-		pathname: Fe([c, r.encodeLocation ? r.encodeLocation(e.pathname.replace(/%/g, "%25").replace(/\?/g, "%3F").replace(/#/g, "%23")).pathname : e.pathname]),
-		pathnameBase: e.pathnameBase === "/" ? c : Fe([c, r.encodeLocation ? r.encodeLocation(e.pathnameBase.replace(/%/g, "%25").replace(/\?/g, "%3F").replace(/#/g, "%23")).pathname : e.pathnameBase])
+		pathname: Ie([c, r.encodeLocation ? r.encodeLocation(e.pathname.replace(/%/g, "%25").replace(/\?/g, "%3F").replace(/#/g, "%23")).pathname : e.pathname]),
+		pathnameBase: e.pathnameBase === "/" ? c : Ie([c, r.encodeLocation ? r.encodeLocation(e.pathnameBase.replace(/%/g, "%25").replace(/\?/g, "%3F").replace(/#/g, "%23")).pathname : e.pathnameBase])
 	})), i, n);
-	return t && g ? /* @__PURE__ */ d.createElement(ct.Provider, { value: {
+	return t && g ? /* @__PURE__ */ d.createElement(lt.Provider, { value: {
 		location: {
 			pathname: "/",
 			search: "",
@@ -1093,8 +1093,8 @@ Please change the parent <Route path="${e}"> to <Route path="${e === "/" ? "*" :
 		navigationType: "POP"
 	} }, g) : g;
 }
-function Tt() {
-	let e = Rt(), t = Ve(e) ? `${e.status} ${e.statusText}` : e instanceof Error ? e.message : JSON.stringify(e), n = e instanceof Error ? e.stack : null, r = "rgba(200,200,200, 0.5)", i = {
+function Et() {
+	let e = zt(), t = He(e) ? `${e.status} ${e.statusText}` : e instanceof Error ? e.message : JSON.stringify(e), n = e instanceof Error ? e.stack : null, r = "rgba(200,200,200, 0.5)", i = {
 		padding: "0.5rem",
 		backgroundColor: r
 	}, a = {
@@ -1103,7 +1103,7 @@ function Tt() {
 	}, o = null;
 	return console.error("Error handled by React Router default ErrorBoundary:", e), o = /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("p", null, "💿 Hey developer 👋"), /* @__PURE__ */ d.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own ", /* @__PURE__ */ d.createElement("code", { style: a }, "ErrorBoundary"), " or", " ", /* @__PURE__ */ d.createElement("code", { style: a }, "errorElement"), " prop on your route.")), /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("h2", null, "Unexpected Application Error!"), /* @__PURE__ */ d.createElement("h3", { style: { fontStyle: "italic" } }, t), n ? /* @__PURE__ */ d.createElement("pre", { style: i }, n) : null, o);
 }
-var Et = /* @__PURE__ */ d.createElement(Tt, null), Dt = class extends d.Component {
+var Dt = /* @__PURE__ */ d.createElement(Et, null), Ot = class extends d.Component {
 	constructor(e) {
 		super(e), this.state = {
 			location: e.location,
@@ -1131,32 +1131,32 @@ var Et = /* @__PURE__ */ d.createElement(Tt, null), Dt = class extends d.Compone
 	render() {
 		let e = this.state.error;
 		if (this.context && typeof e == "object" && e && "digest" in e && typeof e.digest == "string") {
-			let t = ht(e.digest);
+			let t = gt(e.digest);
 			t && (e = t);
 		}
-		let t = e === void 0 ? this.props.children : /* @__PURE__ */ d.createElement(lt.Provider, { value: this.props.routeContext }, /* @__PURE__ */ d.createElement(ut.Provider, {
+		let t = e === void 0 ? this.props.children : /* @__PURE__ */ d.createElement(ut.Provider, { value: this.props.routeContext }, /* @__PURE__ */ d.createElement(dt.Provider, {
 			value: e,
 			children: this.props.component
 		}));
-		return this.context ? /* @__PURE__ */ d.createElement(kt, { error: e }, t) : t;
+		return this.context ? /* @__PURE__ */ d.createElement(At, { error: e }, t) : t;
 	}
 };
-Dt.contextType = nt;
-var Ot = /* @__PURE__ */ new WeakMap();
-function kt({ children: e, error: t }) {
-	let { basename: n, navigator: r } = d.useContext(st);
+Ot.contextType = rt;
+var kt = /* @__PURE__ */ new WeakMap();
+function At({ children: e, error: t }) {
+	let { basename: n, navigator: r } = d.useContext(ct);
 	if (typeof t == "object" && t && "digest" in t && typeof t.digest == "string") {
-		let e = mt(t.digest);
+		let e = ht(t.digest);
 		if (e) {
-			let i = Ot.get(t);
+			let i = kt.get(t);
 			if (i) throw i;
-			let a = We(e.location, n), o = a.absoluteURL || a.to;
-			if (Ye(e.location, o, Ke(r), "allow-explicit"), $e(o)) throw Error("Invalid redirect location");
-			if (Ue && !Ot.get(t)) {
+			let a = Ge(e.location, n), o = a.absoluteURL || a.to;
+			if (Xe(e.location, o, qe(r), "allow-explicit"), et(o)) throw Error("Invalid redirect location");
+			if (We && !kt.get(t)) {
 				if (a.isExternal || e.reloadDocument) window.location.href = o;
 				else {
 					let n = Promise.resolve().then(() => window.__reactRouterDataRouter.navigate(a.to, { replace: e.replace }));
-					throw Ot.set(t, n), n;
+					throw kt.set(t, n), n;
 				}
 			}
 			return /* @__PURE__ */ d.createElement("meta", {
@@ -1167,11 +1167,11 @@ function kt({ children: e, error: t }) {
 	}
 	return e;
 }
-function At({ routeContext: e, match: t, children: n }) {
-	let r = d.useContext(et);
-	return r && r.static && r.staticContext && (t.route.errorElement || t.route.ErrorBoundary) && (r.staticContext._deepestRenderedBoundaryId = t.route.id), /* @__PURE__ */ d.createElement(lt.Provider, { value: e }, n);
+function jt({ routeContext: e, match: t, children: n }) {
+	let r = d.useContext(tt);
+	return r && r.static && r.staticContext && (t.route.errorElement || t.route.ErrorBoundary) && (r.staticContext._deepestRenderedBoundaryId = t.route.id), /* @__PURE__ */ d.createElement(ut.Provider, { value: e }, n);
 }
-function jt(e, t = [], n) {
+function Mt(e, t = [], n) {
 	let r = n?.state;
 	if (e == null) {
 		if (!r) return null;
@@ -1202,16 +1202,16 @@ function jt(e, t = [], n) {
 		c(e, {
 			location: r.location,
 			params: r.matches?.[0]?.params ?? {},
-			pattern: He(r.matches),
+			pattern: Ue(r.matches),
 			errorInfo: t
 		});
 	} : void 0;
 	return i.reduceRight((e, n, c) => {
 		let u, f = !1, p = null, m = null;
-		r && (u = a && n.route.id ? a[n.route.id] : void 0, p = n.route.errorElement || Et, o && (s < 0 && c === 0 ? (Vt("route-fallback", !1, "No `HydrateFallback` element provided to render during initial hydration"), f = !0, m = null) : s === c && (f = !0, m = n.route.hydrateFallbackElement || null)));
+		r && (u = a && n.route.id ? a[n.route.id] : void 0, p = n.route.errorElement || Dt, o && (s < 0 && c === 0 ? (Ht("route-fallback", !1, "No `HydrateFallback` element provided to render during initial hydration"), f = !0, m = null) : s === c && (f = !0, m = n.route.hydrateFallbackElement || null)));
 		let h = t.concat(i.slice(0, c + 1)), g = () => {
 			let t;
-			return t = u ? p : f ? m : n.route.Component ? /* @__PURE__ */ d.createElement(n.route.Component, null) : n.route.element ? n.route.element : e, /* @__PURE__ */ d.createElement(At, {
+			return t = u ? p : f ? m : n.route.Component ? /* @__PURE__ */ d.createElement(n.route.Component, null) : n.route.element ? n.route.element : e, /* @__PURE__ */ d.createElement(jt, {
 				match: n,
 				routeContext: {
 					outlet: e,
@@ -1221,7 +1221,7 @@ function jt(e, t = [], n) {
 				children: t
 			});
 		};
-		return r && (n.route.ErrorBoundary || n.route.errorElement || c === 0) ? /* @__PURE__ */ d.createElement(Dt, {
+		return r && (n.route.ErrorBoundary || n.route.errorElement || c === 0) ? /* @__PURE__ */ d.createElement(Ot, {
 			location: r.location,
 			revalidation: r.revalidation,
 			component: p,
@@ -1236,50 +1236,50 @@ function jt(e, t = [], n) {
 		}) : g();
 	}, null);
 }
-function Mt(e) {
-	return `${e} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`;
-}
 function Nt(e) {
-	let t = d.useContext(et);
-	return O(t, Mt(e)), t;
+	return `${e} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`;
 }
 function Pt(e) {
 	let t = d.useContext(tt);
-	return O(t, Mt(e)), t;
+	return O(t, Nt(e)), t;
 }
 function Ft(e) {
-	let t = d.useContext(lt);
-	return O(t, Mt(e)), t;
+	let t = d.useContext(nt);
+	return O(t, Nt(e)), t;
 }
 function It(e) {
-	let t = Ft(e), n = t.matches[t.matches.length - 1];
+	let t = d.useContext(ut);
+	return O(t, Nt(e)), t;
+}
+function Lt(e) {
+	let t = It(e), n = t.matches[t.matches.length - 1];
 	return O(n.route.id, `${e} can only be used on routes that contain a unique "id"`), n.route.id;
 }
-function Lt() {
-	return It("useRouteId");
-}
 function Rt() {
-	let e = d.useContext(ut), t = Pt("useRouteError"), n = It("useRouteError");
-	return e === void 0 ? t.errors?.[n] : e;
+	return Lt("useRouteId");
 }
 function zt() {
-	let { router: e } = Nt("useNavigate"), t = It("useNavigate"), n = d.useRef(!1);
-	return bt(() => {
+	let e = d.useContext(dt), t = Ft("useRouteError"), n = Lt("useRouteError");
+	return e === void 0 ? t.errors?.[n] : e;
+}
+function Bt() {
+	let { router: e } = Pt("useNavigate"), t = Lt("useNavigate"), n = d.useRef(!1);
+	return xt(() => {
 		n.current = !0;
 	}), d.useCallback(async (r, i = {}) => {
-		oe(n.current, yt), n.current && (typeof r == "number" ? await e.navigate(r) : await e.navigate(r, {
+		oe(n.current, bt), n.current && (typeof r == "number" ? await e.navigate(r) : await e.navigate(r, {
 			fromRouteId: t,
 			...i
 		}));
 	}, [e, t]);
 }
-var Bt = {};
-function Vt(e, t, n) {
-	!t && !Bt[e] && (Bt[e] = !0, oe(!1, n));
+var Vt = {};
+function Ht(e, t, n) {
+	!t && !Vt[e] && (Vt[e] = !0, oe(!1, n));
 }
-d.memo(Ht);
-function Ht({ routes: e, manifest: t, future: n, state: r, isStatic: i, onError: a }) {
-	return wt(e, void 0, {
+d.memo(Ut);
+function Ut({ routes: e, manifest: t, future: n, state: r, isStatic: i, onError: a }) {
+	return Tt(e, void 0, {
 		manifest: t,
 		state: r,
 		isStatic: i,
@@ -1287,8 +1287,8 @@ function Ht({ routes: e, manifest: t, future: n, state: r, isStatic: i, onError:
 		future: n
 	});
 }
-function Ut({ basename: e = "/", children: t = null, location: n, navigationType: r = "POP", navigator: i, static: a = !1, useTransitions: o }) {
-	O(!_t(), "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.");
+function Wt({ basename: e = "/", children: t = null, location: n, navigationType: r = "POP", navigator: i, static: a = !1, useTransitions: o }) {
+	O(!vt(), "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.");
 	let s = e.replace(/^\/*/, "/"), c = d.useMemo(() => ({
 		basename: s,
 		navigator: i,
@@ -1303,7 +1303,7 @@ function Ut({ basename: e = "/", children: t = null, location: n, navigationType
 	]);
 	typeof n == "string" && (n = ue(n));
 	let { pathname: l = "/", search: u = "", hash: f = "", state: p = null, key: m = "default", mask: h } = n, g = d.useMemo(() => {
-		let e = De(l, s);
+		let e = Oe(l, s);
 		return e == null ? null : {
 			location: {
 				pathname: e,
@@ -1325,66 +1325,66 @@ function Ut({ basename: e = "/", children: t = null, location: n, navigationType
 		r,
 		h
 	]);
-	return oe(g != null, `<Router basename="${s}"> is not able to match the URL "${l}${u}${f}" because it does not start with the basename, so the <Router> won't render anything.`), g == null ? null : /* @__PURE__ */ d.createElement(st.Provider, { value: c }, /* @__PURE__ */ d.createElement(ct.Provider, {
+	return oe(g != null, `<Router basename="${s}"> is not able to match the URL "${l}${u}${f}" because it does not start with the basename, so the <Router> won't render anything.`), g == null ? null : /* @__PURE__ */ d.createElement(ct.Provider, { value: c }, /* @__PURE__ */ d.createElement(lt.Provider, {
 		children: t,
 		value: g
 	}));
 }
 d.Component;
-var Wt = "get", Gt = "application/x-www-form-urlencoded";
-function Kt(e) {
+var Gt = "get", Kt = "application/x-www-form-urlencoded";
+function qt(e) {
 	return typeof HTMLElement < "u" && e instanceof HTMLElement;
 }
-function I(e) {
-	return Kt(e) && e.tagName.toLowerCase() === "button";
-}
-function qt(e) {
-	return Kt(e) && e.tagName.toLowerCase() === "form";
+function F(e) {
+	return qt(e) && e.tagName.toLowerCase() === "button";
 }
 function Jt(e) {
-	return Kt(e) && e.tagName.toLowerCase() === "input";
+	return qt(e) && e.tagName.toLowerCase() === "form";
 }
 function Yt(e) {
+	return qt(e) && e.tagName.toLowerCase() === "input";
+}
+function Xt(e) {
 	return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 }
-function Xt(e, t) {
-	return e.button === 0 && (!t || t === "_self") && !Yt(e);
+function Zt(e, t) {
+	return e.button === 0 && (!t || t === "_self") && !Xt(e);
 }
-var Zt = null;
-function Qt() {
-	if (Zt === null) try {
-		new FormData(document.createElement("form"), 0), Zt = !1;
+var Qt = null;
+function $t() {
+	if (Qt === null) try {
+		new FormData(document.createElement("form"), 0), Qt = !1;
 	} catch {
-		Zt = !0;
+		Qt = !0;
 	}
-	return Zt;
+	return Qt;
 }
-var $t = /* @__PURE__ */ new Set([
+var en = /* @__PURE__ */ new Set([
 	"application/x-www-form-urlencoded",
 	"multipart/form-data",
 	"text/plain"
 ]);
-function en(e) {
-	return e != null && !$t.has(e) ? (oe(!1, `"${e}" is not a valid \`encType\` for \`<Form>\`/\`<fetcher.Form>\` and will default to "${Gt}"`), null) : e;
+function tn(e) {
+	return e != null && !en.has(e) ? (oe(!1, `"${e}" is not a valid \`encType\` for \`<Form>\`/\`<fetcher.Form>\` and will default to "${Kt}"`), null) : e;
 }
-function tn(e, t) {
+function nn(e, t) {
 	let n, r, i, a, o;
-	if (qt(e)) {
+	if (Jt(e)) {
 		let o = e.getAttribute("action");
-		r = o ? De(o, t) : null, n = e.getAttribute("method") || Wt, i = en(e.getAttribute("enctype")) || Gt, a = new FormData(e);
-	} else if (I(e) || Jt(e) && (e.type === "submit" || e.type === "image")) {
+		r = o ? Oe(o, t) : null, n = e.getAttribute("method") || Gt, i = tn(e.getAttribute("enctype")) || Kt, a = new FormData(e);
+	} else if (F(e) || Yt(e) && (e.type === "submit" || e.type === "image")) {
 		let o = e.form;
 		if (o == null) throw Error("Cannot submit a <button> or <input type=\"submit\"> without a <form>");
 		let s = e.getAttribute("formaction") || o.getAttribute("action");
-		if (r = s ? De(s, t) : null, n = e.getAttribute("formmethod") || o.getAttribute("method") || Wt, i = en(e.getAttribute("formenctype")) || en(o.getAttribute("enctype")) || Gt, a = new FormData(o, e), !Qt()) {
+		if (r = s ? Oe(s, t) : null, n = e.getAttribute("formmethod") || o.getAttribute("method") || Gt, i = tn(e.getAttribute("formenctype")) || tn(o.getAttribute("enctype")) || Kt, a = new FormData(o, e), !$t()) {
 			let { name: t, type: n, value: r } = e;
 			if (n === "image") {
 				let e = t ? `${t}.` : "";
 				a.append(`${e}x`, "0"), a.append(`${e}y`, "0");
 			} else t && a.append(t, r);
 		}
-	} else if (Kt(e)) throw Error("Cannot submit element that is not <form>, <button>, or <input type=\"submit|image\">");
-	else n = Wt, r = null, i = Gt, o = e;
+	} else if (qt(e)) throw Error("Cannot submit element that is not <form>, <button>, or <input type=\"submit|image\">");
+	else n = Gt, r = null, i = Kt, o = e;
 	return a && i === "text/plain" && (o = a, a = void 0), {
 		action: r,
 		method: n.toLowerCase(),
@@ -1394,14 +1394,14 @@ function tn(e, t) {
 	};
 }
 Object.getOwnPropertyNames(Object.prototype).sort().join("\0");
-function nn(e, t) {
+function rn(e, t) {
 	if (e === !1 || e == null) throw Error(t);
 }
-function rn(e, t, n, r) {
+function an(e, t, n, r) {
 	let i = typeof e == "string" ? new URL(e, typeof window > "u" ? "server://singlefetch/" : window.location.origin) : e;
-	return i.pathname = n ? i.pathname.endsWith("/") ? `${i.pathname}_.${r}` : `${i.pathname}.${r}` : i.pathname === "/" ? `_root.${r}` : t && De(i.pathname, t) === "/" ? `${Ie(t)}/_root.${r}` : `${Ie(i.pathname)}.${r}`, i;
+	return i.pathname = n ? i.pathname.endsWith("/") ? `${i.pathname}_.${r}` : `${i.pathname}.${r}` : i.pathname === "/" ? `_root.${r}` : t && Oe(i.pathname, t) === "/" ? `${Le(t)}/_root.${r}` : `${Le(i.pathname)}.${r}`, i;
 }
-async function an(e, t) {
+async function on(e, t) {
 	if (e.id in t) return t[e.id];
 	try {
 		let n = await import(
@@ -1414,21 +1414,21 @@ async function an(e, t) {
 		return console.error(`Error loading route module \`${e.module}\`, reloading page...`), console.error(t), window.__reactRouterContext && window.__reactRouterContext.isSpaMode, window.location.reload(), new Promise(() => {});
 	}
 }
-function on(e) {
+function sn(e) {
 	return e != null && typeof e.page == "string";
 }
-function sn(e) {
+function cn(e) {
 	return e == null ? !1 : e.href == null ? e.rel === "preload" && typeof e.imageSrcSet == "string" && typeof e.imageSizes == "string" : typeof e.rel == "string" && typeof e.href == "string";
 }
-async function cn(e, t, n) {
-	return pn((await Promise.all(e.map(async (e) => {
+async function ln(e, t, n) {
+	return mn((await Promise.all(e.map(async (e) => {
 		let r = t.routes[e.route.id];
 		if (r) {
-			let e = await an(r, n);
+			let e = await on(r, n);
 			return e.links ? e.links() : [];
 		}
 		return [];
-	}))).flat(1).filter(sn).filter((e) => e.rel === "stylesheet" || e.rel === "preload").map((e) => e.rel === "stylesheet" ? {
+	}))).flat(1).filter(cn).filter((e) => e.rel === "stylesheet" || e.rel === "preload").map((e) => e.rel === "stylesheet" ? {
 		...e,
 		rel: "prefetch",
 		as: "style"
@@ -1437,7 +1437,7 @@ async function cn(e, t, n) {
 		rel: "prefetch"
 	}));
 }
-function ln(e, t, n, r, i, a) {
+function un(e, t, n, r, i, a) {
 	let o = (e, t) => !n[t] || e.route.id !== n[t].route.id, s = (e, t) => n[t].pathname !== e.pathname || n[t].route.path?.endsWith("*") && n[t].params["*"] !== e.params["*"];
 	return a === "assets" ? t.filter((e, t) => o(e, t) || s(e, t)) : a === "data" ? t.filter((t, a) => {
 		let c = r.routes[t.route.id];
@@ -1456,49 +1456,49 @@ function ln(e, t, n, r, i, a) {
 		return !0;
 	}) : [];
 }
-function un(e, t, { includeHydrateFallback: n } = {}) {
-	return dn(e.map((e) => {
+function dn(e, t, { includeHydrateFallback: n } = {}) {
+	return fn(e.map((e) => {
 		let r = t.routes[e.route.id];
 		if (!r) return [];
 		let i = [r.module];
 		return r.clientActionModule && (i = i.concat(r.clientActionModule)), r.clientLoaderModule && (i = i.concat(r.clientLoaderModule)), n && r.hydrateFallbackModule && (i = i.concat(r.hydrateFallbackModule)), r.imports && (i = i.concat(r.imports)), i;
 	}).flat(1));
 }
-function dn(e) {
+function fn(e) {
 	return [...new Set(e)];
 }
-function fn(e) {
+function pn(e) {
 	let t = {}, n = Object.keys(e).sort();
 	for (let r of n) t[r] = e[r];
 	return t;
 }
-function pn(e, t) {
+function mn(e, t) {
 	let n = /* @__PURE__ */ new Set(), r = new Set(t);
 	return e.reduce((e, i) => {
-		if (t && !on(i) && i.as === "script" && i.href && r.has(i.href)) return e;
-		let a = JSON.stringify(fn(i));
+		if (t && !sn(i) && i.as === "script" && i.href && r.has(i.href)) return e;
+		let a = JSON.stringify(pn(i));
 		return n.has(a) || (n.add(a), e.push({
 			key: a,
 			link: i
 		})), e;
 	}, []);
 }
-function mn() {
-	let e = d.useContext(et);
-	return nn(e, "You must render this element inside a <DataRouterContext.Provider> element"), e;
-}
 function hn() {
 	let e = d.useContext(tt);
-	return nn(e, "You must render this element inside a <DataRouterStateContext.Provider> element"), e;
+	return rn(e, "You must render this element inside a <DataRouterContext.Provider> element"), e;
 }
-var gn = d.createContext(void 0);
-gn.displayName = "FrameworkContext";
-function _n() {
-	let e = d.useContext(gn);
-	return nn(e, "You must render this element inside a <HydratedRouter> element"), e;
+function gn() {
+	let e = d.useContext(nt);
+	return rn(e, "You must render this element inside a <DataRouterStateContext.Provider> element"), e;
 }
-function vn(e, t) {
-	let n = d.useContext(gn), [r, i] = d.useState(!1), [a, o] = d.useState(!1), { onFocus: s, onBlur: c, onMouseEnter: l, onMouseLeave: u, onTouchStart: f } = t, p = d.useRef(null);
+var _n = d.createContext(void 0);
+_n.displayName = "FrameworkContext";
+function vn() {
+	let e = d.useContext(_n);
+	return rn(e, "You must render this element inside a <HydratedRouter> element"), e;
+}
+function yn(e, t) {
+	let n = d.useContext(_n), [r, i] = d.useState(!1), [a, o] = d.useState(!1), { onFocus: s, onBlur: c, onMouseEnter: l, onMouseLeave: u, onTouchStart: f } = t, p = d.useRef(null);
 	d.useEffect(() => {
 		if (e === "render" && o(!0), e === "viewport") {
 			let e = new IntersectionObserver((e) => {
@@ -1529,11 +1529,11 @@ function vn(e, t) {
 		a,
 		p,
 		{
-			onFocus: yn(s, m),
-			onBlur: yn(c, h),
-			onMouseEnter: yn(l, m),
-			onMouseLeave: yn(u, h),
-			onTouchStart: yn(f, m)
+			onFocus: bn(s, m),
+			onBlur: bn(c, h),
+			onMouseEnter: bn(l, m),
+			onMouseLeave: bn(u, h),
+			onTouchStart: bn(f, m)
 		}
 	] : [
 		a,
@@ -1545,13 +1545,13 @@ function vn(e, t) {
 		{}
 	];
 }
-function yn(e, t) {
+function bn(e, t) {
 	return (n) => {
 		e && e(n), n.defaultPrevented || t(n);
 	};
 }
-function bn({ page: e, ...t }) {
-	let n = rt(), { nonce: r } = _n(), { router: i } = mn(), a = d.useMemo(() => j(i.routes, e, i.basename), [
+function xn({ page: e, ...t }) {
+	let n = it(), { nonce: r } = vn(), { router: i } = hn(), a = d.useMemo(() => fe(i.routes, e, i.basename), [
 		i.routes,
 		e,
 		i.basename
@@ -1559,21 +1559,21 @@ function bn({ page: e, ...t }) {
 	return a ? (t.nonce == null && r && (t = {
 		...t,
 		nonce: r
-	}), n ? /* @__PURE__ */ d.createElement(Sn, {
+	}), n ? /* @__PURE__ */ d.createElement(Cn, {
 		page: e,
 		matches: a,
 		...t
-	}) : /* @__PURE__ */ d.createElement(Cn, {
+	}) : /* @__PURE__ */ d.createElement(wn, {
 		page: e,
 		matches: a,
 		...t
 	})) : null;
 }
-function xn(e) {
-	let { manifest: t, routeModules: n } = _n(), [r, i] = d.useState([]);
+function Sn(e) {
+	let { manifest: t, routeModules: n } = vn(), [r, i] = d.useState([]);
 	return d.useEffect(() => {
 		let r = !1;
-		return cn(e, t, n).then((e) => {
+		return ln(e, t, n).then((e) => {
 			r || i(e);
 		}), () => {
 			r = !0;
@@ -1584,10 +1584,10 @@ function xn(e) {
 		n
 	]), r;
 }
-function Sn({ page: e, matches: t, ...n }) {
-	let r = vt(), { future: i } = _n(), { basename: a } = mn(), o = d.useMemo(() => {
+function Cn({ page: e, matches: t, ...n }) {
+	let r = yt(), { future: i } = vn(), { basename: a } = hn(), o = d.useMemo(() => {
 		if (e === r.pathname + r.search + r.hash) return [];
-		let n = rn(e, a, i.v8_trailingSlashAwareDataRequests, "rsc"), o = !1, s = [];
+		let n = an(e, a, i.v8_trailingSlashAwareDataRequests, "rsc"), o = !1, s = [];
 		for (let e of t) typeof e.route.shouldRevalidate == "function" ? o = !0 : s.push(e.route.id);
 		return o && s.length > 0 && n.searchParams.set("_routes", s.join(",")), [n.pathname + n.search];
 	}, [
@@ -1605,14 +1605,14 @@ function Sn({ page: e, matches: t, ...n }) {
 		...n
 	})));
 }
-function Cn({ page: e, matches: t, ...n }) {
-	let r = vt(), { future: i, manifest: a, routeModules: o } = _n(), { basename: s } = mn(), { loaderData: c, matches: l } = hn(), u = d.useMemo(() => ln(e, t, l, a, r, "data"), [
+function wn({ page: e, matches: t, ...n }) {
+	let r = yt(), { future: i, manifest: a, routeModules: o } = vn(), { basename: s } = hn(), { loaderData: c, matches: l } = gn(), u = d.useMemo(() => un(e, t, l, a, r, "data"), [
 		e,
 		t,
 		l,
 		a,
 		r
-	]), f = d.useMemo(() => ln(e, t, l, a, r, "assets"), [
+	]), f = d.useMemo(() => un(e, t, l, a, r, "assets"), [
 		e,
 		t,
 		l,
@@ -1625,7 +1625,7 @@ function Cn({ page: e, matches: t, ...n }) {
 			let t = a.routes[e.route.id];
 			t && t.hasLoader && (!u.some((t) => t.route.id === e.route.id) && e.route.id in c && o[e.route.id]?.shouldRevalidate || t.hasClientLoader ? l = !0 : n.add(e.route.id));
 		}), n.size === 0) return [];
-		let d = rn(e, s, i.v8_trailingSlashAwareDataRequests, "data");
+		let d = an(e, s, i.v8_trailingSlashAwareDataRequests, "data");
 		return l && n.size > 0 && d.searchParams.set("_routes", t.filter((e) => n.has(e.route.id)).map((e) => e.route.id).join(",")), [d.pathname + d.search];
 	}, [
 		s,
@@ -1637,7 +1637,7 @@ function Cn({ page: e, matches: t, ...n }) {
 		t,
 		e,
 		o
-	]), m = d.useMemo(() => un(f, a), [f, a]), h = xn(f);
+	]), m = d.useMemo(() => dn(f, a), [f, a]), h = Sn(f);
 	return /* @__PURE__ */ d.createElement(d.Fragment, null, p.map((e) => /* @__PURE__ */ d.createElement("link", {
 		key: e,
 		rel: "prefetch",
@@ -1656,7 +1656,7 @@ function Cn({ page: e, matches: t, ...n }) {
 		crossOrigin: t.crossOrigin ?? n.crossOrigin
 	})));
 }
-function wn(...e) {
+function Tn(...e) {
 	return (t) => {
 		e.forEach((e) => {
 			typeof e == "function" ? e(t) : e != null && (e.current = t);
@@ -1664,11 +1664,11 @@ function wn(...e) {
 	};
 }
 d.Component;
-var Tn = typeof window < "u" && window.document !== void 0 && window.document.createElement !== void 0;
+var En = typeof window < "u" && window.document !== void 0 && window.document.createElement !== void 0;
 try {
-	Tn && (window.__reactRouterVersion = "7.18.4");
+	En && (window.__reactRouterVersion = "7.18.4");
 } catch {}
-function En({ basename: e, children: t, useTransitions: n, window: r }) {
+function Dn({ basename: e, children: t, useTransitions: n, window: r }) {
 	let i = d.useRef();
 	i.current ??= ae({
 		window: r,
@@ -1680,7 +1680,7 @@ function En({ basename: e, children: t, useTransitions: n, window: r }) {
 	}), c = d.useCallback((e) => {
 		n === !1 ? s(e) : d.startTransition(() => s(e));
 	}, [n]);
-	return d.useLayoutEffect(() => a.listen(c), [a, c]), /* @__PURE__ */ d.createElement(Ut, {
+	return d.useLayoutEffect(() => a.listen(c), [a, c]), /* @__PURE__ */ d.createElement(Wt, {
 		basename: e,
 		children: t,
 		location: o.location,
@@ -1689,15 +1689,15 @@ function En({ basename: e, children: t, useTransitions: n, window: r }) {
 		useTransitions: n
 	});
 }
-var Dn = d.forwardRef(function({ onClick: e, discover: t = "render", prefetch: n = "none", relative: r, reloadDocument: i, replace: a, mask: o, state: s, target: c, to: l, preventScrollReset: u, viewTransition: f, defaultShouldRevalidate: p, ...m }, h) {
-	let { basename: g, navigator: _, useTransitions: v } = d.useContext(st), y = typeof l == "string" && E.test(l), b = We(l, g);
+var On = d.forwardRef(function({ onClick: e, discover: t = "render", prefetch: n = "none", relative: r, reloadDocument: i, replace: a, mask: o, state: s, target: c, to: l, preventScrollReset: u, viewTransition: f, defaultShouldRevalidate: p, ...m }, h) {
+	let { basename: g, navigator: _, useTransitions: v } = d.useContext(ct), y = typeof l == "string" && E.test(l), b = Ge(l, g);
 	l = b.to;
-	let x = gt(l, { relative: r }), S = vt(), C = null;
+	let x = _t(l, { relative: r }), S = yt(), C = null;
 	if (o) {
-		let e = Ne(o, [], S.mask ? S.mask.pathname : "/", !0);
-		g !== "/" && (e.pathname = e.pathname === "/" ? g : Fe([g, e.pathname])), C = _.createHref(e);
+		let e = Pe(o, [], S.mask ? S.mask.pathname : "/", !0);
+		g !== "/" && (e.pathname = e.pathname === "/" ? g : Ie([g, e.pathname])), C = _.createHref(e);
 	}
-	let [w, T, ee] = vn(n, m), te = Mn(l, {
+	let [w, T, ee] = yn(n, m), te = Nn(l, {
 		replace: a,
 		mask: o,
 		state: s,
@@ -1716,16 +1716,16 @@ var Dn = d.forwardRef(function({ onClick: e, discover: t = "render", prefetch: n
 		...ee,
 		href: (ne ? C : void 0) || b.absoluteURL || x,
 		onClick: ne ? D : e,
-		ref: wn(h, T),
+		ref: Tn(h, T),
 		target: c,
 		"data-discover": !y && t === "render" ? "true" : void 0
 	});
-	return w && !y ? /* @__PURE__ */ d.createElement(d.Fragment, null, re, /* @__PURE__ */ d.createElement(bn, { page: x })) : re;
+	return w && !y ? /* @__PURE__ */ d.createElement(d.Fragment, null, re, /* @__PURE__ */ d.createElement(xn, { page: x })) : re;
 });
-Dn.displayName = "Link";
-var On = d.forwardRef(function({ "aria-current": e = "page", caseSensitive: t = !1, className: n = "", end: r = !1, style: i, to: a, viewTransition: o, children: s, ...c }, l) {
-	let u = Ct(a, { relative: c.relative }), f = vt(), p = d.useContext(tt), { navigator: m, basename: h } = d.useContext(st), g = p != null && Ln(u) && o === !0, _ = m.encodeLocation ? m.encodeLocation(u).pathname : u.pathname, v = f.pathname, y = p && p.navigation && p.navigation.location ? p.navigation.location.pathname : null;
-	t || (v = v.toLowerCase(), y = y ? y.toLowerCase() : null, _ = _.toLowerCase()), y && h && (y = De(y, h) || y);
+On.displayName = "Link";
+var kn = d.forwardRef(function({ "aria-current": e = "page", caseSensitive: t = !1, className: n = "", end: r = !1, style: i, to: a, viewTransition: o, children: s, ...c }, l) {
+	let u = wt(a, { relative: c.relative }), f = yt(), p = d.useContext(nt), { navigator: m, basename: h } = d.useContext(ct), g = p != null && Rn(u) && o === !0, _ = m.encodeLocation ? m.encodeLocation(u).pathname : u.pathname, v = f.pathname, y = p && p.navigation && p.navigation.location ? p.navigation.location.pathname : null;
+	t || (v = v.toLowerCase(), y = y ? y.toLowerCase() : null, _ = _.toLowerCase()), y && h && (y = Oe(y, h) || y);
 	let b = _ !== "/" && _.endsWith("/") ? _.length - 1 : _.length, x = v === _ || !r && v.startsWith(_) && v.charAt(b) === "/", S = y != null && (y === _ || !r && y.startsWith(_) && y.charAt(_.length) === "/"), C = {
 		isActive: x,
 		isPending: S,
@@ -1738,7 +1738,7 @@ var On = d.forwardRef(function({ "aria-current": e = "page", caseSensitive: t = 
 		g ? "transitioning" : null
 	].filter(Boolean).join(" ");
 	let ee = typeof i == "function" ? i(C) : i;
-	return /* @__PURE__ */ d.createElement(Dn, {
+	return /* @__PURE__ */ d.createElement(On, {
 		...c,
 		"aria-current": w,
 		className: T,
@@ -1748,9 +1748,9 @@ var On = d.forwardRef(function({ "aria-current": e = "page", caseSensitive: t = 
 		viewTransition: o
 	}, typeof s == "function" ? s(C) : s);
 });
-On.displayName = "NavLink";
-var kn = d.forwardRef(({ discover: e = "render", fetcherKey: t, navigate: n, reloadDocument: r, replace: i, state: a, method: o = Wt, action: s, onSubmit: c, relative: l, preventScrollReset: u, viewTransition: f, defaultShouldRevalidate: p, ...m }, h) => {
-	let { useTransitions: g } = d.useContext(st), _ = Fn(), v = In(s, { relative: l }), y = o.toLowerCase() === "get" ? "get" : "post", b = typeof s == "string" && E.test(s);
+kn.displayName = "NavLink";
+var An = d.forwardRef(({ discover: e = "render", fetcherKey: t, navigate: n, reloadDocument: r, replace: i, state: a, method: o = Gt, action: s, onSubmit: c, relative: l, preventScrollReset: u, viewTransition: f, defaultShouldRevalidate: p, ...m }, h) => {
+	let { useTransitions: g } = d.useContext(ct), _ = In(), v = Ln(s, { relative: l }), y = o.toLowerCase() === "get" ? "get" : "post", b = typeof s == "string" && E.test(s);
 	return /* @__PURE__ */ d.createElement("form", {
 		ref: h,
 		method: y,
@@ -1775,18 +1775,18 @@ var kn = d.forwardRef(({ discover: e = "render", fetcherKey: t, navigate: n, rel
 		"data-discover": !b && e === "render" ? "true" : void 0
 	});
 });
-kn.displayName = "Form";
-function An(e) {
+An.displayName = "Form";
+function jn(e) {
 	return `${e} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`;
 }
-function jn(e) {
-	let t = d.useContext(et);
-	return O(t, An(e)), t;
+function Mn(e) {
+	let t = d.useContext(tt);
+	return O(t, jn(e)), t;
 }
-function Mn(e, { target: t, replace: n, mask: r, state: i, preventScrollReset: a, relative: o, viewTransition: s, defaultShouldRevalidate: c, useTransitions: l } = {}) {
-	let u = xt(), f = vt(), p = Ct(e, { relative: o });
+function Nn(e, { target: t, replace: n, mask: r, state: i, preventScrollReset: a, relative: o, viewTransition: s, defaultShouldRevalidate: c, useTransitions: l } = {}) {
+	let u = St(), f = yt(), p = wt(e, { relative: o });
 	return d.useCallback((m) => {
-		if (Xt(m, t)) {
+		if (Zt(m, t)) {
 			m.preventDefault();
 			let t = n === void 0 ? le(f) === le(p) : n, h = () => u(e, {
 				replace: t,
@@ -1815,13 +1815,13 @@ function Mn(e, { target: t, replace: n, mask: r, state: i, preventScrollReset: a
 		l
 	]);
 }
-var Nn = 0, Pn = () => `__${String(++Nn)}__`;
-function Fn() {
-	let { router: e } = jn("useSubmit"), { basename: t } = d.useContext(st), n = Lt(), r = e.fetch, i = e.navigate;
+var Pn = 0, Fn = () => `__${String(++Pn)}__`;
+function In() {
+	let { router: e } = Mn("useSubmit"), { basename: t } = d.useContext(ct), n = Rt(), r = e.fetch, i = e.navigate;
 	return d.useCallback(async (e, a = {}) => {
-		let { action: o, method: s, encType: c, formData: l, body: u } = tn(e, t);
+		let { action: o, method: s, encType: c, formData: l, body: u } = nn(e, t);
 		if (a.navigate === !1) {
-			let e = a.fetcherKey || Pn();
+			let e = a.fetcherKey || Fn();
 			await r(e, n, a.action || o, {
 				defaultShouldRevalidate: a.defaultShouldRevalidate,
 				preventScrollReset: a.preventScrollReset,
@@ -1851,10 +1851,10 @@ function Fn() {
 		n
 	]);
 }
-function In(e, { relative: t } = {}) {
-	let { basename: n } = d.useContext(st), r = d.useContext(lt);
+function Ln(e, { relative: t } = {}) {
+	let { basename: n } = d.useContext(ct), r = d.useContext(ut);
 	O(r, "useFormAction must be used inside a RouteContext");
-	let [i] = r.matches.slice(-1), a = { ...Ct(e || ".", { relative: t }) }, o = vt();
+	let [i] = r.matches.slice(-1), a = { ...wt(e || ".", { relative: t }) }, o = yt();
 	if (e == null) {
 		a.search = o.search;
 		let e = new URLSearchParams(a.search), t = e.getAll("index");
@@ -1864,30 +1864,30 @@ function In(e, { relative: t } = {}) {
 			a.search = n ? `?${n}` : "";
 		}
 	}
-	return (!e || e === ".") && i.route.index && (a.search = a.search ? a.search.replace(/^\?/, "?index&") : "?index"), n !== "/" && (a.pathname = a.pathname === "/" ? n : Fe([n, a.pathname])), le(a);
+	return (!e || e === ".") && i.route.index && (a.search = a.search ? a.search.replace(/^\?/, "?index&") : "?index"), n !== "/" && (a.pathname = a.pathname === "/" ? n : Ie([n, a.pathname])), le(a);
 }
-function Ln(e, { relative: t } = {}) {
-	let n = d.useContext(it);
+function Rn(e, { relative: t } = {}) {
+	let n = d.useContext(at);
 	O(n != null, "`useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?");
-	let { basename: r } = jn("useViewTransitionState"), i = Ct(e, { relative: t });
+	let { basename: r } = Mn("useViewTransitionState"), i = wt(e, { relative: t });
 	if (!n.isTransitioning) return !1;
-	let a = De(n.currentLocation.pathname, r) || n.currentLocation.pathname, o = De(n.nextLocation.pathname, r) || n.nextLocation.pathname;
-	return Ce(i.pathname, o) != null || Ce(i.pathname, a) != null;
+	let a = Oe(n.currentLocation.pathname, r) || n.currentLocation.pathname, o = Oe(n.nextLocation.pathname, r) || n.nextLocation.pathname;
+	return we(i.pathname, o) != null || we(i.pathname, a) != null;
 }
 //#endregion
 //#region src/always-on/useShoppingState.ts
-var Rn = (window.PARTNER_DEMO?.partnerId || "demo-site") + ":spree-online-shopping:";
-function zn(e, t) {
+var zn = (window.PARTNER_DEMO?.partnerId || "demo-site") + ":spree-online-shopping:";
+function Bn(e, t) {
 	let n = () => typeof t == "function" ? t() : t, [r, i] = (0, d.useState)(() => {
 		try {
-			let t = sessionStorage.getItem(Rn + e);
+			let t = sessionStorage.getItem(zn + e);
 			if (t !== null) return JSON.parse(t);
 		} catch {}
 		return n();
 	});
 	return (0, d.useEffect)(() => {
 		try {
-			sessionStorage.setItem(Rn + e, JSON.stringify(r));
+			sessionStorage.setItem(zn + e, JSON.stringify(r));
 		} catch {}
 	}, [e, r]), (0, d.useEffect)(() => {
 		let e = () => i(n());
@@ -1896,7 +1896,7 @@ function zn(e, t) {
 }
 //#endregion
 //#region src/always-on/twin-catalog.ts
-function Bn(e, t, n = () => Date.now()) {
+function Vn(e, t, n = () => Date.now()) {
 	let r, i = 0, a;
 	return function(o = !1) {
 		if (!o && r && n() < i) return Promise.resolve(r);
@@ -1925,19 +1925,19 @@ function Bn(e, t, n = () => Date.now()) {
 }
 //#endregion
 //#region src/always-on/preview-cache.ts
-var Vn = (window.PARTNER_DEMO?.partnerId || "demo-site") + ":spree-preview-cache-v1", Hn = 864e5;
-function Un(e, t = Date.now()) {
+var Hn = (window.PARTNER_DEMO?.partnerId || "demo-site") + ":spree-preview-cache-v1", Un = 864e5;
+function Wn(e, t = Date.now()) {
 	try {
-		let n = JSON.parse(e.getItem(Vn) || "[]");
-		return Array.isArray(n) ? new Map(n.filter((e) => typeof e.key == "string" && Number.isFinite(e.at) && t - e.at < Hn && e.value?.status === "ready" && (typeof e.value.url == "string" || typeof e.value.recommended == "string")).slice(-120).map((e) => [e.key, e.value])) : /* @__PURE__ */ new Map();
+		let n = JSON.parse(e.getItem(Hn) || "[]");
+		return Array.isArray(n) ? new Map(n.filter((e) => typeof e.key == "string" && Number.isFinite(e.at) && t - e.at < Un && e.value?.status === "ready" && (typeof e.value.url == "string" || typeof e.value.recommended == "string")).slice(-120).map((e) => [e.key, e.value])) : /* @__PURE__ */ new Map();
 	} catch {
 		return /* @__PURE__ */ new Map();
 	}
 }
-var Wn = typeof sessionStorage > "u" ? /* @__PURE__ */ new Map() : Un(sessionStorage);
-function Gn(e = sessionStorage) {
+var Gn = typeof sessionStorage > "u" ? /* @__PURE__ */ new Map() : Wn(sessionStorage);
+function Kn(e = sessionStorage) {
 	try {
-		e.setItem(Vn, JSON.stringify([...Wn].filter(([, e]) => e.status === "ready").slice(-120).map(([e, t]) => ({
+		e.setItem(Hn, JSON.stringify([...Gn].filter(([, e]) => e.status === "ready").slice(-120).map(([e, t]) => ({
 			key: e,
 			value: t,
 			at: Date.now()
@@ -1946,114 +1946,114 @@ function Gn(e = sessionStorage) {
 }
 //#endregion
 //#region src/always-on/history.ts
-var Kn = (window.PARTNER_DEMO?.partnerId || "demo-site") + ":spree-shopping-history-v1";
-function qn() {
+var qn = (window.PARTNER_DEMO?.partnerId || "demo-site") + ":spree-shopping-history-v1";
+function Jn() {
 	try {
-		let e = JSON.parse(sessionStorage.getItem(Kn) || "[]");
+		let e = JSON.parse(sessionStorage.getItem(qn) || "[]");
 		return Array.isArray(e) ? e : [];
 	} catch {
 		return [];
 	}
 }
-var Jn = qn(), Yn = 0, Xn = /* @__PURE__ */ new Map();
-function Zn(e) {
+var Yn = Jn(), Xn = 0, Zn = /* @__PURE__ */ new Map();
+function Qn(e) {
 	return {
 		identityId: e,
-		epoch: Yn,
-		revision: Xn.get(e) || 0
+		epoch: Xn,
+		revision: Zn.get(e) || 0
 	};
 }
-var Qn = Kn + "-removed", $n = /* @__PURE__ */ new Set();
+var $n = qn + "-removed", er = /* @__PURE__ */ new Set();
 try {
-	$n = new Set(JSON.parse(sessionStorage.getItem(Qn) || "[]"));
+	er = new Set(JSON.parse(sessionStorage.getItem($n) || "[]"));
 } catch {}
-var er = /* @__PURE__ */ new Set();
-function tr() {
+var tr = /* @__PURE__ */ new Set();
+function nr() {
 	try {
-		sessionStorage.setItem(Kn, JSON.stringify(Jn)), sessionStorage.setItem(Qn, JSON.stringify([...$n]));
+		sessionStorage.setItem(qn, JSON.stringify(Yn)), sessionStorage.setItem($n, JSON.stringify([...er]));
 	} catch {}
-	er.forEach((e) => e());
+	tr.forEach((e) => e());
 }
-function nr(e, t) {
-	if (t.identityId !== e.identityId || t.epoch !== Yn || t.revision !== (Xn.get(e.identityId) || 0) || $n.has(e.id)) return;
-	let n = Jn.find((t) => t.id === e.id);
-	Jn = [{
+function rr(e, t) {
+	if (t.identityId !== e.identityId || t.epoch !== Xn || t.revision !== (Zn.get(e.identityId) || 0) || er.has(e.id)) return;
+	let n = Yn.find((t) => t.id === e.id);
+	Yn = [{
 		...n,
 		...e,
 		at: n?.at || Date.now()
-	}, ...Jn.filter((t) => t.id !== e.id)].sort((e, t) => t.at - e.at), tr();
-}
-function rr(e) {
-	$n.add(e), Jn = Jn.filter((t) => t.id !== e), tr();
+	}, ...Yn.filter((t) => t.id !== e.id)].sort((e, t) => t.at - e.at), nr();
 }
 function ir(e) {
-	Xn.set(e, (Xn.get(e) || 0) + 1), Jn.filter((t) => t.identityId === e).forEach((e) => $n.add(e.id)), Jn = Jn.filter((t) => t.identityId !== e), tr();
+	er.add(e), Yn = Yn.filter((t) => t.id !== e), nr();
 }
-function ar() {
-	return (0, d.useSyncExternalStore)((e) => (er.add(e), () => {
-		er.delete(e);
-	}), () => Jn);
+function ar(e) {
+	Zn.set(e, (Zn.get(e) || 0) + 1), Yn.filter((t) => t.identityId === e).forEach((e) => er.add(e.id)), Yn = Yn.filter((t) => t.identityId !== e), nr();
+}
+function or() {
+	return (0, d.useSyncExternalStore)((e) => (tr.add(e), () => {
+		tr.delete(e);
+	}), () => Yn);
 }
 //#endregion
 //#region src/always-on/connection.ts
-var or = window.PARTNER_DEMO?.api || "https://api.dev.spreeai.com", sr = window.PARTNER_DEMO?.partnerId || "demo-site";
+var sr = window.PARTNER_DEMO?.api || "https://api.dev.spreeai.com", cr = window.PARTNER_DEMO?.partnerId || "demo-site";
 window.PARTNER_DEMO?.clientId;
-var cr = sr + ":spree-dev-session-v1", lr = sr + ":spree-dev-profile-v1";
-function ur(e, t) {
+var lr = cr + ":spree-dev-session-v1", ur = cr + ":spree-dev-profile-v1";
+function dr(e, t) {
 	try {
 		return JSON.parse(sessionStorage.getItem(e) || "null") || t;
 	} catch {
 		return t;
 	}
 }
-var dr = ur(cr, null), L = ur(lr, {
+var fr = dr(lr, null), I = dr(ur, {
 	identity: null,
 	authenticated: !1,
 	name: "",
 	version: 0
 });
-L.identity?.kind === "photo" && !ur(sr + ":spree-session-upload-ledger", []).includes(L.identity.id) && (L = {
-	...L,
+I.identity?.kind === "photo" && !dr(cr + ":spree-session-upload-ledger", []).includes(I.identity.id) && (I = {
+	...I,
 	identity: null
-}), dr || (L = {
+}), fr || (I = {
 	identity: null,
 	authenticated: !1,
 	name: "",
 	version: 0
 });
-var fr = null, pr = 0, mr = /* @__PURE__ */ new Set();
-function hr() {
-	try {
-		sessionStorage.setItem(cr, JSON.stringify(dr)), sessionStorage.setItem(lr, JSON.stringify(L));
-	} catch {}
-	mr.forEach((e) => e());
-}
+var pr = null, mr = 0, hr = /* @__PURE__ */ new Set();
 function gr() {
-	return (0, d.useSyncExternalStore)((e) => (mr.add(e), () => {
-		mr.delete(e);
-	}), () => L);
+	try {
+		sessionStorage.setItem(lr, JSON.stringify(fr)), sessionStorage.setItem(ur, JSON.stringify(I));
+	} catch {}
+	hr.forEach((e) => e());
 }
 function _r() {
-	return L;
+	return (0, d.useSyncExternalStore)((e) => (hr.add(e), () => {
+		hr.delete(e);
+	}), () => I);
 }
 function vr() {
-	return pr;
+	return I;
 }
-function yr(e) {
-	L = {
-		...L,
+function yr() {
+	return mr;
+}
+function br(e) {
+	I = {
+		...I,
 		identity: e,
-		version: L.version + 1
-	}, hr();
+		version: I.version + 1
+	}, gr();
 }
-var br = sr + ":spree-session-upload-ledger";
-function xr() {
-	return ur(br, []);
-}
+var xr = cr + ":spree-session-upload-ledger";
 function Sr() {
-	sessionStorage.removeItem(br);
+	return dr(xr, []);
 }
-async function Cr(e, t, n, r, i = or) {
+function Cr() {
+	sessionStorage.removeItem(xr);
+}
+async function wr(e, t, n, r, i = sr) {
 	let a = h();
 	try {
 		let a = await fetch(i + e, {
@@ -2071,66 +2071,66 @@ async function Cr(e, t, n, r, i = or) {
 		a();
 	}
 }
-async function wr() {
-	if (dr && dr.expiresAt > Date.now() + 6e4) return dr;
-	if (fr) return fr;
-	let e = pr;
-	return fr = (async () => {
+async function Tr() {
+	if (fr && fr.expiresAt > Date.now() + 6e4) return fr;
+	if (pr) return pr;
+	let e = mr;
+	return pr = (async () => {
 		let t;
 		try {
-			t = await Cr(dr ? "/v1/auth/refresh" : "/v1/user/guest", "POST", dr ? {
-				refresh_token: dr.refresh_token,
-				partner_id: sr
+			t = await wr(fr ? "/v1/auth/refresh" : "/v1/user/guest", "POST", fr ? {
+				refresh_token: fr.refresh_token,
+				partner_id: cr
 			} : {
-				partner_id: sr,
+				partner_id: cr,
 				language: "en"
 			});
 		} catch (e) {
-			if (!dr || ![400, 401].includes(e.httpStatus)) throw e;
-			dr = null, L.identity?.kind === "photo" && (L = {
-				...L,
+			if (!fr || ![400, 401].includes(e.httpStatus)) throw e;
+			fr = null, I.identity?.kind === "photo" && (I = {
+				...I,
 				identity: null,
-				version: L.version + 1
-			}), t = await Cr("/v1/user/guest", "POST", {
-				partner_id: sr,
+				version: I.version + 1
+			}), t = await wr("/v1/user/guest", "POST", {
+				partner_id: cr,
 				language: "en"
 			});
 		}
-		if (pr !== e) throw Error("Your session changed. Please try again.");
+		if (mr !== e) throw Error("Your session changed. Please try again.");
 		if (!t?.access_token) throw Error("Unable to start your SPREEAI session.");
-		return dr = {
+		return fr = {
 			...t,
 			expiresAt: Date.now() + Number(t.expires_in) * 1e3
-		}, hr(), dr;
+		}, gr(), fr;
 	})().finally(() => {
-		pr === e && (fr = null);
-	}), fr;
+		mr === e && (pr = null);
+	}), pr;
 }
-async function Tr(e, t = "GET", n, r = or) {
-	let i = pr, a = await wr();
-	if (i !== pr) throw Error("Your session changed.");
+async function Er(e, t = "GET", n, r = sr) {
+	let i = mr, a = await Tr();
+	if (i !== mr) throw Error("Your session changed.");
 	let o;
 	try {
-		o = await Cr(e, t, n, a.access_token, r);
+		o = await wr(e, t, n, a.access_token, r);
 	} catch (s) {
 		if (window.PARTNER_DEMO?.theme === "ch" && s.httpStatus === 429) {
-			if (await new Promise((e) => setTimeout(e, 3e4)), i !== pr) throw Error("Your session changed.");
-			return Cr(e, t, n, a.access_token, r);
+			if (await new Promise((e) => setTimeout(e, 3e4)), i !== mr) throw Error("Your session changed.");
+			return wr(e, t, n, a.access_token, r);
 		}
-		if (s.httpStatus !== 401 || r !== or) throw s;
-		dr = null, fr = null, o = await Cr(e, t, n, (await wr()).access_token, r);
+		if (s.httpStatus !== 401 || r !== sr) throw s;
+		fr = null, pr = null, o = await wr(e, t, n, (await Tr()).access_token, r);
 	}
-	if (i !== pr) throw Error("Your session changed. Please try again.");
+	if (i !== mr) throw Error("Your session changed. Please try again.");
 	return o;
 }
-var Er = "/v1/avatars?partnerID=" + encodeURIComponent(sr) + "&inheritpartner=true&inheritdefault=true", Dr = Bn(async () => (await Tr(Er)).avatars, async () => {
-	let e = await Cr("/v1/user/guest", "POST", {
-		partner_id: sr,
+var Dr = "/v1/avatars?partnerID=" + encodeURIComponent(cr) + "&inheritpartner=true&inheritdefault=true", Or = Vn(async () => (await Er(Dr)).avatars, async () => {
+	let e = await wr("/v1/user/guest", "POST", {
+		partner_id: cr,
 		language: "en"
 	});
 	if (!e?.access_token) throw Error("Unable to load Twins. Please try again.");
-	return (await Cr(Er, "GET", void 0, e.access_token)).avatars;
-}), Or = (e) => ({
+	return (await wr(Dr, "GET", void 0, e.access_token)).avatars;
+}), kr = (e) => ({
 	id: e.id,
 	url: e.url,
 	name: e.name,
@@ -2140,24 +2140,24 @@ var Er = "/v1/avatars?partnerID=" + encodeURIComponent(sr) + "&inheritpartner=tr
 	bodyType: e.sex === "M" ? "Masculine" : "Feminine",
 	usualSize: e.user_tshirt_size
 });
-async function kr(e) {
+async function Ar(e) {
 	if (!Number.isFinite(e.height) || e.height < 100 || e.height > 230 || !Number.isFinite(e.weight) || e.weight < 30 || e.weight > 250) throw Error("Enter a height between 100 and 230 cm and a weight between 30 and 250 kg.");
-	let t = L.version;
-	if (await Tr("/v2/user", "PUT", {
+	let t = I.version;
+	if (await Er("/v2/user", "PUT", {
 		height_centimeters: e.height,
 		weight_kilograms: e.weight,
 		body_type: e.bodyType
-	}), L.version !== t) throw Error("Your profile changed. Please try again.");
-	yr(e);
+	}), I.version !== t) throw Error("Your profile changed. Please try again.");
+	br(e);
 }
-async function Ar(e) {
+async function jr(e) {
 	let t = new FormData();
 	t.append("user_image", e), t.append("source", "web-sdk"), t.append("is_uploaded", "true");
-	let n = await Tr("/v2/store-experience/user-images", "POST", t);
-	if (!jr(n)) throw Error("Your photo upload returned an incomplete result. Please choose your photo again.");
-	return sessionStorage.setItem(br, JSON.stringify([.../* @__PURE__ */ new Set([...xr(), n.id])])), n;
+	let n = await Er("/v2/store-experience/user-images", "POST", t);
+	if (!Mr(n)) throw Error("Your photo upload returned an incomplete result. Please choose your photo again.");
+	return sessionStorage.setItem(xr, JSON.stringify([.../* @__PURE__ */ new Set([...Sr(), n.id])])), n;
 }
-function jr(e) {
+function Mr(e) {
 	if (!e || typeof e != "object") return !1;
 	let t = e;
 	if (typeof t.id != "string" || !t.id.trim() || typeof t.url != "string") return !1;
@@ -2167,17 +2167,17 @@ function jr(e) {
 		return !1;
 	}
 }
-async function Mr() {
-	let e = await Tr("/v2/store-experience/user-images");
-	if (!Array.isArray(e?.images) || e.images.some((e) => !jr(e))) throw Error("Saved photos could not be verified. Choose a photo from your device.");
+async function Nr() {
+	let e = await Er("/v2/store-experience/user-images");
+	if (!Array.isArray(e?.images) || e.images.some((e) => !Mr(e))) throw Error("Saved photos could not be verified. Choose a photo from your device.");
 	let t = e.images;
 	if (new Set(t.map((e) => e.id)).size !== t.length) throw Error("Saved photos could not be verified. Choose a photo from your device.");
-	return { images: t.filter((e) => xr().includes(e.id)) };
+	return { images: t.filter((e) => Sr().includes(e.id)) };
 }
-async function Nr(e, t, n, r, i = 18e4) {
+async function Pr(e, t, n, r, i = 18e4) {
 	let a = Date.now();
 	for (; !r.aborted;) {
-		let o = await Tr(e);
+		let o = await Er(e);
 		if (r.aborted) throw Error("Cancelled");
 		if (n(o)) throw Error("SPREEAI could not generate this view. Please try another piece or photo.");
 		if (t(o)) return o;
@@ -2186,10 +2186,10 @@ async function Nr(e, t, n, r, i = 18e4) {
 	}
 	throw Error("Cancelled");
 }
-async function Pr(e, t, n, r = "front", i, a) {
-	let o = L.version, s = await Tr(`/${r === "back" || i ? "v3.1" : "v3"}/store-experience/tryon`, "POST", {
+async function Fr(e, t, n, r = "front", i, a) {
+	let o = I.version, s = await Er(`/${r === "back" || i ? "v3.1" : "v3"}/store-experience/tryon`, "POST", {
 		garment_set: { garments: (Array.isArray(e) ? e : [e]).map((e) => ({ garment_id: e })) },
-		partner_id: sr,
+		partner_id: cr,
 		image_id: t.id,
 		source: "web-sdk",
 		no_remove_background: !1,
@@ -2198,30 +2198,30 @@ async function Pr(e, t, n, r = "front", i, a) {
 			size: i,
 			base_size: a
 		} : {}
-	}), c = await Nr("/v1/user-assets/tryon/" + encodeURIComponent(s.request_id), (e) => e.status === "COMPLETE", (e) => e.status === "FAILED", n);
-	if (L.version !== o) throw Error("Your profile changed. Create a new view.");
+	}), c = await Pr("/v1/user-assets/tryon/" + encodeURIComponent(s.request_id), (e) => e.status === "COMPLETE", (e) => e.status === "FAILED", n);
+	if (I.version !== o) throw Error("Your profile changed. Create a new view.");
 	if (!c.image?.url) throw Error("No image was returned. Please try again.");
 	return c;
 }
-async function Fr(e, t, n) {
-	let r = L.version, i = await Tr("/v2/store-experience/sizing", "POST", {
+async function Ir(e, t, n) {
+	let r = I.version, i = await Er("/v2/store-experience/sizing", "POST", {
 		garment_id: e,
 		height_centimeters: t.height,
 		weight_kilograms: t.weight,
 		body_type: t.bodyType,
 		source: "web-sdk"
-	}), a = await Nr("/v1/user-assets/sizing/" + encodeURIComponent(i.request_id), (e) => e.sizing !== void 0 || [e.status, e.result].some((e) => e === "COMPLETE" || e === "SUCCESS" || /^\d{4}$/.test(e || "")), (e) => [e.status, e.result].some((e) => [
+	}), a = await Pr("/v1/user-assets/sizing/" + encodeURIComponent(i.request_id), (e) => e.sizing !== void 0 || [e.status, e.result].some((e) => e === "COMPLETE" || e === "SUCCESS" || /^\d{4}$/.test(e || "")), (e) => [e.status, e.result].some((e) => [
 		"FAILED",
 		"FAILURE",
 		"ERROR"
 	].includes((e || "").toUpperCase())), n);
-	if (L.version !== r) throw Error("Your profile changed. Please check your size again.");
+	if (I.version !== r) throw Error("Your profile changed. Please check your size again.");
 	return a;
 }
-var Ir = () => location.hostname === "127.0.0.1" || location.hostname === "localhost" || location.hostname === "demo-store.dev.spreeai.com";
-async function Lr(e, t, n, r, i) {
-	if (!Ir()) throw Error("Detailed fit maps are available in the connected development preview.");
-	return Tr("/api/size-recommendation/garment/" + encodeURIComponent(e) + "/fit", "POST", {
+var Lr = () => location.hostname === "127.0.0.1" || location.hostname === "localhost" || location.hostname === "demo-store.dev.spreeai.com";
+async function Rr(e, t, n, r, i) {
+	if (!Lr()) throw Error("Detailed fit maps are available in the connected development preview.");
+	return Er("/api/size-recommendation/garment/" + encodeURIComponent(e) + "/fit", "POST", {
 		profile: {
 			gender: t.bodyType === "Masculine" ? "male" : "female",
 			height_cm: t.height,
@@ -2235,32 +2235,32 @@ async function Lr(e, t, n, r, i) {
 		available_sizes: i
 	}, "");
 }
-var Rr = "https://api.spreeai.com", zr = null, Br = null;
-async function Vr(e, t = "GET", n) {
-	let r = pr;
-	if ((!zr || zr.expiresAt < Date.now() + 6e4) && (Br ||= Cr("/v1/user/guest", "POST", {
-		partner_id: sr,
+var zr = "https://api.spreeai.com", Br = null, Vr = null;
+async function Hr(e, t = "GET", n) {
+	let r = mr;
+	if ((!Br || Br.expiresAt < Date.now() + 6e4) && (Vr ||= wr("/v1/user/guest", "POST", {
+		partner_id: cr,
 		language: "en"
-	}, void 0, Rr).then((e) => {
-		if (pr !== r) throw Error("Your session changed.");
+	}, void 0, zr).then((e) => {
+		if (mr !== r) throw Error("Your session changed.");
 		if (!e?.access_token) throw Error("Unable to connect to the public demo.");
-		return zr = {
+		return Br = {
 			...e,
 			expiresAt: Date.now() + Number(e.expires_in) * 1e3
-		}, zr;
+		}, Br;
 	}).finally(() => {
-		pr === r && (Br = null);
-	}), await Br), pr !== r) throw Error("Your session changed.");
-	let i = await Cr(e, t, n, zr.access_token, Rr);
-	if (pr !== r) throw Error("Your session changed.");
+		mr === r && (Vr = null);
+	}), await Vr), mr !== r) throw Error("Your session changed.");
+	let i = await wr(e, t, n, Br.access_token, zr);
+	if (mr !== r) throw Error("Your session changed.");
 	return i;
 }
-var Hr = /* @__PURE__ */ new Map();
-async function Ur(e) {
-	let t = pr, n = L.version + ":" + e.id;
-	return Hr.has(n) || Hr.set(n, (async () => {
+var Ur = /* @__PURE__ */ new Map();
+async function Wr(e) {
+	let t = mr, n = I.version + ":" + e.id;
+	return Ur.has(n) || Ur.set(n, (async () => {
 		if (e.kind === "twin") {
-			let t = (await Vr("/v1/avatars?partnerID=demo-site&inheritpartner=true&inheritdefault=true")).avatars?.find((t) => t.name.toLowerCase() === e.name.toLowerCase());
+			let t = (await Hr("/v1/avatars?partnerID=demo-site&inheritpartner=true&inheritdefault=true")).avatars?.find((t) => t.name.toLowerCase() === e.name.toLowerCase());
 			if (t) return {
 				...e,
 				id: t.id
@@ -2269,24 +2269,24 @@ async function Ur(e) {
 		let n = await fetch(e.url);
 		if (!n.ok) throw Error("Your photo could not be connected to this collection.");
 		let r = await n.blob();
-		if (pr !== t) throw Error("Your session changed.");
+		if (mr !== t) throw Error("Your session changed.");
 		let i = new FormData();
 		i.append("user_image", r, "profile.jpg"), i.append("source", "web-sdk"), i.append("is_uploaded", "true");
-		let a = await Vr("/v2/store-experience/user-images", "POST", i);
+		let a = await Hr("/v2/store-experience/user-images", "POST", i);
 		return {
 			...e,
 			id: a.id
 		};
 	})().catch((e) => {
-		throw Hr.delete(n), e;
-	})), Hr.get(n);
+		throw Ur.delete(n), e;
+	})), Ur.get(n);
 }
-async function Wr(e, t, n, r, i) {
-	let a = L.version, o = await Ur(t);
-	if (L.version !== a) throw Error("Your profile changed.");
-	let s = await Vr(`/${r ? "v3.1" : "v3"}/store-experience/tryon`, "POST", {
+async function Gr(e, t, n, r, i) {
+	let a = I.version, o = await Wr(t);
+	if (I.version !== a) throw Error("Your profile changed.");
+	let s = await Hr(`/${r ? "v3.1" : "v3"}/store-experience/tryon`, "POST", {
 		garment_set: { garments: e.map((e) => ({ garment_id: e })) },
-		partner_id: sr,
+		partner_id: cr,
 		image_id: o.id,
 		source: "web-sdk",
 		no_remove_background: !1,
@@ -2294,15 +2294,15 @@ async function Wr(e, t, n, r, i) {
 			size: r,
 			base_size: i
 		} : {}
-	}), c = await Gr("/v1/user-assets/tryon/" + encodeURIComponent(s.request_id), n, (e) => e.status === "COMPLETE", (e) => e.status === "FAILED");
-	if (L.version !== a) throw Error("Your profile changed. Create a new view.");
+	}), c = await Kr("/v1/user-assets/tryon/" + encodeURIComponent(s.request_id), n, (e) => e.status === "COMPLETE", (e) => e.status === "FAILED");
+	if (I.version !== a) throw Error("Your profile changed. Create a new view.");
 	if (!c.image?.url) throw Error("No image was returned. Please retry your look.");
 	return c;
 }
-async function Gr(e, t, n, r) {
+async function Kr(e, t, n, r) {
 	let i = Date.now();
 	for (; !t.aborted;) {
-		let t = await Vr(e);
+		let t = await Hr(e);
 		if (r(t)) throw Error("This personal view is temporarily unavailable.");
 		if (n(t)) return t;
 		if (Date.now() - i > 18e4) throw Error("This is taking longer than expected.");
@@ -2310,23 +2310,23 @@ async function Gr(e, t, n, r) {
 	}
 	throw Error("Cancelled");
 }
-async function Kr(e, t, n) {
-	let r = await Vr("/v2/store-experience/sizing", "POST", {
+async function qr(e, t, n) {
+	let r = await Hr("/v2/store-experience/sizing", "POST", {
 		garment_id: e,
 		height_centimeters: t.height,
 		weight_kilograms: t.weight,
 		body_type: t.bodyType,
 		source: "web-sdk"
 	});
-	return Gr("/v1/user-assets/sizing/" + encodeURIComponent(r.request_id), n, (e) => !!e.sizing || [e.status, e.result].some((e) => e === "COMPLETE" || e === "SUCCESS" || /^\d{4}$/.test(e || "")), (e) => [e.status, e.result].some((e) => [
+	return Kr("/v1/user-assets/sizing/" + encodeURIComponent(r.request_id), n, (e) => !!e.sizing || [e.status, e.result].some((e) => e === "COMPLETE" || e === "SUCCESS" || /^\d{4}$/.test(e || "")), (e) => [e.status, e.result].some((e) => [
 		"FAILED",
 		"FAILURE",
 		"ERROR"
 	].includes((e || "").toUpperCase())));
 }
-async function qr(e, t, n, r, i) {
-	if (!Ir()) throw Error("Detailed fit advice requires the connected preview.");
-	return Tr("/api/size-recommendation/garment/" + encodeURIComponent(e), "POST", {
+async function Jr(e, t, n, r, i) {
+	if (!Lr()) throw Error("Detailed fit advice requires the connected preview.");
+	return Er("/api/size-recommendation/garment/" + encodeURIComponent(e), "POST", {
 		profile: {
 			gender: t.bodyType === "Masculine" ? "male" : "female",
 			height_cm: t.height,
@@ -2341,7 +2341,7 @@ async function qr(e, t, n, r, i) {
 }
 //#endregion
 //#region src/partner-demo/full-body-previews.ts
-function Jr(e, t) {
+function Yr(e, t) {
 	if (window.PARTNER_DEMO?.theme !== "ch" || e !== "8816ce4c-9b01-0000-1700-aa221afd8020" || t.length !== 1) return;
 	let n = {
 		"ch-195095966710": "isabella-skirt-full-body.webp",
@@ -2355,7 +2355,7 @@ function Jr(e, t) {
 }
 //#endregion
 //#region src/always-on/image-readiness.ts
-function Yr(e, t = 15e3) {
+function Xr(e, t = 15e3) {
 	return new Promise((n, r) => {
 		if (!e) {
 			r(/* @__PURE__ */ Error("No image was returned. Please retry your look."));
@@ -2370,7 +2370,7 @@ function Yr(e, t = 15e3) {
 }
 //#endregion
 //#region src/always-on/preview-job.ts
-async function Xr(e, t = 21e4) {
+async function Zr(e, t = 21e4) {
 	let n;
 	try {
 		return await Promise.race([Promise.resolve().then(e), new Promise((e, r) => {
@@ -2382,22 +2382,22 @@ async function Xr(e, t = 21e4) {
 }
 //#endregion
 //#region src/always-on/presigned.ts
-var Zr = 6e4, Qr = (e) => {
+var Qr = 6e4, $r = (e) => {
 	let t = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/.exec(e);
 	if (!t) return null;
 	let [, n, r, i, a, o, s] = t;
 	return Date.UTC(Number(n), Number(r) - 1, Number(i), Number(a), Number(o), Number(s));
-}, $r = (e) => {
+}, ei = (e) => {
 	if (!e) return !1;
 	try {
 		let t = new URL(e), n = t.searchParams.get("X-Amz-Date"), r = t.searchParams.get("X-Amz-Expires");
 		if (!n || !r) return !1;
-		let i = Qr(n);
-		return i !== null && Date.now() > i + Number(r) * 1e3 - Zr;
+		let i = $r(n);
+		return i !== null && Date.now() > i + Number(r) * 1e3 - Qr;
 	} catch {
 		return !1;
 	}
-}, ei = (e, t, n) => {
+}, ti = (e, t, n) => {
 	let r = e.indexOf(t), i = e.indexOf(n);
 	if (r === -1 || i === -1) return null;
 	let a = r - i;
@@ -2417,7 +2417,7 @@ var Zr = 6e4, Qr = (e) => {
 		label: "Oversized",
 		tone: "over"
 	};
-}, ti = /^(os|one[\s-]?size|o\/s)$/i, ni = (e) => e.length > 0 && e.every((e) => ti.test(e.trim())), ri = (e) => ti.test(e.trim()) ? "One size" : e, ii = {
+}, ni = /^(os|one[\s-]?size|o\/s)$/i, ri = (e) => e.length > 0 && e.every((e) => ni.test(e.trim())), ii = (e) => ni.test(e.trim()) ? "One size" : e, ai = {
 	XXS: ["00"],
 	XS: ["0", "2"],
 	S: ["4", "6"],
@@ -2425,23 +2425,23 @@ var Zr = 6e4, Qr = (e) => {
 	L: ["12", "14"],
 	XL: ["16", "18"],
 	XXL: ["20", "22"]
-}, ai = (e) => /^\d+$/.test(e.trim()), oi = (e) => e.trim().toUpperCase(), si = (e, t) => {
-	let n = oi(e), r = t.find((e) => oi(e) === n);
+}, oi = (e) => /^\d+$/.test(e.trim()), si = (e) => e.trim().toUpperCase(), ci = (e, t) => {
+	let n = si(e), r = t.find((e) => si(e) === n);
 	if (r) return r;
-	if (t.length > 0 && t.every(ai) && ii[n]) {
-		let e = [...ii[n]].reverse();
+	if (t.length > 0 && t.every(oi) && ai[n]) {
+		let e = [...ai[n]].reverse();
 		for (let n of e) {
-			let e = t.find((e) => oi(e) === n);
+			let e = t.find((e) => si(e) === n);
 			if (e) return e;
 		}
 		return null;
 	}
-	if (t.length > 0 && t.every((e) => !ai(e)) && ai(n)) {
-		let e = Object.keys(ii).find((e) => ii[e].includes(n));
-		return e ? t.find((t) => oi(t) === e) ?? null : null;
+	if (t.length > 0 && t.every((e) => !oi(e)) && oi(n)) {
+		let e = Object.keys(ai).find((e) => ai[e].includes(n));
+		return e ? t.find((t) => si(t) === e) ?? null : null;
 	}
 	return null;
-}, ci = [
+}, li = [
 	"XS",
 	"S",
 	"M",
@@ -2449,25 +2449,25 @@ var Zr = 6e4, Qr = (e) => {
 	"XL",
 	"2XL",
 	"3XL"
-], li = {
+], ui = {
 	XXL: "2XL",
 	XXXL: "3XL"
-}, ui = (e) => e === "00" || /^[1-9]?\d$/.test(e), di = (e) => {
-	let t = oi(e);
-	if (ai(t)) return ui(t) ? t : null;
-	let n = li[t] ?? t;
-	return ci.includes(n) ? n : null;
-}, fi = (e, t) => {
-	let n = di(e), r = di(t);
-	return !n || !r || n === r || ai(n) !== ai(r) ? null : {
+}, di = (e) => e === "00" || /^[1-9]?\d$/.test(e), fi = (e) => {
+	let t = si(e);
+	if (oi(t)) return di(t) ? t : null;
+	let n = ui[t] ?? t;
+	return li.includes(n) ? n : null;
+}, pi = (e, t) => {
+	let n = fi(e), r = fi(t);
+	return !n || !r || n === r || oi(n) !== oi(r) ? null : {
 		size: n,
 		baseSize: r
 	};
 };
 //#endregion
 //#region src/always-on/fit-preview.ts
-function pi(e, t, n) {
-	if (ni(e)) return {
+function mi(e, t, n) {
+	if (ri(e)) return {
 		size: "",
 		base: "",
 		reason: ""
@@ -2487,7 +2487,7 @@ function pi(e, t, n) {
 		base: "",
 		reason: `Previews below the recommended size ${n} are not available yet.`
 	};
-	let r = fi(t, n), i = di(n);
+	let r = pi(t, n), i = fi(n);
 	return r ? {
 		size: r.size,
 		base: r.baseSize,
@@ -2502,7 +2502,7 @@ function pi(e, t, n) {
 		reason: "Visual previews for this sizing system are not available yet."
 	};
 }
-function mi(e, t, n, r) {
+function hi(e, t, n, r) {
 	if (t === n) return "Recommended";
 	let i = r?.sizes.find((e) => e.size === t)?.zones.filter((e) => /waist|hip|bust|chest/.test(e.point)).map((e) => e.verdict) || [];
 	if (i.includes("too_small")) return "Tight fit";
@@ -2510,51 +2510,51 @@ function mi(e, t, n, r) {
 	if (i.includes("loose")) return "Oversized fit";
 	if (i.includes("room")) return "Relaxed fit";
 	if (i.includes("true")) return "Also fits";
-	let a = ei(e, t, n);
+	let a = ti(e, t, n);
 	return a ? a.label + " fit" : "";
 }
 //#endregion
 //#region src/always-on/personalization.ts
-var hi = /* @__PURE__ */ new Set(), gi = { status: "idle" }, R = Wn, _i = /* @__PURE__ */ new Map(), vi = /* @__PURE__ */ new Set(), yi = { status: "loading" }, bi = Promise.resolve(), xi = () => vi.forEach((e) => e()), Si = () => {
-	let e = _r();
+var gi = /* @__PURE__ */ new Set(), _i = { status: "idle" }, L = Gn, vi = /* @__PURE__ */ new Map(), yi = /* @__PURE__ */ new Set(), bi = { status: "loading" }, xi = Promise.resolve(), Si = () => yi.forEach((e) => e()), Ci = () => {
+	let e = vr();
 	return e.identity ? e.version + ":" + e.identity.id : "";
-}, Ci = (e, t = "", n = "", r = "dev") => Si() + ":" + r + ":image:" + e.join("|") + ":" + t + ":" + n + (window.PARTNER_DEMO?.theme === "ch" ? ":full-body-v2" : ""), wi = (e) => R.get(Ci([e]))?.url;
-function Ti(e, t, n) {
-	if (!e || _i.has(e) || R.has(e) && R.get(e)?.status !== "loading" && !$r(R.get(e)?.url) && (!R.get(e)?.url || hi.has(R.get(e).url))) return;
-	R.set(e, { status: "loading" }), xi();
-	let r = h(), i = window.PARTNER_DEMO?.theme === "ch" && e.includes(":image:"), a = () => Xr(t), o = (i ? bi.then(a) : a()).then((t) => {
-		n === Si() && (R.set(e, {
+}, wi = (e, t = "", n = "", r = "dev") => Ci() + ":" + r + ":image:" + e.join("|") + ":" + t + ":" + n + (window.PARTNER_DEMO?.theme === "ch" ? ":full-body-v2" : ""), Ti = (e) => L.get(wi([e]))?.url;
+function Ei(e, t, n) {
+	if (!e || vi.has(e) || L.has(e) && L.get(e)?.status !== "loading" && !ei(L.get(e)?.url) && (!L.get(e)?.url || gi.has(L.get(e).url))) return;
+	L.set(e, { status: "loading" }), Si();
+	let r = h(), i = window.PARTNER_DEMO?.theme === "ch" && e.includes(":image:"), a = () => Zr(t), o = (i ? xi.then(a) : a()).then((t) => {
+		n === Ci() && (L.set(e, {
 			...t,
 			status: "ready"
-		}), Gn());
+		}), Kn());
 	}).catch((t) => {
-		n === Si() && R.set(e, {
+		n === Ci() && L.set(e, {
 			status: "error",
 			error: t instanceof Error ? t.message : "Temporarily unavailable."
 		});
 	}).finally(() => {
-		n !== Si() && R.get(e)?.status === "loading" && R.delete(e), r(), _i.delete(e), xi();
+		n !== Ci() && L.get(e)?.status === "loading" && L.delete(e), r(), vi.delete(e), Si();
 	});
-	_i.set(e, o), i && (bi = o.catch(() => {}));
+	vi.set(e, o), i && (xi = o.catch(() => {}));
 }
-function Ei(e) {
-	return (0, d.useSyncExternalStore)((e) => (vi.add(e), () => {
-		vi.delete(e);
-	}), () => e ? R.get(e)?.status === "ready" && $r(R.get(e)?.url) ? yi : R.get(e) || gi : gi);
+function Di(e) {
+	return (0, d.useSyncExternalStore)((e) => (yi.add(e), () => {
+		yi.delete(e);
+	}), () => e ? L.get(e)?.status === "ready" && ei(L.get(e)?.url) ? bi : L.get(e) || _i : _i);
 }
-function Di(e, t = "", n = "", r = 0) {
-	let i = gr(), a = i.identity, o = a ? i.version + ":" + a.id : "", s = e.map((e) => e.garmentId), c = a && s.length > 0 ? Ci(s, t, n, e[0]?.environment || "dev") : "", l = Ei(c), u = R.get(c)?.status === "ready" && $r(R.get(c)?.url), f = (0, d.useMemo)(() => Zn(a?.id || ""), [
+function Oi(e, t = "", n = "", r = 0) {
+	let i = _r(), a = i.identity, o = a ? i.version + ":" + a.id : "", s = e.map((e) => e.garmentId), c = a && s.length > 0 ? wi(s, t, n, e[0]?.environment || "dev") : "", l = Di(c), u = L.get(c)?.status === "ready" && ei(L.get(c)?.url), f = (0, d.useMemo)(() => Qn(a?.id || ""), [
 		c,
 		r,
 		u
 	]);
 	return (0, d.useEffect)(() => {
 		if (!a || !s.length) return;
-		r > 0 && R.get(c)?.status === "error" && R.delete(c);
-		let i = R.get(c), l = setTimeout(() => Ti(c, async () => {
-			if (o !== Si()) throw Error("Profile changed");
-			let r = Jr(a.id, s);
-			if (r) return await Yr(r), hi.add(r), o === Si() && nr({
+		r > 0 && L.get(c)?.status === "error" && L.delete(c);
+		let i = L.get(c), l = setTimeout(() => Ei(c, async () => {
+			if (o !== Ci()) throw Error("Profile changed");
+			let r = Yr(a.id, s);
+			if (r) return await Xr(r), gi.add(r), o === Ci() && rr({
 				id: c,
 				kind: t ? "sizing" : "tryon",
 				identityId: a.id,
@@ -2571,20 +2571,20 @@ function Di(e, t = "", n = "", r = 0) {
 				url: r,
 				previewSource: "prepared-demo"
 			};
-			if (i?.requestId && $r(i.url)) {
-				let e = await (i.environment === "prod" ? Vr : Tr)("/v1/user-assets/tryon/" + encodeURIComponent(i.requestId));
-				if (!e.image?.url || $r(e.image.url)) throw Error("This preview link is unavailable. Please retry your look.");
-				return await Yr(e.image.url), hi.add(e.image.url), {
+			if (i?.requestId && ei(i.url)) {
+				let e = await (i.environment === "prod" ? Hr : Er)("/v1/user-assets/tryon/" + encodeURIComponent(i.requestId));
+				if (!e.image?.url || ei(e.image.url)) throw Error("This preview link is unavailable. Please retry your look.");
+				return await Xr(e.image.url), gi.add(e.image.url), {
 					...i,
 					url: e.image.url
 				};
 			}
 			if (i?.url && i.status === "ready") try {
-				return await Yr(i.url), hi.add(i.url), i;
+				return await Xr(i.url), gi.add(i.url), i;
 			} catch {
 				if (i.requestId) {
-					let e = await (i.environment === "prod" ? Vr : Tr)("/v1/user-assets/tryon/" + encodeURIComponent(i.requestId));
-					if (e.image?.url) return await Yr(e.image.url), hi.add(e.image.url), {
+					let e = await (i.environment === "prod" ? Hr : Er)("/v1/user-assets/tryon/" + encodeURIComponent(i.requestId));
+					if (e.image?.url) return await Xr(e.image.url), gi.add(e.image.url), {
 						...i,
 						url: e.image.url
 					};
@@ -2592,9 +2592,9 @@ function Di(e, t = "", n = "", r = 0) {
 				throw Error("Your saved preview could not be loaded. Retry to create a fresh view.");
 			}
 			if (e.some((t) => (t.environment || "dev") !== (e[0].environment || "dev"))) throw Error("Choose pieces from the same collection for a combined look.");
-			let l = e[0].environment === "prod" ? await Wr(s, a, new AbortController().signal, t || void 0, n || void 0) : await Pr(s, a, new AbortController().signal, "front", t || void 0, n || void 0);
+			let l = e[0].environment === "prod" ? await Gr(s, a, new AbortController().signal, t || void 0, n || void 0) : await Fr(s, a, new AbortController().signal, "front", t || void 0, n || void 0);
 			if (!l.image?.url) throw Error("No image was returned. Please retry your look.");
-			return await Yr(l.image.url), hi.add(l.image.url), o === Si() && nr({
+			return await Xr(l.image.url), gi.add(l.image.url), o === Ci() && rr({
 				id: c,
 				kind: t ? "sizing" : "tryon",
 				identityId: a.id,
@@ -2620,24 +2620,24 @@ function Di(e, t = "", n = "", r = 0) {
 		u
 	]), l;
 }
-function Oi(e) {
-	let t = gr(), n = t.identity, r = n ? t.version + ":" + n.id : "", i = n && e && !ni(e.sizes) ? r + ":" + (e.environment || "dev") + ":fit:" + e.garmentId + (window.PARTNER_DEMO ? ":simulation-v1" : "") : "", a = Ei(i), o = (0, d.useMemo)(() => Zn(n?.id || ""), [i]);
+function ki(e) {
+	let t = _r(), n = t.identity, r = n ? t.version + ":" + n.id : "", i = n && e && !ri(e.sizes) ? r + ":" + (e.environment || "dev") + ":fit:" + e.garmentId + (window.PARTNER_DEMO ? ":simulation-v1" : "") : "", a = Di(i), o = (0, d.useMemo)(() => Qn(n?.id || ""), [i]);
 	return (0, d.useEffect)(() => {
-		n && e && !ni(e.sizes) && Ti(i, async () => {
+		n && e && !ri(e.sizes) && Ei(i, async () => {
 			if (window.PARTNER_DEMO) return {
-				recommended: si(n.usualSize || "M", e.sizes) || e.sizes[Math.floor(e.sizes.length / 2)],
+				recommended: ci(n.usualSize || "M", e.sizes) || e.sizes[Math.floor(e.sizes.length / 2)],
 				map: null,
 				recommendationSource: "simulated",
 				fitNote: "Simulated demo recommendation, based on the selected model’s reference size. Not a calibrated garment-specific fit prediction."
 			};
 			if (!n.height || !n.weight) throw Error("Add height and weight to get size guidance.");
 			let [t, a, s] = await Promise.allSettled([
-				(e.environment === "prod" ? Kr : Fr)(e.garmentId, n, new AbortController().signal),
-				e.environment !== "prod" && Ir() ? Lr(e.garmentId, n, e.name, e.category, e.sizes) : Promise.resolve(null),
-				n.kind === "photo" && e.environment !== "prod" && Ir() ? qr(e.garmentId, n, e.name, e.category, e.sizes) : Promise.resolve(null)
-			]), c = a.status === "fulfilled" ? a.value : null, l = s.status === "fulfilled" ? s.value : null, u = l?.size || c?.recommended, d = t.status === "fulfilled" ? t.value.sizing?.size : void 0, f = (t) => e.sizes.find((e) => e.toUpperCase() === t?.toUpperCase()), p = f(u) || f(d) || (n.kind === "twin" && n.usualSize ? si(n.usualSize, e.sizes) : null), m = f(u) ? "chart" : f(d) ? "engine" : "twin";
+				(e.environment === "prod" ? qr : Ir)(e.garmentId, n, new AbortController().signal),
+				e.environment !== "prod" && Lr() ? Rr(e.garmentId, n, e.name, e.category, e.sizes) : Promise.resolve(null),
+				n.kind === "photo" && e.environment !== "prod" && Lr() ? Jr(e.garmentId, n, e.name, e.category, e.sizes) : Promise.resolve(null)
+			]), c = a.status === "fulfilled" ? a.value : null, l = s.status === "fulfilled" ? s.value : null, u = l?.size || c?.recommended, d = t.status === "fulfilled" ? t.value.sizing?.size : void 0, f = (t) => e.sizes.find((e) => e.toUpperCase() === t?.toUpperCase()), p = f(u) || f(d) || (n.kind === "twin" && n.usualSize ? ci(n.usualSize, e.sizes) : null), m = f(u) ? "chart" : f(d) ? "engine" : "twin";
 			if (!p || !e.sizes.includes(p)) throw Error("Personal sizing isn’t available for this piece yet.");
-			return r === Si() && nr({
+			return r === Ci() && rr({
 				id: i,
 				kind: "sizing",
 				identityId: n.id,
@@ -2649,7 +2649,7 @@ function Oi(e) {
 				}],
 				images: [],
 				recommended: p,
-				guidance: ki(c, p).map((e) => e.point + ": " + e.label).join(" · ")
+				guidance: Ai(c, p).map((e) => e.point + ": " + e.label).join(" · ")
 			}, o), {
 				recommended: p,
 				map: c,
@@ -2659,7 +2659,7 @@ function Oi(e) {
 		}, r);
 	}, [i]), a;
 }
-function ki(e, t) {
+function Ai(e, t) {
 	return (e?.sizes.find((e) => e.size === t)?.zones || []).filter((e) => e.verdict).map((e) => ({
 		point: e.point.replace(/_/g, " "),
 		label: {
@@ -2673,12 +2673,12 @@ function ki(e, t) {
 		}[e.verdict] || "Fit guidance"
 	}));
 }
-function Ai(e, t = "", n = 0) {
-	let { identity: r } = gr(), i = Oi(e), a = ni(e.sizes), o = t || i.recommended || (a ? e.sizes[0] : ""), s = pi(e.sizes, o, i.recommended || ""), c = pi(e.sizes, i.recommended || "", i.recommended || ""), l = e.environment === "prod" || window.PARTNER_DEMO?.theme === "ch", u = l || a || !r?.height || !r?.weight || !t && [
+function ji(e, t = "", n = 0) {
+	let { identity: r } = _r(), i = ki(e), a = ri(e.sizes), o = t || i.recommended || (a ? e.sizes[0] : ""), s = mi(e.sizes, o, i.recommended || ""), c = mi(e.sizes, i.recommended || "", i.recommended || ""), l = e.environment === "prod" || window.PARTNER_DEMO?.theme === "ch", u = l || a || !r?.height || !r?.weight || !t && [
 		"idle",
 		"loading",
 		"error"
-	].includes(i.status), d = Di(r && (u || i.recommended && !c.reason) ? [e] : [], u ? "" : c.size, u ? "" : c.base, n), f = Di(r && !l && !s.reason && o !== i.recommended && !a && d.status === "ready" ? [e] : [], s.size, s.base, n);
+	].includes(i.status), d = Oi(r && (u || i.recommended && !c.reason) ? [e] : [], u ? "" : c.size, u ? "" : c.base, n), f = Oi(r && !l && !s.reason && o !== i.recommended && !a && d.status === "ready" ? [e] : [], s.size, s.base, n);
 	return u ? {
 		...d,
 		reason: "",
@@ -2689,7 +2689,7 @@ function Ai(e, t = "", n = 0) {
 		reason: "",
 		selected: o
 	} : s.reason ? {
-		...gi,
+		..._i,
 		reason: s.reason,
 		selected: o
 	} : o === i.recommended || d.status === "error" ? {
@@ -2706,16 +2706,16 @@ function Ai(e, t = "", n = 0) {
 		reason: "",
 		selected: o
 	} : {
-		...gi,
+		..._i,
 		reason: "Add your profile to discover your fit.",
 		selected: o
 	};
 }
 //#endregion
 //#region src/always-on/PersonalViews.tsx
-var ji = (e, t, n) => wi(e);
-function Mi({ product: e, selectedSize: t = "" }) {
-	let [n, r] = (0, d.useState)(0), { identity: i } = gr(), a = Ai(e, t, n);
+var Mi = (e, t, n) => Ti(e);
+function Ni({ product: e, selectedSize: t = "" }) {
+	let [n, r] = (0, d.useState)(0), { identity: i } = _r(), a = ji(e, t, n);
 	return i ? /* @__PURE__ */ (0, y.jsxs)("div", {
 		className: "automatic-view",
 		children: [
@@ -2742,7 +2742,7 @@ function Mi({ product: e, selectedSize: t = "" }) {
 						onClick: () => r((e) => e + 1),
 						children: "Retry preview"
 					}),
-					a.reason?.includes("profile") && /* @__PURE__ */ (0, y.jsx)(Dn, {
+					a.reason?.includes("profile") && /* @__PURE__ */ (0, y.jsx)(On, {
 						className: "text-link",
 						to: "/account",
 						children: "Add measurements for sizing"
@@ -2759,7 +2759,7 @@ function Mi({ product: e, selectedSize: t = "" }) {
 		children: [
 			/* @__PURE__ */ (0, y.jsx)("h2", { children: "See this piece on you." }),
 			/* @__PURE__ */ (0, y.jsx)("p", { children: "Add your photo or use a Twin to begin." }),
-			/* @__PURE__ */ (0, y.jsx)(Dn, {
+			/* @__PURE__ */ (0, y.jsx)(On, {
 				className: "primary",
 				to: "/account",
 				children: "Add your photo or use a Twin"
@@ -2769,12 +2769,12 @@ function Mi({ product: e, selectedSize: t = "" }) {
 }
 //#endregion
 //#region src/partner-demo/GarmentFitPreview.tsx
-function Ni(e, t, n = "6") {
+function Pi(e, t, n = "6") {
 	let r = Math.max(0, e.indexOf(n));
 	return Math.max(-.13, Math.min(.18, (Math.max(0, e.indexOf(t)) - r) * .035));
 }
-function Pi({ product: e, src: t, size: n, zoom: r = 1, reference: i = "6" }) {
-	let a = (0, d.useRef)(null), [o, s] = (0, d.useState)(!1), c = Ni(e.sizes, n, i);
+function Fi({ product: e, src: t, size: n, zoom: r = 1, reference: i = "6" }) {
+	let a = (0, d.useRef)(null), [o, s] = (0, d.useState)(!1), c = Pi(e.sizes, n, i);
 	return (0, d.useEffect)(() => {
 		let n = !0;
 		s(!1);
@@ -2825,12 +2825,12 @@ function Pi({ product: e, src: t, size: n, zoom: r = 1, reference: i = "6" }) {
 }
 //#endregion
 //#region src/partner-demo/CarolinaFit.tsx
-function Fi({ product: e, size: t, onSize: n }) {
+function Ii({ product: e, size: t, onSize: n }) {
 	let [r, i] = (0, d.useState)("2"), [a, o] = (0, d.useState)(t || "8"), [s, c] = (0, d.useState)(1);
 	(0, d.useEffect)(() => {
 		t && o(t);
 	}, [t]);
-	let l = ji(e.garmentId), u = l || e.gallery?.[1] || e.model;
+	let l = Mi(e.garmentId), u = l || e.gallery?.[1] || e.model;
 	return /* @__PURE__ */ (0, y.jsxs)("section", {
 		className: "ch-fit",
 		children: [
@@ -2869,7 +2869,7 @@ function Fi({ product: e, size: t, onSize: n }) {
 					value: a,
 					set: o
 				}].map((r) => {
-					let i = Ni(e.sizes, r.value);
+					let i = Pi(e.sizes, r.value);
 					return /* @__PURE__ */ (0, y.jsxs)("article", {
 						className: t === r.value ? "is-selected" : "",
 						children: [
@@ -2886,7 +2886,7 @@ function Fi({ product: e, size: t, onSize: n }) {
 								className: "ch-fit-canvas",
 								"data-size": r.value,
 								"data-scale": 1 + i,
-								children: /* @__PURE__ */ (0, y.jsx)(Pi, {
+								children: /* @__PURE__ */ (0, y.jsx)(Fi, {
 									product: e,
 									src: u,
 									size: r.value,
@@ -2920,85 +2920,85 @@ function Fi({ product: e, size: t, onSize: n }) {
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+primitive@1.1.7/node_modules/@radix-ui/primitive/dist/index.mjs
-var Ii = Object.defineProperty, Li = (e, t) => Ii(e, "name", {
+var Li = Object.defineProperty, Ri = (e, t) => Li(e, "name", {
 	value: t,
 	configurable: !0
-}), Ri = !!(typeof window < "u" && window.document && window.document.createElement);
-function zi(e, t, { checkForDefaultPrevented: n = !0 } = {}) {
-	return /* @__PURE__ */ Li(function(r) {
+}), zi = !!(typeof window < "u" && window.document && window.document.createElement);
+function Bi(e, t, { checkForDefaultPrevented: n = !0 } = {}) {
+	return /* @__PURE__ */ Ri(function(r) {
 		if (e?.(r), n === !1 || !r || !r.defaultPrevented) return t?.(r);
 	}, "handleEvent");
 }
-Li(zi, "composeEventHandlers");
-function Bi(e) {
-	if (!Ri) throw Error("Cannot access window outside of the DOM");
+Ri(Bi, "composeEventHandlers");
+function Vi(e) {
+	if (!zi) throw Error("Cannot access window outside of the DOM");
 	return e?.ownerDocument?.defaultView ?? window;
 }
-Li(Bi, "getOwnerWindow");
-function Vi(e) {
-	if (!Ri) throw Error("Cannot access document outside of the DOM");
+Ri(Vi, "getOwnerWindow");
+function Hi(e) {
+	if (!zi) throw Error("Cannot access document outside of the DOM");
 	return e?.ownerDocument ?? document;
 }
-Li(Vi, "getOwnerDocument");
-function Hi(e, t = !1) {
-	let { activeElement: n } = Vi(e);
+Ri(Hi, "getOwnerDocument");
+function Ui(e, t = !1) {
+	let { activeElement: n } = Hi(e);
 	if (!n?.nodeName) return null;
-	if (Ui(n) && n.contentDocument) return Hi(n.contentDocument.body, t);
+	if (Wi(n) && n.contentDocument) return Ui(n.contentDocument.body, t);
 	if (t) {
 		let e = n.getAttribute("aria-activedescendant");
 		if (e) {
-			let t = Vi(n).getElementById(e);
+			let t = Hi(n).getElementById(e);
 			if (t) return t;
 		}
 	}
 	return n;
 }
-Li(Hi, "getActiveElement");
-function Ui(e) {
+Ri(Ui, "getActiveElement");
+function Wi(e) {
 	return e.tagName === "IFRAME";
 }
-Li(Ui, "isFrame");
+Ri(Wi, "isFrame");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-compose-refs@1.1.5_@types+react@19.3.0_react@19.3.0/node_modules/@radix-ui/react-compose-refs/dist/index.mjs
-var Wi = Object.defineProperty, Gi = (e, t) => Wi(e, "name", {
+var Gi = Object.defineProperty, Ki = (e, t) => Gi(e, "name", {
 	value: t,
 	configurable: !0
 });
-function Ki(e, t) {
+function qi(e, t) {
 	if (typeof e == "function") return e(t);
 	e != null && (e.current = t);
 }
-Gi(Ki, "setRef");
-function qi(...e) {
+Ki(qi, "setRef");
+function Ji(...e) {
 	return (t) => {
 		let n = !1, r = e.map((e) => {
-			let r = Ki(e, t);
+			let r = qi(e, t);
 			return !n && typeof r == "function" && (n = !0), r;
 		});
 		if (n) return () => {
 			for (let t = 0; t < r.length; t++) {
 				let n = r[t];
-				typeof n == "function" ? n() : Ki(e[t], null);
+				typeof n == "function" ? n() : qi(e[t], null);
 			}
 		};
 	};
 }
-Gi(qi, "composeRefs");
-function Ji(...e) {
-	return d.useCallback(qi(...e), e);
+Ki(Ji, "composeRefs");
+function Yi(...e) {
+	return d.useCallback(Ji(...e), e);
 }
-Gi(Ji, "useComposedRefs");
+Ki(Yi, "useComposedRefs");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-context@1.2.2_@types+react@19.3.0_react@19.3.0/node_modules/@radix-ui/react-context/dist/index.mjs
-var Yi = Object.defineProperty, Xi = (e, t) => Yi(e, "name", {
+var Xi = Object.defineProperty, Zi = (e, t) => Xi(e, "name", {
 	value: t,
 	configurable: !0
 });
 // @__NO_SIDE_EFFECTS__
-function Zi(e, t) {
+function Qi(e, t) {
 	let n = d.createContext(t);
 	n.displayName = e + "Context";
-	let r = /* @__PURE__ */ Xi((e) => {
+	let r = /* @__PURE__ */ Zi((e) => {
 		let { children: t, ...r } = e, i = d.useMemo(() => r, Object.values(r));
 		return /* @__PURE__ */ (0, y.jsx)(n.Provider, {
 			value: i,
@@ -3012,18 +3012,18 @@ function Zi(e, t) {
 		if (t !== void 0) return t;
 		if (!a) throw Error(`\`${r}\` must be used within \`${e}\``);
 	}
-	return Xi(i, "useContext"), [r, i];
+	return Zi(i, "useContext"), [r, i];
 }
-Xi(Zi, "createContext");
+Zi(Qi, "createContext");
 // @__NO_SIDE_EFFECTS__
-function Qi(e, t = []) {
+function $i(e, t = []) {
 	let n = [];
 	function r(t, r) {
 		let i = d.createContext(r);
 		i.displayName = t + "Context";
 		let a = n.length;
 		n = [...n, r];
-		let o = /* @__PURE__ */ Xi((t) => {
+		let o = /* @__PURE__ */ Zi((t) => {
 			let { scope: n, children: r, ...o } = t, s = n?.[e]?.[a] || i, c = d.useMemo(() => o, Object.values(o));
 			return /* @__PURE__ */ (0, y.jsx)(s.Provider, {
 				value: c,
@@ -3037,12 +3037,12 @@ function Qi(e, t = []) {
 			if (r !== void 0) return r;
 			if (!c) throw Error(`\`${n}\` must be used within \`${t}\``);
 		}
-		return Xi(s, "useContext"), [o, s];
+		return Zi(s, "useContext"), [o, s];
 	}
-	Xi(r, "createContext");
-	let i = /* @__PURE__ */ Xi(() => {
+	Zi(r, "createContext");
+	let i = /* @__PURE__ */ Zi(() => {
 		let t = n.map((e) => d.createContext(e));
-		return /* @__PURE__ */ Xi(function(n) {
+		return /* @__PURE__ */ Zi(function(n) {
 			let r = n?.[e] || t;
 			return d.useMemo(() => ({ [`__scope${e}`]: {
 				...n,
@@ -3050,18 +3050,18 @@ function Qi(e, t = []) {
 			} }), [n, r]);
 		}, "useScope");
 	}, "createScope");
-	return i.scopeName = e, [r, $i(i, ...t)];
+	return i.scopeName = e, [r, ea(i, ...t)];
 }
-Xi(Qi, "createContextScope");
-function $i(...e) {
+Zi($i, "createContextScope");
+function ea(...e) {
 	let t = e[0];
 	if (e.length === 1) return t;
-	let n = /* @__PURE__ */ Xi(() => {
+	let n = /* @__PURE__ */ Zi(() => {
 		let n = e.map((e) => ({
 			useScope: e(),
 			scopeName: e.scopeName
 		}));
-		return /* @__PURE__ */ Xi(function(e) {
+		return /* @__PURE__ */ Zi(function(e) {
 			let r = n.reduce((t, { useScope: n, scopeName: r }) => {
 				let i = n(e)[`__scope${r}`];
 				return {
@@ -3074,52 +3074,52 @@ function $i(...e) {
 	}, "createScope");
 	return n.scopeName = t.scopeName, n;
 }
-Xi($i, "composeContextScopes");
+Zi(ea, "composeContextScopes");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-use-layout-effect@1.1.4_@types+react@19.3.0_react@19.3.0/node_modules/@radix-ui/react-use-layout-effect/dist/index.mjs
-var ea = globalThis?.document ? d.useLayoutEffect : () => {}, ta = Object.defineProperty, na = (e, t) => ta(e, "name", {
+var ta = globalThis?.document ? d.useLayoutEffect : () => {}, na = Object.defineProperty, ra = (e, t) => na(e, "name", {
 	value: t,
 	configurable: !0
-}), z = d.useId || (() => void 0), B = 0;
-function ra(e) {
-	let [t, n] = d.useState(z());
-	return ea(() => {
-		e || n((e) => e ?? String(B++));
+}), R = d.useId || (() => void 0), z = 0;
+function ia(e) {
+	let [t, n] = d.useState(R());
+	return ta(() => {
+		e || n((e) => e ?? String(z++));
 	}, [e]), e || (t ? `radix-${t}` : "");
 }
-na(ra, "useId");
+ra(ia, "useId");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-use-effect-event@0.0.5_@types+react@19.3.0_react@19.3.0/node_modules/@radix-ui/react-use-effect-event/dist/index.mjs
-var ia = Object.defineProperty, aa = (e, t) => ia(e, "name", {
+var aa = Object.defineProperty, oa = (e, t) => aa(e, "name", {
 	value: t,
 	configurable: !0
-}), oa = d.useEffectEvent, sa = d.useInsertionEffect;
-function ca(e) {
-	if (typeof oa == "function") return oa(e);
+}), sa = d.useEffectEvent, ca = d.useInsertionEffect;
+function la(e) {
+	if (typeof sa == "function") return sa(e);
 	let t = d.useRef(() => {
 		throw Error("Cannot call an event handler while rendering.");
 	});
-	return typeof sa == "function" ? sa(() => {
+	return typeof ca == "function" ? ca(() => {
 		t.current = e;
-	}) : ea(() => {
+	}) : ta(() => {
 		t.current = e;
 	}), d.useMemo(() => ((...e) => t.current?.(...e)), []);
 }
-aa(ca, "useEffectEvent");
+oa(la, "useEffectEvent");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-use-controllable-state@1.2.6_@types+react@19.3.0_react@19.3.0/node_modules/@radix-ui/react-use-controllable-state/dist/index.mjs
-var la = Object.defineProperty, ua = (e, t) => la(e, "name", {
+var ua = Object.defineProperty, da = (e, t) => ua(e, "name", {
 	value: t,
 	configurable: !0
-}), da = d.useInsertionEffect || ea;
-function fa({ prop: e, defaultProp: t, onChange: n = /* @__PURE__ */ ua(() => {}, "onChange"), caller: r }) {
-	let [i, a, o] = pa({
+}), fa = d.useInsertionEffect || ta;
+function pa({ prop: e, defaultProp: t, onChange: n = /* @__PURE__ */ da(() => {}, "onChange"), caller: r }) {
+	let [i, a, o] = ma({
 		defaultProp: t,
 		onChange: n
 	}), s = e !== void 0;
 	return [s ? e : i, d.useCallback((t) => {
 		if (s) {
-			let n = ma(t) ? t(e) : t;
+			let n = ha(t) ? t(e) : t;
 			n !== e && o.current?.(n);
 		} else a(t);
 	}, [
@@ -3129,10 +3129,10 @@ function fa({ prop: e, defaultProp: t, onChange: n = /* @__PURE__ */ ua(() => {}
 		o
 	])];
 }
-ua(fa, "useControllableState");
-function pa({ defaultProp: e, onChange: t }) {
+da(pa, "useControllableState");
+function ma({ defaultProp: e, onChange: t }) {
 	let [n, r] = d.useState(e), i = d.useRef(n), a = d.useRef(t);
-	return da(() => {
+	return fa(() => {
 		a.current = t;
 	}, [t]), d.useEffect(() => {
 		i.current !== n && (a.current?.(n), i.current = n);
@@ -3142,20 +3142,20 @@ function pa({ defaultProp: e, onChange: t }) {
 		a
 	];
 }
-ua(pa, "useUncontrolledState");
-function ma(e) {
+da(ma, "useUncontrolledState");
+function ha(e) {
 	return typeof e == "function";
 }
-ua(ma, "isFunction");
-var ha = Symbol("RADIX:SYNC_STATE");
-function ga(e, t, n, r) {
-	let { prop: i, defaultProp: a, onChange: o, caller: s } = t, c = i !== void 0, l = ca(o), u = [{
+da(ha, "isFunction");
+var ga = Symbol("RADIX:SYNC_STATE");
+function _a(e, t, n, r) {
+	let { prop: i, defaultProp: a, onChange: o, caller: s } = t, c = i !== void 0, l = la(o), u = [{
 		...n,
 		state: a
 	}];
 	r && u.push(r);
 	let [f, p] = d.useReducer((t, n) => {
-		if (n.type === ha) return {
+		if (n.type === ga) return {
 			...t,
 			state: n.state
 		};
@@ -3175,7 +3175,7 @@ function ga(e, t, n, r) {
 	}, [f, i]);
 	return d.useEffect(() => {
 		c && !Object.is(i, f.state) && p({
-			type: ha,
+			type: ga,
 			state: i
 		});
 	}, [
@@ -3184,10 +3184,10 @@ function ga(e, t, n, r) {
 		c
 	]), [g, p];
 }
-ua(ga, "useControllableStateReducer");
+da(_a, "useControllableStateReducer");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js
-var _a = /* @__PURE__ */ o(((e) => {
+var va = /* @__PURE__ */ o(((e) => {
 	var t = u();
 	function n(e) {
 		var t = "https://react.dev/errors/" + e;
@@ -3315,7 +3315,7 @@ var _a = /* @__PURE__ */ o(((e) => {
 	}, e.useFormStatus = function() {
 		return l.H.useHostTransitionStatus();
 	}, e.version = "19.3.0";
-})), va = /* @__PURE__ */ o(((e, t) => {
+})), ya = /* @__PURE__ */ o(((e, t) => {
 	function n() {
 		if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE == "function") try {
 			__REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(n);
@@ -3323,48 +3323,48 @@ var _a = /* @__PURE__ */ o(((e) => {
 			console.error(e);
 		}
 	}
-	n(), t.exports = _a();
-})), ya = /* @__PURE__ */ c(va(), 1), ba = Object.defineProperty, xa = (e, t) => ba(e, "name", {
+	n(), t.exports = va();
+})), ba = /* @__PURE__ */ c(ya(), 1), xa = Object.defineProperty, Sa = (e, t) => xa(e, "name", {
 	value: t,
 	configurable: !0
 });
 // @__NO_SIDE_EFFECTS__
-function Sa(e) {
+function Ca(e) {
 	let t = d.forwardRef((t, n) => {
 		let { children: r, ...i } = t, a = null, o = !1, s = [];
-		Aa(r) && typeof Pa == "function" && (r = Pa(r._payload)), d.Children.forEach(r, (e) => {
-			if (Oa(e)) {
+		ja(r) && typeof Fa == "function" && (r = Fa(r._payload)), d.Children.forEach(r, (e) => {
+			if (ka(e)) {
 				o = !0;
 				let t = e, n = "child" in t.props ? t.props.child : t.props.children;
-				Aa(n) && typeof Pa == "function" && (n = Pa(n._payload)), a = Ta(t, n), s.push(a?.props?.children);
+				ja(n) && typeof Fa == "function" && (n = Fa(n._payload)), a = Ea(t, n), s.push(a?.props?.children);
 			} else s.push(e);
 		}), a ? a = d.cloneElement(a, void 0, s) : !o && d.Children.count(r) === 1 && d.isValidElement(r) && (a = r);
-		let c = a ? Da(a) : void 0, l = Ji(n, c);
+		let c = a ? Oa(a) : void 0, l = Yi(n, c);
 		if (!a) {
-			if (r || r === 0) throw Error(o ? Na(e) : Ma(e));
+			if (r || r === 0) throw Error(o ? Pa(e) : Na(e));
 			return r;
 		}
-		let u = Ea(i, a.props ?? {});
+		let u = Da(i, a.props ?? {});
 		return a.type !== d.Fragment && (u.ref = n ? l : c), d.cloneElement(a, u);
 	});
 	return t.displayName = `${e}.Slot`, t;
 }
-xa(Sa, "createSlot");
-var Ca = Symbol.for("radix.slottable");
+Sa(Ca, "createSlot");
+var wa = Symbol.for("radix.slottable");
 // @__NO_SIDE_EFFECTS__
-function wa(e) {
-	let t = /* @__PURE__ */ xa((e) => "child" in e ? e.children(e.child) : e.children, "Slottable");
-	return t.displayName = `${e}.Slottable`, t.__radixId = Ca, t;
+function Ta(e) {
+	let t = /* @__PURE__ */ Sa((e) => "child" in e ? e.children(e.child) : e.children, "Slottable");
+	return t.displayName = `${e}.Slottable`, t.__radixId = wa, t;
 }
-xa(wa, "createSlottable");
-var Ta = /* @__PURE__ */ xa((e, t) => {
+Sa(Ta, "createSlottable");
+var Ea = /* @__PURE__ */ Sa((e, t) => {
 	if ("child" in e.props) {
 		let t = e.props.child;
 		return d.isValidElement(t) ? d.cloneElement(t, void 0, e.props.children(t.props.children)) : null;
 	}
 	return d.isValidElement(t) ? t : null;
 }, "getSlottableElementFromSlottable");
-function Ea(e, t) {
+function Da(e, t) {
 	let n = { ...t };
 	for (let r in t) {
 		let i = e[r], a = t[r];
@@ -3381,29 +3381,29 @@ function Ea(e, t) {
 		...n
 	};
 }
-xa(Ea, "mergeProps");
-function Da(e) {
+Sa(Da, "mergeProps");
+function Oa(e) {
 	let t = Object.getOwnPropertyDescriptor(e.props, "ref")?.get, n = t && "isReactWarning" in t && t.isReactWarning;
 	return n ? e.ref : (t = Object.getOwnPropertyDescriptor(e, "ref")?.get, n = t && "isReactWarning" in t && t.isReactWarning, n ? e.props.ref : e.props.ref || e.ref);
 }
-xa(Da, "getElementRef");
-function Oa(e) {
-	return d.isValidElement(e) && typeof e.type == "function" && "__radixId" in e.type && e.type.__radixId === Ca;
+Sa(Oa, "getElementRef");
+function ka(e) {
+	return d.isValidElement(e) && typeof e.type == "function" && "__radixId" in e.type && e.type.__radixId === wa;
 }
-xa(Oa, "isSlottable");
-var ka = Symbol.for("react.lazy");
-function Aa(e) {
-	return typeof e == "object" && !!e && "$$typeof" in e && e.$$typeof === ka && "_payload" in e && ja(e._payload);
-}
-xa(Aa, "isLazyComponent");
+Sa(ka, "isSlottable");
+var Aa = Symbol.for("react.lazy");
 function ja(e) {
+	return typeof e == "object" && !!e && "$$typeof" in e && e.$$typeof === Aa && "_payload" in e && Ma(e._payload);
+}
+Sa(ja, "isLazyComponent");
+function Ma(e) {
 	return typeof e == "object" && !!e && "then" in e;
 }
-xa(ja, "isPromiseLike");
-var Ma = /* @__PURE__ */ xa((e) => `${e} failed to slot onto its children. Expected a single React element child or \`Slottable\`.`, "createSlotError"), Na = /* @__PURE__ */ xa((e) => `${e} failed to slot onto its \`Slottable\`. Expected \`Slottable\` to receive a single React element child.`, "createSlottableError"), Pa = d.use, Fa = Object.defineProperty, Ia = (e, t) => Fa(e, "name", {
+Sa(Ma, "isPromiseLike");
+var Na = /* @__PURE__ */ Sa((e) => `${e} failed to slot onto its children. Expected a single React element child or \`Slottable\`.`, "createSlotError"), Pa = /* @__PURE__ */ Sa((e) => `${e} failed to slot onto its \`Slottable\`. Expected \`Slottable\` to receive a single React element child.`, "createSlottableError"), Fa = d.use, Ia = Object.defineProperty, La = (e, t) => Ia(e, "name", {
 	value: t,
 	configurable: !0
-}), La = [
+}), Ra = [
 	"a",
 	"button",
 	"div",
@@ -3422,7 +3422,7 @@ var Ma = /* @__PURE__ */ xa((e) => `${e} failed to slot onto its children. Expec
 	"svg",
 	"ul"
 ].reduce((e, t) => {
-	let n = /* @__PURE__ */ Sa(`Primitive.${t}`), r = d.forwardRef((e, r) => {
+	let n = /* @__PURE__ */ Ca(`Primitive.${t}`), r = d.forwardRef((e, r) => {
 		let { asChild: i, ...a } = e, o = i ? n : t;
 		return typeof window < "u" && (window[Symbol.for("radix-ui")] = !0), /* @__PURE__ */ (0, y.jsx)(o, {
 			...a,
@@ -3434,35 +3434,35 @@ var Ma = /* @__PURE__ */ xa((e) => `${e} failed to slot onto its children. Expec
 		[t]: r
 	};
 }, {});
-function Ra(e, t) {
-	e && ya.flushSync(() => e.dispatchEvent(t));
+function za(e, t) {
+	e && ba.flushSync(() => e.dispatchEvent(t));
 }
-Ia(Ra, "dispatchDiscreteCustomEvent");
+La(za, "dispatchDiscreteCustomEvent");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-use-callback-ref@1.1.4_@types+react@19.3.0_react@19.3.0/node_modules/@radix-ui/react-use-callback-ref/dist/index.mjs
-var za = Object.defineProperty, Ba = (e, t) => za(e, "name", {
+var Ba = Object.defineProperty, Va = (e, t) => Ba(e, "name", {
 	value: t,
 	configurable: !0
 });
-function Va(e) {
+function Ha(e) {
 	let t = d.useRef(e);
 	return d.useEffect(() => {
 		t.current = e;
 	}), d.useMemo(() => ((...e) => t.current?.(...e)), []);
 }
-Ba(Va, "useCallbackRef");
+Va(Ha, "useCallbackRef");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-dismissable-layer@1.1.19_@types+react-dom@19.3.0_@types+react@19.3.0__@_c9641557e0183ada0688bd7873e8a9d9/node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs
-var Ha = Object.defineProperty, Ua = (e, t) => Ha(e, "name", {
+var Ua = Object.defineProperty, Wa = (e, t) => Ua(e, "name", {
 	value: t,
 	configurable: !0
-}), Wa = "dismissableLayer.update", Ga = "dismissableLayer.pointerDownOutside", Ka = "dismissableLayer.focusOutside", qa, Ja = d.createContext({
+}), Ga = "dismissableLayer.update", Ka = "dismissableLayer.pointerDownOutside", qa = "dismissableLayer.focusOutside", Ja, Ya = d.createContext({
 	layers: /* @__PURE__ */ new Set(),
 	layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
 	branches: /* @__PURE__ */ new Set(),
 	dismissableSurfaces: /* @__PURE__ */ new Set()
-}), Ya = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ Ua(function(e, t) {
-	let { disableOutsidePointerEvents: n = !1, deferPointerDownOutside: r = !1, onEscapeKeyDown: i, onPointerDownOutside: a, onFocusOutside: o, onInteractOutside: s, onDismiss: c, ...l } = e, u = d.useContext(Ja), [f, p] = d.useState(null), m = f?.ownerDocument ?? globalThis?.document, [, h] = d.useState({}), g = Ji(t, p), _ = Array.from(u.layers), [v] = [...u.layersWithOutsidePointerEventsDisabled].slice(-1), b = v ? _.indexOf(v) : -1, x = f ? _.indexOf(f) : -1, S = u.layersWithOutsidePointerEventsDisabled.size > 0, C = x >= b, w = d.useRef(!1), T = Qa((e) => {
+}), Xa = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ Wa(function(e, t) {
+	let { disableOutsidePointerEvents: n = !1, deferPointerDownOutside: r = !1, onEscapeKeyDown: i, onPointerDownOutside: a, onFocusOutside: o, onInteractOutside: s, onDismiss: c, ...l } = e, u = d.useContext(Ya), [f, p] = d.useState(null), m = f?.ownerDocument ?? globalThis?.document, [, h] = d.useState({}), g = Yi(t, p), _ = Array.from(u.layers), [v] = [...u.layersWithOutsidePointerEventsDisabled].slice(-1), b = v ? _.indexOf(v) : -1, x = f ? _.indexOf(f) : -1, S = u.layersWithOutsidePointerEventsDisabled.size > 0, C = x >= b, w = d.useRef(!1), T = $a((e) => {
 		a?.(e), s?.(e), e.defaultPrevented || c?.();
 	}, {
 		ownerDocument: m,
@@ -3474,11 +3474,11 @@ var Ha = Object.defineProperty, Ua = (e, t) => Ha(e, "name", {
 			let t = [...u.branches].some((t) => t.contains(e));
 			return C && !t;
 		}, [u.branches, C])
-	}), ee = $a((e) => {
+	}), ee = eo((e) => {
 		if (r && w.current) return;
 		let t = e.target;
 		[...u.branches].some((e) => e.contains(t)) || (o?.(e), s?.(e), e.defaultPrevented || c?.());
-	}, m), te = f ? x === _.length - 1 : !1, E = Va((e) => {
+	}, m), te = f ? x === _.length - 1 : !1, E = Ha((e) => {
 		e.key === "Escape" && (i?.(e), !e.defaultPrevented && c && (e.preventDefault(), c()));
 	});
 	return d.useEffect(() => {
@@ -3488,8 +3488,8 @@ var Ha = Object.defineProperty, Ua = (e, t) => Ha(e, "name", {
 		te,
 		E
 	]), d.useEffect(() => {
-		if (f) return n && (u.layersWithOutsidePointerEventsDisabled.size === 0 && (qa = m.body.style.pointerEvents, m.body.style.pointerEvents = "none"), u.layersWithOutsidePointerEventsDisabled.add(f)), u.layers.add(f), eo(), () => {
-			n && (u.layersWithOutsidePointerEventsDisabled.delete(f), u.layersWithOutsidePointerEventsDisabled.size === 0 && (m.body.style.pointerEvents = qa));
+		if (f) return n && (u.layersWithOutsidePointerEventsDisabled.size === 0 && (Ja = m.body.style.pointerEvents, m.body.style.pointerEvents = "none"), u.layersWithOutsidePointerEventsDisabled.add(f)), u.layers.add(f), to(), () => {
+			n && (u.layersWithOutsidePointerEventsDisabled.delete(f), u.layersWithOutsidePointerEventsDisabled.size === 0 && (m.body.style.pointerEvents = Ja));
 		};
 	}, [
 		f,
@@ -3497,43 +3497,43 @@ var Ha = Object.defineProperty, Ua = (e, t) => Ha(e, "name", {
 		n,
 		u
 	]), d.useEffect(() => () => {
-		f && (u.layers.delete(f), u.layersWithOutsidePointerEventsDisabled.delete(f), eo());
+		f && (u.layers.delete(f), u.layersWithOutsidePointerEventsDisabled.delete(f), to());
 	}, [f, u]), d.useEffect(() => {
-		let e = /* @__PURE__ */ Ua(() => h({}), "handleUpdate");
-		return document.addEventListener(Wa, e), () => document.removeEventListener(Wa, e);
-	}, []), /* @__PURE__ */ (0, y.jsx)(La.div, {
+		let e = /* @__PURE__ */ Wa(() => h({}), "handleUpdate");
+		return document.addEventListener(Ga, e), () => document.removeEventListener(Ga, e);
+	}, []), /* @__PURE__ */ (0, y.jsx)(Ra.div, {
 		...l,
 		ref: g,
 		style: {
 			pointerEvents: S ? C ? "auto" : "none" : void 0,
 			...e.style
 		},
-		onFocusCapture: zi(e.onFocusCapture, ee.onFocusCapture),
-		onBlurCapture: zi(e.onBlurCapture, ee.onBlurCapture),
-		onPointerDownCapture: zi(e.onPointerDownCapture, T.onPointerDownCapture)
+		onFocusCapture: Bi(e.onFocusCapture, ee.onFocusCapture),
+		onBlurCapture: Bi(e.onBlurCapture, ee.onBlurCapture),
+		onPointerDownCapture: Bi(e.onPointerDownCapture, T.onPointerDownCapture)
 	});
 }, "DismissableLayer"));
-function Xa() {
-	let e = d.useContext(Ja), [t, n] = d.useState(null);
+function Za() {
+	let e = d.useContext(Ya), [t, n] = d.useState(null);
 	return d.useEffect(() => {
 		if (t) return e.dismissableSurfaces.add(t), () => {
 			e.dismissableSurfaces.delete(t);
 		};
 	}, [t, e.dismissableSurfaces]), n;
 }
-Ua(Xa, "useDismissableLayerSurface");
-var Za = /* @__PURE__ */ Ua(() => !0, "IS_TRUE");
-function Qa(e, t) {
-	let { ownerDocument: n = globalThis?.document, deferPointerDownOutside: r = !1, isDeferredPointerDownOutsideRef: i, dismissableSurfaces: a, shouldHandlePointerDownOutside: o = Za } = t, s = Va(e), c = d.useRef(!1), l = d.useRef(!1), u = d.useRef(/* @__PURE__ */ new Map()), f = d.useRef(() => {});
+Wa(Za, "useDismissableLayerSurface");
+var Qa = /* @__PURE__ */ Wa(() => !0, "IS_TRUE");
+function $a(e, t) {
+	let { ownerDocument: n = globalThis?.document, deferPointerDownOutside: r = !1, isDeferredPointerDownOutsideRef: i, dismissableSurfaces: a, shouldHandlePointerDownOutside: o = Qa } = t, s = Ha(e), c = d.useRef(!1), l = d.useRef(!1), u = d.useRef(/* @__PURE__ */ new Map()), f = d.useRef(() => {});
 	return d.useEffect(() => {
 		function e() {
 			l.current = !1, i.current = !1, u.current.clear();
 		}
-		Ua(e, "resetOutsideInteraction");
+		Wa(e, "resetOutsideInteraction");
 		function t() {
 			return Array.from(u.current.values()).some(Boolean);
 		}
-		Ua(t, "isOutsideInteractionIntercepted");
+		Wa(t, "isOutsideInteractionIntercepted");
 		function d(e) {
 			if (!l.current) return;
 			let t = e.target;
@@ -3541,19 +3541,19 @@ function Qa(e, t) {
 				l.current && f.current();
 			}, 0);
 		}
-		Ua(d, "handleInteractionCapture");
+		Wa(d, "handleInteractionCapture");
 		function p(e) {
 			l.current && u.current.set(e.type, !1);
 		}
-		Ua(p, "handleInteractionBubble");
-		let m = /* @__PURE__ */ Ua((a) => {
+		Wa(p, "handleInteractionBubble");
+		let m = /* @__PURE__ */ Wa((a) => {
 			if (a.target && !c.current) {
 				let d = function() {
 					n.removeEventListener("click", f.current);
 					let r = t();
-					e(), r || to(Ga, s, p, { discrete: !0 });
+					e(), r || no(Ka, s, p, { discrete: !0 });
 				};
-				if (Ua(d, "handleAndDispatchPointerDownOutsideEvent"), !o(a.target)) {
+				if (Wa(d, "handleAndDispatchPointerDownOutsideEvent"), !o(a.target)) {
 					n.removeEventListener("click", f.current), e(), c.current = !1;
 					return;
 				}
@@ -3584,46 +3584,46 @@ function Qa(e, t) {
 		i,
 		a,
 		o
-	]), { onPointerDownCapture: /* @__PURE__ */ Ua(() => c.current = !0, "onPointerDownCapture") };
+	]), { onPointerDownCapture: /* @__PURE__ */ Wa(() => c.current = !0, "onPointerDownCapture") };
 }
-Ua(Qa, "usePointerDownOutside");
-function $a(e, t = globalThis?.document) {
-	let n = Va(e), r = d.useRef(!1);
+Wa($a, "usePointerDownOutside");
+function eo(e, t = globalThis?.document) {
+	let n = Ha(e), r = d.useRef(!1);
 	return d.useEffect(() => {
-		let e = /* @__PURE__ */ Ua((e) => {
-			e.target && !r.current && to(Ka, n, { originalEvent: e }, { discrete: !1 });
+		let e = /* @__PURE__ */ Wa((e) => {
+			e.target && !r.current && no(qa, n, { originalEvent: e }, { discrete: !1 });
 		}, "handleFocus");
 		return t.addEventListener("focusin", e), () => t.removeEventListener("focusin", e);
 	}, [t, n]), {
-		onFocusCapture: /* @__PURE__ */ Ua(() => r.current = !0, "onFocusCapture"),
-		onBlurCapture: /* @__PURE__ */ Ua(() => r.current = !1, "onBlurCapture")
+		onFocusCapture: /* @__PURE__ */ Wa(() => r.current = !0, "onFocusCapture"),
+		onBlurCapture: /* @__PURE__ */ Wa(() => r.current = !1, "onBlurCapture")
 	};
 }
-Ua($a, "useFocusOutside");
-function eo() {
-	let e = new CustomEvent(Wa);
+Wa(eo, "useFocusOutside");
+function to() {
+	let e = new CustomEvent(Ga);
 	document.dispatchEvent(e);
 }
-Ua(eo, "dispatchUpdate");
-function to(e, t, n, { discrete: r }) {
+Wa(to, "dispatchUpdate");
+function no(e, t, n, { discrete: r }) {
 	let i = n.originalEvent.target, a = new CustomEvent(e, {
 		bubbles: !1,
 		cancelable: !0,
 		detail: n
 	});
-	t && i.addEventListener(e, t, { once: !0 }), r ? Ra(i, a) : i.dispatchEvent(a);
+	t && i.addEventListener(e, t, { once: !0 }), r ? za(i, a) : i.dispatchEvent(a);
 }
-Ua(to, "handleAndDispatchCustomEvent");
+Wa(no, "handleAndDispatchCustomEvent");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-focus-scope@1.1.16_@types+react-dom@19.3.0_@types+react@19.3.0__@types+_91a0a1d715213a5ab8359e0114beaafa/node_modules/@radix-ui/react-focus-scope/dist/index.mjs
-var no = Object.defineProperty, ro = (e, t) => no(e, "name", {
+var ro = Object.defineProperty, io = (e, t) => ro(e, "name", {
 	value: t,
 	configurable: !0
-}), io = "focusScope.autoFocusOnMount", ao = "focusScope.autoFocusOnUnmount", oo = {
+}), ao = "focusScope.autoFocusOnMount", oo = "focusScope.autoFocusOnUnmount", so = {
 	bubbles: !1,
 	cancelable: !0
-}, so = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ro(function(e, t) {
-	let { loop: n = !1, trapped: r = !1, onMountAutoFocus: i, onUnmountAutoFocus: a, ...o } = e, [s, c] = d.useState(null), l = Va(i), u = Va(a), f = d.useRef(null), p = Ji(t, c), m = d.useRef({
+}, co = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ io(function(e, t) {
+	let { loop: n = !1, trapped: r = !1, onMountAutoFocus: i, onUnmountAutoFocus: a, ...o } = e, [s, c] = d.useState(null), l = Ha(i), u = Ha(a), f = d.useRef(null), p = Yi(t, c), m = d.useRef({
 		paused: !1,
 		pause() {
 			this.paused = !0;
@@ -3637,15 +3637,15 @@ var no = Object.defineProperty, ro = (e, t) => no(e, "name", {
 			let e = function(e) {
 				if (m.paused || !s) return;
 				let t = e.target;
-				s.contains(t) ? f.current = t : ho(f.current, { select: !0 });
+				s.contains(t) ? f.current = t : go(f.current, { select: !0 });
 			}, t = function(e) {
 				if (m.paused || !s) return;
 				let t = e.relatedTarget;
-				t !== null && (s.contains(t) || ho(f.current, { select: !0 }));
+				t !== null && (s.contains(t) || go(f.current, { select: !0 }));
 			}, n = function(e) {
-				if (document.activeElement === document.body) for (let t of e) t.removedNodes.length > 0 && ho(s);
+				if (document.activeElement === document.body) for (let t of e) t.removedNodes.length > 0 && go(s);
 			};
-			ro(e, "handleFocusIn"), ro(t, "handleFocusOut"), ro(n, "handleMutations"), document.addEventListener("focusin", e), document.addEventListener("focusout", t);
+			io(e, "handleFocusIn"), io(t, "handleFocusOut"), io(n, "handleMutations"), document.addEventListener("focusin", e), document.addEventListener("focusout", t);
 			let r = new MutationObserver(n);
 			return s && r.observe(s, {
 				childList: !0,
@@ -3660,16 +3660,16 @@ var no = Object.defineProperty, ro = (e, t) => no(e, "name", {
 		m.paused
 	]), d.useEffect(() => {
 		if (s) {
-			go.add(m);
+			_o.add(m);
 			let e = document.activeElement;
 			if (!s.contains(e)) {
-				let t = new CustomEvent(io, oo);
-				s.addEventListener(io, l), s.dispatchEvent(t), t.defaultPrevented || (co(yo(uo(s)), { select: !0 }), document.activeElement === e && ho(s));
+				let t = new CustomEvent(ao, so);
+				s.addEventListener(ao, l), s.dispatchEvent(t), t.defaultPrevented || (lo(bo(fo(s)), { select: !0 }), document.activeElement === e && go(s));
 			}
 			return () => {
-				s.removeEventListener(io, l), setTimeout(() => {
-					let t = new CustomEvent(ao, oo);
-					s.addEventListener(ao, u), s.dispatchEvent(t), t.defaultPrevented || ho(e ?? document.body, { select: !0 }), s.removeEventListener(ao, u), go.remove(m);
+				s.removeEventListener(ao, l), setTimeout(() => {
+					let t = new CustomEvent(oo, so);
+					s.addEventListener(oo, u), s.dispatchEvent(t), t.defaultPrevented || go(e ?? document.body, { select: !0 }), s.removeEventListener(oo, u), _o.remove(m);
 				}, 0);
 			};
 		}
@@ -3683,46 +3683,46 @@ var no = Object.defineProperty, ro = (e, t) => no(e, "name", {
 		if (!n && !r || m.paused) return;
 		let t = e.key === "Tab" && !e.altKey && !e.ctrlKey && !e.metaKey, i = document.activeElement;
 		if (t && i) {
-			let t = e.currentTarget, [r, a] = lo(t);
-			r && a ? !e.shiftKey && i === a ? (e.preventDefault(), n && ho(r, { select: !0 })) : e.shiftKey && i === r && (e.preventDefault(), n && ho(a, { select: !0 })) : i === t && e.preventDefault();
+			let t = e.currentTarget, [r, a] = uo(t);
+			r && a ? !e.shiftKey && i === a ? (e.preventDefault(), n && go(r, { select: !0 })) : e.shiftKey && i === r && (e.preventDefault(), n && go(a, { select: !0 })) : i === t && e.preventDefault();
 		}
 	}, [
 		n,
 		r,
 		m.paused
 	]);
-	return /* @__PURE__ */ (0, y.jsx)(La.div, {
+	return /* @__PURE__ */ (0, y.jsx)(Ra.div, {
 		tabIndex: -1,
 		...o,
 		ref: p,
 		onKeyDown: h
 	});
 }, "FocusScope"));
-function co(e, { select: t = !1 } = {}) {
+function lo(e, { select: t = !1 } = {}) {
 	let n = document.activeElement;
-	for (let r of e) if (ho(r, { select: t }), document.activeElement !== n) return;
+	for (let r of e) if (go(r, { select: t }), document.activeElement !== n) return;
 }
-ro(co, "focusFirst");
-function lo(e) {
-	let t = uo(e);
-	return [fo(t, e), fo(t.reverse(), e)];
-}
-ro(lo, "getTabbableEdges");
+io(lo, "focusFirst");
 function uo(e) {
-	let t = [], n = document.createTreeWalker(e, NodeFilter.SHOW_ELEMENT, { acceptNode: /* @__PURE__ */ ro((e) => {
+	let t = fo(e);
+	return [po(t, e), po(t.reverse(), e)];
+}
+io(uo, "getTabbableEdges");
+function fo(e) {
+	let t = [], n = document.createTreeWalker(e, NodeFilter.SHOW_ELEMENT, { acceptNode: /* @__PURE__ */ io((e) => {
 		let t = e.tagName === "INPUT" && e.type === "hidden";
 		return e.disabled || e.hidden || t ? NodeFilter.FILTER_SKIP : e.tabIndex >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
 	}, "acceptNode") });
 	for (; n.nextNode();) t.push(n.currentNode);
 	return t;
 }
-ro(uo, "getTabbableCandidates");
-function fo(e, t) {
+io(fo, "getTabbableCandidates");
+function po(e, t) {
 	let n = typeof t.checkVisibility == "function" && t.checkVisibility({ checkVisibilityCSS: !0 });
-	for (let r of e) if (!(n ? !r.checkVisibility({ checkVisibilityCSS: !0 }) : po(r, { upTo: t }))) return r;
+	for (let r of e) if (!(n ? !r.checkVisibility({ checkVisibilityCSS: !0 }) : mo(r, { upTo: t }))) return r;
 }
-ro(fo, "findVisible");
-function po(e, { upTo: t }) {
+io(po, "findVisible");
+function mo(e, { upTo: t }) {
 	if (getComputedStyle(e).visibility === "hidden") return !0;
 	for (; e;) {
 		if (t !== void 0 && e === t) return !1;
@@ -3731,68 +3731,68 @@ function po(e, { upTo: t }) {
 	}
 	return !1;
 }
-ro(po, "isHidden");
-function mo(e) {
+io(mo, "isHidden");
+function ho(e) {
 	return e instanceof HTMLInputElement && "select" in e;
 }
-ro(mo, "isSelectableInput");
-function ho(e, { select: t = !1 } = {}) {
+io(ho, "isSelectableInput");
+function go(e, { select: t = !1 } = {}) {
 	if (e && e.focus) {
 		let n = document.activeElement;
-		e.focus({ preventScroll: !0 }), e !== n && mo(e) && t && e.select();
+		e.focus({ preventScroll: !0 }), e !== n && ho(e) && t && e.select();
 	}
 }
-ro(ho, "focus");
-var go = _o();
-function _o() {
+io(go, "focus");
+var _o = vo();
+function vo() {
 	let e = [];
 	return {
 		add(t) {
 			let n = e[0];
-			t !== n && n?.pause(), e = vo(e, t), e.unshift(t);
+			t !== n && n?.pause(), e = yo(e, t), e.unshift(t);
 		},
 		remove(t) {
-			e = vo(e, t), e[0]?.resume();
+			e = yo(e, t), e[0]?.resume();
 		}
 	};
 }
-ro(_o, "createFocusScopesStack");
-function vo(e, t) {
+io(vo, "createFocusScopesStack");
+function yo(e, t) {
 	let n = [...e], r = n.indexOf(t);
 	return r !== -1 && n.splice(r, 1), n;
 }
-ro(vo, "arrayRemove");
-function yo(e) {
+io(yo, "arrayRemove");
+function bo(e) {
 	return e.filter((e) => e.tagName !== "A");
 }
-ro(yo, "removeLinks");
+io(bo, "removeLinks");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-portal@1.1.17_@types+react-dom@19.3.0_@types+react@19.3.0__@types+react_484564a2ec4329649f69b712999578b8/node_modules/@radix-ui/react-portal/dist/index.mjs
-var bo = Object.defineProperty, xo = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ((e, t) => bo(e, "name", {
+var xo = Object.defineProperty, So = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ((e, t) => xo(e, "name", {
 	value: t,
 	configurable: !0
 }))(function(e, t) {
 	let { container: n, ...r } = e, [i, a] = d.useState(!1);
-	ea(() => a(!0), []);
+	ta(() => a(!0), []);
 	let o = n || i && globalThis?.document?.body;
-	return o ? ya.createPortal(/* @__PURE__ */ (0, y.jsx)(La.div, {
+	return o ? ba.createPortal(/* @__PURE__ */ (0, y.jsx)(Ra.div, {
 		...r,
 		ref: t
 	}), o) : null;
-}, "Portal")), So = Object.defineProperty, Co = (e, t) => So(e, "name", {
+}, "Portal")), Co = Object.defineProperty, wo = (e, t) => Co(e, "name", {
 	value: t,
 	configurable: !0
 });
-function wo(e, t) {
+function To(e, t) {
 	return d.useReducer((e, n) => t[e][n] ?? e, e);
 }
-Co(wo, "useStateMachine");
-var To = /* @__PURE__ */ Co((e) => {
-	let { present: t, children: n } = e, r = Eo(t), i = typeof n == "function" ? n({ present: r.isPresent }) : d.Children.only(n), a = Oo(r.ref, Ao(i));
+wo(To, "useStateMachine");
+var Eo = /* @__PURE__ */ wo((e) => {
+	let { present: t, children: n } = e, r = Do(t), i = typeof n == "function" ? n({ present: r.isPresent }) : d.Children.only(n), a = ko(r.ref, jo(i));
 	return typeof n == "function" || r.isPresent ? d.cloneElement(i, { ref: a }) : null;
 }, "Presence");
-function Eo(e) {
-	let [t, n] = d.useState(), r = d.useRef(null), i = d.useRef(e), a = d.useRef("none"), o = d.useRef(void 0), [s, c] = wo(e ? "mounted" : "unmounted", {
+function Do(e) {
+	let [t, n] = d.useState(), r = d.useRef(null), i = d.useRef(e), a = d.useRef("none"), o = d.useRef(void 0), [s, c] = To(e ? "mounted" : "unmounted", {
 		mounted: {
 			UNMOUNT: "unmounted",
 			ANIMATION_OUT: "unmountSuspended"
@@ -3804,25 +3804,25 @@ function Eo(e) {
 		unmounted: { MOUNT: "mounted" }
 	});
 	return d.useEffect(() => {
-		s === "mounted" ? (a.current = o.current ?? ko(r.current), o.current = void 0) : a.current = "none";
-	}, [s]), ea(() => {
+		s === "mounted" ? (a.current = o.current ?? Ao(r.current), o.current = void 0) : a.current = "none";
+	}, [s]), ta(() => {
 		let t = r.current, n = i.current;
 		if (n !== e) {
-			let r = a.current, s = ko(t);
+			let r = a.current, s = Ao(t);
 			e ? (o.current = s, c("MOUNT")) : s === "none" || t?.display === "none" ? c("UNMOUNT") : c(n && r !== s ? "ANIMATION_OUT" : "UNMOUNT"), i.current = e;
 		}
-	}, [e, c]), ea(() => {
+	}, [e, c]), ta(() => {
 		if (t) {
-			let e, n = t.ownerDocument.defaultView ?? window, o = /* @__PURE__ */ Co((a) => {
-				let o = ko(r.current).includes(CSS.escape(a.animationName));
+			let e, n = t.ownerDocument.defaultView ?? window, o = /* @__PURE__ */ wo((a) => {
+				let o = Ao(r.current).includes(CSS.escape(a.animationName));
 				if (a.target === t && o && (c("ANIMATION_END"), !i.current)) {
 					let r = t.style.animationFillMode;
 					t.style.animationFillMode = "forwards", e = n.setTimeout(() => {
 						t.style.animationFillMode === "forwards" && (t.style.animationFillMode = r);
 					});
 				}
-			}, "handleAnimationEnd"), s = /* @__PURE__ */ Co((e) => {
-				e.target === t && (a.current = ko(r.current));
+			}, "handleAnimationEnd"), s = /* @__PURE__ */ wo((e) => {
+				e.target === t && (a.current = Ao(r.current));
 			}, "handleAnimationStart");
 			return t.addEventListener("animationstart", s), t.addEventListener("animationcancel", o), t.addEventListener("animationend", o), () => {
 				n.clearTimeout(e), t.removeEventListener("animationstart", s), t.removeEventListener("animationcancel", o), t.removeEventListener("animationend", o);
@@ -3834,100 +3834,100 @@ function Eo(e) {
 		ref: d.useCallback((e) => {
 			if (e) {
 				let t = getComputedStyle(e);
-				r.current = t, o.current = ko(t);
+				r.current = t, o.current = Ao(t);
 			} else r.current = null;
 			n(e);
 		}, [])
 	};
 }
-Co(Eo, "usePresence");
-function Do(e, t) {
+wo(Do, "usePresence");
+function Oo(e, t) {
 	if (typeof e == "function") return e(t);
 	e != null && (e.current = t);
 }
-Co(Do, "setRef");
-function Oo(...e) {
+wo(Oo, "setRef");
+function ko(...e) {
 	let t = d.useRef(e);
 	return t.current = e, d.useCallback((e) => {
 		let n = t.current, r = !1, i = n.map((t) => {
-			let n = Do(t, e);
+			let n = Oo(t, e);
 			return !r && typeof n == "function" && (r = !0), n;
 		});
 		if (r) return () => {
 			for (let e = 0; e < i.length; e++) {
 				let t = i[e];
-				typeof t == "function" ? t() : Do(n[e], null);
+				typeof t == "function" ? t() : Oo(n[e], null);
 			}
 		};
 	}, []);
 }
-Co(Oo, "useStableComposedRefs");
-function ko(e) {
+wo(ko, "useStableComposedRefs");
+function Ao(e) {
 	return e?.animationName || "none";
 }
-Co(ko, "getAnimationName");
-function Ao(e) {
+wo(Ao, "getAnimationName");
+function jo(e) {
 	let t = Object.getOwnPropertyDescriptor(e.props, "ref")?.get, n = t && "isReactWarning" in t && t.isReactWarning;
 	return n ? e.ref : (t = Object.getOwnPropertyDescriptor(e, "ref")?.get, n = t && "isReactWarning" in t && t.isReactWarning, n ? e.props.ref : e.props.ref || e.ref);
 }
-Co(Ao, "getElementRef");
+wo(jo, "getElementRef");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@radix-ui+react-focus-guards@1.1.6_@types+react@19.3.0_react@19.3.0/node_modules/@radix-ui/react-focus-guards/dist/index.mjs
-var jo = Object.defineProperty, Mo = (e, t) => jo(e, "name", {
+var Mo = Object.defineProperty, No = (e, t) => Mo(e, "name", {
 	value: t,
 	configurable: !0
-}), No = 0, Po = null;
-function Fo(e) {
-	return Io(), e.children;
+}), Po = 0, Fo = null;
+function Io(e) {
+	return Lo(), e.children;
 }
-Mo(Fo, "FocusGuards");
-function Io() {
+No(Io, "FocusGuards");
+function Lo() {
 	d.useEffect(() => {
-		Po ||= {
-			start: Lo(),
-			end: Lo()
+		Fo ||= {
+			start: Ro(),
+			end: Ro()
 		};
-		let { start: e, end: t } = Po;
-		return document.body.firstElementChild !== e && document.body.insertAdjacentElement("afterbegin", e), document.body.lastElementChild !== t && document.body.insertAdjacentElement("beforeend", t), No++, () => {
-			No === 1 && (Po?.start.remove(), Po?.end.remove(), Po = null), No = Math.max(0, No - 1);
+		let { start: e, end: t } = Fo;
+		return document.body.firstElementChild !== e && document.body.insertAdjacentElement("afterbegin", e), document.body.lastElementChild !== t && document.body.insertAdjacentElement("beforeend", t), Po++, () => {
+			Po === 1 && (Fo?.start.remove(), Fo?.end.remove(), Fo = null), Po = Math.max(0, Po - 1);
 		};
 	}, []);
 }
-Mo(Io, "useFocusGuards");
-function Lo() {
+No(Lo, "useFocusGuards");
+function Ro() {
 	let e = document.createElement("span");
 	return e.setAttribute("data-radix-focus-guard", ""), e.tabIndex = 0, e.style.outline = "none", e.style.opacity = "0", e.style.position = "fixed", e.style.pointerEvents = "none", e;
 }
-Mo(Lo, "createFocusGuard");
+No(Ro, "createFocusGuard");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/tslib@2.8.1/node_modules/tslib/tslib.es6.mjs
-var Ro = function() {
-	return Ro = Object.assign || function(e) {
+var zo = function() {
+	return zo = Object.assign || function(e) {
 		for (var t, n = 1, r = arguments.length; n < r; n++) for (var i in t = arguments[n], t) Object.prototype.hasOwnProperty.call(t, i) && (e[i] = t[i]);
 		return e;
-	}, Ro.apply(this, arguments);
+	}, zo.apply(this, arguments);
 };
-function zo(e, t) {
+function Bo(e, t) {
 	var n = {};
 	for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
 	if (e != null && typeof Object.getOwnPropertySymbols == "function") for (var i = 0, r = Object.getOwnPropertySymbols(e); i < r.length; i++) t.indexOf(r[i]) < 0 && Object.prototype.propertyIsEnumerable.call(e, r[i]) && (n[r[i]] = e[r[i]]);
 	return n;
 }
-function Bo(e, t, n) {
+function Vo(e, t, n) {
 	if (n || arguments.length === 2) for (var r = 0, i = t.length, a; r < i; r++) (a || !(r in t)) && (a ||= Array.prototype.slice.call(t, 0, r), a[r] = t[r]);
 	return e.concat(a || Array.prototype.slice.call(t));
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/react-remove-scroll-bar@2.3.8_@types+react@19.3.0_react@19.3.0/node_modules/react-remove-scroll-bar/dist/es2015/constants.js
-var Vo = "right-scroll-bar-position", V = "width-before-scroll-bar", H = "with-scroll-bars-hidden", Ho = "--removed-body-scroll-bar-size";
+var Ho = "right-scroll-bar-position", B = "width-before-scroll-bar", V = "with-scroll-bars-hidden", Uo = "--removed-body-scroll-bar-size";
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/use-callback-ref@1.3.3_@types+react@19.3.0_react@19.3.0/node_modules/use-callback-ref/dist/es2015/assignRef.js
-function Uo(e, t) {
+function Wo(e, t) {
 	return typeof e == "function" ? e(t) : e && (e.current = t), e;
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/use-callback-ref@1.3.3_@types+react@19.3.0_react@19.3.0/node_modules/use-callback-ref/dist/es2015/useRef.js
-function Wo(e, t) {
+function Go(e, t) {
 	var n = (0, d.useState)(function() {
 		return {
 			value: e,
@@ -3947,33 +3947,33 @@ function Wo(e, t) {
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/use-callback-ref@1.3.3_@types+react@19.3.0_react@19.3.0/node_modules/use-callback-ref/dist/es2015/useMergeRef.js
-var Go = typeof window < "u" ? d.useLayoutEffect : d.useEffect, Ko = /* @__PURE__ */ new WeakMap();
-function qo(e, t) {
-	var n = Wo(t || null, function(t) {
+var Ko = typeof window < "u" ? d.useLayoutEffect : d.useEffect, qo = /* @__PURE__ */ new WeakMap();
+function Jo(e, t) {
+	var n = Go(t || null, function(t) {
 		return e.forEach(function(e) {
-			return Uo(e, t);
+			return Wo(e, t);
 		});
 	});
-	return Go(function() {
-		var t = Ko.get(n);
+	return Ko(function() {
+		var t = qo.get(n);
 		if (t) {
 			var r = new Set(t), i = new Set(e), a = n.current;
 			r.forEach(function(e) {
-				i.has(e) || Uo(e, null);
+				i.has(e) || Wo(e, null);
 			}), i.forEach(function(e) {
-				r.has(e) || Uo(e, a);
+				r.has(e) || Wo(e, a);
 			});
 		}
-		Ko.set(n, e);
+		qo.set(n, e);
 	}, [e]), n;
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/use-sidecar@1.1.3_@types+react@19.3.0_react@19.3.0/node_modules/use-sidecar/dist/es2015/medium.js
-function Jo(e) {
+function Yo(e) {
 	return e;
 }
-function Yo(e, t) {
-	t === void 0 && (t = Jo);
+function Xo(e, t) {
+	t === void 0 && (t = Yo);
 	var n = [], r = !1;
 	return {
 		read: function() {
@@ -4026,35 +4026,35 @@ function Yo(e, t) {
 		}
 	};
 }
-function Xo(e) {
+function Zo(e) {
 	e === void 0 && (e = {});
-	var t = Yo(null);
-	return t.options = Ro({
+	var t = Xo(null);
+	return t.options = zo({
 		async: !0,
 		ssr: !1
 	}, e), t;
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/use-sidecar@1.1.3_@types+react@19.3.0_react@19.3.0/node_modules/use-sidecar/dist/es2015/exports.js
-var Zo = function(e) {
-	var t = e.sideCar, n = zo(e, ["sideCar"]);
+var Qo = function(e) {
+	var t = e.sideCar, n = Bo(e, ["sideCar"]);
 	if (!t) throw Error("Sidecar: please provide `sideCar` property to import the right car");
 	var r = t.read();
 	if (!r) throw Error("Sidecar medium not found");
-	return d.createElement(r, Ro({}, n));
+	return d.createElement(r, zo({}, n));
 };
-Zo.isSideCarExport = !0;
-function Qo(e, t) {
-	return e.useMedium(t), Zo;
+Qo.isSideCarExport = !0;
+function $o(e, t) {
+	return e.useMedium(t), Qo;
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/react-remove-scroll@2.7.2_@types+react@19.3.0_react@19.3.0/node_modules/react-remove-scroll/dist/es2015/medium.js
-var $o = Xo(), es = function() {}, ts = d.forwardRef(function(e, t) {
+var es = Zo(), ts = function() {}, ns = d.forwardRef(function(e, t) {
 	var n = d.useRef(null), r = d.useState({
-		onScrollCapture: es,
-		onWheelCapture: es,
-		onTouchMoveCapture: es
-	}), i = r[0], a = r[1], o = e.forwardProps, s = e.children, c = e.className, l = e.removeScrollBar, u = e.enabled, f = e.shards, p = e.sideCar, m = e.noRelative, h = e.noIsolation, g = e.inert, _ = e.allowPinchZoom, v = e.as, y = v === void 0 ? "div" : v, b = e.gapMode, x = zo(e, [
+		onScrollCapture: ts,
+		onWheelCapture: ts,
+		onTouchMoveCapture: ts
+	}), i = r[0], a = r[1], o = e.forwardProps, s = e.children, c = e.className, l = e.removeScrollBar, u = e.enabled, f = e.shards, p = e.sideCar, m = e.noRelative, h = e.noIsolation, g = e.inert, _ = e.allowPinchZoom, v = e.as, y = v === void 0 ? "div" : v, b = e.gapMode, x = Bo(e, [
 		"forwardProps",
 		"children",
 		"className",
@@ -4068,9 +4068,9 @@ var $o = Xo(), es = function() {}, ts = d.forwardRef(function(e, t) {
 		"allowPinchZoom",
 		"as",
 		"gapMode"
-	]), S = p, C = qo([n, t]), w = Ro(Ro({}, x), i);
+	]), S = p, C = Jo([n, t]), w = zo(zo({}, x), i);
 	return d.createElement(d.Fragment, null, u && d.createElement(S, {
-		sideCar: $o,
+		sideCar: es,
 		removeScrollBar: l,
 		shards: f,
 		noRelative: m,
@@ -4080,51 +4080,51 @@ var $o = Xo(), es = function() {}, ts = d.forwardRef(function(e, t) {
 		allowPinchZoom: !!_,
 		lockRef: n,
 		gapMode: b
-	}), o ? d.cloneElement(d.Children.only(s), Ro(Ro({}, w), { ref: C })) : d.createElement(y, Ro({}, w, {
+	}), o ? d.cloneElement(d.Children.only(s), zo(zo({}, w), { ref: C })) : d.createElement(y, zo({}, w, {
 		className: c,
 		ref: C
 	}), s));
 });
-ts.defaultProps = {
+ns.defaultProps = {
 	enabled: !0,
 	removeScrollBar: !0,
 	inert: !1
-}, ts.classNames = {
-	fullWidth: V,
-	zeroRight: Vo
+}, ns.classNames = {
+	fullWidth: B,
+	zeroRight: Ho
 };
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/get-nonce@1.0.1/node_modules/get-nonce/dist/es2015/index.js
-var ns = function() {
+var rs = function() {
 	if (typeof __webpack_nonce__ < "u") return __webpack_nonce__;
 };
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/react-style-singleton@2.2.3_@types+react@19.3.0_react@19.3.0/node_modules/react-style-singleton/dist/es2015/singleton.js
-function rs() {
+function is() {
 	if (!document) return null;
 	var e = document.createElement("style");
 	e.type = "text/css";
-	var t = ns();
+	var t = rs();
 	return t && e.setAttribute("nonce", t), e;
 }
-function is(e, t) {
+function as(e, t) {
 	e.styleSheet ? e.styleSheet.cssText = t : e.appendChild(document.createTextNode(t));
 }
-function as(e) {
+function os(e) {
 	(document.head || document.getElementsByTagName("head")[0]).appendChild(e);
 }
-var os = function() {
+var ss = function() {
 	var e = 0, t = null;
 	return {
 		add: function(n) {
-			e == 0 && (t = rs()) && (is(t, n), as(t)), e++;
+			e == 0 && (t = is()) && (as(t, n), os(t)), e++;
 		},
 		remove: function() {
 			e--, !e && t && (t.parentNode && t.parentNode.removeChild(t), t = null);
 		}
 	};
-}, ss = function() {
-	var e = os();
+}, cs = function() {
+	var e = ss();
 	return function(t, n) {
 		d.useEffect(function() {
 			return e.add(t), function() {
@@ -4132,43 +4132,43 @@ var os = function() {
 			};
 		}, [t && n]);
 	};
-}, cs = function() {
-	var e = ss();
+}, ls = function() {
+	var e = cs();
 	return function(t) {
 		var n = t.styles, r = t.dynamic;
 		return e(n, r), null;
 	};
-}, ls = {
+}, us = {
 	left: 0,
 	top: 0,
 	right: 0,
 	gap: 0
-}, us = function(e) {
-	return parseInt(e || "", 10) || 0;
 }, ds = function(e) {
+	return parseInt(e || "", 10) || 0;
+}, fs = function(e) {
 	var t = window.getComputedStyle(document.body), n = t[e === "padding" ? "paddingLeft" : "marginLeft"], r = t[e === "padding" ? "paddingTop" : "marginTop"], i = t[e === "padding" ? "paddingRight" : "marginRight"];
 	return [
-		us(n),
-		us(r),
-		us(i)
+		ds(n),
+		ds(r),
+		ds(i)
 	];
-}, fs = function(e) {
-	if (e === void 0 && (e = "margin"), typeof window > "u") return ls;
-	var t = ds(e), n = document.documentElement.clientWidth, r = window.innerWidth;
+}, ps = function(e) {
+	if (e === void 0 && (e = "margin"), typeof window > "u") return us;
+	var t = fs(e), n = document.documentElement.clientWidth, r = window.innerWidth;
 	return {
 		left: t[0],
 		top: t[1],
 		right: t[2],
 		gap: Math.max(0, r - n + t[2] - t[0])
 	};
-}, ps = cs(), ms = "data-scroll-locked", hs = function(e, t, n, r) {
+}, ms = ls(), hs = "data-scroll-locked", gs = function(e, t, n, r) {
 	var i = e.left, a = e.top, o = e.right, s = e.gap;
 	return n === void 0 && (n = "margin"), `
-  .${H} {
+  .${V} {
    overflow: hidden ${r};
    padding-right: ${s}px ${r};
   }
-  body[${ms}] {
+  body[${hs}] {
     overflow: hidden ${r};
     overscroll-behavior: contain;
     ${[
@@ -4185,122 +4185,122 @@ var os = function() {
 	].filter(Boolean).join("")}
   }
   
-  .${Vo} {
+  .${Ho} {
     right: ${s}px ${r};
   }
   
-  .${V} {
+  .${B} {
     margin-right: ${s}px ${r};
   }
   
-  .${Vo} .${Vo} {
+  .${Ho} .${Ho} {
     right: 0 ${r};
   }
   
-  .${V} .${V} {
+  .${B} .${B} {
     margin-right: 0 ${r};
   }
   
-  body[${ms}] {
-    ${Ho}: ${s}px;
+  body[${hs}] {
+    ${Uo}: ${s}px;
   }
 `;
-}, gs = function() {
+}, _s = function() {
 	var e = parseInt(document.body.getAttribute("data-scroll-locked") || "0", 10);
 	return isFinite(e) ? e : 0;
-}, _s = function() {
+}, vs = function() {
 	d.useEffect(function() {
-		return document.body.setAttribute(ms, (gs() + 1).toString()), function() {
-			var e = gs() - 1;
-			e <= 0 ? document.body.removeAttribute(ms) : document.body.setAttribute(ms, e.toString());
+		return document.body.setAttribute(hs, (_s() + 1).toString()), function() {
+			var e = _s() - 1;
+			e <= 0 ? document.body.removeAttribute(hs) : document.body.setAttribute(hs, e.toString());
 		};
 	}, []);
-}, vs = function(e) {
+}, ys = function(e) {
 	var t = e.noRelative, n = e.noImportant, r = e.gapMode, i = r === void 0 ? "margin" : r;
-	_s();
+	vs();
 	var a = d.useMemo(function() {
-		return fs(i);
+		return ps(i);
 	}, [i]);
-	return d.createElement(ps, { styles: hs(a, !t, i, n ? "" : "!important") });
-}, ys = !1;
+	return d.createElement(ms, { styles: gs(a, !t, i, n ? "" : "!important") });
+}, bs = !1;
 if (typeof window < "u") try {
-	var bs = Object.defineProperty({}, "passive", { get: function() {
-		return ys = !0, !0;
+	var xs = Object.defineProperty({}, "passive", { get: function() {
+		return bs = !0, !0;
 	} });
-	window.addEventListener("test", bs, bs), window.removeEventListener("test", bs, bs);
+	window.addEventListener("test", xs, xs), window.removeEventListener("test", xs, xs);
 } catch {
-	ys = !1;
+	bs = !1;
 }
-var xs = ys ? { passive: !1 } : !1, Ss = function(e) {
+var Ss = bs ? { passive: !1 } : !1, Cs = function(e) {
 	return e.tagName === "TEXTAREA";
-}, Cs = function(e, t) {
+}, ws = function(e, t) {
 	if (!(e instanceof Element)) return !1;
 	var n = window.getComputedStyle(e);
-	return n[t] !== "hidden" && !(n.overflowY === n.overflowX && !Ss(e) && n[t] === "visible");
-}, ws = function(e) {
-	return Cs(e, "overflowY");
+	return n[t] !== "hidden" && !(n.overflowY === n.overflowX && !Cs(e) && n[t] === "visible");
 }, Ts = function(e) {
-	return Cs(e, "overflowX");
-}, Es = function(e, t) {
+	return ws(e, "overflowY");
+}, Es = function(e) {
+	return ws(e, "overflowX");
+}, Ds = function(e, t) {
 	var n = t.ownerDocument, r = t;
 	do {
-		if (typeof ShadowRoot < "u" && r instanceof ShadowRoot && (r = r.host), ks(e, r)) {
-			var i = As(e, r);
+		if (typeof ShadowRoot < "u" && r instanceof ShadowRoot && (r = r.host), As(e, r)) {
+			var i = js(e, r);
 			if (i[1] > i[2]) return !0;
 		}
 		r = r.parentNode;
 	} while (r && r !== n.body);
 	return !1;
-}, Ds = function(e) {
+}, Os = function(e) {
 	return [
 		e.scrollTop,
 		e.scrollHeight,
 		e.clientHeight
 	];
-}, Os = function(e) {
+}, ks = function(e) {
 	return [
 		e.scrollLeft,
 		e.scrollWidth,
 		e.clientWidth
 	];
-}, ks = function(e, t) {
-	return e === "v" ? ws(t) : Ts(t);
 }, As = function(e, t) {
-	return e === "v" ? Ds(t) : Os(t);
+	return e === "v" ? Ts(t) : Es(t);
 }, js = function(e, t) {
+	return e === "v" ? Os(t) : ks(t);
+}, Ms = function(e, t) {
 	return e === "h" && t === "rtl" ? -1 : 1;
-}, Ms = function(e, t, n, r, i) {
-	var a = js(e, window.getComputedStyle(t).direction), o = a * r, s = n.target, c = t.contains(s), l = !1, u = o > 0, d = 0, f = 0;
+}, Ns = function(e, t, n, r, i) {
+	var a = Ms(e, window.getComputedStyle(t).direction), o = a * r, s = n.target, c = t.contains(s), l = !1, u = o > 0, d = 0, f = 0;
 	do {
 		if (!s) break;
-		var p = As(e, s), m = p[0], h = p[1] - p[2] - a * m;
-		(m || h) && ks(e, s) && (d += h, f += m);
+		var p = js(e, s), m = p[0], h = p[1] - p[2] - a * m;
+		(m || h) && As(e, s) && (d += h, f += m);
 		var g = s.parentNode;
 		s = g && g.nodeType === Node.DOCUMENT_FRAGMENT_NODE ? g.host : g;
 	} while (!c && s !== document.body || c && (t.contains(s) || t === s));
 	return (u && (i && Math.abs(d) < 1 || !i && o > d) || !u && (i && Math.abs(f) < 1 || !i && -o > f)) && (l = !0), l;
-}, Ns = function(e) {
-	return "changedTouches" in e ? [e.changedTouches[0].clientX, e.changedTouches[0].clientY] : [0, 0];
 }, Ps = function(e) {
-	return [e.deltaX, e.deltaY];
+	return "changedTouches" in e ? [e.changedTouches[0].clientX, e.changedTouches[0].clientY] : [0, 0];
 }, Fs = function(e) {
+	return [e.deltaX, e.deltaY];
+}, Is = function(e) {
 	return e && "current" in e ? e.current : e;
-}, Is = function(e, t) {
+}, Ls = function(e, t) {
 	return e[0] === t[0] && e[1] === t[1];
-}, Ls = function(e) {
+}, Rs = function(e) {
 	return `
   .block-interactivity-${e} {pointer-events: none;}
   .allow-interactivity-${e} {pointer-events: all;}
 `;
-}, Rs = 0, zs = [];
-function Bs(e) {
-	var t = d.useRef([]), n = d.useRef([0, 0]), r = d.useRef(), i = d.useState(Rs++)[0], a = d.useState(cs)[0], o = d.useRef(e);
+}, zs = 0, Bs = [];
+function Vs(e) {
+	var t = d.useRef([]), n = d.useRef([0, 0]), r = d.useRef(), i = d.useState(zs++)[0], a = d.useState(ls)[0], o = d.useRef(e);
 	d.useEffect(function() {
 		o.current = e;
 	}, [e]), d.useEffect(function() {
 		if (e.inert) {
 			document.body.classList.add(`block-interactivity-${i}`);
-			var t = Bo([e.lockRef.current], (e.shards || []).map(Fs), !0).filter(Boolean);
+			var t = Vo([e.lockRef.current], (e.shards || []).map(Is), !0).filter(Boolean);
 			return t.forEach(function(e) {
 				return e.classList.add(`allow-interactivity-${i}`);
 			}), function() {
@@ -4316,28 +4316,28 @@ function Bs(e) {
 	]);
 	var s = d.useCallback(function(e, t) {
 		if ("touches" in e && e.touches.length === 2 || e.type === "wheel" && e.ctrlKey) return !o.current.allowPinchZoom;
-		var i = Ns(e), a = n.current, s = "deltaX" in e ? e.deltaX : a[0] - i[0], c = "deltaY" in e ? e.deltaY : a[1] - i[1], l, u = e.target, d = Math.abs(s) > Math.abs(c) ? "h" : "v";
+		var i = Ps(e), a = n.current, s = "deltaX" in e ? e.deltaX : a[0] - i[0], c = "deltaY" in e ? e.deltaY : a[1] - i[1], l, u = e.target, d = Math.abs(s) > Math.abs(c) ? "h" : "v";
 		if ("touches" in e && d === "h" && u.type === "range") return !1;
 		var f = window.getSelection(), p = f && f.anchorNode;
 		if (p && (p === u || p.contains(u))) return !1;
-		var m = Es(d, u);
+		var m = Ds(d, u);
 		if (!m) return !0;
-		if (m ? l = d : (l = d === "v" ? "h" : "v", m = Es(d, u)), !m) return !1;
+		if (m ? l = d : (l = d === "v" ? "h" : "v", m = Ds(d, u)), !m) return !1;
 		if (!r.current && "changedTouches" in e && (s || c) && (r.current = l), !l) return !0;
 		var h = r.current || l;
-		return Ms(h, t, e, h === "h" ? s : c, !0);
+		return Ns(h, t, e, h === "h" ? s : c, !0);
 	}, []), c = d.useCallback(function(e) {
 		var n = e;
-		if (zs.length && zs[zs.length - 1] === a) {
-			var r = "deltaY" in n ? Ps(n) : Ns(n), i = t.current.filter(function(e) {
-				return e.name === n.type && (e.target === n.target || n.target === e.shadowParent) && Is(e.delta, r);
+		if (Bs.length && Bs[Bs.length - 1] === a) {
+			var r = "deltaY" in n ? Fs(n) : Ps(n), i = t.current.filter(function(e) {
+				return e.name === n.type && (e.target === n.target || n.target === e.shadowParent) && Ls(e.delta, r);
 			})[0];
 			if (i && i.should) {
 				n.cancelable && n.preventDefault();
 				return;
 			}
 			if (!i) {
-				var c = (o.current.shards || []).map(Fs).filter(Boolean).filter(function(e) {
+				var c = (o.current.shards || []).map(Is).filter(Boolean).filter(function(e) {
 					return e.contains(n.target);
 				});
 				(c.length > 0 ? s(n, c[0]) : !o.current.noIsolation) && n.cancelable && n.preventDefault();
@@ -4349,7 +4349,7 @@ function Bs(e) {
 			delta: n,
 			target: r,
 			should: i,
-			shadowParent: Vs(r)
+			shadowParent: Hs(r)
 		};
 		t.current.push(a), setTimeout(function() {
 			t.current = t.current.filter(function(e) {
@@ -4357,60 +4357,60 @@ function Bs(e) {
 			});
 		}, 1);
 	}, []), u = d.useCallback(function(e) {
-		n.current = Ns(e), r.current = void 0;
+		n.current = Ps(e), r.current = void 0;
 	}, []), f = d.useCallback(function(t) {
-		l(t.type, Ps(t), t.target, s(t, e.lockRef.current));
+		l(t.type, Fs(t), t.target, s(t, e.lockRef.current));
 	}, []), p = d.useCallback(function(t) {
-		l(t.type, Ns(t), t.target, s(t, e.lockRef.current));
+		l(t.type, Ps(t), t.target, s(t, e.lockRef.current));
 	}, []);
 	d.useEffect(function() {
-		return zs.push(a), e.setCallbacks({
+		return Bs.push(a), e.setCallbacks({
 			onScrollCapture: f,
 			onWheelCapture: f,
 			onTouchMoveCapture: p
-		}), document.addEventListener("wheel", c, xs), document.addEventListener("touchmove", c, xs), document.addEventListener("touchstart", u, xs), function() {
-			zs = zs.filter(function(e) {
+		}), document.addEventListener("wheel", c, Ss), document.addEventListener("touchmove", c, Ss), document.addEventListener("touchstart", u, Ss), function() {
+			Bs = Bs.filter(function(e) {
 				return e !== a;
-			}), document.removeEventListener("wheel", c, xs), document.removeEventListener("touchmove", c, xs), document.removeEventListener("touchstart", u, xs);
+			}), document.removeEventListener("wheel", c, Ss), document.removeEventListener("touchmove", c, Ss), document.removeEventListener("touchstart", u, Ss);
 		};
 	}, []);
 	var m = e.removeScrollBar, h = e.inert;
-	return d.createElement(d.Fragment, null, h ? d.createElement(a, { styles: Ls(i) }) : null, m ? d.createElement(vs, {
+	return d.createElement(d.Fragment, null, h ? d.createElement(a, { styles: Rs(i) }) : null, m ? d.createElement(ys, {
 		noRelative: e.noRelative,
 		gapMode: e.gapMode
 	}) : null);
 }
-function Vs(e) {
+function Hs(e) {
 	for (var t = null; e !== null;) e instanceof ShadowRoot && (t = e.host, e = e.host), e = e.parentNode;
 	return t;
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/react-remove-scroll@2.7.2_@types+react@19.3.0_react@19.3.0/node_modules/react-remove-scroll/dist/es2015/sidecar.js
-var Hs = Qo($o, Bs), Us = d.forwardRef(function(e, t) {
-	return d.createElement(ts, Ro({}, e, {
+var Us = $o(es, Vs), Ws = d.forwardRef(function(e, t) {
+	return d.createElement(ns, zo({}, e, {
 		ref: t,
-		sideCar: Hs
+		sideCar: Us
 	}));
 });
-Us.classNames = ts.classNames;
+Ws.classNames = ns.classNames;
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/aria-hidden@1.2.6/node_modules/aria-hidden/dist/es2015/index.js
-var Ws = function(e) {
+var Gs = function(e) {
 	return typeof document > "u" ? null : (Array.isArray(e) ? e[0] : e).ownerDocument.body;
-}, Gs = /* @__PURE__ */ new WeakMap(), Ks = /* @__PURE__ */ new WeakMap(), qs = {}, Js = 0, Ys = function(e) {
-	return e && (e.host || Ys(e.parentNode));
-}, Xs = function(e, t) {
+}, Ks = /* @__PURE__ */ new WeakMap(), qs = /* @__PURE__ */ new WeakMap(), Js = {}, Ys = 0, Xs = function(e) {
+	return e && (e.host || Xs(e.parentNode));
+}, Zs = function(e, t) {
 	return t.map(function(t) {
 		if (e.contains(t)) return t;
-		var n = Ys(t);
+		var n = Xs(t);
 		return n && e.contains(n) ? n : (console.error("aria-hidden", t, "in not contained inside", e, ". Doing nothing"), null);
 	}).filter(function(e) {
 		return !!e;
 	});
-}, Zs = function(e, t, n, r) {
-	var i = Xs(t, Array.isArray(e) ? e : [e]);
-	qs[n] || (qs[n] = /* @__PURE__ */ new WeakMap());
-	var a = qs[n], o = [], s = /* @__PURE__ */ new Set(), c = new Set(i), l = function(e) {
+}, Qs = function(e, t, n, r) {
+	var i = Zs(t, Array.isArray(e) ? e : [e]);
+	Js[n] || (Js[n] = /* @__PURE__ */ new WeakMap());
+	var a = Js[n], o = [], s = /* @__PURE__ */ new Set(), c = new Set(i), l = function(e) {
 		e && !s.has(e) && (s.add(e), l(e.parentNode));
 	};
 	i.forEach(l);
@@ -4418,42 +4418,42 @@ var Ws = function(e) {
 		e && !c.has(e) && Array.prototype.forEach.call(e.children, function(e) {
 			if (s.has(e)) u(e);
 			else try {
-				var t = e.getAttribute(r), i = t !== null && t !== "false", c = (Gs.get(e) || 0) + 1, l = (a.get(e) || 0) + 1;
-				Gs.set(e, c), a.set(e, l), o.push(e), c === 1 && i && Ks.set(e, !0), l === 1 && e.setAttribute(n, "true"), i || e.setAttribute(r, "true");
+				var t = e.getAttribute(r), i = t !== null && t !== "false", c = (Ks.get(e) || 0) + 1, l = (a.get(e) || 0) + 1;
+				Ks.set(e, c), a.set(e, l), o.push(e), c === 1 && i && qs.set(e, !0), l === 1 && e.setAttribute(n, "true"), i || e.setAttribute(r, "true");
 			} catch (t) {
 				console.error("aria-hidden: cannot operate on ", e, t);
 			}
 		});
 	};
-	return u(t), s.clear(), Js++, function() {
+	return u(t), s.clear(), Ys++, function() {
 		o.forEach(function(e) {
-			var t = Gs.get(e) - 1, i = a.get(e) - 1;
-			Gs.set(e, t), a.set(e, i), t || (Ks.has(e) || e.removeAttribute(r), Ks.delete(e)), i || e.removeAttribute(n);
-		}), Js--, Js || (Gs = /* @__PURE__ */ new WeakMap(), Gs = /* @__PURE__ */ new WeakMap(), Ks = /* @__PURE__ */ new WeakMap(), qs = {});
+			var t = Ks.get(e) - 1, i = a.get(e) - 1;
+			Ks.set(e, t), a.set(e, i), t || (qs.has(e) || e.removeAttribute(r), qs.delete(e)), i || e.removeAttribute(n);
+		}), Ys--, Ys || (Ks = /* @__PURE__ */ new WeakMap(), Ks = /* @__PURE__ */ new WeakMap(), qs = /* @__PURE__ */ new WeakMap(), Js = {});
 	};
-}, Qs = function(e, t, n) {
+}, $s = function(e, t, n) {
 	n === void 0 && (n = "data-aria-hidden");
-	var r = Array.from(Array.isArray(e) ? e : [e]), i = t || Ws(e);
-	return i ? (r.push.apply(r, Array.from(i.querySelectorAll("[aria-live], script"))), Zs(r, i, n, "aria-hidden")) : function() {
+	var r = Array.from(Array.isArray(e) ? e : [e]), i = t || Gs(e);
+	return i ? (r.push.apply(r, Array.from(i.querySelectorAll("[aria-live], script"))), Qs(r, i, n, "aria-hidden")) : function() {
 		return null;
 	};
-}, $s = Object.defineProperty, ec = (e, t) => $s(e, "name", {
+}, ec = Object.defineProperty, tc = (e, t) => ec(e, "name", {
 	value: t,
 	configurable: !0
-}), tc = "Dialog", [nc, rc] = /* @__PURE__ */ Qi(tc), [ic, ac] = nc(tc), oc = /* @__PURE__ */ ec((e) => {
-	let { __scopeDialog: t, children: n, open: r, defaultOpen: i, onOpenChange: a, modal: o = !0 } = e, s = d.useRef(null), c = d.useRef(null), [l, u] = fa({
+}), nc = "Dialog", [rc, ic] = /* @__PURE__ */ $i(nc), [ac, oc] = rc(nc), sc = /* @__PURE__ */ tc((e) => {
+	let { __scopeDialog: t, children: n, open: r, defaultOpen: i, onOpenChange: a, modal: o = !0 } = e, s = d.useRef(null), c = d.useRef(null), [l, u] = pa({
 		prop: r,
 		defaultProp: i ?? !1,
 		onChange: a,
-		caller: tc
+		caller: nc
 	}), [f, p] = d.useState(0), [m, h] = d.useState(0);
-	return /* @__PURE__ */ (0, y.jsx)(ic, {
+	return /* @__PURE__ */ (0, y.jsx)(ac, {
 		scope: t,
 		triggerRef: s,
 		contentRef: c,
-		contentId: ra(),
-		titleId: ra(),
-		descriptionId: ra(),
+		contentId: ia(),
+		titleId: ia(),
+		descriptionId: ia(),
 		titlePresent: f > 0,
 		descriptionPresent: m > 0,
 		setTitleCount: p,
@@ -4464,49 +4464,49 @@ var Ws = function(e) {
 		modal: o,
 		children: n
 	});
-}, "Dialog"), sc = "DialogTrigger", cc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let { __scopeDialog: n, ...r } = e, i = ac(sc, n), a = Ji(t, i.triggerRef);
-	return /* @__PURE__ */ (0, y.jsx)(La.button, {
+}, "Dialog"), cc = "DialogTrigger", lc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let { __scopeDialog: n, ...r } = e, i = oc(cc, n), a = Yi(t, i.triggerRef);
+	return /* @__PURE__ */ (0, y.jsx)(Ra.button, {
 		type: "button",
 		"aria-haspopup": "dialog",
 		"aria-expanded": i.open,
 		"aria-controls": i.open ? i.contentId : void 0,
-		"data-state": Oc(i.open),
+		"data-state": kc(i.open),
 		...r,
 		ref: a,
-		onClick: zi(e.onClick, i.onOpenToggle)
+		onClick: Bi(e.onClick, i.onOpenToggle)
 	});
-}, "DialogTrigger")), lc = "DialogPortal", [uc, dc] = nc(lc, { forceMount: void 0 }), fc = /* @__PURE__ */ ec((e) => {
-	let { __scopeDialog: t, forceMount: n, children: r, container: i } = e, a = ac(lc, t);
-	return /* @__PURE__ */ (0, y.jsx)(uc, {
+}, "DialogTrigger")), uc = "DialogPortal", [dc, fc] = rc(uc, { forceMount: void 0 }), pc = /* @__PURE__ */ tc((e) => {
+	let { __scopeDialog: t, forceMount: n, children: r, container: i } = e, a = oc(uc, t);
+	return /* @__PURE__ */ (0, y.jsx)(dc, {
 		scope: t,
 		forceMount: n,
-		children: d.Children.map(r, (e) => /* @__PURE__ */ (0, y.jsx)(To, {
+		children: d.Children.map(r, (e) => /* @__PURE__ */ (0, y.jsx)(Eo, {
 			present: n || a.open,
-			children: /* @__PURE__ */ (0, y.jsx)(xo, {
+			children: /* @__PURE__ */ (0, y.jsx)(So, {
 				asChild: !0,
 				container: i,
 				children: e
 			})
 		}))
 	});
-}, "DialogPortal"), pc = "DialogOverlay", mc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let n = dc(pc, e.__scopeDialog), { forceMount: r = n.forceMount, ...i } = e, a = ac(pc, e.__scopeDialog);
-	return a.modal ? /* @__PURE__ */ (0, y.jsx)(To, {
+}, "DialogPortal"), mc = "DialogOverlay", hc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let n = fc(mc, e.__scopeDialog), { forceMount: r = n.forceMount, ...i } = e, a = oc(mc, e.__scopeDialog);
+	return a.modal ? /* @__PURE__ */ (0, y.jsx)(Eo, {
 		present: r || a.open,
-		children: /* @__PURE__ */ (0, y.jsx)(gc, {
+		children: /* @__PURE__ */ (0, y.jsx)(_c, {
 			...i,
 			ref: t
 		})
 	}) : null;
-}, "DialogOverlay")), hc = /* @__PURE__ */ Sa("DialogOverlay.RemoveScroll"), gc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let { __scopeDialog: n, ...r } = e, i = ac(pc, n), a = Ji(t, Xa());
-	return /* @__PURE__ */ (0, y.jsx)(Us, {
-		as: hc,
+}, "DialogOverlay")), gc = /* @__PURE__ */ Ca("DialogOverlay.RemoveScroll"), _c = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let { __scopeDialog: n, ...r } = e, i = oc(mc, n), a = Yi(t, Za());
+	return /* @__PURE__ */ (0, y.jsx)(Ws, {
+		as: gc,
 		allowPinchZoom: !0,
 		shards: [i.contentRef],
-		children: /* @__PURE__ */ (0, y.jsx)(La.div, {
-			"data-state": Oc(i.open),
+		children: /* @__PURE__ */ (0, y.jsx)(Ra.div, {
+			"data-state": kc(i.open),
 			...r,
 			ref: a,
 			style: {
@@ -4515,40 +4515,40 @@ var Ws = function(e) {
 			}
 		})
 	});
-}, "DialogOverlayImpl")), _c = "DialogContent", vc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let n = dc(_c, e.__scopeDialog), { forceMount: r = n.forceMount, ...i } = e, a = ac(_c, e.__scopeDialog);
-	return /* @__PURE__ */ (0, y.jsx)(To, {
+}, "DialogOverlayImpl")), vc = "DialogContent", yc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let n = fc(vc, e.__scopeDialog), { forceMount: r = n.forceMount, ...i } = e, a = oc(vc, e.__scopeDialog);
+	return /* @__PURE__ */ (0, y.jsx)(Eo, {
 		present: r || a.open,
-		children: a.modal ? /* @__PURE__ */ (0, y.jsx)(yc, {
+		children: a.modal ? /* @__PURE__ */ (0, y.jsx)(bc, {
 			...i,
 			ref: t
-		}) : /* @__PURE__ */ (0, y.jsx)(bc, {
+		}) : /* @__PURE__ */ (0, y.jsx)(xc, {
 			...i,
 			ref: t
 		})
 	});
-}, "DialogContent")), yc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let n = ac(_c, e.__scopeDialog), r = d.useRef(null), i = Ji(t, n.contentRef, r);
+}, "DialogContent")), bc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let n = oc(vc, e.__scopeDialog), r = d.useRef(null), i = Yi(t, n.contentRef, r);
 	return d.useEffect(() => {
 		let e = r.current;
-		if (e) return Qs(e);
-	}, []), /* @__PURE__ */ (0, y.jsx)(xc, {
+		if (e) return $s(e);
+	}, []), /* @__PURE__ */ (0, y.jsx)(Sc, {
 		...e,
 		ref: i,
 		trapFocus: n.open,
 		disableOutsidePointerEvents: n.open,
-		onCloseAutoFocus: zi(e.onCloseAutoFocus, (e) => {
+		onCloseAutoFocus: Bi(e.onCloseAutoFocus, (e) => {
 			e.preventDefault(), n.triggerRef.current?.focus();
 		}),
-		onPointerDownOutside: zi(e.onPointerDownOutside, (e) => {
+		onPointerDownOutside: Bi(e.onPointerDownOutside, (e) => {
 			let t = e.detail.originalEvent, n = t.button === 0 && t.ctrlKey === !0;
 			(t.button === 2 || n) && e.preventDefault();
 		}),
-		onFocusOutside: zi(e.onFocusOutside, (e) => e.preventDefault())
+		onFocusOutside: Bi(e.onFocusOutside, (e) => e.preventDefault())
 	});
-}, "DialogContentModal")), bc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let n = ac(_c, e.__scopeDialog), r = d.useRef(!1), i = d.useRef(!1);
-	return /* @__PURE__ */ (0, y.jsx)(xc, {
+}, "DialogContentModal")), xc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let n = oc(vc, e.__scopeDialog), r = d.useRef(!1), i = d.useRef(!1);
+	return /* @__PURE__ */ (0, y.jsx)(Sc, {
 		...e,
 		ref: t,
 		trapFocus: !1,
@@ -4562,56 +4562,56 @@ var Ws = function(e) {
 			n.triggerRef.current?.contains(a) && t.preventDefault(), t.detail.originalEvent.type === "focusin" && i.current && t.preventDefault();
 		}
 	});
-}, "DialogContentNonModal")), xc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let { __scopeDialog: n, trapFocus: r, onOpenAutoFocus: i, onCloseAutoFocus: a, ...o } = e, s = ac(_c, n);
-	return Io(), /* @__PURE__ */ (0, y.jsx)(y.Fragment, { children: /* @__PURE__ */ (0, y.jsx)(so, {
+}, "DialogContentNonModal")), Sc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let { __scopeDialog: n, trapFocus: r, onOpenAutoFocus: i, onCloseAutoFocus: a, ...o } = e, s = oc(vc, n);
+	return Lo(), /* @__PURE__ */ (0, y.jsx)(y.Fragment, { children: /* @__PURE__ */ (0, y.jsx)(co, {
 		asChild: !0,
 		loop: !0,
 		trapped: r,
 		onMountAutoFocus: i,
 		onUnmountAutoFocus: a,
-		children: /* @__PURE__ */ (0, y.jsx)(Ya, {
+		children: /* @__PURE__ */ (0, y.jsx)(Xa, {
 			role: "dialog",
 			id: s.contentId,
 			"aria-describedby": s.descriptionPresent ? s.descriptionId : void 0,
 			"aria-labelledby": s.titlePresent ? s.titleId : void 0,
-			"data-state": Oc(s.open),
+			"data-state": kc(s.open),
 			...o,
 			ref: t,
 			deferPointerDownOutside: !0,
 			onDismiss: () => s.onOpenChange(!1)
 		})
 	}) });
-}, "DialogContentImpl")), Sc = "DialogTitle", Cc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let { __scopeDialog: n, ...r } = e, i = ac(Sc, n), { setTitleCount: a } = i;
-	return ea(() => (a((e) => e + 1), () => a((e) => e - 1)), [a]), /* @__PURE__ */ (0, y.jsx)(La.h2, {
+}, "DialogContentImpl")), Cc = "DialogTitle", wc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let { __scopeDialog: n, ...r } = e, i = oc(Cc, n), { setTitleCount: a } = i;
+	return ta(() => (a((e) => e + 1), () => a((e) => e - 1)), [a]), /* @__PURE__ */ (0, y.jsx)(Ra.h2, {
 		id: i.titleId,
 		...r,
 		ref: t
 	});
-}, "DialogTitle")), wc = "DialogDescription", Tc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let { __scopeDialog: n, ...r } = e, i = ac(wc, n), { setDescriptionCount: a } = i;
-	return ea(() => (a((e) => e + 1), () => a((e) => e - 1)), [a]), /* @__PURE__ */ (0, y.jsx)(La.p, {
+}, "DialogTitle")), Tc = "DialogDescription", Ec = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let { __scopeDialog: n, ...r } = e, i = oc(Tc, n), { setDescriptionCount: a } = i;
+	return ta(() => (a((e) => e + 1), () => a((e) => e - 1)), [a]), /* @__PURE__ */ (0, y.jsx)(Ra.p, {
 		id: i.descriptionId,
 		...r,
 		ref: t
 	});
-}, "DialogDescription")), Ec = "DialogClose", Dc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ ec(function(e, t) {
-	let { __scopeDialog: n, ...r } = e, i = ac(Ec, n);
-	return /* @__PURE__ */ (0, y.jsx)(La.button, {
+}, "DialogDescription")), Dc = "DialogClose", Oc = /* @__PURE__ */ d.forwardRef(/* @__PURE__ */ tc(function(e, t) {
+	let { __scopeDialog: n, ...r } = e, i = oc(Dc, n);
+	return /* @__PURE__ */ (0, y.jsx)(Ra.button, {
 		type: "button",
 		...r,
 		ref: t,
-		onClick: zi(e.onClick, () => i.onOpenChange(!1))
+		onClick: Bi(e.onClick, () => i.onOpenChange(!1))
 	});
 }, "DialogClose"));
-function Oc(e) {
+function kc(e) {
 	return e ? "open" : "closed";
 }
-ec(Oc, "getState");
+tc(kc, "getState");
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@phosphor-icons+react@2.1.10_react-dom@19.3.0_react@19.3.0__react@19.3.0/node_modules/@phosphor-icons/react/dist/defs/Camera.es.js
-var kc = /* @__PURE__ */ new Map([
+var Ac = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M208,52H182.42L170,33.34A12,12,0,0,0,160,28H96a12,12,0,0,0-10,5.34L73.57,52H48A28,28,0,0,0,20,80V192a28,28,0,0,0,28,28H208a28,28,0,0,0,28-28V80A28,28,0,0,0,208,52Zm4,140a4,4,0,0,1-4,4H48a4,4,0,0,1-4-4V80a4,4,0,0,1,4-4H80a12,12,0,0,0,10-5.34L102.42,52h51.15L166,70.66A12,12,0,0,0,176,76h32a4,4,0,0,1,4,4ZM128,84a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,84Zm0,72a24,24,0,1,1,24-24A24,24,0,0,1,128,156Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M208,64H176L160,40H96L80,64H48A16,16,0,0,0,32,80V192a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V80A16,16,0,0,0,208,64ZM128,168a36,36,0,1,1,36-36A36,36,0,0,1,128,168Z",
@@ -4621,13 +4621,13 @@ var kc = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M208,58H179.21L165,36.67A6,6,0,0,0,160,34H96a6,6,0,0,0-5,2.67L76.78,58H48A22,22,0,0,0,26,80V192a22,22,0,0,0,22,22H208a22,22,0,0,0,22-22V80A22,22,0,0,0,208,58Zm10,134a10,10,0,0,1-10,10H48a10,10,0,0,1-10-10V80A10,10,0,0,1,48,70H80a6,6,0,0,0,5-2.67L99.21,46h57.57L171,67.33A6,6,0,0,0,176,70h32a10,10,0,0,1,10,10ZM128,90a42,42,0,1,0,42,42A42,42,0,0,0,128,90Zm0,72a30,30,0,1,1,30-30A30,30,0,0,1,128,162Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M208,56H180.28L166.65,35.56A8,8,0,0,0,160,32H96a8,8,0,0,0-6.65,3.56L75.71,56H48A24,24,0,0,0,24,80V192a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V80A24,24,0,0,0,208,56Zm8,136a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H80a8,8,0,0,0,6.66-3.56L100.28,48h55.43l13.63,20.44A8,8,0,0,0,176,72h32a8,8,0,0,1,8,8ZM128,88a44,44,0,1,0,44,44A44.05,44.05,0,0,0,128,88Zm0,72a28,28,0,1,1,28-28A28,28,0,0,1,128,160Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M208,60H178.13L163.32,37.78A4,4,0,0,0,160,36H96a4,4,0,0,0-3.32,1.78L77.85,60H48A20,20,0,0,0,28,80V192a20,20,0,0,0,20,20H208a20,20,0,0,0,20-20V80A20,20,0,0,0,208,60Zm12,132a12,12,0,0,1-12,12H48a12,12,0,0,1-12-12V80A12,12,0,0,1,48,68H80a4,4,0,0,0,3.33-1.78L98.13,44h59.72l14.82,22.22A4,4,0,0,0,176,68h32a12,12,0,0,1,12,12ZM128,92a40,40,0,1,0,40,40A40,40,0,0,0,128,92Zm0,72a32,32,0,1,1,32-32A32,32,0,0,1,128,164Z" }))]
-]), Ac = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), jc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: kc
+	weights: Ac
 }));
-Ac.displayName = "CameraIcon";
-var jc = Ac, Mc = /* @__PURE__ */ new Map([
+jc.displayName = "CameraIcon";
+var Mc = jc, Nc = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M234.38,210a123.36,123.36,0,0,0-60.78-53.23,76,76,0,1,0-91.2,0A123.36,123.36,0,0,0,21.62,210a12,12,0,1,0,20.77,12c18.12-31.32,50.12-50,85.61-50s67.49,18.69,85.61,50a12,12,0,0,0,20.77-12ZM76,96a52,52,0,1,1,52,52A52.06,52.06,0,0,1,76,96Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M192,96a64,64,0,1,1-64-64A64,64,0,0,1,192,96Z",
@@ -4637,26 +4637,26 @@ var jc = Ac, Mc = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M229.19,213c-15.81-27.32-40.63-46.49-69.47-54.62a70,70,0,1,0-63.44,0C67.44,166.5,42.62,185.67,26.81,213a6,6,0,1,0,10.38,6C56.4,185.81,90.34,166,128,166s71.6,19.81,90.81,53a6,6,0,1,0,10.38-6ZM70,96a58,58,0,1,1,58,58A58.07,58.07,0,0,1,70,96Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M227.46,214c-16.52-28.56-43-48.06-73.68-55.09a68,68,0,1,0-51.56,0c-30.64,7-57.16,26.53-73.68,55.09a4,4,0,0,0,6.92,4C55,184.19,89.62,164,128,164s73,20.19,92.54,54a4,4,0,0,0,3.46,2,3.93,3.93,0,0,0,2-.54A4,4,0,0,0,227.46,214ZM68,96a60,60,0,1,1,60,60A60.07,60.07,0,0,1,68,96Z" }))]
-]), Nc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Pc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: Mc
+	weights: Nc
 }));
-Nc.displayName = "UserIcon";
-var Pc = Nc;
+Pc.displayName = "UserIcon";
+var Fc = Pc;
 //#endregion
 //#region src/always-on/IdentityPortrait.tsx
-function Fc({ identity: e }) {
-	return /* @__PURE__ */ (0, y.jsx)(Ic, { identity: e }, `${e.kind}:${e.id}:${e.url}`);
-}
 function Ic({ identity: e }) {
+	return /* @__PURE__ */ (0, y.jsx)(Lc, { identity: e }, `${e.kind}:${e.id}:${e.url}`);
+}
+function Lc({ identity: e }) {
 	let [t, n] = (0, d.useState)(e.url), [r, i] = (0, d.useState)(!e.url), [a, o] = (0, d.useState)(!1);
 	return (0, d.useEffect)(() => {
 		if (!r || a) return;
 		let t = !0;
 		return (async () => {
 			try {
-				let r = (e.kind === "twin" ? await Dr(!0) : (await Mr()).images)?.find((t) => t.id === e.id);
+				let r = (e.kind === "twin" ? await Or(!0) : (await Nr()).images)?.find((t) => t.id === e.id);
 				t && r?.url && (n(r.url), i(!1));
 			} catch {} finally {
 				t && o(!0);
@@ -4673,7 +4673,7 @@ function Ic({ identity: e }) {
 		role: "img",
 		"aria-label": `${e.name} portrait ${a ? "unavailable" : "loading"}`,
 		title: a ? "Portrait temporarily unavailable" : "Refreshing portrait",
-		children: /* @__PURE__ */ (0, y.jsx)(Pc, {
+		children: /* @__PURE__ */ (0, y.jsx)(Fc, {
 			size: 22,
 			"aria-hidden": "true"
 		})
@@ -4685,7 +4685,7 @@ function Ic({ identity: e }) {
 }
 //#endregion
 //#region src/always-on/PhotoUpload.tsx
-function Lc({ file: e, savedPhotoUrl: t, busy: n, onChange: r, onRemove: i, onError: a }) {
+function Rc({ file: e, savedPhotoUrl: t, busy: n, onChange: r, onRemove: i, onError: a }) {
 	let o = (0, d.useRef)(null), [s, c] = (0, d.useState)("");
 	(0, d.useEffect)(() => {
 		if (!e) {
@@ -4744,7 +4744,7 @@ function Lc({ file: e, savedPhotoUrl: t, busy: n, onChange: r, onRemove: i, onEr
 			disabled: n,
 			onClick: () => o.current?.click(),
 			children: [
-				/* @__PURE__ */ (0, y.jsx)(jc, { size: 34 }),
+				/* @__PURE__ */ (0, y.jsx)(Mc, { size: 34 }),
 				/* @__PURE__ */ (0, y.jsx)("strong", { children: "Choose your photo" }),
 				/* @__PURE__ */ (0, y.jsx)("small", { children: "JPG, PNG or WebP · Up to 8 MB" })
 			]
@@ -4753,7 +4753,7 @@ function Lc({ file: e, savedPhotoUrl: t, busy: n, onChange: r, onRemove: i, onEr
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@phosphor-icons+react@2.1.10_react-dom@19.3.0_react@19.3.0__react@19.3.0/node_modules/@phosphor-icons/react/dist/defs/TShirt.es.js
-var Rc = /* @__PURE__ */ new Map([
+var zc = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M246.17,57.9,198.09,29.65h0A11.9,11.9,0,0,0,192,28H160a12,12,0,0,0-12,12,20,20,0,0,1-40,0A12,12,0,0,0,96,28H64a11.9,11.9,0,0,0-6.07,1.66h0L9.83,57.9A20.18,20.18,0,0,0,2,84l17.9,36.8A19.62,19.62,0,0,0,37.67,132H52v76a20,20,0,0,0,20,20H184a20,20,0,0,0,20-20V132h14.32a19.64,19.64,0,0,0,17.75-11.17L254,84A20.18,20.18,0,0,0,246.17,57.9ZM40.37,108,25.16,76.73,52,61v47ZM180,204H76V52h9.67a44,44,0,0,0,84.68,0H180Zm35.62-96H204V61l26.83,15.76Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M247.11,78.77l-19.27,36.81a8.44,8.44,0,0,1-7.5,4.42H192V40l51.78,28.25A7.81,7.81,0,0,1,247.11,78.77Zm-238.22,0,19.27,36.81a8.44,8.44,0,0,0,7.5,4.42H64V40L12.22,68.25A7.81,7.81,0,0,0,8.89,78.77Z",
@@ -4763,13 +4763,13 @@ var Rc = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M246.64,63,194.87,34.74A5.93,5.93,0,0,0,192,34H160a6,6,0,0,0-6,6,26,26,0,0,1-52,0,6,6,0,0,0-6-6H64a5.93,5.93,0,0,0-2.88.74L9.36,63A13.77,13.77,0,0,0,3.58,81.55l19.28,36.81A14.38,14.38,0,0,0,35.67,126H58v82a14,14,0,0,0,14,14H184a14,14,0,0,0,14-14V126h22.34a14.38,14.38,0,0,0,12.81-7.64l19.28-36.81A13.77,13.77,0,0,0,246.64,63Zm-211,51a2.42,2.42,0,0,1-2.18-1.21L14.21,76a1.82,1.82,0,0,1,.9-2.47L58,50.11V114ZM186,208a2,2,0,0,1-2,2H72a2,2,0,0,1-2-2V46H90.48a38,38,0,0,0,75,0H186Zm55.8-132-19.28,36.8a2.42,2.42,0,0,1-2.18,1.21H198V50.11l42.9,23.4A1.83,1.83,0,0,1,241.79,76Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M247.59,61.22,195.83,33A8,8,0,0,0,192,32H160a8,8,0,0,0-8,8,24,24,0,0,1-48,0,8,8,0,0,0-8-8H64a8,8,0,0,0-3.84,1L8.41,61.22A15.76,15.76,0,0,0,1.82,82.48l19.27,36.81A16.37,16.37,0,0,0,35.67,128H56v80a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V128h20.34a16.37,16.37,0,0,0,14.58-8.71l19.27-36.81A15.76,15.76,0,0,0,247.59,61.22ZM35.67,112a.62.62,0,0,1-.41-.13L16.09,75.26,56,53.48V112ZM184,208H72V48h16.8a40,40,0,0,0,78.38,0H184Zm36.75-96.14a.55.55,0,0,1-.41.14H200V53.48l39.92,21.78Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M245.68,64.73,193.91,36.49h0A4,4,0,0,0,192,36H160a4,4,0,0,0-4,4,28,28,0,0,1-56,0,4,4,0,0,0-4-4H64a4,4,0,0,0-1.9.5h0L10.32,64.73a11.79,11.79,0,0,0-5,15.89l19.28,36.81a12.37,12.37,0,0,0,11,6.57H60v84a12,12,0,0,0,12,12H184a12,12,0,0,0,12-12V124h24.33a12.37,12.37,0,0,0,11-6.57l19.28-36.81A11.79,11.79,0,0,0,245.68,64.73ZM35.67,116a4.46,4.46,0,0,1-4-2.28L12.44,76.91a3.79,3.79,0,0,1,1.71-5.15L60,46.74V116ZM188,208a4,4,0,0,1-4,4H72a4,4,0,0,1-4-4V44H92.22a36,36,0,0,0,71.56,0H188ZM243.56,76.91l-19.27,36.81a4.46,4.46,0,0,1-4,2.28H196V46.74l45.85,25A3.79,3.79,0,0,1,243.56,76.91Z" }))]
-]), zc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Bc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: Rc
+	weights: zc
 }));
-zc.displayName = "TShirtIcon";
-var Bc = zc, Vc = [
+Bc.displayName = "TShirtIcon";
+var Vc = Bc, Hc = [
 	{
 		value: "fitted",
 		label: "Fitted",
@@ -4786,7 +4786,7 @@ var Bc = zc, Vc = [
 		hint: "A little more room"
 	}
 ];
-function Hc({ value: e, onChange: t, bodyType: n, unit: r }) {
+function Uc({ value: e, onChange: t, bodyType: n, unit: r }) {
 	let i = r === "metric";
 	return /* @__PURE__ */ (0, y.jsxs)("div", {
 		className: "personal-fit-fields",
@@ -4870,7 +4870,7 @@ function Hc({ value: e, onChange: t, bodyType: n, unit: r }) {
 				}),
 				/* @__PURE__ */ (0, y.jsx)("div", {
 					className: "fit-preference-options",
-					children: Vc.map((n) => /* @__PURE__ */ (0, y.jsxs)("label", {
+					children: Hc.map((n) => /* @__PURE__ */ (0, y.jsxs)("label", {
 						className: e.fitPreference === n.value ? "selected" : "",
 						children: [
 							/* @__PURE__ */ (0, y.jsx)("input", {
@@ -4883,7 +4883,7 @@ function Hc({ value: e, onChange: t, bodyType: n, unit: r }) {
 									fitPreference: n.value
 								})
 							}),
-							/* @__PURE__ */ (0, y.jsx)(Bc, {
+							/* @__PURE__ */ (0, y.jsx)(Vc, {
 								className: `preference-shirt preference-shirt-${n.value}`,
 								size: 29,
 								weight: "thin",
@@ -4909,7 +4909,7 @@ function Hc({ value: e, onChange: t, bodyType: n, unit: r }) {
 }
 //#endregion
 //#region src/always-on/InlinePhotoConsent.tsx
-function Uc({ checks: e, onChange: t, busy: n, saved: r }) {
+function Wc({ checks: e, onChange: t, busy: n, saved: r }) {
 	return /* @__PURE__ */ (0, y.jsxs)("section", {
 		className: "inline-photo-consent",
 		"aria-labelledby": "photo-permission-title",
@@ -4949,7 +4949,7 @@ function Uc({ checks: e, onChange: t, busy: n, saved: r }) {
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@phosphor-icons+react@2.1.10_react-dom@19.3.0_react@19.3.0__react@19.3.0/node_modules/@phosphor-icons/react/dist/defs/UsersThree.es.js
-var Wc = /* @__PURE__ */ new Map([
+var Gc = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M164.38,181.1a52,52,0,1,0-72.76,0,75.89,75.89,0,0,0-30,28.89,12,12,0,0,0,20.78,12,53,53,0,0,1,91.22,0,12,12,0,1,0,20.78-12A75.89,75.89,0,0,0,164.38,181.1ZM100,144a28,28,0,1,1,28,28A28,28,0,0,1,100,144Zm147.21,9.59a12,12,0,0,1-16.81-2.39c-8.33-11.09-19.85-19.59-29.33-21.64a12,12,0,0,1-1.82-22.91,20,20,0,1,0-24.78-28.3,12,12,0,1,1-21-11.6,44,44,0,1,1,73.28,48.35,92.18,92.18,0,0,1,22.85,21.69A12,12,0,0,1,247.21,153.59Zm-192.28-24c-9.48,2.05-21,10.55-29.33,21.65A12,12,0,0,1,6.41,136.79,92.37,92.37,0,0,1,29.26,115.1a44,44,0,1,1,73.28-48.35,12,12,0,1,1-21,11.6,20,20,0,1,0-24.78,28.3,12,12,0,0,1-1.82,22.91Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M168,144a40,40,0,1,1-40-40A40,40,0,0,1,168,144ZM64,56A32,32,0,1,0,96,88,32,32,0,0,0,64,56Zm128,0a32,32,0,1,0,32,32A32,32,0,0,0,192,56Z",
@@ -4959,13 +4959,13 @@ var Wc = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M243.6,148.8a6,6,0,0,1-8.4-1.2A53.58,53.58,0,0,0,192,126a6,6,0,0,1,0-12,26,26,0,1,0-25.18-32.5,6,6,0,0,1-11.62-3,38,38,0,1,1,59.91,39.63A65.69,65.69,0,0,1,244.8,140.4,6,6,0,0,1,243.6,148.8ZM189.19,213a6,6,0,0,1-2.19,8.2,5.9,5.9,0,0,1-3,.81,6,6,0,0,1-5.2-3,59,59,0,0,0-101.62,0,6,6,0,1,1-10.38-6A70.1,70.1,0,0,1,103,182.55a46,46,0,1,1,50.1,0A70.1,70.1,0,0,1,189.19,213ZM128,178a34,34,0,1,0-34-34A34,34,0,0,0,128,178ZM70,120a6,6,0,0,0-6-6A26,26,0,1,1,89.18,81.49a6,6,0,1,0,11.62-3,38,38,0,1,0-59.91,39.63A65.69,65.69,0,0,0,11.2,140.4a6,6,0,1,0,9.6,7.2A53.58,53.58,0,0,1,64,126,6,6,0,0,0,70,120Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M237,147.44a4,4,0,0,1-5.48-1.4c-8.33-14-20.93-22-34.56-22a4,4,0,0,1-1.2-.2,36.76,36.76,0,0,1-3.8.2,4,4,0,0,1,0-8,28,28,0,1,0-27.12-35,4,4,0,0,1-7.75-2,36,36,0,1,1,54,39.48c10.81,3.85,20.51,12,27.31,23.48A4,4,0,0,1,237,147.44ZM187.46,214a4,4,0,0,1-1.46,5.46,3.93,3.93,0,0,1-2,.54,4,4,0,0,1-3.46-2,61,61,0,0,0-105.08,0,4,4,0,0,1-6.92-4,68.35,68.35,0,0,1,39.19-31,44,44,0,1,1,40.54,0A68.35,68.35,0,0,1,187.46,214ZM128,180a36,36,0,1,0-36-36A36,36,0,0,0,128,180ZM64,116A28,28,0,1,1,91.12,81a4,4,0,0,0,7.75-2A36,36,0,1,0,45.3,118.75,63.55,63.55,0,0,0,12.8,141.6a4,4,0,0,0,6.4,4.8A55.55,55.55,0,0,1,64,124a4,4,0,0,0,0-8Z" }))]
-]), Gc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Kc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: Wc
+	weights: Gc
 }));
-Gc.displayName = "UsersThreeIcon";
-var Kc = Gc, qc = /* @__PURE__ */ new Map([
+Kc.displayName = "UsersThreeIcon";
+var qc = Kc, Jc = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M232,56V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56Z",
@@ -4975,13 +4975,13 @@ var Kc = Gc, qc = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M228.24,76.24l-128,128a6,6,0,0,1-8.48,0l-56-56a6,6,0,0,1,8.48-8.48L96,191.51,219.76,67.76a6,6,0,0,1,8.48,8.48Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M226.83,74.83l-128,128a4,4,0,0,1-5.66,0l-56-56a4,4,0,0,1,5.66-5.66L96,194.34,221.17,69.17a4,4,0,1,1,5.66,5.66Z" }))]
-]), Jc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Yc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: qc
+	weights: Jc
 }));
-Jc.displayName = "CheckIcon";
-var Yc = Jc, Xc = /* @__PURE__ */ new Map([
+Yc.displayName = "CheckIcon";
+var Xc = Yc, Zc = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M40,92H70.06a36,36,0,0,0,67.88,0H216a12,12,0,0,0,0-24H137.94a36,36,0,0,0-67.88,0H40a12,12,0,0,0,0,24Zm64-24A12,12,0,1,1,92,80,12,12,0,0,1,104,68Zm112,96H201.94a36,36,0,0,0-67.88,0H40a12,12,0,0,0,0,24h94.06a36,36,0,0,0,67.88,0H216a12,12,0,0,0,0-24Zm-48,24a12,12,0,1,1,12-12A12,12,0,0,1,168,188Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M128,80a24,24,0,1,1-24-24A24,24,0,0,1,128,80Zm40,72a24,24,0,1,0,24,24A24,24,0,0,0,168,152Z",
@@ -4991,49 +4991,49 @@ var Yc = Jc, Xc = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M40,86H74.6a30,30,0,0,0,58.8,0H216a6,6,0,0,0,0-12H133.4a30,30,0,0,0-58.8,0H40a6,6,0,0,0,0,12Zm64-24A18,18,0,1,1,86,80,18,18,0,0,1,104,62ZM216,170H197.4a30,30,0,0,0-58.8,0H40a6,6,0,0,0,0,12h98.6a30,30,0,0,0,58.8,0H216a6,6,0,0,0,0-12Zm-48,24a18,18,0,1,1,18-18A18,18,0,0,1,168,194Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M40,88H73a32,32,0,0,0,62,0h81a8,8,0,0,0,0-16H135a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16Zm64-24A16,16,0,1,1,88,80,16,16,0,0,1,104,64ZM216,168H199a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16h97a32,32,0,0,0,62,0h17a8,8,0,0,0,0-16Zm-48,24a16,16,0,1,1,16-16A16,16,0,0,1,168,192Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M40,84H76.29a28,28,0,0,0,55.42,0H216a4,4,0,0,0,0-8H131.71a28,28,0,0,0-55.42,0H40a4,4,0,0,0,0,8Zm64-24A20,20,0,1,1,84,80,20,20,0,0,1,104,60ZM216,172H195.71a28,28,0,0,0-55.42,0H40a4,4,0,0,0,0,8H140.29a28,28,0,0,0,55.42,0H216a4,4,0,0,0,0-8Zm-48,24a20,20,0,1,1,20-20A20,20,0,0,1,168,196Z" }))]
-]), Zc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Qc = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: Xc
+	weights: Zc
 }));
-Zc.displayName = "SlidersHorizontalIcon";
-var Qc = Zc, $c = (e) => e.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-function el({ garments: e, title: t = "", person: n = "", size: r = "", view: i }) {
+Qc.displayName = "SlidersHorizontalIcon";
+var $c = Qc, el = (e) => e.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+function tl({ garments: e, title: t = "", person: n = "", size: r = "", view: i }) {
 	return [
-		(e.map($c).filter(Boolean).join("-and-") || $c(t) || "Look").slice(0, 120).replace(/-+$/, ""),
-		$c(n).slice(0, 30),
-		r ? "Size-" + $c(r).slice(0, 15) : "",
+		(e.map(el).filter(Boolean).join("-and-") || el(t) || "Look").slice(0, 120).replace(/-+$/, ""),
+		el(n).slice(0, 30),
+		r ? "Size-" + el(r).slice(0, 15) : "",
 		i ? "View-" + i : "",
 		"SPREEAI"
 	].filter(Boolean).join("-") + ".png";
 }
 //#endregion
 //#region src/always-on/preview-guidance.ts
-var tl = "AI-generated preview. Garment details and fit may vary.", nl = "Size recommendations are guidance, not a guarantee of fit. Actual fit may vary by garment and personal preference.";
+var nl = "AI-generated preview. Garment details and fit may vary.", rl = "Size recommendations are guidance, not a guarantee of fit. Actual fit may vary by garment and personal preference.";
 //#endregion
 //#region src/always-on/SizingGuidance.tsx
-function rl() {
+function il() {
 	return /* @__PURE__ */ (0, y.jsx)("span", {
 		className: "sizing-guidance",
-		children: nl
+		children: rl
 	});
 }
 //#endregion
 //#region src/always-on/TryOnBeta.tsx
-function il() {
+function al() {
 	return /* @__PURE__ */ (0, y.jsxs)("span", {
 		className: "tryon-beta",
 		children: [
 			/* @__PURE__ */ (0, y.jsx)("strong", { children: "Try-on · Beta" }),
-			/* @__PURE__ */ (0, y.jsx)("span", { children: tl }),
+			/* @__PURE__ */ (0, y.jsx)("span", { children: nl }),
 			window.PARTNER_DEMO?.theme === "ch" && /* @__PURE__ */ (0, y.jsx)("span", { children: "Preset models may use prepared AI demo previews. Uploaded-photo try-ons use SPREEAI." }),
-			/* @__PURE__ */ (0, y.jsx)(rl, {})
+			/* @__PURE__ */ (0, y.jsx)(il, {})
 		]
 	});
 }
 //#endregion
 //#region src/always-on/ImageZoom.tsx
-function al({ src: e, alt: t, onError: n, allowOriginal: r = !1, expandedTryOn: i = !1 }) {
+function ol({ src: e, alt: t, onError: n, allowOriginal: r = !1, expandedTryOn: i = !1 }) {
 	let a = r || i, [o, s] = (0, d.useState)(0);
 	(0, d.useLayoutEffect)(() => {
 		if (!a || !e) return;
@@ -5101,31 +5101,31 @@ function al({ src: e, alt: t, onError: n, allowOriginal: r = !1, expandedTryOn: 
 					onClick: () => l(e),
 					children: [e, "×"]
 				}, e)),
-				r && e && /* @__PURE__ */ (0, y.jsxs)(oc, { children: [/* @__PURE__ */ (0, y.jsx)(cc, {
+				r && e && /* @__PURE__ */ (0, y.jsxs)(sc, { children: [/* @__PURE__ */ (0, y.jsx)(lc, {
 					className: "image-zoom-original",
 					"aria-label": `Expand full image: ${t}`,
 					children: "Full image"
-				}), /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "image-fullscreen-overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+				}), /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "image-fullscreen-overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 					className: "image-fullscreen",
 					children: [
 						/* @__PURE__ */ (0, y.jsxs)("header", { children: [
-							/* @__PURE__ */ (0, y.jsx)(Cc, { children: t }),
-							/* @__PURE__ */ (0, y.jsx)(Tc, {
+							/* @__PURE__ */ (0, y.jsx)(wc, { children: t }),
+							/* @__PURE__ */ (0, y.jsx)(Ec, {
 								className: "sr-only",
 								children: "Full-screen try-on image. Zoom to inspect details, then close to return to your preview."
 							}),
-							/* @__PURE__ */ (0, y.jsx)(Dc, {
+							/* @__PURE__ */ (0, y.jsx)(Oc, {
 								"aria-label": "Close full image",
 								children: "×"
 							})
 						] }),
-						/* @__PURE__ */ (0, y.jsx)(al, {
+						/* @__PURE__ */ (0, y.jsx)(ol, {
 							expandedTryOn: !0,
 							src: e,
 							alt: t,
 							onError: n
 						}),
-						/* @__PURE__ */ (0, y.jsx)(il, {})
+						/* @__PURE__ */ (0, y.jsx)(al, {})
 					]
 				})] })] }),
 				/* @__PURE__ */ (0, y.jsx)("span", {
@@ -5188,7 +5188,7 @@ function al({ src: e, alt: t, onError: n, allowOriginal: r = !1, expandedTryOn: 
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/@phosphor-icons+react@2.1.10_react-dom@19.3.0_react@19.3.0__react@19.3.0/node_modules/@phosphor-icons/react/dist/defs/FacebookLogo.es.js
-var ol = /* @__PURE__ */ new Map([
+var sl = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,20A108,108,0,1,0,236,128,108.12,108.12,0,0,0,128,20Zm12,191.13V156h20a12,12,0,0,0,0-24H140V112a12,12,0,0,1,12-12h16a12,12,0,0,0,0-24H152a36,36,0,0,0-36,36v20H96a12,12,0,0,0,0,24h20v55.13a84,84,0,1,1,24,0Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z",
@@ -5198,13 +5198,13 @@ var ol = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm6,191.8V150h26a6,6,0,0,0,0-12H134V112a18,18,0,0,1,18-18h16a6,6,0,0,0,0-12H152a30,30,0,0,0-30,30v26H96a6,6,0,0,0,0,12h26v67.8a90,90,0,1,1,12,0Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,191.63V152h24a8,8,0,0,0,0-16H136V112a16,16,0,0,1,16-16h16a8,8,0,0,0,0-16H152a32,32,0,0,0-32,32v24H96a8,8,0,0,0,0,16h24v63.63a88,88,0,1,1,16,0Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,28A100,100,0,1,0,228,128,100.11,100.11,0,0,0,128,28Zm4,191.91V148h28a4,4,0,0,0,0-8H132V112a20,20,0,0,1,20-20h16a4,4,0,0,0,0-8H152a28,28,0,0,0-28,28v28H96a4,4,0,0,0,0,8h28v71.91a92,92,0,1,1,8,0Z" }))]
-]), sl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), cl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: ol
+	weights: sl
 }));
-sl.displayName = "FacebookLogoIcon";
-var cl = sl, ll = /* @__PURE__ */ new Map([
+cl.displayName = "FacebookLogoIcon";
+var ll = cl, ul = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M218.12,209.56l-61-95.8,59.72-65.69a12,12,0,0,0-17.76-16.14L143.81,92.77,106.12,33.56A12,12,0,0,0,96,28H48A12,12,0,0,0,37.88,46.44l61,95.8L39.12,207.93a12,12,0,1,0,17.76,16.14l55.31-60.84,37.69,59.21A12,12,0,0,0,160,228h48a12,12,0,0,0,10.12-18.44ZM166.59,204,69.86,52H89.41l96.73,152Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M208,216H160L48,40H96Z",
@@ -5214,13 +5214,13 @@ var cl = sl, ll = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M213.06,212.78l-63.42-99.66L212.44,44A6,6,0,1,0,203.56,36L143,102.62l-41.9-65.84A6,6,0,0,0,96,34H48a6,6,0,0,0-5.06,9.22l63.42,99.66L43.56,212A6,6,0,0,0,52.44,220L113,153.38l41.9,65.84A6,6,0,0,0,160,222h48a6,6,0,0,0,5.06-9.22ZM163.29,210,58.93,46H92.71L197.07,210Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M214.75,211.71l-62.6-98.38,61.77-67.95a8,8,0,0,0-11.84-10.76L143.24,99.34,102.75,35.71A8,8,0,0,0,96,32H48a8,8,0,0,0-6.75,12.3l62.6,98.37-61.77,68a8,8,0,1,0,11.84,10.76l58.84-64.72,40.49,63.63A8,8,0,0,0,160,224h48a8,8,0,0,0,6.75-12.29ZM164.39,208,62.57,48h29L193.43,208Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M211.37,213.85,147.13,112.9,211,42.69A4,4,0,0,0,205,37.31L142.68,105.9,99.38,37.85A4,4,0,0,0,96,36H48a4,4,0,0,0-3.37,6.15L108.87,143.1,45,213.31A4,4,0,1,0,51,218.69l62.36-68.59,43.3,68.05A4,4,0,0,0,160,220h48a4,4,0,0,0,3.37-6.15ZM162.2,212,55.29,44H93.8L200.71,212Z" }))]
-]), ul = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), dl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: ll
+	weights: ul
 }));
-ul.displayName = "XLogoIcon";
-var dl = ul, fl = /* @__PURE__ */ new Map([
+dl.displayName = "XLogoIcon";
+var fl = dl, pl = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M188.84,120.46a68.14,68.14,0,0,0-10-6.23c-3.72-21.68-16.41-37.41-35.52-43.2C121.94,64.55,97.29,72.42,86,89.34a12,12,0,0,0,20,13.32c5.47-8.2,19.11-12.08,30.41-8.66a24.72,24.72,0,0,1,14.88,12.24,86.73,86.73,0,0,0-8.86-.45C108.56,105.79,84,125.22,84,152c0,22.9,17.54,39.52,41.71,39.52a52,52,0,0,0,37.23-16c6-6.23,12.88-16.46,15.72-32.07,6.2,6.42,9.34,14.67,9.34,24.59,0,17.74-19.07,44-60,44-45.76,0-68-27.48-68-84s22.24-84,68-84c31.08,0,51,12.42,60.8,38a12,12,0,0,0,22.4-8.62C197.77,38.44,169,20,128,20,68.67,20,36,58.35,36,128s32.67,108,92,108c31.36,0,51.08-12.05,62.11-22.15C203.81,201.28,212,184.14,212,168,212,148.36,204,131.92,188.84,120.46Zm-43.2,38.39a27.9,27.9,0,0,1-19.93,8.67c-8.17,0-17.71-4.06-17.71-15.52,0-15.26,17.84-22.21,34.41-22.21a60.23,60.23,0,0,1,13.51,1.52C155.36,142.93,151.84,152.41,145.64,158.85Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M208,128c0,48-16,96-80,96s-80-48-80-96,16-96,80-96S208,80,208,128Z",
@@ -5230,13 +5230,13 @@ var dl = ul, fl = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M185.22,125.25a62,62,0,0,0-11.78-7c-3.53-29.6-23-38.82-31.83-41.5-19-5.74-40.73,1.09-50.6,15.9a6,6,0,1,0,10,6.66c6.94-10.41,23.25-15.28,37.14-11.07,7.22,2.18,18.39,8.34,22.39,25.61a78.74,78.74,0,0,0-18.11-2.08c-13.53,0-26.16,3.46-35.55,9.77C96,128.85,90,139.66,90,152c0,22,18,33.52,35.71,33.52a46,46,0,0,0,32.91-14.19c6.58-6.85,14.35-19.11,15.29-39.26a44.59,44.59,0,0,1,4.07,2.75c10.48,7.92,16,19.4,16,33.18,0,20.16-21,50-66,50-27.07,0-46.92-9.19-59-27.33C59,175.75,54,154.66,54,128s5-47.75,15-62.67C81.08,47.19,100.93,38,128,38c33.85,0,55.57,13.67,66.4,41.8a6,6,0,1,0,11.2-4.31C193,42.65,166.85,26,128,26,96.67,26,73.46,37,59,58.67,47.72,75.6,42,98.93,42,128s5.72,52.4,17,69.33C73.46,219,96.67,230,128,230c29.43,0,47.81-11.19,58.05-20.58C198.54,198,206,182.49,206,168,206,150.31,198.81,135.52,185.22,125.25ZM150,163a33.94,33.94,0,0,1-24.26,10.51C109.33,173.52,102,162.71,102,152c0-13.59,12.64-28.21,40.41-28.21a65.33,65.33,0,0,1,19.58,3c0,.41,0,.82,0,1.24C162,142.72,157.84,154.82,150,163Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M186.42,123.65a63.81,63.81,0,0,0-11.13-6.72c-4-29.89-24-39.31-33.1-42.07-19.78-6-42.51,1.19-52.85,16.7a8,8,0,0,0,13.32,8.88c6.37-9.56,22-14.16,34.89-10.27,9.95,3,16.82,10.3,20.15,21a81.05,81.05,0,0,0-15.29-1.43c-13.92,0-26.95,3.59-36.67,10.1C94.3,127.57,88,139,88,152c0,20.58,15.86,35.52,37.71,35.52a48,48,0,0,0,34.35-14.81c6.44-6.7,14-18.36,15.61-37.1.38.26.74.53,1.1.8C186.88,144.05,192,154.68,192,168c0,19.36-20.34,48-64,48-26.73,0-45.48-8.65-57.34-26.44C60.93,175,56,154.26,56,128s4.93-47,14.66-61.56C82.52,48.65,101.27,40,128,40c32.93,0,54,13.25,64.53,40.52a8,8,0,1,0,14.93-5.75C194.68,41.56,167.2,24,128,24,96,24,72.19,35.29,57.34,57.56,45.83,74.83,40,98.52,40,128s5.83,53.17,17.34,70.44C72.19,220.71,96,232,128,232c30.07,0,48.9-11.48,59.4-21.1C200.3,199.08,208,183,208,168,208,149.66,200.54,134.32,186.42,123.65Zm-37.89,38a31.94,31.94,0,0,1-22.82,9.9c-10.81,0-21.71-6-21.71-19.52,0-12.63,12-26.21,38.41-26.21A63.88,63.88,0,0,1,160,128.24C160,142.32,156,153.86,148.53,161.62Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M184,126.84a59.8,59.8,0,0,0-12.42-7.16c-3-29.38-22-38.4-30.56-41-18.16-5.5-39,1-48.36,15.09a4,4,0,0,0,6.66,4.44c7.4-11.1,24.7-16.32,39.38-11.87,8.12,2.45,20.95,9.6,24.41,30.32a75.83,75.83,0,0,0-20.71-2.88c-13.14,0-25.37,3.34-34.44,9.43-10.45,7-16,17-16,28.78,0,20.7,17,31.52,33.71,31.52a44,44,0,0,0,31.47-13.58c9.56-9.94,14.68-24.19,14.82-41.23a50.18,50.18,0,0,1,7.19,4.51c11,8.32,16.81,20.34,16.81,34.78,0,11.73-6.25,24.46-16.7,34.05C170.36,210.24,154.21,220,128,220c-50.43,0-76-30.95-76-92s25.57-92,76-92c34.29,0,57.26,14.5,68.27,43.08a4,4,0,1,0,7.46-2.87C191.42,44.22,165.94,28,128,28,73.05,28,44,62.58,44,128s29.05,100,84,100c28.79,0,46.72-10.9,56.7-20.05,12.09-11.08,19.3-26,19.3-39.95C204,151,197.09,136.73,184,126.84Zm-32.6,37.55a35.92,35.92,0,0,1-25.7,11.13c-12.38,0-25.71-7.36-25.71-23.52,0-20.76,22-30.21,42.41-30.21A67.08,67.08,0,0,1,164,125.3c0,.88.05,1.78.05,2.7C164,143.25,159.65,155.83,151.41,164.39Z" }))]
-]), pl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), ml = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: fl
+	weights: pl
 }));
-pl.displayName = "ThreadsLogoIcon";
-var ml = pl, hl = /* @__PURE__ */ new Map([
+ml.displayName = "ThreadsLogoIcon";
+var hl = ml, gl = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,72a24,24,0,1,1,24-24A24,24,0,0,1,128,152ZM176,20H80A60.07,60.07,0,0,0,20,80v96a60.07,60.07,0,0,0,60,60h96a60.07,60.07,0,0,0,60-60V80A60.07,60.07,0,0,0,176,20Zm36,156a36,36,0,0,1-36,36H80a36,36,0,0,1-36-36V80A36,36,0,0,1,80,44h96a36,36,0,0,1,36,36ZM196,76a16,16,0,1,1-16-16A16,16,0,0,1,196,76Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M176,32H80A48,48,0,0,0,32,80v96a48,48,0,0,0,48,48h96a48,48,0,0,0,48-48V80A48,48,0,0,0,176,32ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z",
@@ -5246,13 +5246,13 @@ var ml = pl, hl = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,82a46,46,0,1,0,46,46A46.06,46.06,0,0,0,128,82Zm0,80a34,34,0,1,1,34-34A34,34,0,0,1,128,162ZM176,26H80A54.06,54.06,0,0,0,26,80v96a54.06,54.06,0,0,0,54,54h96a54.06,54.06,0,0,0,54-54V80A54.06,54.06,0,0,0,176,26Zm42,150a42,42,0,0,1-42,42H80a42,42,0,0,1-42-42V80A42,42,0,0,1,80,38h96a42,42,0,0,1,42,42ZM190,76a10,10,0,1,1-10-10A10,10,0,0,1,190,76Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M128,84a44,44,0,1,0,44,44A44.05,44.05,0,0,0,128,84Zm0,80a36,36,0,1,1,36-36A36,36,0,0,1,128,164ZM176,28H80A52.06,52.06,0,0,0,28,80v96a52.06,52.06,0,0,0,52,52h96a52.06,52.06,0,0,0,52-52V80A52.06,52.06,0,0,0,176,28Zm44,148a44.05,44.05,0,0,1-44,44H80a44.05,44.05,0,0,1-44-44V80A44.05,44.05,0,0,1,80,36h96a44.05,44.05,0,0,1,44,44ZM188,76a8,8,0,1,1-8-8A8,8,0,0,1,188,76Z" }))]
-]), gl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), _l = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: hl
+	weights: gl
 }));
-gl.displayName = "InstagramLogoIcon";
-var _l = gl, U = /* @__PURE__ */ new Map([
+_l.displayName = "InstagramLogoIcon";
+var vl = _l, H = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M224,68a44.05,44.05,0,0,1-44-44,12,12,0,0,0-12-12H128a12,12,0,0,0-12,12V156a16,16,0,1,1-22.85-14.47A12,12,0,0,0,100,130.69V88A12,12,0,0,0,85.9,76.19a79.35,79.35,0,0,0-47.08,27.74A81.84,81.84,0,0,0,20,156a80,80,0,0,0,160,0V122.67A107.47,107.47,0,0,0,224,132a12,12,0,0,0,12-12V80A12,12,0,0,0,224,68Zm-12,39.15a83.05,83.05,0,0,1-37-14.91A12,12,0,0,0,156,102v54a56,56,0,0,1-112,0,57.86,57.86,0,0,1,32-51.56V124a40,40,0,1,0,64,32V36h17.06A68.21,68.21,0,0,0,212,90.94Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M224,120a95.55,95.55,0,0,1-56-18v54a68,68,0,0,1-136,0c0-33.46,24.17-62.33,56-68v42.69A28,28,0,1,0,128,156V24h40a56,56,0,0,0,56,56Z",
@@ -5262,13 +5262,13 @@ var _l = gl, U = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M224,74a50.06,50.06,0,0,1-50-50,6,6,0,0,0-6-6H128a6,6,0,0,0-6,6V156a22,22,0,1,1-31.43-19.89A6,6,0,0,0,94,130.69V88a6,6,0,0,0-7-5.91C52.2,88.28,26,120.05,26,156a74,74,0,0,0,148,0V112.93A101.28,101.28,0,0,0,224,126a6,6,0,0,0,6-6V80A6,6,0,0,0,224,74Zm-6,39.8a89.13,89.13,0,0,1-46.5-16.69A6,6,0,0,0,162,102v54a62,62,0,0,1-124,0c0-27.72,18.47-52.48,44-60.38v31.53A34,34,0,1,0,134,156V30h28.29A62.09,62.09,0,0,0,218,85.71Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M224,72a48.05,48.05,0,0,1-48-48,8,8,0,0,0-8-8H128a8,8,0,0,0-8,8V156a20,20,0,1,1-28.57-18.08A8,8,0,0,0,96,130.69V88a8,8,0,0,0-9.4-7.88C50.91,86.48,24,119.1,24,156a76,76,0,0,0,152,0V116.29A103.25,103.25,0,0,0,224,128a8,8,0,0,0,8-8V80A8,8,0,0,0,224,72Zm-8,39.64a87.19,87.19,0,0,1-43.33-16.15A8,8,0,0,0,160,102v54a60,60,0,0,1-120,0c0-25.9,16.64-49.13,40-57.6v27.67A36,36,0,1,0,136,156V32h24.5A64.14,64.14,0,0,0,216,87.5Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M224,76a52.06,52.06,0,0,1-52-52,4,4,0,0,0-4-4H128a4,4,0,0,0-4,4V156a24,24,0,1,1-34.28-21.69A4,4,0,0,0,92,130.69V88a4,4,0,0,0-4.7-3.94C53.49,90.08,28,121,28,156a72,72,0,0,0,144,0V109.44A99.26,99.26,0,0,0,224,124a4,4,0,0,0,4-4V80A4,4,0,0,0,224,76Zm-4,39.92a91.32,91.32,0,0,1-49.66-17.18A4,4,0,0,0,164,102v54a64,64,0,0,1-128,0c0-29.52,20.32-55.79,48-63v35.31A32,32,0,1,0,132,156V28h32.13A60.11,60.11,0,0,0,220,83.87Z" }))]
-]), vl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), yl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: U
+	weights: H
 }));
-vl.displayName = "TiktokLogoIcon";
-var yl = vl, bl = /* @__PURE__ */ new Map([
+yl.displayName = "TiktokLogoIcon";
+var bl = yl, xl = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M251.75,181.48a11.88,11.88,0,0,0-7.66-8.84c-1.42-.54-25.86-10.18-39.35-43.23l15.68-6.27a12,12,0,1,0-8.91-22.28l-13.35,5.34A150.23,150.23,0,0,1,196,80,68,68,0,0,0,60,80a151.26,151.26,0,0,1-2.18,26.23l-13.36-5.34a12,12,0,1,0-8.91,22.28l15.68,6.27C37.74,162.46,13.31,172.09,12,172.6a12,12,0,0,0-4.17,20.05c8.09,7.6,19.85,8.76,30.23,9.79,5.62.55,12,1.18,14.85,2.75,2.59,1.42,5.94,6,8.9,10.07,5.51,7.56,12.38,17,23.47,19.8,10.23,2.61,20.11-.75,28.82-3.72,5-1.7,10.17-3.46,13.92-3.46s8.92,1.76,13.92,3.46c6.51,2.22,13.67,4.66,21.15,4.66a30.9,30.9,0,0,0,7.67-.94h0c11.09-2.84,18-12.24,23.47-19.8,3-4,6.31-8.65,8.9-10.07,2.85-1.57,9.23-2.2,14.85-2.75,10.38-1,22.14-2.19,30.23-9.79A12,12,0,0,0,251.75,181.48Zm-60.22,2.68c-7.27,4-12.29,10.88-16.72,17-3.25,4.45-7.3,10-10,10.7-3.3.85-9.32-1.2-15.14-3.18-6.53-2.23-13.93-4.75-21.65-4.75s-15.12,2.52-21.65,4.75c-5.82,2-11.84,4-15.14,3.18-2.74-.7-6.79-6.25-10-10.7-4.43-6.07-9.45-13-16.72-17-5.75-3.17-12.44-4.34-19.16-5.1a105.29,105.29,0,0,0,7.63-7.62c8.64-9.57,18.29-24,24.52-44.4a.14.14,0,0,0,0-.06,11.24,11.24,0,0,0,.63-2.13A162.57,162.57,0,0,0,84,80a44,44,0,0,1,88,0,162.57,162.57,0,0,0,5.92,44.88,12.64,12.64,0,0,0,.63,2.13.14.14,0,0,0,0,.06c6.23,20.44,15.88,34.83,24.52,44.4a105.29,105.29,0,0,0,7.63,7.62C204,179.82,197.29,181,191.53,184.16Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M240,183.9c-9.25,8.69-31.45,4.61-42.66,10.78-11,6.07-17.07,25.56-29.57,28.76-12.08,3.09-26.72-7.56-39.77-7.56s-27.69,10.65-39.77,7.56c-12.5-3.2-18.53-22.69-29.57-28.76C47.45,188.51,25.25,192.59,16,183.9c0,0,56-20,56-103.93a56,56,0,0,1,112,0C184,163.86,240,183.9,240,183.9Z",
@@ -5278,13 +5278,13 @@ var yl = vl, bl = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M245.87,182.68a6,6,0,0,0-3.85-4.43c-.4-.14-30.71-11.53-44.87-52.25l21.08-8.43a6,6,0,1,0-4.46-11.14l-20,8A148.66,148.66,0,0,1,190,80,62,62,0,0,0,66,80a151.37,151.37,0,0,1-3.72,34.48l-20.05-8a6,6,0,0,0-4.46,11.14L58.93,126A96.13,96.13,0,0,1,40,158.87c-12.85,14.44-25.91,19.34-26,19.38a6,6,0,0,0-2.08,10c6.6,6.19,16.83,7.2,26.71,8.18,6.51.64,13.23,1.31,17.16,3.47,3.76,2.07,7.36,7,10.85,11.79,5.21,7.13,11.11,15.22,20.12,17.53,8.5,2.16,17.09-.76,25.4-3.59,5.72-1.94,11.11-3.78,15.86-3.78s10.14,1.84,15.86,3.78c6.29,2.14,12.74,4.34,19.19,4.34a25.36,25.36,0,0,0,6.21-.75h0c9-2.3,14.91-10.39,20.12-17.52,3.49-4.78,7.09-9.72,10.85-11.79,3.93-2.16,10.65-2.83,17.16-3.47,9.88-1,20.11-2,26.71-8.18A6,6,0,0,0,245.87,182.68Zm-29.66,1.84c-7.71.76-15.68,1.55-21.76,4.9s-10.5,9.39-14.77,15.22-8.56,11.74-13.39,13c-5,1.28-11.61-1-18.57-3.32-6.38-2.17-13-4.42-19.72-4.42s-13.34,2.25-19.72,4.42c-7,2.37-13.53,4.6-18.57,3.32-4.83-1.24-9.18-7.2-13.39-13s-8.67-11.88-14.77-15.23-14-4.14-21.76-4.9c-3.37-.33-6.79-.67-9.89-1.21a93.88,93.88,0,0,0,18.55-15.9c8.24-9.11,17.44-22.86,23.35-42.48a1.42,1.42,0,0,0,.08-.18,5.47,5.47,0,0,0,.35-1.27A156.21,156.21,0,0,0,78,80a50,50,0,0,1,100,0,156.21,156.21,0,0,0,5.77,43.51,5.34,5.34,0,0,0,.35,1.27.89.89,0,0,0,.08.17c5.91,19.63,15.11,33.38,23.35,42.49a93.88,93.88,0,0,0,18.55,15.9C223,183.85,219.58,184.19,216.21,184.52Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M247.83,182.28a8,8,0,0,0-5.13-5.9c-.39-.14-28.95-10.88-43-49.23l19.3-7.72A8,8,0,1,0,213,104.57l-17.82,7.13A149,149,0,0,1,192,80,64,64,0,0,0,64,80a151.24,151.24,0,0,1-3.18,31.75L43,104.57A8,8,0,1,0,37,119.43l19.37,7.75a94,94,0,0,1-17.74,30.2c-12.52,14.14-25.27,19-25.36,19a8,8,0,0,0-2.77,13.36c7.1,6.67,17.67,7.71,27.88,8.72,6.31.62,12.83,1.27,16.39,3.23,3.37,1.86,6.85,6.62,10.21,11.22,5.4,7.41,11.53,15.8,21.24,18.28,9.07,2.33,18.35-.83,26.54-3.62,5.55-1.89,10.8-3.68,15.21-3.68s9.66,1.79,15.21,3.68c6.2,2.11,13,4.43,19.9,4.43a26.35,26.35,0,0,0,6.64-.81h0c9.7-2.48,15.83-10.87,21.23-18.28,3.36-4.6,6.84-9.36,10.21-11.22,3.56-2,10.08-2.61,16.39-3.23,10.21-1,20.78-2.05,27.88-8.72A8,8,0,0,0,247.83,182.28Zm-31.82.26c-7.91.78-16.08,1.59-22.53,5.13s-11,9.79-15.41,15.81c-4,5.48-8.15,11.16-12.28,12.21-4.46,1.15-10.76-1-17.42-3.27s-13.31-4.53-20.37-4.53-13.83,2.3-20.37,4.53-13,4.42-17.42,3.27c-4.13-1.05-8.27-6.73-12.28-12.21-4.39-6-8.93-12.24-15.41-15.81S47.9,183.32,40,182.54c-1.55-.15-3.15-.31-4.74-.49a97.34,97.34,0,0,0,14.69-13.29c8.37-9.27,17.72-23.23,23.74-43.13l.06-.13a8.63,8.63,0,0,0,.46-1.61A158.47,158.47,0,0,0,80,80a48,48,0,0,1,96,0,158.42,158.42,0,0,0,5.8,43.92,8.63,8.63,0,0,0,.46,1.61l.06.13c6,19.9,15.37,33.86,23.74,43.13a97.34,97.34,0,0,0,14.69,13.29C219.16,182.23,217.57,182.39,216,182.54Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M243.92,183.1a4,4,0,0,0-2.56-3c-.13,0-13.52-5-26.69-19.76a99.18,99.18,0,0,1-20-35.54l22.83-9.13a4,4,0,1,0-3-7.42l-22.08,8.83A149.77,149.77,0,0,1,188,80,60,60,0,0,0,68,80a150.25,150.25,0,0,1-4.43,37.15l-22.08-8.83a4,4,0,1,0-3,7.42l22.82,9.13a99.16,99.16,0,0,1-20,35.54c-13.18,14.73-26.56,19.71-26.69,19.76a4,4,0,0,0-1.39,6.68c6.12,5.73,16,6.71,25.55,7.65,6.7.67,13.64,1.35,17.92,3.71s7.73,7.18,11.51,12.36c5.25,7.2,10.69,14.65,19,16.77,7.92,2,16.23-.8,24.26-3.54,5.88-2,11.43-3.89,16.5-3.89s10.63,1.89,16.5,3.89c6.13,2.09,12.42,4.23,18.57,4.23a22.92,22.92,0,0,0,5.7-.69h0c8.31-2.12,13.74-9.57,19-16.77,3.79-5.18,7.36-10.08,11.51-12.36s11.22-3,17.93-3.71c9.55-.94,19.43-1.92,25.54-7.65A4,4,0,0,0,243.92,183.1Zm-27.51,3.41c-7.51.75-15.27,1.51-21,4.66s-10,9-14.12,14.66c-4.62,6.33-9,12.32-14.51,13.73s-12.46-.89-19.71-3.36c-6.23-2.12-12.68-4.32-19.08-4.32s-12.84,2.2-19.08,4.32c-7.24,2.47-14.09,4.8-19.7,3.36s-9.89-7.4-14.52-13.73c-4.13-5.66-8.41-11.52-14.11-14.66s-13.49-3.91-21-4.66c-5.26-.52-10.63-1-14.91-2.37A90.17,90.17,0,0,0,47,166.08c8.1-9,17.14-22.5,23-41.85A1.51,1.51,0,0,0,70,124a3.8,3.8,0,0,0,.23-.91A154.12,154.12,0,0,0,76,80a52,52,0,0,1,104,0,154.12,154.12,0,0,0,5.74,43.13,3.41,3.41,0,0,0,.24.91c0,.08.07.14.1.22,5.81,19.35,14.86,32.88,23,41.85a90.16,90.16,0,0,0,22.27,18.06C227,185.46,221.67,186,216.41,186.51Z" }))]
-]), xl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Sl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: bl
+	weights: xl
 }));
-xl.displayName = "SnapchatLogoIcon";
-var Sl = xl, Cl = /* @__PURE__ */ new Map([
+Sl.displayName = "SnapchatLogoIcon";
+var Cl = Sl, wl = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M120,128a16,16,0,1,1-16-16A16,16,0,0,1,120,128Zm32-16a16,16,0,1,0,16,16A16,16,0,0,0,152,112Zm84,16A108,108,0,0,1,78.77,224.15L46.34,235A20,20,0,0,1,21,209.66l10.81-32.43A108,108,0,1,1,236,128Zm-24,0A84,84,0,1,0,55.27,170.06a12,12,0,0,1,1,9.81l-9.93,29.79,29.79-9.93a12.1,12.1,0,0,1,3.8-.62,12,12,0,0,1,6,1.62A84,84,0,0,0,212,128Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M224,128A96,96,0,0,1,79.93,211.11h0L42.54,223.58a8,8,0,0,1-10.12-10.12l12.47-37.39h0A96,96,0,1,1,224,128Z",
@@ -5294,13 +5294,13 @@ var Sl = xl, Cl = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM84,118a10,10,0,1,0,10,10A10,10,0,0,0,84,118Zm88,0a10,10,0,1,0,10,10A10,10,0,0,0,172,118Zm58,10A102,102,0,0,1,79.31,217.65L44.44,229.27a14,14,0,0,1-17.71-17.71l11.62-34.87A102,102,0,1,1,230,128Zm-12,0A90,90,0,1,0,50.08,173.06a6,6,0,0,1,.5,4.91L38.12,215.35a2,2,0,0,0,2.53,2.53L78,205.42a6.2,6.2,0,0,1,1.9-.31,6.09,6.09,0,0,1,3,.81A90,90,0,0,0,218,128Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128ZM84,116a12,12,0,1,0,12,12A12,12,0,0,0,84,116Zm88,0a12,12,0,1,0,12,12A12,12,0,0,0,172,116Zm60,12A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M136,128a8,8,0,1,1-8-8A8,8,0,0,1,136,128Zm-52-8a8,8,0,1,0,8,8A8,8,0,0,0,84,120Zm88,0a8,8,0,1,0,8,8A8,8,0,0,0,172,120Zm56,8A100,100,0,0,1,79.5,215.47l-35.69,11.9a12,12,0,0,1-15.18-15.18l11.9-35.69A100,100,0,1,1,228,128Zm-8,0A92,92,0,1,0,48.35,174.07a4,4,0,0,1,.33,3.27L36.22,214.72a4,4,0,0,0,5.06,5.06l37.38-12.46a3.93,3.93,0,0,1,1.27-.21,4.05,4.05,0,0,1,2,.54A92,92,0,0,0,220,128Z" }))]
-]), wl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Tl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: Cl
+	weights: wl
 }));
-wl.displayName = "ChatCircleDotsIcon";
-var Tl = wl, El = /* @__PURE__ */ new Map([
+Tl.displayName = "ChatCircleDotsIcon";
+var El = Tl, Dl = /* @__PURE__ */ new Map([
 	["bold", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M87.5,151.52l64-64a12,12,0,0,1,17,17l-64,64a12,12,0,0,1-17-17Zm131-114a60.08,60.08,0,0,0-84.87,0L103.51,67.61a12,12,0,0,0,17,17l30.07-30.06a36,36,0,0,1,50.93,50.92L171.4,135.52a12,12,0,1,0,17,17l30.08-30.06A60.09,60.09,0,0,0,218.45,37.55ZM135.52,171.4l-30.07,30.08a36,36,0,0,1-50.92-50.93l30.06-30.07a12,12,0,0,0-17-17L37.55,133.58a60,60,0,0,0,84.88,84.87l30.06-30.07a12,12,0,0,0-17-17Z" }))],
 	["duotone", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", {
 		d: "M209.94,113.94l-96,96a48,48,0,0,1-67.88-67.88l96-96a48,48,0,0,1,67.88,67.88Z",
@@ -5310,16 +5310,16 @@ var Tl = wl, El = /* @__PURE__ */ new Map([
 	["light", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M164.25,91.75a6,6,0,0,1,0,8.49l-64,64a6,6,0,0,1-8.49-8.48l64-64A6,6,0,0,1,164.25,91.75ZM214.2,41.8a54.07,54.07,0,0,0-76.38,0L107.75,71.85a6,6,0,0,0,8.49,8.49l30.07-30.06a42,42,0,0,1,59.41,59.41l-30.08,30.07a6,6,0,1,0,8.49,8.49l30.07-30.07A54,54,0,0,0,214.2,41.8ZM139.76,175.64l-30.07,30.08a42,42,0,0,1-59.41-59.41l30.06-30.07a6,6,0,0,0-8.49-8.49l-30,30.07a54,54,0,0,0,76.38,76.39l30.07-30.08a6,6,0,0,0-8.49-8.49Z" }))],
 	["regular", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M165.66,90.34a8,8,0,0,1,0,11.32l-64,64a8,8,0,0,1-11.32-11.32l64-64A8,8,0,0,1,165.66,90.34ZM215.6,40.4a56,56,0,0,0-79.2,0L106.34,70.45a8,8,0,0,0,11.32,11.32l30.06-30a40,40,0,0,1,56.57,56.56l-30.07,30.06a8,8,0,0,0,11.31,11.32L215.6,119.6a56,56,0,0,0,0-79.2ZM138.34,174.22l-30.06,30.06a40,40,0,1,1-56.56-56.57l30.05-30.05a8,8,0,0,0-11.32-11.32L40.4,136.4a56,56,0,0,0,79.2,79.2l30.06-30.07a8,8,0,0,0-11.32-11.31Z" }))],
 	["thin", /* @__PURE__ */ d.createElement(d.Fragment, null, /* @__PURE__ */ d.createElement("path", { d: "M162.84,93.16a4,4,0,0,1,0,5.66l-64,64a4,4,0,0,1-5.66-5.66l64-64A4,4,0,0,1,162.84,93.16Zm49.95-49.95a52.07,52.07,0,0,0-73.56,0L109.17,73.27a4,4,0,0,0,5.65,5.66l30.07-30.06a44,44,0,0,1,62.24,62.24l-30.07,30.06a4,4,0,0,0,5.66,5.66l30.07-30.06A52.07,52.07,0,0,0,212.79,43.21ZM141.17,177.06l-30.06,30.07a44,44,0,0,1-62.24-62.24l30.06-30.06a4,4,0,0,0-5.66-5.66L43.21,139.23a52,52,0,0,0,73.56,73.56l30.06-30.07a4,4,0,1,0-5.66-5.66Z" }))]
-]), Dl = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
+]), Ol = d.forwardRef((e, t) => /* @__PURE__ */ d.createElement(C, {
 	ref: t,
 	...e,
-	weights: El
+	weights: Dl
 }));
-Dl.displayName = "LinkSimpleIcon";
-var Ol = Dl;
+Ol.displayName = "LinkSimpleIcon";
+var kl = Ol;
 //#endregion
 //#region src/always-on/LookPreview.tsx
-function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct: a, isTryOn: o = !1, exportPerson: s, exportSize: c, imagePieces: l }) {
+function Al({ images: e, title: t, pieces: n, children: r, detail: i, onProduct: a, isTryOn: o = !1, exportPerson: s, exportSize: c, imagePieces: l }) {
 	let [u, f] = (0, d.useState)(!1), [p, m] = (0, d.useState)(0), [h, g] = (0, d.useState)(""), [_, v] = (0, d.useState)(!1), [b, x] = (0, d.useState)(!1), S = e[p] || e[0], C = n[0] ? new URL(`/spreeai-always-on-demo/online/product/${n[0].id}/`, window.location.origin).href : window.location.href;
 	async function w() {
 		let r = await fetch(S, { credentials: "omit" });
@@ -5327,7 +5327,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 		let i = await r.blob(), a = await createImageBitmap(i), o = document.createElement("canvas");
 		o.width = a.width, o.height = a.height, o.getContext("2d").drawImage(a, 0, 0), a.close();
 		let u = await new Promise((e, t) => o.toBlob((n) => n ? e(n) : t(Error("Export unavailable")), "image/png"));
-		return new File([u], el({
+		return new File([u], tl({
 			garments: (l?.[p] ? [l[p]] : n).map((e) => e.name),
 			title: t,
 			person: s,
@@ -5385,12 +5385,12 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 			e instanceof DOMException && e.name === "AbortError" || g("Save your image and add it to TikTok, or copy the product link.");
 		}
 	}
-	return /* @__PURE__ */ (0, y.jsxs)(oc, {
+	return /* @__PURE__ */ (0, y.jsxs)(sc, {
 		open: u,
 		onOpenChange: (e) => {
 			f(e), g(""), x(!1);
 		},
-		children: [/* @__PURE__ */ (0, y.jsx)(cc, {
+		children: [/* @__PURE__ */ (0, y.jsx)(lc, {
 			asChild: !0,
 			children: /* @__PURE__ */ (0, y.jsxs)("button", {
 				className: "look-preview-trigger",
@@ -5401,18 +5401,18 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 					children: "View look"
 				})]
 			})
-		}), /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "overlay look-lightbox-overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+		}), /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "overlay look-lightbox-overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 			className: "look-lightbox",
 			"aria-describedby": "look-viewer-description",
 			children: [
-				/* @__PURE__ */ (0, y.jsx)(Dc, {
+				/* @__PURE__ */ (0, y.jsx)(Oc, {
 					className: "look-close",
 					"aria-label": "Close enlarged look",
 					children: "×"
 				}),
 				/* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "look-lightbox-image",
-					children: [b ? /* @__PURE__ */ (0, y.jsx)("p", { children: "This preview link is unavailable. Open the product below to view your look again." }) : /* @__PURE__ */ (0, y.jsx)(al, {
+					children: [b ? /* @__PURE__ */ (0, y.jsx)("p", { children: "This preview link is unavailable. Open the product below to view your look again." }) : /* @__PURE__ */ (0, y.jsx)(ol, {
 						allowOriginal: o,
 						src: S,
 						alt: t,
@@ -5435,12 +5435,12 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 							className: "eyebrow",
 							children: "YOUR ALWAYS ON GALLERY"
 						}),
-						/* @__PURE__ */ (0, y.jsx)(Cc, { children: t }),
-						/* @__PURE__ */ (0, y.jsx)(Tc, {
+						/* @__PURE__ */ (0, y.jsx)(wc, { children: t }),
+						/* @__PURE__ */ (0, y.jsx)(Ec, {
 							id: "look-viewer-description",
 							children: i || "Your look, up close. Revisit the pieces or keep the image."
 						}),
-						o && /* @__PURE__ */ (0, y.jsx)(il, {}),
+						o && /* @__PURE__ */ (0, y.jsx)(al, {}),
 						/* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "look-download-actions",
 							children: [/* @__PURE__ */ (0, y.jsx)("button", {
@@ -5462,7 +5462,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 						}),
 						/* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "look-products",
-							children: [/* @__PURE__ */ (0, y.jsx)("h3", { children: "The pieces" }), n.map((e) => /* @__PURE__ */ (0, y.jsxs)(Dn, {
+							children: [/* @__PURE__ */ (0, y.jsx)("h3", { children: "The pieces" }), n.map((e) => /* @__PURE__ */ (0, y.jsxs)(On, {
 								to: `/product/${e.id}`,
 								onClick: () => {
 									f(!1), a?.();
@@ -5478,17 +5478,17 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 									[
 										{
 											name: "Facebook",
-											Icon: cl,
+											Icon: ll,
 											href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(C)}`
 										},
 										{
 											name: "X",
-											Icon: dl,
+											Icon: fl,
 											href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(C)}&text=${encodeURIComponent("My Always On find: " + t)}`
 										},
 										{
 											name: "Threads",
-											Icon: ml,
+											Icon: hl,
 											href: `https://www.threads.com/intent/post?text=${encodeURIComponent("My Always On find: " + t + " " + C)}`
 										}
 									].map(({ name: e, Icon: t, href: n }) => /* @__PURE__ */ (0, y.jsx)("a", {
@@ -5509,7 +5509,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 										onClick: () => {
 											typeof navigator.share == "function" ? ee() : g("To share on Instagram, select Save image, then add the downloaded photo to a post or story in Instagram.");
 										},
-										children: /* @__PURE__ */ (0, y.jsx)(_l, {
+										children: /* @__PURE__ */ (0, y.jsx)(vl, {
 											size: 22,
 											"aria-hidden": "true"
 										})
@@ -5518,7 +5518,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 										onClick: () => void te(),
 										"aria-label": "Share to TikTok",
 										title: "Choose TikTok in your device share menu, or copy the link",
-										children: /* @__PURE__ */ (0, y.jsx)(yl, {
+										children: /* @__PURE__ */ (0, y.jsx)(bl, {
 											size: 22,
 											"aria-hidden": "true"
 										})
@@ -5529,7 +5529,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 										rel: "noreferrer",
 										"aria-label": "Share on Snapchat",
 										title: "Snapchat",
-										children: /* @__PURE__ */ (0, y.jsx)(Sl, {
+										children: /* @__PURE__ */ (0, y.jsx)(Cl, {
 											size: 22,
 											"aria-hidden": "true"
 										})
@@ -5538,7 +5538,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 										href: `sms:?body=${encodeURIComponent("My Always On find: " + t + " " + C)}`,
 										"aria-label": "Share by SMS",
 										title: "SMS",
-										children: /* @__PURE__ */ (0, y.jsx)(Tl, {
+										children: /* @__PURE__ */ (0, y.jsx)(El, {
 											size: 22,
 											"aria-hidden": "true"
 										})
@@ -5547,7 +5547,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 										"aria-label": "Copy product link",
 										title: "Copy link",
 										onClick: () => void navigator.clipboard.writeText(C).then(() => g("Product link copied.")).catch(() => g("Copy the product address after opening its page.")),
-										children: /* @__PURE__ */ (0, y.jsx)(Ol, {
+										children: /* @__PURE__ */ (0, y.jsx)(kl, {
 											size: 22,
 											"aria-hidden": "true"
 										})
@@ -5574,8 +5574,8 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 }
 //#endregion
 //#region src/always-on/AccountHistory.tsx
-function Al({ onProduct: e }) {
-	let { identity: t } = gr(), n = ar(), [r, i] = (0, d.useState)("all"), [a, o] = (0, d.useState)(12), s = n.filter((e) => e.identityId === t?.id), c = s.filter((e) => r === "all" || e.kind === r);
+function jl({ onProduct: e }) {
+	let { identity: t } = _r(), n = or(), [r, i] = (0, d.useState)("all"), [a, o] = (0, d.useState)(12), s = n.filter((e) => e.identityId === t?.id), c = s.filter((e) => r === "all" || e.kind === r);
 	return /* @__PURE__ */ (0, y.jsxs)("section", {
 		className: "account-history activity-gallery",
 		children: [
@@ -5617,7 +5617,7 @@ function Al({ onProduct: e }) {
 					" · Most recent first"
 				] }), s.length > 0 && t && /* @__PURE__ */ (0, y.jsx)("button", {
 					className: "text-link",
-					onClick: () => ir(t.id),
+					onClick: () => ar(t.id),
 					children: "Clear all activity"
 				})]
 			}),
@@ -5625,7 +5625,7 @@ function Al({ onProduct: e }) {
 				className: "history-grid",
 				children: c.slice(0, a).map((t) => {
 					let n = t.pieces.map((e) => e.name).join(" + "), r = t.images.length ? t.images : t.pieces.map((e) => e.image);
-					return /* @__PURE__ */ (0, y.jsxs)("article", { children: [/* @__PURE__ */ (0, y.jsx)(kl, {
+					return /* @__PURE__ */ (0, y.jsxs)("article", { children: [/* @__PURE__ */ (0, y.jsx)(Al, {
 						exportPerson: t.images.length ? t.identityName : void 0,
 						exportSize: t.images.length ? t.size : void 0,
 						imagePieces: t.kind === "comparison" || !t.images.length ? t.pieces : void 0,
@@ -5667,13 +5667,13 @@ function Al({ onProduct: e }) {
 							}),
 							/* @__PURE__ */ (0, y.jsxs)("div", {
 								className: "activity-card-actions",
-								children: [/* @__PURE__ */ (0, y.jsx)(Dn, {
+								children: [/* @__PURE__ */ (0, y.jsx)(On, {
 									onClick: e,
 									to: `/product/${t.pieces[0]?.id}`,
 									children: "View product"
 								}), /* @__PURE__ */ (0, y.jsx)("button", {
 									"aria-label": `Delete ${n} from activity`,
-									onClick: () => rr(t.id),
+									onClick: () => ir(t.id),
 									children: "Remove"
 								})]
 							})
@@ -5689,7 +5689,7 @@ function Al({ onProduct: e }) {
 				children: [
 					/* @__PURE__ */ (0, y.jsx)("h3", { children: "Your next discovery starts here." }),
 					/* @__PURE__ */ (0, y.jsx)("p", { children: "Try a piece, explore sizes or compare your favorites." }),
-					/* @__PURE__ */ (0, y.jsx)(Dn, {
+					/* @__PURE__ */ (0, y.jsx)(On, {
 						className: "text-link",
 						to: "/collection",
 						onClick: e,
@@ -5709,24 +5709,24 @@ function Al({ onProduct: e }) {
 }
 //#endregion
 //#region src/always-on/ConnectedAccount.tsx
-var jl = () => navigator.language.toLowerCase() === "en-us" ? "imperial" : "metric", Ml = (e, t) => t === "metric" ? `${Math.round(e.height)} cm · ${Math.round(e.weight)} kg` : `${Math.floor(e.height / 2.54 / 12)}′ ${Math.round(e.height / 2.54 % 12)}″ · ${Math.round(e.weight / .453592)} lb`;
-function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: r, initialTab: i, onSaved: a, showMeasurements: o = !1, saveOnly: s = !1 }) {
-	let c = gr(), [l, u] = (0, d.useState)(i || r || c.identity?.kind || "photo"), [f, p] = (0, d.useState)([]), [m, h] = (0, d.useState)(c.identity), [g, _] = (0, d.useState)(null), [v, x] = (0, d.useState)(!1), [S, C] = (0, d.useState)(""), [w, T] = (0, d.useState)(""), [ee, te] = (0, d.useState)([
+var Ml = () => navigator.language.toLowerCase() === "en-us" ? "imperial" : "metric", Nl = (e, t) => t === "metric" ? `${Math.round(e.height)} cm · ${Math.round(e.weight)} kg` : `${Math.floor(e.height / 2.54 / 12)}′ ${Math.round(e.height / 2.54 % 12)}″ · ${Math.round(e.weight / .453592)} lb`;
+function Pl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: r, initialTab: i, onSaved: a, showMeasurements: o = !1, saveOnly: s = !1 }) {
+	let c = _r(), [l, u] = (0, d.useState)(i || r || c.identity?.kind || "photo"), [f, p] = (0, d.useState)([]), [m, h] = (0, d.useState)(c.identity), [g, _] = (0, d.useState)(null), [v, x] = (0, d.useState)(!1), [S, C] = (0, d.useState)(""), [w, T] = (0, d.useState)(""), [ee, te] = (0, d.useState)([
 		!1,
 		!1,
 		!1
-	]), [E, D] = (0, d.useState)("All"), [ne, re] = (0, d.useState)("All"), [ie, ae] = (0, d.useState)("All"), [O, oe] = (0, d.useState)("All"), [se, ce] = (0, d.useState)(1), [k, le] = zn("profile-unit", jl), [ue, de] = zn("personal-fit-details", {}), [A, j] = zn("personal-measures", {
+	]), [E, D] = (0, d.useState)("All"), [ne, re] = (0, d.useState)("All"), [ie, ae] = (0, d.useState)("All"), [O, oe] = (0, d.useState)("All"), [se, ce] = (0, d.useState)(1), [k, le] = Bn("profile-unit", Ml), [ue, de] = Bn("personal-fit-details", {}), [A, fe] = Bn("personal-measures", {
 		height: 0,
 		weight: 0,
 		bodyType: "Feminine"
-	}), [M, fe] = (0, d.useState)(!1);
+	}), [j, pe] = (0, d.useState)(!1);
 	(0, d.useEffect)(() => te([
 		!1,
 		!1,
 		!1
 	]), [g, m?.id]), (0, d.useEffect)(() => {
 		let e = !0;
-		return Dr().then((t) => {
+		return Or().then((t) => {
 			e && p([...t].sort((e, t) => e.name.localeCompare(t.name)));
 		}).catch((t) => {
 			e && C(t.message);
@@ -5734,7 +5734,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 			e = !1;
 		};
 	}, []);
-	async function pe(e) {
+	async function me(e) {
 		if (!v) {
 			x(!0), C("");
 			try {
@@ -5746,24 +5746,24 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 			}
 		}
 	}
-	function me(e) {
+	function he(e) {
 		if (s) {
 			T(e + ". Saved for this browser session.");
 			return;
 		}
 		window.dispatchEvent(new CustomEvent("spree-feedback-toast", { detail: e })), a ? a() : t();
 	}
-	async function he(e) {
+	async function ge(e) {
 		if (s) {
-			h(Or(e)), T("");
+			h(kr(e)), T("");
 			return;
 		}
-		await pe(async () => {
-			let t = Or(e);
-			await kr(t), h(t), me(`${t.name} selected`);
+		await me(async () => {
+			let t = kr(e);
+			await Ar(t), h(t), he(`${t.name} selected`);
 		});
 	}
-	async function N() {
+	async function M() {
 		if (g && !ee.every(Boolean)) throw Error("Confirm your photo permissions before saving.");
 		if ((A.height || A.weight) && (!Number.isFinite(A.height) || A.height < 100 || A.height > 230 || !Number.isFinite(A.weight) || A.weight < 30 || A.weight > 250)) throw Error("Enter height from 100–230 cm and weight from 30–250 kg, or leave both blank.");
 		if ((A.bodyType === "Feminine" ? [
@@ -5771,22 +5771,22 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 			ue.waistCm,
 			ue.hipsCm
 		] : [ue.chestCm, ue.waistCm]).some((e) => e !== void 0 && (!Number.isFinite(e) || e < 50 || e > 200))) throw Error("Use body measurements from 50–200 cm (19.7–78.7 in), or leave them blank.");
-		let e = vr(), t = _r().version, n = m?.kind === "photo" ? m : null;
+		let e = yr(), t = vr().version, n = m?.kind === "photo" ? m : null;
 		if (g) {
 			let e = URL.createObjectURL(g);
 			try {
-				await Yr(e);
+				await Xr(e);
 			} finally {
 				URL.revokeObjectURL(e);
 			}
 			n = {
-				...await Ar(g),
+				...await jr(g),
 				...A,
 				kind: "photo",
 				name: "Your photo"
 			};
 		} else if (n) {
-			let e = (await Mr()).images.find((e) => e.id === n.id);
+			let e = (await Nr()).images.find((e) => e.id === n.id);
 			if (!e) throw Error("This photo cannot be verified in this session. Choose it from your device again.");
 			n = {
 				...n,
@@ -5794,20 +5794,20 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 				url: e.url
 			};
 		}
-		if (e !== vr() || t !== _r().version) throw Error("Your session changed. Choose your photo again.");
+		if (e !== yr() || t !== vr().version) throw Error("Your session changed. Choose your photo again.");
 		if (!n) throw Error("Choose a photo first.");
 		if (A.height || A.weight) {
 			if (!A.height || !A.weight) throw Error("Add both height and weight for sizing, or leave both blank.");
-			await kr(n);
-		} else yr(n);
-		s && (h(n), _(null)), me("Your photo is ready");
+			await Ar(n);
+		} else br(n);
+		s && (h(n), _(null)), he("Your photo is ready");
 	}
-	let P = m?.kind === "photo" && !g && m.id === c.identity?.id, ge = P && (A.height !== m.height || A.weight !== m.weight || A.bodyType !== m.bodyType);
-	function _e() {
-		yr(null), Sr(), h(null), _(null), T("Photo removed from this demo. For server deletion, use the Privacy Notice request process.");
+	let N = m?.kind === "photo" && !g && m.id === c.identity?.id, _e = N && (A.height !== m.height || A.weight !== m.weight || A.bodyType !== m.bodyType);
+	function ve() {
+		br(null), Cr(), h(null), _(null), T("Photo removed from this demo. For server deletion, use the Privacy Notice request process.");
 	}
-	let ve = f.filter((e) => (E === "All" || e.sex === E) && (ne === "All" || (ne === "short" ? e.user_height_centimeters < 170 : e.user_height_centimeters >= 170)) && (ie === "All" || (ie === "light" ? e.user_weight_kilograms < 70 : e.user_weight_kilograms >= 70)) && (O === "All" || e.user_tshirt_size === O)), ye = Math.floor(A.height / 2.54 / 12), be = Math.round(A.height / 2.54 % 12 * 10) / 10;
-	function F(e) {
+	let ye = f.filter((e) => (E === "All" || e.sex === E) && (ne === "All" || (ne === "short" ? e.user_height_centimeters < 170 : e.user_height_centimeters >= 170)) && (ie === "All" || (ie === "light" ? e.user_weight_kilograms < 70 : e.user_weight_kilograms >= 70)) && (O === "All" || e.user_tshirt_size === O)), be = Math.floor(A.height / 2.54 / 12), xe = Math.round(A.height / 2.54 % 12 * 10) / 10;
+	function P(e) {
 		u(e), C(""), T(""), e === "photo" && h(c.identity?.kind === "photo" ? c.identity : null);
 	}
 	return /* @__PURE__ */ (0, y.jsxs)("section", {
@@ -5824,7 +5824,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					/* @__PURE__ */ (0, y.jsx)("p", { children: "No account needed. Your selection stays in this browser session." })
 				] }), c.identity && /* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "account-status",
-					children: [/* @__PURE__ */ (0, y.jsx)(Fc, { identity: c.identity }), /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("strong", { children: c.identity.name }), /* @__PURE__ */ (0, y.jsx)("small", { children: c.identity.kind === "twin" ? "Active Twin" : "Your uploaded photo" })] })]
+					children: [/* @__PURE__ */ (0, y.jsx)(Ic, { identity: c.identity }), /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("strong", { children: c.identity.name }), /* @__PURE__ */ (0, y.jsx)("small", { children: c.identity.kind === "twin" ? "Active Twin" : "Your uploaded photo" })] })]
 				})]
 			}),
 			/* @__PURE__ */ (0, y.jsxs)("nav", {
@@ -5833,7 +5833,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 				children: [
 					/* @__PURE__ */ (0, y.jsx)("button", {
 						"aria-pressed": l === "photo" || l === "twin",
-						onClick: () => F(c.identity?.kind || "photo"),
+						onClick: () => P(c.identity?.kind || "photo"),
 						children: "Profile"
 					}),
 					/* @__PURE__ */ (0, y.jsx)("button", {
@@ -5848,19 +5848,19 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					})
 				]
 			}),
-			l === "history" ? /* @__PURE__ */ (0, y.jsx)(Al, { onProduct: t }) : l === "saved" ? /* @__PURE__ */ (0, y.jsx)("div", {
+			l === "history" ? /* @__PURE__ */ (0, y.jsx)(jl, { onProduct: t }) : l === "saved" ? /* @__PURE__ */ (0, y.jsx)("div", {
 				className: "account-contained",
 				children: e
 			}) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("div", {
 				className: "identity-methods",
 				children: [/* @__PURE__ */ (0, y.jsxs)("button", {
 					"aria-pressed": l === "photo",
-					onClick: () => F("photo"),
-					children: [/* @__PURE__ */ (0, y.jsx)(jc, { size: 24 }), /* @__PURE__ */ (0, y.jsxs)("span", { children: ["Add your photo", /* @__PURE__ */ (0, y.jsx)("small", { children: "See the collection on you" })] })]
+					onClick: () => P("photo"),
+					children: [/* @__PURE__ */ (0, y.jsx)(Mc, { size: 24 }), /* @__PURE__ */ (0, y.jsxs)("span", { children: ["Add your photo", /* @__PURE__ */ (0, y.jsx)("small", { children: "See the collection on you" })] })]
 				}), /* @__PURE__ */ (0, y.jsxs)("button", {
 					"aria-pressed": l === "twin",
-					onClick: () => F("twin"),
-					children: [/* @__PURE__ */ (0, y.jsx)(Kc, { size: 24 }), /* @__PURE__ */ (0, y.jsxs)("span", { children: ["Use a Twin", /* @__PURE__ */ (0, y.jsx)("small", { children: "Try pieces on a model" })] })]
+					onClick: () => P("twin"),
+					children: [/* @__PURE__ */ (0, y.jsx)(qc, { size: 24 }), /* @__PURE__ */ (0, y.jsxs)("span", { children: ["Use a Twin", /* @__PURE__ */ (0, y.jsx)("small", { children: "Try pieces on a model" })] })]
 				})]
 			}), l === "twin" ? /* @__PURE__ */ (0, y.jsxs)("section", {
 				className: "twin-browser",
@@ -5883,11 +5883,11 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					/* @__PURE__ */ (0, y.jsxs)("button", {
 						type: "button",
 						className: "twin-filter-trigger",
-						"aria-expanded": M,
+						"aria-expanded": j,
 						"aria-controls": "twin-filters",
-						onClick: () => fe(!M),
+						onClick: () => pe(!j),
 						children: [
-							/* @__PURE__ */ (0, y.jsx)(Qc, { size: 20 }),
+							/* @__PURE__ */ (0, y.jsx)($c, { size: 20 }),
 							"Filters",
 							[
 								E,
@@ -5902,7 +5902,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 							].filter((e) => e !== "All").length })
 						]
 					}),
-					M && /* @__PURE__ */ (0, y.jsxs)("div", {
+					j && /* @__PURE__ */ (0, y.jsxs)("div", {
 						className: "twin-filters",
 						id: "twin-filters",
 						children: [
@@ -5983,24 +5983,24 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					}),
 					/* @__PURE__ */ (0, y.jsx)("div", {
 						className: "connected-twins",
-						children: ve.slice((se - 1) * 8, se * 8).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
+						children: ye.slice((se - 1) * 8, se * 8).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
 							disabled: v,
 							"aria-pressed": (s ? m?.id : c.identity?.id) === e.id,
-							onClick: () => void he(e),
+							onClick: () => void ge(e),
 							children: [
 								/* @__PURE__ */ (0, y.jsx)("img", {
 									loading: "lazy",
 									src: e.url,
 									alt: e.name
 								}),
-								/* @__PURE__ */ (0, y.jsxs)("strong", { children: [e.name, c.identity?.id === e.id && /* @__PURE__ */ (0, y.jsx)(Yc, { size: 18 })] }),
-								/* @__PURE__ */ (0, y.jsx)("small", { children: Ml(Or(e), k) }),
+								/* @__PURE__ */ (0, y.jsxs)("strong", { children: [e.name, c.identity?.id === e.id && /* @__PURE__ */ (0, y.jsx)(Xc, { size: 18 })] }),
+								/* @__PURE__ */ (0, y.jsx)("small", { children: Nl(kr(e), k) }),
 								/* @__PURE__ */ (0, y.jsx)("small", { children: e.user_tshirt_size ? `Reference size ${e.user_tshirt_size}` : "Preset measurements" })
 							]
 						}, e.id))
 					}),
 					!f.length && !S && /* @__PURE__ */ (0, y.jsx)(b, { label: "Loading Twins…" }),
-					!ve.length && !!f.length && /* @__PURE__ */ (0, y.jsx)("p", { children: "No Twins match these filters. Try a broader selection." }),
+					!ye.length && !!f.length && /* @__PURE__ */ (0, y.jsx)("p", { children: "No Twins match these filters. Try a broader selection." }),
 					/* @__PURE__ */ (0, y.jsxs)("nav", {
 						className: "review-pagination",
 						"aria-label": "Twin pages",
@@ -6013,10 +6013,10 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 							/* @__PURE__ */ (0, y.jsxs)("span", { children: [
 								se,
 								" / ",
-								Math.max(1, Math.ceil(ve.length / 8))
+								Math.max(1, Math.ceil(ye.length / 8))
 							] }),
 							/* @__PURE__ */ (0, y.jsx)("button", {
-								disabled: se * 8 >= ve.length,
+								disabled: se * 8 >= ye.length,
 								onClick: () => ce(se + 1),
 								children: "Next"
 							})
@@ -6024,14 +6024,17 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					}),
 					s && /* @__PURE__ */ (0, y.jsxs)("div", {
 						className: "account-save-selection",
-						children: [/* @__PURE__ */ (0, y.jsx)("button", {
-							className: "primary",
+						children: [/* @__PURE__ */ (0, y.jsxs)("button", {
+							className: "primary account-save-button",
 							disabled: v || m?.kind !== "twin",
-							onClick: () => void pe(async () => {
-								m?.kind === "twin" && (await kr(m), me(m.name + " selected"));
+							onClick: () => void me(async () => {
+								m?.kind === "twin" && (await Ar(m), he(m.name + " selected"));
 							}),
-							children: "Save Twin"
-						}), /* @__PURE__ */ (0, y.jsx)("p", { children: "Save your selection for your next try-on. No preview is generated here." })]
+							children: [/* @__PURE__ */ (0, y.jsx)(Xc, {
+								size: 17,
+								"aria-hidden": "true"
+							}), "Save Twin"]
+						}), /* @__PURE__ */ (0, y.jsx)("p", { children: "Ready for your next try-on, whenever you choose." })]
 					})
 				]
 			}) : /* @__PURE__ */ (0, y.jsxs)("div", {
@@ -6041,12 +6044,12 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					children: [
 						/* @__PURE__ */ (0, y.jsx)("h2", { children: "Your photo." }),
 						/* @__PURE__ */ (0, y.jsx)("p", { children: "Choose a clear, full-body photo from your phone or computer." }),
-						/* @__PURE__ */ (0, y.jsx)(Lc, {
+						/* @__PURE__ */ (0, y.jsx)(Rc, {
 							file: g,
 							savedPhotoUrl: m?.kind === "photo" ? m.url : void 0,
 							busy: v,
 							onError: C,
-							onRemove: _e,
+							onRemove: ve,
 							onChange: (e) => {
 								_(e), h(null), C(""), T("");
 							}
@@ -6055,7 +6058,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 				}), /* @__PURE__ */ (0, y.jsxs)("form", {
 					className: "connected-measures",
 					onSubmit: (e) => {
-						e.preventDefault(), P && !ge ? s ? me("Your photo is ready") : t() : pe(N);
+						e.preventDefault(), N && !_e ? s ? he("Your photo is ready") : t() : me(M);
 					},
 					children: [
 						/* @__PURE__ */ (0, y.jsx)("h2", { children: "Make it yours." }),
@@ -6087,7 +6090,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 										min: "100",
 										max: "230",
 										value: A.height || "",
-										onChange: (e) => j({
+										onChange: (e) => fe({
 											...A,
 											height: Number(e.target.value)
 										})
@@ -6095,20 +6098,20 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 										type: "number",
 										min: "3",
 										max: "7",
-										value: ye || "",
-										onChange: (e) => j({
+										value: be || "",
+										onChange: (e) => fe({
 											...A,
-											height: (Number(e.target.value) * 12 + be) * 2.54
+											height: (Number(e.target.value) * 12 + xe) * 2.54
 										})
 									})] }), /* @__PURE__ */ (0, y.jsxs)("label", { children: ["Height (inches)", /* @__PURE__ */ (0, y.jsx)("input", {
 										type: "number",
 										min: "0",
 										max: "11.9",
 										step: "0.1",
-										value: be || "",
-										onChange: (e) => j({
+										value: xe || "",
+										onChange: (e) => fe({
 											...A,
-											height: (ye * 12 + Number(e.target.value)) * 2.54
+											height: (be * 12 + Number(e.target.value)) * 2.54
 										})
 									})] })] }), /* @__PURE__ */ (0, y.jsxs)("label", { children: [
 										"Weight (",
@@ -6120,7 +6123,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 											min: k === "metric" ? 30 : 66,
 											max: k === "metric" ? 250 : 551,
 											value: A.weight ? Math.round(A.weight / (k === "metric" ? 1 : .453592) * 10) / 10 : "",
-											onChange: (e) => j({
+											onChange: (e) => fe({
 												...A,
 												weight: Number(e.target.value) * (k === "metric" ? 1 : .453592)
 											})
@@ -6129,7 +6132,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 								}),
 								/* @__PURE__ */ (0, y.jsxs)("label", { children: ["Sizing profile", /* @__PURE__ */ (0, y.jsxs)("select", {
 									value: A.bodyType,
-									onChange: (e) => j({
+									onChange: (e) => fe({
 										...A,
 										bodyType: e.target.value
 									}),
@@ -6139,7 +6142,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 						}),
 						/* @__PURE__ */ (0, y.jsxs)("details", { children: [
 							/* @__PURE__ */ (0, y.jsx)("summary", { children: "Body measurements & preferred fit" }),
-							/* @__PURE__ */ (0, y.jsx)(Hc, {
+							/* @__PURE__ */ (0, y.jsx)(Uc, {
 								value: ue,
 								onChange: de,
 								bodyType: A.bodyType,
@@ -6150,16 +6153,23 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 								children: "These optional preferences stay in this browser session; they do not yet affect the sizing service."
 							})
 						] }),
-						/* @__PURE__ */ (0, y.jsx)(Uc, {
+						/* @__PURE__ */ (0, y.jsx)(Wc, {
 							checks: ee,
 							onChange: te,
 							busy: v,
-							saved: P
+							saved: N
 						}),
-						/* @__PURE__ */ (0, y.jsx)("button", {
-							className: "primary",
-							disabled: v || !g && m?.kind !== "photo" || !P && !ee.every(Boolean),
-							children: P ? ge ? "Save changes" : s ? "Save profile" : "Done" : "Agree & save photo"
+						/* @__PURE__ */ (0, y.jsxs)("button", {
+							className: s ? "primary account-save-button" : "primary",
+							disabled: v || !g && m?.kind !== "photo" || !N && !ee.every(Boolean),
+							children: [s && /* @__PURE__ */ (0, y.jsx)(Xc, {
+								size: 17,
+								"aria-hidden": "true"
+							}), N ? _e ? "Save changes" : s ? "Save profile" : "Done" : "Agree & save photo"]
+						}),
+						s && /* @__PURE__ */ (0, y.jsx)("p", {
+							className: "account-save-hint",
+							children: "Save your profile now. Choose a garment to try on when you’re ready."
 						})
 					]
 				})]
@@ -6180,57 +6190,57 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 }
 //#endregion
 //#region src/always-on/ChangePerspective.tsx
-function Pl() {
-	let { identity: e } = gr(), [t, n] = (0, d.useState)(!1);
-	return /* @__PURE__ */ (0, y.jsxs)(oc, {
+function Fl() {
+	let { identity: e } = _r(), [t, n] = (0, d.useState)(!1);
+	return /* @__PURE__ */ (0, y.jsxs)(sc, {
 		open: t,
 		onOpenChange: n,
 		children: [/* @__PURE__ */ (0, y.jsxs)("div", {
 			className: "perspective-shortcut",
 			children: [/* @__PURE__ */ (0, y.jsxs)("div", {
 				className: "perspective-person",
-				children: [e ? /* @__PURE__ */ (0, y.jsx)(Fc, { identity: e }) : /* @__PURE__ */ (0, y.jsx)("span", {
+				children: [e ? /* @__PURE__ */ (0, y.jsx)(Ic, { identity: e }) : /* @__PURE__ */ (0, y.jsx)("span", {
 					className: "perspective-guest-icon",
-					children: /* @__PURE__ */ (0, y.jsx)(jc, {
+					children: /* @__PURE__ */ (0, y.jsx)(Mc, {
 						size: 20,
 						"aria-hidden": "true"
 					})
 				}), /* @__PURE__ */ (0, y.jsxs)("span", { children: [/* @__PURE__ */ (0, y.jsx)("small", { children: "YOUR PERSPECTIVE" }), /* @__PURE__ */ (0, y.jsx)("strong", { children: e ? e.kind === "twin" ? `${e.name} · Twin` : "You · Your photo" : "Make this look yours" })] })]
-			}), /* @__PURE__ */ (0, y.jsxs)(cc, {
+			}), /* @__PURE__ */ (0, y.jsxs)(lc, {
 				className: "perspective-change",
 				children: [/* @__PURE__ */ (0, y.jsx)("span", {
 					className: "perspective-camera",
-					children: /* @__PURE__ */ (0, y.jsx)(jc, { size: 18 })
+					children: /* @__PURE__ */ (0, y.jsx)(Mc, { size: 18 })
 				}), /* @__PURE__ */ (0, y.jsx)("span", { children: "Change photo or twin" })]
 			})]
-		}), /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "perspective-overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+		}), /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "perspective-overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 			className: "perspective-sheet",
 			"aria-describedby": "perspective-description",
 			children: [
 				/* @__PURE__ */ (0, y.jsxs)("header", {
 					className: "perspective-sheet-heading",
-					children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("p", { children: "YOUR PERSONAL VIEW" }), /* @__PURE__ */ (0, y.jsx)(Cc, { children: "Make this look yours." })] }), /* @__PURE__ */ (0, y.jsx)(Dc, {
+					children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("p", { children: "YOUR PERSONAL VIEW" }), /* @__PURE__ */ (0, y.jsx)(wc, { children: "Make this look yours." })] }), /* @__PURE__ */ (0, y.jsx)(Oc, {
 						className: "perspective-sheet-close",
 						"aria-label": "Close photo or twin editor",
 						children: "×"
 					})]
 				}),
-				/* @__PURE__ */ (0, y.jsx)(Tc, {
+				/* @__PURE__ */ (0, y.jsx)(Ec, {
 					id: "perspective-description",
 					children: "Switch to your photo or another Twin. Your piece stays open. We’ll refresh your preview and fit guidance."
 				}),
 				e && /* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "perspective-current",
 					children: [
-						/* @__PURE__ */ (0, y.jsx)(Fc, { identity: e }),
+						/* @__PURE__ */ (0, y.jsx)(Ic, { identity: e }),
 						/* @__PURE__ */ (0, y.jsxs)("span", { children: ["Currently viewing", /* @__PURE__ */ (0, y.jsx)("strong", { children: e?.kind === "twin" ? `${e.name} · Twin` : "Your photo" })] }),
-						/* @__PURE__ */ (0, y.jsx)(jc, {
+						/* @__PURE__ */ (0, y.jsx)(Mc, {
 							size: 22,
 							"aria-hidden": "true"
 						})
 					]
 				}),
-				/* @__PURE__ */ (0, y.jsx)(Nl, {
+				/* @__PURE__ */ (0, y.jsx)(Pl, {
 					perspectiveOnly: !0,
 					initialSource: "photo",
 					savedLooks: null,
@@ -6243,7 +6253,7 @@ function Pl() {
 }
 //#endregion
 //#region src/always-on/production-catalog.json
-var Fl = /*#__PURE__*/ JSON.parse("[{\"id\":\"roanne-panelled-knit-maxi-dress-demosite\",\"title\":\"Knit Maxi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Gold\",\"hex\":\"#c9b07e\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/roanne-panelled-knit-maxi-dress-demosite/f6a01f5e-9f01-0000-0b00-46521b5a4bd9.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/roanne-panelled-knit-maxi-dress-demosite/faa01f5e-9f01-0000-0b00-0277b8b29a81.png\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"dalida-knit-dress\",\"title\":\"Dalida Knit Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#201f22\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$628.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dalida-knit-dress/676bdfb9-9f01-0000-0b00-4eac2c59a2cd.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dalida-knit-dress/666bdfb9-9f01-0000-0b00-ba9b1c869102.png\"}]}],\"description\":\"A knit midi dress featuring an open back with bow details.\\n\\n— Midi length\\n\\n— Mock neck\\n\\n— Double bow details in back\\n\\n— Flattering knit blend\",\"buy_link\":\"https://cultgaia.com/products/dalida-dress-black?variant=43517210525770\"},{\"id\":\"nina-embellished-midi-gown\",\"title\":\"Embellished Midi Gown\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"yellow\",\"hex\":\"#ccb100\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$3995.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nina-embellished-midi-gown/d3a8b418-9f01-0000-0b00-d455803e64cb.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nina-embellished-midi-gown/dca8b418-9f01-0000-0b00-78434fc81ee2.png\"}]}],\"description\":\"Designed to turn heads, our best-selling Nina dress is back to drop jaws. This fully beaded beauty is a disco ball’s dream, dripping in multicolored, hand-embellished crystals on a butter yellow base adorned with intricate beading. Its bodycon silhouette sculpts the waist as it scintillates, while the sweetheart neckline and studded straps beautifully illuminate the decolletage (and the dancefloor). This ankle-grazing gem cuts right above your shoes, finished with a back slit that’s both flirtatious and functional--perfect for showing off your moves. It’s guaranteed to be the center of attention, even if you’re seated in the back of the ballroom.\",\"buy_link\":\"https://www.aliceandolivia.com/nina-embellished-midi-gown/CG604E62503F732.html\"},{\"id\":\"seraphis-skirt-black-demosite\",\"title\":\"Seraphis Skirt - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$998\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/seraphis-skirt-black-demosite/d682db81-a001-0000-0b00-68ec45f2c715.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/seraphis-skirt-black-demosite/9683db81-a001-0000-0b00-36706afad490.jpg\"}]}],\"description\":\"A classic black maxi skirt with a low rise fit and delicate lace embroidery.\\n— Maxi length\\n— Lace embroidered hem\\n— Side zipper\\n— Viscose wool blend\\n— Wear as a set with the Nevina Top\",\"buy_link\":\"https://cultgaia.com/products/seraphis-skirt-black\"},{\"id\":\"womens-jeans-demo-site\",\"title\":\"Dark Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Denim\",\"hex\":\"#242b41\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$108.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/womens-jeans-demo-site/4be2b6b9-9f01-0000-0b00-0001b2b73a53.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/womens-jeans-demo-site/50e2b6b9-9f01-0000-0b00-4bdef4ec0a73.png\"}]}],\"description\":\"Citizens of Humanity's 'Nora' jeans offer a tailored approach to a timeless silhouette. They're cut from a stretchy denim that is soft yet durable.\"},{\"id\":\"dries-van-noten-printed-georgette-pants\",\"title\":\"Printed Georgette Straight-Leg Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Purple\"},\"size_groups\":[{\"sizes\":[\"FR 34\",\"FR 36\",\"FR 38\",\"FR 40\",\"FR 42\",\"FR 44\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$745\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dries-van-noten-printed-georgette-pants/5769e16e-a001-0000-0b00-3f21e8bd6e0e.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dries-van-noten-printed-georgette-pants/5769e16e-a001-0000-0b00-dc2e7cc9e0f7.jpg\"}]}],\"description\":\"These georgette pants carry a marbled-clay print, with a drawstring waist lending an ease to the floor-grazing straight-leg silhouette.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/dries-van-noten/clothing/straight-leg/printed-georgette-straight-leg-pants/46376663163086418\"},{\"id\":\"pink-cheetah-sweater-demo-site\",\"title\":\"Pink Cheetah Sweater\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Pink\",\"hex\":\"#624749\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pink-cheetah-sweater-demo-site/45f4c0b9-9f01-0000-0b00-c78901adb88b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pink-cheetah-sweater-demo-site/15f4c0b9-9f01-0000-0b00-fd9d4046d36c.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/new-in?pageNumber=4\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/new-in?pageNumber=4\"},{\"id\":\"magdabutrym-floral-appliqued-off-shoulder-midi-dress\",\"title\":\"Floral-Appliquéd Off-the-Shoulder Wool and Silk-Blend Midi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Gray\",\"hex\":\"#afacac\"},\"size_groups\":[{\"sizes\":[\"FR 34\",\"FR 36\",\"FR 38\",\"FR 40\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$2455\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/magdabutrym-floral-appliqued-off-shoulder-midi-dress/1ce4e16e-a001-0000-0b00-52ccabed9e55.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/magdabutrym-floral-appliqued-off-shoulder-midi-dress/b5e3e16e-a001-0000-0b00-5fe0b6c69894.jpg\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/magdabutrym-floral-appliqued-off-shoulder-midi-dress/ffe3e16e-a001-0000-0b00-041a962f363c.jpg\"}]}],\"description\":\"Tailored from a wool and silk-blend, Magda Butrym's dress has an off-the-shoulder neckline and fitted bodice that narrows into a wrapped waist belt, finished with a signature floral embellishment at one hip. The pencil skirt falls to a midi length.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/magda-butrym/clothing/midi-dresses/floral-appliqued-off-the-shoulder-wool-and-silk-blend-midi-dress/46376663163140618\"},{\"id\":\"ollie-skirt-floral-jacquard-demosite\",\"title\":\"Ollie Skire - Floral Jacquard\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"FLORAL JACQUARD\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$998\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ollie-skirt-floral-jacquard-demosite/a901e26e-a001-0000-0b00-cfad7445304d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ollie-skirt-floral-jacquard-demosite/7f02e26e-a001-0000-0b00-2e74253431d2.jpg\"}]}],\"description\":\"A floral jacquard midi skirt with suiting inpsired details and a low rise fit.\\n— Midi length\\n— Floral jacquard pattern\\n— Low rise\\n— Wear as a set with the Mee Top\",\"buy_link\":\"https://cultgaia.com/products/ollie-skirt-floral-jacquard\"},{\"id\":\"cocktail-dress\",\"title\":\"Cocktail Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Silver\",\"hex\":\"#b1c0ce\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$500.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cocktail-dress/666ab4b9-9f01-0000-0b00-61f244d5c7cf.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cocktail-dress/656ab4b9-9f01-0000-0b00-27f0b493c51b.png\"}]}],\"description\":\"https://cliopeppiatt.co.uk/products/manhattan-mini-dress\",\"buy_link\":\"https://cliopeppiatt.co.uk/products/manhattan-mini-dress\"},{\"id\":\"gianvitorossi-sofia-sling-70\",\"title\":\"Sofia Sling 70\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black Leather\"},\"size_groups\":[{\"sizes\":[\"35\",\"36\",\"36.5\",\"37\",\"38\",\"38.5\",\"39\",\"41.5\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$995.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianvitorossi-sofia-sling-70/109de16e-a001-0000-0b00-13ecb1e605a3.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianvitorossi-sofia-sling-70/239de16e-a001-0000-0b00-8b23ac3e8058.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianvitorossi-sofia-sling-70/139de16e-a001-0000-0b00-a50dd67a052c.jpg\"}]}],\"description\":\"Crafted from leather, Sofia Sling 70 is a pointed-toe slingback defined by the Maison's distinctive 70mm heel. Pointed toe. Buckle closure. 3 inch heel (70mm). Handmade in Italy.\",\"buy_link\":\"https://www.nordstrom.com/s/sofia-sling-70/8867870\"},{\"id\":\"plaid-shirt\",\"title\":\"Plaid shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Green/Blue\",\"hex\":\"#867d74\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$50.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/plaid-shirt/6789f1b9-9f01-0000-0b00-dd08a887b560.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/plaid-shirt/7589f1b9-9f01-0000-0b00-308eed0b2511.png\"}]}],\"description\":\"https://www.cettire.com/products/our-legacy-envelop-shirt-966491756/cmVhY3Rpb24vcHJvZHVjdDpSbWlyYjUyV3ZOaTZ3c0FDcg%3D%3D?lng=en&utm_source=google&utm_medium=cpc&gclid=CjwKCAjwpqHTBhAcEiwAj2AfunFVfPmKwjYSuILkJzXnQHDCRcvDeRPX4_J_0bFcZRmxrdBcw6noGRoC1G4QAvD_BwE&gad_source=1&gad_campaignid=1040313833&gbraid=0AAAAAD-gd10bmu_d_AFckRrag0SDErvl3\",\"buy_link\":\"https://www.cettire.com/products/our-legacy-envelop-shirt-966491756/cmVhY3Rpb24vcHJvZHVjdDpSbWlyYjUyV3ZOaTZ3c0FDcg%3D%3D?lng=en&utm_source=google&utm_medium=cpc&gclid=CjwKCAjwpqHTBhAcEiwAj2AfunFVfPmKwjYSuILkJzXnQHDCRcvDeRPX4_J_0bFcZRmxrdBcw6noGRoC1G4QAvD_BwE&gad_source=1&gad_campaignid=1040313833&gbraid=0AAAAAD-gd10bmu_d_AFckRrag0SDErvl3\"},{\"id\":\"heaven-mayhem-clarke-cuff-silver\",\"title\":\"Clarke Cuff\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bracelet\",\"name\":\"Bracelet\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Silver\"},\"size_groups\":[{\"sizes\":[\"OneSize\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$100\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/heaven-mayhem-clarke-cuff-silver/57a4e16e-a001-0000-0b00-193d931c8e35.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/heaven-mayhem-clarke-cuff-silver/5aa4e16e-a001-0000-0b00-9f0cc650a07a.jpg\"}]}],\"description\":\"This cuff bracelet from Heaven Mayhem is crafted from silver-tone metal and features smooth ridges and an enamel center. Cuff, One Size. Imported, China.\",\"buy_link\":\"https://www.shopbop.com/clarke-cuff-heaven-mayhem/vp/v=1/1541145595.htm\"},{\"id\":\"proenzaschouler-nilo-textured-jacquard-dress\",\"title\":\"Nilo Textured Jacquard Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Copper\",\"hex\":\"#594236\"},\"size_groups\":[{\"sizes\":[\"S\",\"M\",\"L\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$2990\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/proenzaschouler-nilo-textured-jacquard-dress/d44fdb81-a001-0000-0b00-97e127af8931.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/proenzaschouler-nilo-textured-jacquard-dress/d34fdb81-a001-0000-0b00-b1a41ac1a7d9.jpg\"}]}],\"description\":\"Heavyweight jacquard knit with stretch. Thigh-high side slit, fringe trim, scoop neck, sleeveless, pullover design with no closure. Shell: 41% wool/33% viscose/26% polyamide. Trim: 45% wool/25% viscose/20% polyamide/10% cotton. Made in Italy.\",\"buy_link\":\"https://www.shopbop.com/nilo-dress-proenza-schouler/vp/v=1/1502064002.htm\"},{\"id\":\"crepe-mini-dress-demosite\",\"title\":\"Crepe Mini Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Maroon\",\"hex\":\"#551823\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-mini-dress-demosite/0892185e-9f01-0000-0b00-31fe8de11115.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-mini-dress-demosite/0392185e-9f01-0000-0b00-d3f14c387df8.png\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"oversized-sweatshirt-demo-site\",\"title\":\"Oversized Sweatshirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Beige\",\"hex\":\"#aea08f\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/e376c518-9f01-0000-0b00-c40c4eb16dbb.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/d776c518-9f01-0000-0b00-861beb82368d.png\"}]},{\"color\":{\"name\":\"Grey\",\"hex\":\"#55514c\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/667b164d-9f01-0000-0b00-7b6728a32185.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/5b7b164d-9f01-0000-0b00-d7c53d3443b2.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#222023\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/e7c0194d-9f01-0000-0b00-02bf7cc74b89.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/e5c0194d-9f01-0000-0b00-ea55cce57df3.png\"}]}],\"description\":\"Oversized fit with a lined crossover hood, dropped shoulders, and a kangaroo pocket. Wide cuffs and hem.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1336252003.html\"},{\"id\":\"zara-linen-fringe-jacket\",\"title\":\"Linen Blend Fringe Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Ecru\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$229\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/zara-linen-fringe-jacket/23b8db81-a001-0000-0b00-c8b1dd5d6462.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/zara-linen-fringe-jacket/24b8db81-a001-0000-0b00-245c01a8c8ff.jpg\"}]}],\"description\":\"Jacket made with 36% linen blend yarn. V-neck and long sleeves. Side pockets hidden in the seams. Matching fringe trim detail. Asymmetric hem. Inner lining. Front metal hook closure.\",\"buy_link\":\"https://www.zara.com/us/en/zw-collection-linen-blend-fringe-jacket-p07012800.html\"},{\"id\":\"romma-top-black-demosite\",\"title\":\"Romma Knit Top - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\",\"hex\":\"#141715\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$398\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/romma-top-black-demosite/fe73db81-a001-0000-0b00-5131790d3574.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/romma-top-black-demosite/cf74db81-a001-0000-0b00-8a78d99737ed.jpg\"}]}],\"description\":\"An essential sleeveless knit top with a slight mock neck, cropped hem and cinched waist detailing.\\n— Wool blend\\n— Slight mock neck\\n— Cinching at waist\\n— Wear as a set with the Infinity Skirt\",\"buy_link\":\"https://cultgaia.com/products/romma-top-black\"},{\"id\":\"dress-with-draped-neckline\",\"title\":\"Light Blue Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Light Blue\",\"hex\":\"#a7cbeb\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-draped-neckline/356e2547-9f01-0000-0b00-88c206684442.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-draped-neckline/396e2547-9f01-0000-0b00-e20a63b282a3.png\"}]}],\"description\":\"Satin halter maxi dress with a soft drape. Fitted style with a deep draped neckline and a button-and-loop closure at the nape of the neck. Concealed zipper with hook-and-eye closure at the back and a back vent. Fully lined bodice.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1337767001.html\"},{\"id\":\"tank-top-demo-site\",\"title\":\"Tank Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Blue\",\"hex\":\"#c4e1e2\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/6e93b2b9-9f01-0000-0b00-10b925c33de6.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/6f93b2b9-9f01-0000-0b00-1c660b261f56.png\"}]},{\"color\":{\"name\":\"Yellow\",\"hex\":\"#f1ecb9\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/d6adb2b9-9f01-0000-0b00-94c314727a0e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/dfadb2b9-9f01-0000-0b00-ea57da317d53.png\"}]},{\"color\":{\"name\":\"White\",\"hex\":\"#ebeaef\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/9422b3b9-9f01-0000-0b00-d67a00cb677b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/9522b3b9-9f01-0000-0b00-5bcdb446ca1f.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#1e1d22\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/df7db3b9-9f01-0000-0b00-10434b08c275.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/e37db3b9-9f01-0000-0b00-bbc79f99d9c0.png\"}]}],\"description\":\"https://www.aritzia.com/us/en/product/homestretch%E2%84%A2-2-rib-frequency-tank/116336.html?color=36528\"},{\"id\":\"wide-leg-jeans-demo-site\",\"title\":\"Wide Leg Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\",\"hex\":\"#e2312e\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/fee313b9-9f01-0000-0b00-4b0f96c331c8.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/f9e313b9-9f01-0000-0b00-cccb379d38d5.png\"}]},{\"color\":{\"name\":\"Pastel Pink\",\"hex\":\"#ebdad4\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/aeaba21c-a001-0000-0b00-c1c2b3516837.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/a8aba21c-a001-0000-0b00-25cecf680619.png\"}]},{\"color\":{\"name\":\"Purple\",\"hex\":\"#331f4d\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/17d3a11c-a001-0000-0b00-3f45fa5fd022.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/1ad3a11c-a001-0000-0b00-dd820245b539.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/wide-leg/mid-rise-wide-leg-jeans/46376663163071020\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/wide-leg/mid-rise-wide-leg-jeans/46376663163071020\"},{\"id\":\"tapered-jeans-demo-site\",\"title\":\"Tapered Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Denim Blue\",\"hex\":\"#8396a7\"},\"size_groups\":[{\"sizes\":[\"28/32\",\"29/32\",\"30/32\",\"30/34\",\"31/32\",\"32/32\",\"32/34\",\"33/32\",\"34/32\",\"34/34\",\"36/32\",\"38/32\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-jeans-demo-site/feaab918-9f01-0000-0b00-b9d80926ec29.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-jeans-demo-site/e3aab918-9f01-0000-0b00-4e7bbc68e195.png\"}]}],\"description\":\"Five-pocket jeans in cotton denim with a slight stretch for optimal comfort. Standard waist-to-low fit with a slightly relaxed skinny leg. Standard waistband and zip fly. The perfect match for your favorite t-shirt.\\n\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1315519005.html\"},{\"id\":\"matteau-breton-tee-002\",\"title\":\"Breton Striped Cotton-Jersey T-Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$315\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/304f2d82-a001-0000-0b00-0f28e407d771.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/53ebe16e-a001-0000-0b00-1da08bfb4182.jpg\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/75ebe16e-a001-0000-0b00-7cd741fa526d.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/4febe16e-a001-0000-0b00-5489691452c3.jpg\"}]}],\"description\":\"Matteau's 'Breton' T-shirt in Red, made in Australia from breathable cotton-jersey. Classic nautical white and red striped pattern. Boxy fit with dropped shoulders and wide sleeves, finished with a boat neckline.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/matteau/clothing/t-shirts/breton-striped-cotton-jersey-t-shirt/46376663163044985\"},{\"id\":\"flared-fit-pants-in-stretch-jersey-demosite\",\"title\":\"Flared Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Blue\",\"hex\":\"#222028\"},\"size_groups\":[{\"sizes\":[\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$299.00\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/flared-fit-pants-in-stretch-jersey-demosite/b98de16e-a001-0000-0b00-66235a98249f.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/flared-fit-pants-in-stretch-jersey-demosite/ae8de16e-a001-0000-0b00-6fecdb26a08b.png\"}]}],\"description\":\"Details\\nIn travel-friendly jersey with stretch and crease resistance, these BOSS Womenswear pants have a modern flared profile. Cropped length. Metal detail on waistband.\\nflared fit\\nRegular rise\\nHook and zip closure\\nElastic Waistband\\nFlared leg\\nPockets bottom front: Side pockets\\nPockets bottom back: Welt pocket\\nFit foot width: 52,3 cm (20.6 inches)\",\"buy_link\":\"https://www.hugoboss.com/us/flared-fit-pants-in-stretch-jersey/hbna50563831_404.html\"},{\"id\":\"liberowe-fringed-tweed-jacket\",\"title\":\"Fringed Tweed Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\"},\"size_groups\":[{\"sizes\":[\"x small\",\"small\",\"medium\",\"large\",\"x large\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1950\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/liberowe-fringed-tweed-jacket/e2dce16e-a001-0000-0b00-720239500bd1.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/liberowe-fringed-tweed-jacket/e2dce16e-a001-0000-0b00-e09547472bb2.jpg\"}]}],\"description\":\"Made from wool-blend tweed and tailored with paneled seams that create a softly flared silhouette. Fringed trims frame the neckline, front and hem, with oversized hook-and-eye fastenings.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/liberowe/clothing/casual-jackets/fringed-wool-blend-tweed-jacket/46376663163151712\"},{\"id\":\"slim-fit-vest-with-peplum-hem-demosite\",\"title\":\"Slim-Fit Vest\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Blue\",\"hex\":\"#24252e\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$399.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/2f58641a-a001-0000-0b00-80c6a892d916.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/c757641a-a001-0000-0b00-5c8bdb77ab39.png\"}]},{\"color\":{\"name\":\"Off-white\",\"hex\":\"#e6dfd0\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$399.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/e739651a-a001-0000-0b00-85d0bde6c8e7.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/bc38651a-a001-0000-0b00-ff55ad681c16.png\"}]},{\"color\":{\"name\":\"Red\",\"hex\":\"#ba040b\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$399.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/11e3651a-a001-0000-0b00-13ad21bc1eea.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/cfe1651a-a001-0000-0b00-ffcc675eb83e.png\"}]}],\"description\":\"With sleeveless styling and a peplum hem, this BOSS Womenswear vest is crafted in comfortable stretch fabric. Streamlined fit. Double-ended front zipper.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/slim-fit-vest-with-peplum-hem/hbna50563813_404.html\"},{\"id\":\"rodarte-floral-midi-dress\",\"title\":\"Floral-Print Silk-Crepe Midi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Lavender Floral\"},\"size_groups\":[{\"sizes\":[\"US0\",\"US2\",\"US4\",\"US6\",\"US8\",\"US10\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1595\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rodarte-floral-midi-dress/6166db81-a001-0000-0b00-3701c412f2bf.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rodarte-floral-midi-dress/6166db81-a001-0000-0b00-5951ce7446e5.jpg\"}]}],\"description\":\"Rodarte's \\\"Lavender Bouquet\\\" midi dress, cut from silk-crepe and adorned with understated botanical motifs. Defined by a one-shoulder neckline with draped sleeve detail for refined dimension.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/rodarte/clothing/midi-dresses/floral-print-silk-crepe-midi-dress/46376663163105286\"},{\"id\":\"cami-top-dove-demosite\",\"title\":\"Cami Top - Dove\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"DOVE\",\"hex\":\"#cdb5a0\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$498\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cami-top-dove-demosite/914ae16e-a001-0000-0b00-1c3e5330869a.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cami-top-dove-demosite/5d4be16e-a001-0000-0b00-99e6a16539ab.jpg\"}]}],\"description\":\"An asymmetrical, shoulder-baring top gathered at the waist and designed in voluminous paneling of mini-pleated plisse.\\n— Asymmetrical silhouette\\n— Relaxed, yet gathered at the waist\\n— Stretch fit\\n— Exposed shoulder\\n— Mini-pleated chintz plisse\",\"buy_link\":\"https://cultgaia.com/products/cami-top-dove\"},{\"id\":\"textured-knit-resort-shirt\",\"title\":\"Textured Knit Resort Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Heathered Oat\",\"hex\":\"#d6cac3\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/eed8ebb9-9f01-0000-0b00-c0e31d044bcd.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/efd8ebb9-9f01-0000-0b00-06bb400d493c.png\"}]},{\"color\":{\"name\":\"Blue\",\"hex\":\"#cfd1d5\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/f601ecb9-9f01-0000-0b00-22c5aba89f4f.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/f601ecb9-9f01-0000-0b00-bfc9d2b73dd3.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#1b1b1e\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/2026ecb9-9f01-0000-0b00-cbbdcf2ae2a2.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/4b26ecb9-9f01-0000-0b00-606a31a0ecf2.png\"}]}],\"description\":\"Made from 100% organic cotton in a sweater yarn with a jacquard-like texture. Reads elevated, wears relaxed. Button it up with chinos or linen trousers.\",\"buy_link\":\"https://www.everlane.com/products/mens-textured-knit-resort-shirt-heathered-oat\"},{\"id\":\"cardigan-in-a-flowy-fabric-demosite\",\"title\":\"Cardigan in Flowy Fabric\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Green\",\"hex\":\"#144632\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/7f53e16e-a001-0000-0b00-54696801703a.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/2153e16e-a001-0000-0b00-4db39f2c264f.png\"}]},{\"color\":{\"name\":\"Maroon\",\"hex\":\"#541721\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/2758e16e-a001-0000-0b00-69c244b67642.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/2458e16e-a001-0000-0b00-45c7b51e5fa4.png\"}]},{\"color\":{\"name\":\"Sky Blue\",\"hex\":\"#bed3e6\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/705ce16e-a001-0000-0b00-c6f522b99174.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/105ce16e-a001-0000-0b00-2160ef76bab3.png\"}]}],\"description\":\"Lightweight ribbed cardigan with a round neck and buttons down the front.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1328852003.html\"},{\"id\":\"denim-jacket-demo-site\",\"title\":\"Denim Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\",\"hex\":\"#e72f31\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/25b1b4b9-9f01-0000-0b00-2462c95817a6.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/21b1b4b9-9f01-0000-0b00-14cdbdd1c442.png\"}]},{\"color\":{\"name\":\"Pastel Pink\",\"hex\":\"#f2dfdb\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/a7d3b4b9-9f01-0000-0b00-20cf0d85b245.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/c6d3b4b9-9f01-0000-0b00-798f2a327298.png\"}]},{\"color\":{\"name\":\"Purple\",\"hex\":\"#36204f\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/bdfbb4b9-9f01-0000-0b00-ec30cf04265b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/bcfbb4b9-9f01-0000-0b00-5f2d84d4c006.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/casual-jackets/denim-cotton-jacket/46376663163071002\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/casual-jackets/denim-cotton-jacket/46376663163071002\"},{\"id\":\"burberry-check-silk-scarf-sand\",\"title\":\"Check Silk Scarf - Sand\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"scarf\",\"name\":\"Scarf\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Sand\"},\"size_groups\":[{\"sizes\":[\"OneSize\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$555\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/burberry-check-silk-scarf-sand/7142e16e-a001-0000-0b00-039518de9b2d.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/burberry-check-silk-scarf-sand/8a42e16e-a001-0000-0b00-c13053fef6e5.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/burberry-check-silk-scarf-sand/7342e16e-a001-0000-0b00-f938536eb2bd.jpg\"}]}],\"description\":\"Fabric: Silk twill. Signature checkered pattern with contrast border. Shell: 100% silk. Made in Italy. Dry clean only.\",\"buy_link\":\"https://www.shopbop.com/check-silk-scarf-burberry/vp/v=1/1533005.htm\"},{\"id\":\"cropped-jacket-demo-site\",\"title\":\"Cropped Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Off White\",\"hex\":\"#ded6ca\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$98.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cropped-jacket-demo-site/f963e78a-9f01-0000-0b00-5cae474a60a9.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cropped-jacket-demo-site/5164e78a-9f01-0000-0b00-aa4f81732e9c.png\"}]}],\"description\":\"https://www.aritzia.com/us/en/product/little-cropped-jacket/125276.html?color=11420\",\"buy_link\":\"https://www.aritzia.com/us/en/product/little-cropped-jacket/125276.html?color=11420\"},{\"id\":\"elene-top-bleu-taormina-paisley\",\"title\":\"Elene Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Taormina Paisley\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$278.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/elene-top-bleu-taormina-paisley/d07ee16e-a001-0000-0b00-f593310d52ae.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/elene-top-bleu-taormina-paisley/da7ee16e-a001-0000-0b00-9f46ee2cefc1.png\"}]}],\"description\":\"Rendered in buttery silk-viscose twill, the Elene Top is patterned with our Taormina Paisley, an intricate motif inspired by 19th-century French Provençal textiles. With a relaxed silhouette, it features full-length sleeves and self-covered buttons down the front.\",\"buy_link\":\"https://www.shopdoen.com/products/elene-top-bleu-taormina-paisley?variant=42264239800433\"},{\"id\":\"mcqueen-shoulder-bow-blouse\",\"title\":\"Shoulder Bow Blouse\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Ivory\"},\"size_groups\":[{\"sizes\":[\"36\",\"38\",\"40\",\"42\",\"44\",\"46\",\"48\",\"50\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"£1100\",\"currency\":\"GBP\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/mcqueen-shoulder-bow-blouse/f9f2e16e-a001-0000-0b00-002004f84938.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/mcqueen-shoulder-bow-blouse/0df3e16e-a001-0000-0b00-e3e9bdeeffe0.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/mcqueen-shoulder-bow-blouse/f6f2e16e-a001-0000-0b00-341cbda41913.jpg\"}]}],\"description\":\"Blouse in light ivory silk crepe de Chine with an asymmetric neckline and shoulder bow detailing. Long sleeves with gathered cuffs. Regular fit. 100% Silk. Made in Italy.\",\"buy_link\":\"https://www.alexandermcqueen.com/en-gb/pr/shoulder-bow-blouse-A004JDQBADT9007.html\"},{\"id\":\"cecilia-pump\",\"title\":\"Cecilia Pump\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Grey Suede\"},\"size_groups\":[{\"sizes\":[\"35\",\"36\",\"36.5\",\"37\",\"37.5\",\"38\",\"38.5\",\"39\",\"39.5\",\"40\",\"40.5\",\"41\",\"42\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$980.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cecilia-pump/5c64e16e-a001-0000-0b00-8e144adb7c65.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cecilia-pump/2163e16e-a001-0000-0b00-4d8ec7a833ae.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cecilia-pump/5364e16e-a001-0000-0b00-384b6edda2fc.png\"}]}],\"description\":\"A refined suede pump designed to gently embrace and visually slim the foot. Crafted in Italy to be exceptionally lightweight. Signature details include sculptural Ona heel and gold staple detail at vamp.\",\"buy_link\":\"https://khaite.com/products/cecilia-pump-50-in-grey?utm_medium=paid&utm_source=shop_campaigns&shpcid=49633&utm_campaign=49633&variant=41569630093375&_su_rec=49vsfQTTHQPbSYeO3y1eiVlcAfzx38R3jt7yCUjv3j4w4iDNiDVst4mD75zT1s7aT2V66NWHNrr71fSde0F4jh1bNp9B1J2hKZ7HP7BWzmK7r5FaMNXv87m6NTtjptGSjh6eTZFLOj4FbRvMSak8FKJ6nfzs8WyNQ1kJDEo3AHFF4_-0iQ4J5VGV4AM1X9v1v-t6YYcuyZdXDdfxeyXF89xaxp7zjOOyo8GkwkifQFC_falaJeRPRe51LIy8uPm-S9DkkHQW6c9uhZVzV9Yd7v1FocgLzBCVFi1Ar4iNde4picbmdRG59Nvq6qxdquKfsC_wne_vAC8TV4qbHqxDUwTT\"},{\"id\":\"leather-pants-demo-site\",\"title\":\"Leather Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#322d31\"},\"size_groups\":[{\"sizes\":[],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$35.90\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/leather-pants-demo-site/ccd4e16e-a001-0000-0b00-d945f30e0c8f.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/leather-pants-demo-site/6ed4e16e-a001-0000-0b00-35e66d0b6e94.png\"}]}],\"description\":\"Description and fitting\\nH&M Premium Selection\\nSoft leather trousers with a low waist and concealed zip, hook, and button fastening. Slanted pockets, welt back pocket with triangular flap and button, horizontal seam at the knees, and a stripe at the front and back.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1334191001.html\"},{\"id\":\"regular-fit-linen-blend-polo-shirt-demo-site\",\"title\":\"Black & White Polo Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Stripes\",\"hex\":\"#171417\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-linen-blend-polo-shirt-demo-site/80d7bb18-9f01-0000-0b00-59cd96a6ff82.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-linen-blend-polo-shirt-demo-site/1ed7bb18-9f01-0000-0b00-d7e4dc2ff530.png\"}]}],\"description\":\"Polo shirt in a soft linen-blend knit. Features a ribbed V-neck and ribbed trim on the sleeves and hem. Standard fit for a classic and comfortable silhouette.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1311090003.html\"},{\"id\":\"hudson-st-pant-demosite\",\"title\":\"Wide-Leg Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"men\",\"name\":\"Men\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"ermine\",\"hex\":\"#af855d\"},\"size_groups\":[{\"sizes\":[],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$695.00\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/hudson-st-pant-demosite/d3b4e16e-a001-0000-0b00-66ff7bec0579.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/hudson-st-pant-demosite/beb4e16e-a001-0000-0b00-2325509ad765.png\"}]}],\"description\":\"Details\\nRelaxed mid-rise pant in fluid regency stripe. Fabric is a fluid viscose twill in a refined regency stripe, woven with subtle lurex for soft luminosity. Designed with front pleats that open into a draped, wide-leg silhouette. Finished with elasticized back waistband, side seam pockets, a single welt pocket at the back, and subtle topstitch detailing throughout.\",\"buy_link\":\"https://www.twpclothing.com/products/hudson-st-ivory-green?variant=52746923508075\"},{\"id\":\"regular-fit-blazer-in-italian-made-virgin-wool-demosite\",\"title\":\"Regular-Fit Blazer\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#1c1d21\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$599.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-blazer-in-italian-made-virgin-wool-demosite/9b74bf18-9f01-0000-0b00-667a60357b07.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-blazer-in-italian-made-virgin-wool-demosite/8674bf18-9f01-0000-0b00-08be631d307e.png\"}]}],\"description\":\"With natural stretch for ease of movement, this BOSS Womenswear blazer is crafted from long-lasting Italian-made wool. Tailored to a regular fit.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/regular-fit-blazer-in-italian-made-virgin-wool/hbna50490020_404.html\"},{\"id\":\"black-shorts-demo-site\",\"title\":\"Pleated Shorts\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#262522\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$108.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/013fb7b9-9f01-0000-0b00-929d9e41f7da.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/f73eb7b9-9f01-0000-0b00-629b6c452dd0.png\"}]},{\"color\":{\"name\":\"Beige\",\"hex\":\"#e5dcd0\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$108.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/f77eb7b9-9f01-0000-0b00-86ef17417155.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/fa7eb7b9-9f01-0000-0b00-d8eb2b952474.png\"}]}],\"description\":\"These are pleated shorts with a low rise, relaxed fit and darted back waist for shaping. They're finely tailored from soft stretch fabric that’s lightweight and drapey for everyday wear. This fabric is sourced from a premier Portuguese mill and made with 60% recycled polyester and 29% LENZING™ ECOVERO™ Viscose.\\n\\n\",\"buy_link\":\"https://www.aritzia.com/us/en/product/touchpoint-short/130244.html?color=1274\"},{\"id\":\"regular-fit-shirt-demo-site\",\"title\":\"Striped Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cream/Stripes\",\"hex\":\"#d0c9bb\"},\"size_groups\":[{\"sizes\":[\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$24.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shirt-demo-site/c3b6b818-9f01-0000-0b00-6e8ee0559507.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shirt-demo-site/cdb6b818-9f01-0000-0b00-915f790407cb.png\"}]}],\"description\":\"Short-sleeved shirt in a soft, airy cotton blend fabric. Features an open collar, classic placket, back yoke, and straight hem. Standard fit for a comfortable, classic silhouette.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1309692003.html\"},{\"id\":\"eel-effect-leather-sneakers\",\"title\":\"Eel-effect leather sneakers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"red\"},\"size_groups\":[{\"sizes\":[\"35\",\"36\",\"37\",\"38\",\"39\",\"40\",\"41\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$591.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/eel-effect-leather-sneakers/8e73e16e-a001-0000-0b00-75828a021c90.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/eel-effect-leather-sneakers/c474e16e-a001-0000-0b00-19004a878f73.png\"}]}],\"description\":\"Unexpected color contrasts are a signature of Dries Van Noten. These lace-up shoes are crafted from glossy red leather and shaped to a streamlined silhouette. Crisp white laces and trim highlight the clean lines, creating a striking contrast against the rich surface.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/dries-van-noten/shoes/low-top/eel-effect-leather-sneakers/46376663163048440?cm_mmc=LinkshareUS-_-0c5b5rpoqTU-_-Custom-_-LinkBuilder&utm_source=rakuten&utm_medium=affiliation&utm_campaign=US_3556869&utm_content=US_Vogue&utm_term=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&ranMID=24449&ranEAID=0c5b5rpoqTU&ranSiteID=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&siteID=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&adj_t=663co1a&adj_campaign=US_3556869&linkshare_siteID=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&linkshare_affiliate_mid=24449\"},{\"id\":\"relaxed-fit-linen-blend-tailored-trousers-demo-site\",\"title\":\"Linen Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"White\",\"hex\":\"#ffffff\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/b04ebc18-9f01-0000-0b00-2ff2cf7cc633.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/ac4ebc18-9f01-0000-0b00-886f5cf80809.png\"}]},{\"color\":{\"name\":\"Beige\",\"hex\":\"#d5c4ac\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/1f6ef64c-9f01-0000-0b00-71f8c36a934a.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/226ef64c-9f01-0000-0b00-2896ac57a52b.png\"}]},{\"color\":{\"name\":\"Navy\",\"hex\":\"#24293b\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/63ea034d-9f01-0000-0b00-3e94e9e1f415.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/1fe9034d-9f01-0000-0b00-2d4dfc6d5709.png\"}]}],\"description\":\"Trousers in a lightweight cotton and linen blend with pleats. Features a gathered elasticated waistband, zip and button fastening, side pockets, and welt back pockets. A relaxed fit for a casual yet not oversized silhouette. The linen and cotton blend combines the softness of cotton with the structure of linen to create a textured, breathable fabric with a beautiful drape.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1283074001.html\"},{\"id\":\"crepe-viscose-jersey-dress-abyss-demosite\",\"title\":\"Jersey Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Navy\",\"hex\":\"#222638\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-viscose-jersey-dress-abyss-demosite/ae46f85d-9f01-0000-0b00-aa96f23948a7.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-viscose-jersey-dress-abyss-demosite/ae46f85d-9f01-0000-0b00-782d404e324c.jpeg\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"relaxed-fit-t-shirt-demo-site\",\"title\":\"Relaxed-Fit T-Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Gray\",\"hex\":\"#656a72\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$12.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/6c226c1a-a001-0000-0b00-6276ad052655.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/1a226c1a-a001-0000-0b00-e98fd7d6ddca.png\"}]},{\"color\":{\"name\":\"White\",\"hex\":\"#ffffff\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$12.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/ccb8a14c-9f01-0000-0b00-784e1fae6a77.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/d2b8a14c-9f01-0000-0b00-ec515263934b.png\"}]}],\"description\":\"Relaxed-fit T-shirt in medium-weight cotton jersey with a casual but not oversized silhouette. Ribbed round neck, dropped shoulders, and a straight-cut hem.\",\"buy_link\":\"https://www2.hm.com/en_us/productpage.1309319012.html\"},{\"id\":\"floral-print-pants\",\"title\":\"Floral-Print Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Floral\",\"hex\":\"#bf9677\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$200.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/d909b6b9-9f01-0000-0b00-f48e31d3b35d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/d809b6b9-9f01-0000-0b00-b2112cd7a0e3.png\"}]},{\"color\":{\"name\":\"Black Floral-Print\",\"hex\":\"#2a242b\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$200.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/1b2fb6b9-9f01-0000-0b00-4e94e870165f.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/202fb6b9-9f01-0000-0b00-63714f3ee264.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\"},{\"id\":\"izel-sweater-black-demosite\",\"title\":\"Sweater - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\",\"hex\":\"#181619\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$358\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/izel-sweater-black-demosite/08c4e16e-a001-0000-0b00-5a680f212545.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/izel-sweater-black-demosite/d4c4e16e-a001-0000-0b00-af88a3995e97.jpg\"}]}],\"description\":\"An essential turtleneck bodysuit crafted from a flattering knit blend.\\n— Turtleneck\\n— Snap closure\\n— Knit blend\\n— Figure hugging fabric\",\"buy_link\":\"https://cultgaia.com/products/izel-sweater-black\"},{\"id\":\"couture-virgin-wool-blend-mini-dress-demosite\",\"title\":\"Couture Mini Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/white\",\"hex\":\"#181619\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/couture-virgin-wool-blend-mini-dress-demosite/1bfd1b5e-9f01-0000-0b00-6d49ef98ed30.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/couture-virgin-wool-blend-mini-dress-demosite/1efd1b5e-9f01-0000-0b00-a0ea46aa07f3.png\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"printed-shorts\",\"title\":\"Blue Embroidered Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"White\",\"hex\":\"#91c1cd\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/printed-shorts/d6241ec8-9f01-0000-0b00-e0a14ce132f3.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/printed-shorts/ae241ec8-9f01-0000-0b00-ee3856729ec1.png\"}]}],\"description\":\"https://isleofmonday.com/products/roberto-cavalli-fw-2002-patchwork-shorts\",\"buy_link\":\"https://isleofmonday.com/products/roberto-cavalli-fw-2002-patchwork-shorts\"},{\"id\":\"simkhai-laia-bustier-strapless-maxi-dress\",\"title\":\"Laia Bustier Strapless Maxi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black Multi\"},\"size_groups\":[{\"sizes\":[\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$695.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/simkhai-laia-bustier-strapless-maxi-dress/738bdb81-a001-0000-0b00-30082a9fa482.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/simkhai-laia-bustier-strapless-maxi-dress/998adb81-a001-0000-0b00-8470d4c0d00a.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/simkhai-laia-bustier-strapless-maxi-dress/d48bdb81-a001-0000-0b00-f3b8d6801f19.png\"}]}],\"description\":\"Features\\nStraight neck\\nZipper closure at back\\nStrapless\\nDrape detail at left hip\\nColor-blocked design\\nTextured design\\nLined\\nImported\\nSize & Fit\\nFits true to size, order your normal size\\nDesigned for a floor-length look\\nApprox. 54.5\\\" from shoulder to hem, based on a size 4\\nMaterials & Care\\n97% polyester/3% spandex; lining: 100% polyester\\nDry clean\",\"buy_link\":\"https://www.bloomingdales.com/shop/product/simkhai-laia-bustier-strapless-maxi-dress?ID=6251579&utm_source=rakuten&utm_medium=affiliate&utm_campaign=affiliates&ranMID=13867&ranEAID=0c5b5rpoqTU&ranSiteID=0c5b5rpoqTU-05Y_FxH7GpR5oqWyPXSZTA&LinkshareID=0c5b5rpoqTU-05Y_FxH7GpR5oqWyPXSZTA&m_sc=aff&PartnerID=LINKSHARE&cm_mmc=LINKSHARE-_-n-_-n-_-n&ranPublisherID=0c5b5rpoqTU&ranLinkID=1&ranLinkTypeID=10&pubNAME=Vogue\"},{\"id\":\"renesme-dress-cheetah\",\"title\":\"Renesme Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cheetah\",\"hex\":\"#bd9068\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$528.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/renesme-dress-cheetah/d8c7b8b9-9f01-0000-0b00-eb61ca59c394.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/renesme-dress-cheetah/d6c7b8b9-9f01-0000-0b00-c254e75d95b0.png\"}]}],\"description\":\"A silk twill midi dress featuring a high neckline and a classic cheetah print.\\n\\n— Midi length\\n\\n— High neck\\n\\n— Adjustable straps\\n\\n— Silk twill\",\"buy_link\":\"https://cultgaia.com/products/renesme-dress-cheetah?variant=43517236248650\"},{\"id\":\"ralphlauren-polo-play-thong-sandal-limeade\",\"title\":\"Polo Play Leather Thong Sandal\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Limeade\"},\"size_groups\":[{\"sizes\":[\"5\",\"5.5\",\"6\",\"6.5\",\"7\",\"7.5\",\"8\",\"8.5\",\"9\",\"9.5\",\"10\",\"11\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$209.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ralphlauren-polo-play-thong-sandal-limeade/bd5edb81-a001-0000-0b00-d3de65e8ff4e.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ralphlauren-polo-play-thong-sandal-limeade/db5edb81-a001-0000-0b00-56c604656b10.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ralphlauren-polo-play-thong-sandal-limeade/bf5edb81-a001-0000-0b00-57e83949789b.jpg\"}]}],\"description\":\"Part of our Polo Play collection, these thong sandals are crafted with full-grain sheep leather in a vibrant selection of colors inspired by Ralph Lauren's iconic Polo shirt. The minimalist silhouette is debossed with our signature Pony at the strap. 0.25\\\" (5mm) heel height. Thong silhouette. Slip-on styling. Upper and lining: 100% leather. Imported.\",\"buy_link\":\"https://www.ralphlauren.com/women-footwear-shoes/polo-play-leather-thong-sandal/0080278625.html\"},{\"id\":\"pucci-printed-mesh-maxi-dress\",\"title\":\"Printed Mesh Maxi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Beige Print\"},\"size_groups\":[{\"sizes\":[\"IT38\",\"IT40\",\"IT42\",\"IT44\",\"IT46\",\"IT48\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1060\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pucci-printed-mesh-maxi-dress/ec57db81-a001-0000-0b00-376d50e4fca5.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pucci-printed-mesh-maxi-dress/cb57db81-a001-0000-0b00-b84c44920403.jpg\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pucci-printed-mesh-maxi-dress/ce57db81-a001-0000-0b00-d0f508615e3e.jpg\"}]}],\"description\":\"PUCCI's maxi dress is crafted in Italy from tonal brown mesh with a swirling, wave-like print. Designed in a classic column silhouette that falls to a full length. All-over printing means each piece is one of a kind.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/pucci/clothing/maxi-dresses/printed-mesh-maxi-dress/46376663163078433\"},{\"id\":\"gauze-shirt-boxy-fit\",\"title\":\"Gauze Shirt in Boxy Fit\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Indigo\",\"hex\":\"#3f4f70\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/37b0f1b9-9f01-0000-0b00-0f7af349d4d9.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/3ab0f1b9-9f01-0000-0b00-c4d304c379e7.png\"}]},{\"color\":{\"name\":\"Beige\",\"hex\":\"#9e927f\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/dde0f1b9-9f01-0000-0b00-f82ebbcd62fd.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/e0e0f1b9-9f01-0000-0b00-81561b33814d.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#191618\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/63fdf1b9-9f01-0000-0b00-fec4e75c6441.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/17fdf1b9-9f01-0000-0b00-2bdb8be55847.png\"}]}],\"description\":\"Gauze weave with crinkled texture. Dropped shoulder, long sleeves with button cuffs. Spread collar, button front.\",\"buy_link\":\"https://www.gapfactory.com/browse/product.do?pid=1176021021&vid=1&pcid=1052118&cid=1052118&nav=meganav%3AMen%3ANew+%26+Featured%3ANew+Arrivals#pdp-page-content\"},{\"id\":\"regular-fit-shorts-demo-site\",\"title\":\"Striped Shorts\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cream/Stripes\",\"hex\":\"#cec6b4\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$19.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shorts-demo-site/28fdf924-9f01-0000-0b00-b13f9c967197.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shorts-demo-site/ccfcf924-9f01-0000-0b00-0edf59549ab0.png\"}]}],\"description\":\"Shorts in a textured cotton blend fabric with an elasticated waistband and drawstring. Discreet side pockets and an inset back pocket. Standard fit for a classic and comfortable silhouette.\",\"buy_link\":\"https://www2.hm.com/en_us/men/products/shorts.html?patterns=Striped&id=aa14\"},{\"id\":\"canvas-baggy-trouser-jeans\",\"title\":\"Canvas Baggy Trouser Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Indigo\",\"hex\":\"#131c32\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$50.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/6f81ecb9-9f01-0000-0b00-7e21895c8984.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/7081ecb9-9f01-0000-0b00-2f048368f461.png\"}]},{\"color\":{\"name\":\"Striped\",\"hex\":\"#7e909b\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$50.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/5aa1ecb9-9f01-0000-0b00-28c298b882d8.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/53a1ecb9-9f01-0000-0b00-4929287ddfe3.png\"}]}],\"description\":\"A fit that moves freely. Low slung with a slouchy, loose leg. A baggy canvas jean in a dark indigo wash. Zip fly, front slant pockets and back button-flap patch pockets.\",\"buy_link\":\"https://www.gap.com/browse/product.do?pid=801572002&vid=1#pdp-page-content\"},{\"id\":\"slim-fit-blouse-in-cotton-with-peplum-hem-demosite\",\"title\":\"Slim-Fit Blouse\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"White\",\"hex\":\"#ffffff\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/e9fd661a-a001-0000-0b00-2c40bfd2559e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/a3fc661a-a001-0000-0b00-720a6635427f.png\"}]},{\"color\":{\"name\":\"Blue\",\"hex\":\"#b4cff4\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/2ea8671a-a001-0000-0b00-03c06e6ac6c5.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/fda6671a-a001-0000-0b00-3db5feb46583.png\"}]},{\"color\":{\"name\":\"Mint Green\",\"hex\":\"#d2e3d7\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/0c3c681a-a001-0000-0b00-4918b93026fa.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/db3a681a-a001-0000-0b00-e08a7fb0acde.png\"}]},{\"color\":{\"name\":\"Brown\",\"hex\":\"#765140\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/2127691a-a001-0000-0b00-41189d5d7afc.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/f925691a-a001-0000-0b00-86bb9c110fe6.png\"}]}],\"description\":\"With a defined fit flaring to an elegant peplum hem, this HUGO Womenswear blouse is crafted in crisp cotton poplin. Embroidered logo below rear collar.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/slim-fit-blouse-in-cotton-with-peplum-hem/hbna50562961_100.html#cgid=11100\"},{\"id\":\"braiden-top-wren-demosite\",\"title\":\"Braiden Top - Wren\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"WREN\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$898\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/braiden-top-wren-demosite/a13be16e-a001-0000-0b00-e09ce4de2501.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/braiden-top-wren-demosite/7d3ce16e-a001-0000-0b00-e0d9c60f6711.jpg\"}]}],\"description\":\"A braided cotton corset top with thin straps and a sculpted bodice.\\n— Cotton utility fabrication\\n— Braided bodice\\n— Thin straps\\n— Zipper closure\",\"buy_link\":\"https://cultgaia.com/products/braiden-top-wren\"},{\"id\":\"katya-sculpted-bow-romper\",\"title\":\"Sculpted Bow Romper\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/White\",\"hex\":\"#15181d\"},\"size_groups\":[{\"sizes\":[\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$395.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/katya-sculpted-bow-romper/8508b818-9f01-0000-0b00-93500900b1ac.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/katya-sculpted-bow-romper/7e08b818-9f01-0000-0b00-98abf0e2024a.png\"}]}],\"description\":\"A romper that looks like the chicest mini dress. With hidden inner shorts, our Katya guarantees comfort and ease of movement. It’s designed in a matte satin crepe with sculpted seams that define the waist, creating a subtle hourglass shape. The oversized satin bow makes it feminine and fun, while the strapless neckline stays secure thanks to an inner silicone grip. It’s polished, playful, and super photogenic.\",\"buy_link\":\"https://www.aliceandolivia.com/katya-sculpted-bow-romper/CC603210802G980.html\"},{\"id\":\"toryburch-sequin-mesh-top\",\"title\":\"Sequin Mesh Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Snow White / Light Pink\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$299\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-sequin-mesh-top/44b0db81-a001-0000-0b00-bc6f66b6412b.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-sequin-mesh-top/43b0db81-a001-0000-0b00-5aae1b23ff12.jpg\"}]}],\"description\":\"Slim fit sequin mesh top. 92% lyocell, 8% elastane; 100% polyester sequin mesh. Dry clean.\",\"buy_link\":\"https://www.toryburch.com/en-us/clothing/tops/sequin-mesh-top/181581.html\"},{\"id\":\"calf-hair-trousers\",\"title\":\"Calf Hair Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Calf Hair\",\"hex\":\"#3b2b22\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$300.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/calf-hair-trousers/de4e15c8-9f01-0000-0b00-879eeec4306e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/calf-hair-trousers/da4e15c8-9f01-0000-0b00-181fe410a9f4.png\"}]}],\"description\":\"https://isleofmonday.com/products/jitrois-calf-hair-leather-trousers\",\"buy_link\":\"https://isleofmonday.com/products/jitrois-calf-hair-leather-trousers\"},{\"id\":\"gianina-dress-black-demosite\",\"title\":\"Gianina Knit Dress - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$698\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianina-dress-black-demosite/8495e16e-a001-0000-0b00-58f034ce3eb0.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianina-dress-black-demosite/8195e16e-a001-0000-0b00-fb7a5d9edb83.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianina-dress-black-demosite/b296e16e-a001-0000-0b00-6a0b92051987.jpg\"}]}],\"description\":\"Preorder - Estimated Ship Date is Between September 29th and October 5th\\nA high neck knit midi dress featuring an open back with\\nsculptural pearl-like stones woven into delicate crisscross straps.\\n— Midi length\\n— Open back\\n— Stone adorned straps\",\"buy_link\":\"https://cultgaia.com/products/gianina-dress-black\"},{\"id\":\"rohe-textured-fringe-boucle-top\",\"title\":\"Textured Fringe Boucle Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cream\"},\"size_groups\":[{\"sizes\":[\"30\",\"32\",\"34\",\"36\",\"38\",\"40\",\"42\",\"44\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"€495\",\"currency\":\"EUR\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rohe-textured-fringe-boucle-top/5c6ddb81-a001-0000-0b00-0f3c941811bc.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rohe-textured-fringe-boucle-top/5c6ddb81-a001-0000-0b00-301d24a6504d.jpg\"}]}],\"description\":\"A sleeveless top crafted from textured boucle fringe, with an open neckline and fringe detailing that continues down the sides of the garment. Finished with a button and keyhole opening at the back of the neck. 100% polyester.\",\"buy_link\":\"https://roheframes.com/collections/new-arrivals/products/textured-fringe-boucle-top-cream\"},{\"id\":\"slim-fit-jacket-in-washable-virgin-wool-demo-site\",\"title\":\"Slim-Fit Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Blue\",\"hex\":\"#2c3143\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$699.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-jacket-in-washable-virgin-wool-demo-site/931cba18-9f01-0000-0b00-c272acf8bb59.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-jacket-in-washable-virgin-wool-demo-site/841cba18-9f01-0000-0b00-7781e03af69f.png\"}]}],\"description\":\"In super-lightweight virgin wool with wrinkle recovery, this BOSS Menswear jacket offers easy-care appeal. Clean slim fit. Machine washable.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/slim-fit-jacket-in-washable-virgin-wool/hbna50561991_466.html\"},{\"id\":\"floral-print-shirt-demo-site\",\"title\":\"Floral Print Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Floral\",\"hex\":\"#61847d\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$300.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-shirt-demo-site/d749d2b9-9f01-0000-0b00-e4c9ae1dd612.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-shirt-demo-site/ce49d2b9-9f01-0000-0b00-48a278299208.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\"},{\"id\":\"ilkyaz-ozel-dusk-satin-fringed-pants\",\"title\":\"Dusk Satin Fringed Wide-Leg Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\"},\"size_groups\":[{\"sizes\":[\"FR 34\",\"FR 36\",\"FR 38\",\"FR 40\",\"FR 42\",\"FR 44\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$720\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ilkyaz-ozel-dusk-satin-fringed-pants/8cbbe16e-a001-0000-0b00-4b01be12e212.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ilkyaz-ozel-dusk-satin-fringed-pants/90bbe16e-a001-0000-0b00-0801d9753cf6.jpg\"}]}],\"description\":\"ILKYAZ OZEL's 'Dusk' pants are cut from satin in a structured wide-leg silhouette with a subtle sheen. An elongated belt ties around the waist and is trimmed with fringe that delicately sways with movement.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/ilkyaz-ozel/clothing/wide-leg/dusk-satin-fringed-wide-leg-pants/46376663163136455\"},{\"id\":\"toryburch-racerback-tank-003\",\"title\":\"Racerback Tank\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Brown/Navy/White Stripe\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$330\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-racerback-tank-003/e7a8db81-a001-0000-0b00-709c65190bbc.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-racerback-tank-003/eaa8db81-a001-0000-0b00-cca7fbb4b816.jpg\"}]}],\"description\":\"Crafted in Japanese cotton jersey, the striped tank features a scoop neck, sporty racerback and a removable flower pin. Designed for a slim fit.\",\"buy_link\":\"https://www.toryburch.com/en-us/clothing/tops/racerback-tank/185743.html?color=209\"},{\"id\":\"tapered-fit-trousers-in-washable-virgin-wool-demo-site\",\"title\":\"Tapered-Fit Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Blue\",\"hex\":\"#3a3c4f\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$299.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-fit-trousers-in-washable-virgin-wool-demo-site/f3dfba18-9f01-0000-0b00-beb3d85a545d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-fit-trousers-in-washable-virgin-wool-demo-site/9ddfba18-9f01-0000-0b00-17991d976ace.png\"}]}],\"description\":\"Offering easy care and modern style, these washable BOSS Menswear trousers are crafted in lightweight virgin wool. Tapered fit. Wrinkle resistant.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/tapered-fit-trousers-in-washable-virgin-wool/hbna50561986_466.html\"},{\"id\":\"wool-cashmere-cable-knit-mini-dress-demosite\",\"title\":\"Knit Mini Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\",\"hex\":\"#aa0333\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wool-cashmere-cable-knit-mini-dress-demosite/a2c6f05f-9f01-0000-0b00-b0528da206a8.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wool-cashmere-cable-knit-mini-dress-demosite/4ec6f05f-9f01-0000-0b00-0fd54fd65358.png\"}]}],\"description\":\"https://www.alexandermcqueen.com/en-gb/pr/wool-cashmere-cable-knit-mini-dress-848815Q1BE16062.html\",\"buy_link\":\"https://www.alexandermcqueen.com/en-gb/pr/wool-cashmere-cable-knit-mini-dress-848815Q1BE16062.html\"},{\"id\":\"bebe-dress-etched-floral\",\"title\":\"Bebe Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Floral\",\"hex\":\"#313648\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1598.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/bebe-dress-etched-floral/f46fa98f-9f01-0000-0b00-d70e0b513685.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/bebe-dress-etched-floral/8a6fa98f-9f01-0000-0b00-a56586c17215.png\"}]}],\"description\":\"A mini dress featuring bead and sequin embroidery in our etched floral pattern.\\n\\n— Mini length\\n\\n— Square neckline\\n\\n— Embroidered beaded floral print\\n\\n— Thin straps\",\"buy_link\":\"https://cultgaia.com/products/bebe-dress-etched-floral?variant=43517204594762\"},{\"id\":\"nike-ld1000-suede-black\",\"title\":\"LD-1000 Suede\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Sail/Gum Light Brown/Dark Smoke Grey\"},\"size_groups\":[{\"sizes\":[\"5\",\"5.5\",\"6\",\"6.5\",\"7\",\"7.5\",\"8\",\"8.5\",\"9\",\"9.5\",\"10\",\"10.5\",\"11\",\"11.5\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$67.97\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nike-ld1000-suede-black/65fae16e-a001-0000-0b00-ef7cecb6857d.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nike-ld1000-suede-black/7efae16e-a001-0000-0b00-22c9eec2508b.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nike-ld1000-suede-black/67fae16e-a001-0000-0b00-28939cf67e45.jpg\"}]}],\"description\":\"Back in 1977, the LD-1000 made waves with dramatically flared heel cushioning to support long-distance runners. The retro shape and Waffle outsole make it a staple comfortable enough for everyday wear. Upper combines leather and suede for durability. Foam midsole. Rubber outsole. Shown: Black/Sail/Gum Light Brown/Dark Smoke Grey.\",\"buy_link\":\"https://www.nike.com/t/ld-1000-suede-womens-shoes-gXu3Z9Gy\"},{\"id\":\"dress-with-japanese-sleeves-demo-site\",\"title\":\"Dress with Japanese Sleeves\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Brown\",\"hex\":\"#312b1e\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-japanese-sleeves-demo-site/6cc42647-9f01-0000-0b00-83cef88c5cd8.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-japanese-sleeves-demo-site/6ac42647-9f01-0000-0b00-fde14f354eba.png\"}]}],\"description\":\"Fitted midi dress in stretch knit. Features a boat neckline, kimono sleeves, and a gathered waist. Fully lined bodice.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1239334023.html\"},{\"id\":\"cotton-blouse-with-english-embroidery-demosite\",\"title\":\"Blouse with English Embroidery\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"pink\",\"hex\":\"#ebd0c9\"},\"size_groups\":[{\"sizes\":[],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$29.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cotton-blouse-with-english-embroidery-demosite/bc0ebe18-9f01-0000-0b00-083636c033b3.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cotton-blouse-with-english-embroidery-demosite/b90ebe18-9f01-0000-0b00-1700ffad62dd.png\"}]}],\"description\":\"Short cotton blouse with broderie anglaise and scalloped trim. Deep V-neck with flounce trim and open front with concealed hook-and-eye closure and a thin tie at the waist. Elbow-length sleeves with thin elastic and flounce trim at the cuffs, and elasticated seam with gathers at the waist to create a flared hem.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1332998002.html\"},{\"id\":\"saintlaurent-jill-bootie-stonish-beige\",\"title\":\"Jill Bootie\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Stonish Beige\"},\"size_groups\":[{\"sizes\":[\"6\",\"7\",\"7.5\",\"8\",\"8.5\",\"9\",\"9.5\",\"10\",\"11\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1700.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/saintlaurent-jill-bootie-stonish-beige/2d7adb81-a001-0000-0b00-f32688c378ed.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/saintlaurent-jill-bootie-stonish-beige/487adb81-a001-0000-0b00-51ddb584bc18.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/saintlaurent-jill-bootie-stonish-beige/307adb81-a001-0000-0b00-cfe19e0dd254.jpg\"}]}],\"description\":\"This butter-soft lambskin bootie crafted in Italy with a square pointed toe and tapered heel presents a clean and contemporary silhouette. 3 3/4\\\" (95mm) heel. Side zip closure. Leather upper, lining and sole. Made in Italy.\",\"buy_link\":\"https://www.nordstrom.com/s/jill-bootie-women/8802961\"},{\"id\":\"relaxed-fit-cotton-cargo-pants-demo-site\",\"title\":\"Cargo Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Light Beige\",\"hex\":\"#d1baa0\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$34.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/e57bbd18-9f01-0000-0b00-95a0360d164d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/dc7bbd18-9f01-0000-0b00-282f719b7284.png\"}]},{\"color\":{\"name\":\"Olive Green\",\"hex\":\"#605b44\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$34.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/c832e94c-9f01-0000-0b00-764ea888072b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/ce32e94c-9f01-0000-0b00-f1aaaf46eebf.png\"}]}],\"description\":\"Cargo pants in soft cotton canvas with a concealed drawstring waist and zip and snap button closure. Features slanted pockets, and concealed flap and snap button pockets on the legs and back. Stitched pleats at the knees. Relaxed fit for a casual yet not oversized silhouette.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1316423003.html\"},{\"id\":\"linen-dress-demo-site\",\"title\":\"Linen Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Polka Dot\",\"hex\":\"#23211f\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/da12c38a-9f01-0000-0b00-55d1b99514b7.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/ea12c38a-9f01-0000-0b00-a6ab2508e5d6.png\"}]},{\"color\":{\"name\":\"Off White\",\"hex\":\"#ebe7ec\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/4863c48a-9f01-0000-0b00-8f57b87986f6.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/b963c48a-9f01-0000-0b00-891128b7398a.png\"}]}],\"description\":\"Smooth linen blend.\\nTank straps.\\nSquare neckline, keyhole with button closure at back.\\nSelect styles have allover print.\",\"buy_link\":\"https://www.gapfactory.com/browse/product.do?pid=845008061&vid=1&tid=gfpl000071&kwid=1&ds_agid=23920023099-&gclsrc=aw.ds&gad_source=1&gad_campaignid=23925131477&gbraid=0AAAAAD_AT8tSTue6G-zdhXTsLQWQtgc5b&gclid=Cj0KCQjwjb3SBhDgARIsAMKiWzirn47hGYO4L8IMAK2VqbhGHzcf7CY7Gt32hFCbSjaC6S8stUlfVqAaAoJ8EALw_wcB#pdp-page-content\"},{\"id\":\"toryburch-mirror-embellished-cotton-dress\",\"title\":\"Mirror Embellished Cotton Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Pink / Gray\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1995\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-mirror-embellished-cotton-dress/82a1db81-a001-0000-0b00-550c70665b62.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-mirror-embellished-cotton-dress/82a1db81-a001-0000-0b00-35fba262b651.jpg\"}]}],\"description\":\"Hand-applied mirror embellishment covers this cotton dress, styled with spaghetti straps and a fitted silhouette that falls above the ankle. Ties at the back of the bodice with a hidden side zipper and hook-and-eye closure at the skirt.\",\"buy_link\":\"https://www.toryburch.com/en-us/clothing/dresses/mirror-embellished-cotton-dress/183267.html\"},{\"id\":\"canvas-relaxed-shirt-jacket\",\"title\":\"Canvas Relaxed Shirt Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Ecru Beige\",\"hex\":\"#968d86\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"60.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-relaxed-shirt-jacket/7751ecb9-9f01-0000-0b00-28e437ba3e17.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-relaxed-shirt-jacket/7751ecb9-9f01-0000-0b00-4b24347a5829.png\"}]}],\"description\":\"Smooth cotton canvas shirt jacket in a relaxed fit. Spread collar, button front. Long sleeves with button cuffs. Chest patch pocket, interior patch pocket, side welt pockets.\",\"buy_link\":\"https://www.gap.com/browse/product.do?pid=894748002&vid=1#pdp-page-content\"}]"), Il = /*#__PURE__*/ JSON.parse("[{\"id\":\"oscardelarenta-crystal-fringe-chandelier-earrings-demo\",\"title\":\"Crystal Fringe Chandelier Earrings\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Earring\"}],\"variants\":[{\"color\":{\"name\":\"Topaz\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$720.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-crystal-fringe-chandelier-earrings-demo/368decaa-a001-0000-0b00-6c4803e28be8.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-crystal-fringe-chandelier-earrings-demo/f08decaa-a001-0000-0b00-e30cea8537db.webp\"}]}],\"description\":\"A faceted crystal stud anchors cascading strands of shimmering rhinestones, creating a dramatic chandelier silhouette. The polished setting is dotted with scattered crystals that amplify the sparkle from every angle.\\n\\nMaterials: 75% Brass, 15% Glass.\\n\\nCare: Avoid harsh chemicals, lotions, and perfumes. Do not wear in pool/shower. Wipe with a damp microfiber cloth and store separately in a cloth pouch.\",\"buy_link\":\"https://www.oscardelarenta.com/products/crystal-fringe-chandelier-earrings-p26j911-top?variant=53069432717675\"},{\"id\":\"dominican-landscape-pencil-skirt\",\"title\":\"Dominican Landscape Pencil Skirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Blue green multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$21900.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/dominican-landscape-pencil-skirt/215797aa-a001-0000-0b00-93d9d425a52f.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/dominican-landscape-pencil-skirt/295797aa-a001-0000-0b00-0cf1cbc77e9c.webp\"}]}],\"description\":\"The Dominican Landscape print brings a painterly expression of place to this pencil skirt, nodding to Oscar de la Renta’s heritage and roots in the Dominican Republic. Sweeping palm trees and beach scenes unfold across the silhouette, capturing the warmth and vibrancy of the island.\\n\\n\",\"buy_link\":\"https://www.oscardelarenta.com/products/dominican-landscape-pencil-skirt-26pn401pta-bgt?variant=52676719804779\"},{\"id\":\"odlr-maple-leaves-faille-dress-grm\",\"title\":\"Maple Leaves Faille Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Green Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$4990\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-maple-leaves-faille-dress-grm/0f51a6a6-a001-0000-0b00-088e5d4720c6.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-maple-leaves-faille-dress-grm/2151a6a6-a001-0000-0b00-91cfc0546cb2.jpg\"}]}],\"description\":\"Sleeveless scoop-neck cocktail dress in green-multi maple leaf print faille.\",\"buy_link\":\"https://www.oscardelarenta.com/products/maple-leaves-faille-dress-26fn264fpf-grm\"},{\"id\":\"odlr-hibiscus-embroidered-knit-pullover-brn\",\"title\":\"Hibiscus Embroidered Knit Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Brown\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$1990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-hibiscus-embroidered-knit-pullover-brn/25cf52c5-a001-0000-0b00-b10e99040de2.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-hibiscus-embroidered-knit-pullover-brn/2dcf52c5-a001-0000-0b00-5660f9799cd1.png\"}]}],\"description\":\"Delicate hibiscus embroidery blooms across this refined knit pullover, adding dimensional texture to the clean silhouette. The softly structured shape is framed by a high neckline and ribbed trims for a polished finish.\",\"buy_link\":\"https://www.oscardelarenta.com/products/hibiscus-embroidered-knit-pullover-26pe159chi-brn\"},{\"id\":\"odlr-mixed-botanical-cropped-jacket-nav\",\"title\":\"Mixed Botanical Cropped Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Navy\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-cropped-jacket-nav/da8b3fa2-a001-0000-0b00-f3c4381029e4.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-cropped-jacket-nav/3a8c3fa2-a001-0000-0b00-c07a1d787e72.webp\"}]}],\"description\":\"A collared knit jacket in a refined navy wool-blend, with delicate embroidery that adds an artful dimension to the structured knit surface. A versatile layering piece that bridges tailoring and knitwear with ease. Long sleeves, collared neckline, unlined. Country of Origin: Italy. Style Code: 26FE187NEW_NAV. 97% Wool, 2% Polyamide, 1% Elastane. Dry clean only. Do not wash, bleach, iron, steam, or tumble dry.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-cropped-jacket-26fe187new-nav?variant=53342635000171\"},{\"id\":\"odlr-mixed-botanical-tie-detailed-blouse-bsm\",\"title\":\"Mixed Botanical Tie-Detailed Blouse\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blush Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2290.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-detailed-blouse-bsm/70ccddaa-a001-0000-0b00-856a9e1f7577.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-detailed-blouse-bsm/be43ddaa-a001-0000-0b00-19e2edef59a5.jpg\"}]}],\"description\":\"A garden in full bloom rendered in lightweight cotton voile, this blouse captures the season's botanical spirit with an all-over mixed floral print. A delicate tie detail at the neckline lends an effortlessly refined finish.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-tie-detailed-blouse-26fn716mbv-bsm\"},{\"id\":\"odlr-embossed-mini-tro-bag-cog\",\"title\":\"Embossed Mini TRO Bag\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Accessory\"}],\"variants\":[{\"color\":{\"name\":\"Cognac\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$3390.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-embossed-mini-tro-bag-cog/920c10c5-a001-0000-0b00-f97edc895300.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-embossed-mini-tro-bag-cog/990c10c5-a001-0000-0b00-c6ce7591721b.jpg\"}]}],\"description\":\"The house's signature Mini TRO silhouette is rendered in richly textured embossed calfskin, the structured crossbody form offering a refined versatility suited to any occasion. A push-lock closure and chain strap complete the polished, compact design.\",\"buy_link\":\"https://www.oscardelarenta.com/products/embossed-mini-tro-bag-26fh003ecf-cog\"},{\"id\":\"odlr-faded-mixed-botanical-denim-pant-whm\",\"title\":\"Faded Mixed Botanical Denim Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"White Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-faded-mixed-botanical-denim-pant-whm/dbaa33c5-a001-0000-0b00-73799ddf2284.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-faded-mixed-botanical-denim-pant-whm/dbaa33c5-a001-0000-0b00-a22ae8164841.jpg\"}]}],\"description\":\"The season's faded mixed botanical print is applied to cotton denim for a relaxed pant with a distinctive, artisanal aesthetic. The washed treatment lends the botanical motifs a painterly, sun-faded quality.\",\"buy_link\":\"https://www.oscardelarenta.com/products/faded-mixed-botanical-denim-pant-26fn3182fbn-whm\"},{\"id\":\"odlr-beaded-floral-embroidered-pencil-dress-ivr\",\"title\":\"Beaded Floral Embroidered Pencil Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Ivory\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$5990\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/042b60a7-a001-0000-0b00-41bfdd1e6785.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/20f35fa7-a001-0000-0b00-533bdaa5e4c1.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/e7ab61a7-a001-0000-0b00-668786ace10e.png\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/e0ab61a7-a001-0000-0b00-e15740fef422.png\"}]}],\"description\":\"Beaded floral embroidery is worked across the surface of this short-sleeve stretch wool cocktail dress, each bloom adding a luminous, celebratory dimension. The ivory colorway renders the embellishment in full relief.\",\"buy_link\":\"https://www.oscardelarenta.com/products/beaded-floral-embroidered-pencil-dress-26fe639dsw-ivr\"},{\"id\":\"tinos-dress\",\"title\":\"Tinos Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Dove Grey\",\"hex\":\"#595450\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$660.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/ee289024-9c01-0000-0b00-3b00c93d8ed9.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/e7319024-9c01-0000-0b00-a44fe9a0d5f1.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/732a9024-9c01-0000-0b00-e990a140bf47.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/762a9024-9c01-0000-0b00-bb30b5151c4e.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/tinos-dress/49d9c5d7-a001-0000-0b00-8137fc1ed7d3.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/tinos-dress/93d9c5d7-a001-0000-0b00-7c58828f9333.jpg\"},{\"tag\":\"back_flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/tinos-dress/3082b0d7-a001-0000-0b00-314251c4d555.png\"},{\"tag\":\"back_model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/2f319024-9c01-0000-0b00-aa77af0d3e84.jpg\"}]}],\"description\":\"A long-sleeve rib-knit bodice meets a pleated crepe midi skirt, cinched at the waist by a double grey leather belt and set with rows of metal eyelets. A concealed zip runs the length of the back. Fabric: knit & crepe. Fit: true to size — MAYKA's model is 164 cm (bust 82, waist 64, hips 91 cm) and wears XS. Sizes XS–XL follow EU 34–42; also made in Tall (6 cm longer).\",\"buy_link\":\"https://maykastore.com/products/tinos-dress\"},{\"id\":\"odlr-mixed-botanical-embroidered-oversized-pullover-bru\",\"title\":\"Mixed Botanical Embroidered Oversized Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Brown Multi\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$3990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-embroidered-oversized-pullover-bru/654cd8aa-a001-0000-0b00-a5966393b007.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-embroidered-oversized-pullover-bru/26ddd6aa-a001-0000-0b00-05a6f2bef2a6.jpg\"},{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-embroidered-oversized-pullover-bru/3545d7aa-a001-0000-0b00-602a0f3e78a2.png\"}]}],\"description\":\"A large-scale floral intarsia pattern is worked entirely by hand into this luxurious wool-cotton pullover, each bloom rendered with the precision of a painting. A singular piece that carries the craft and artistry of the house.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-embroidered-oversized-pullover-26fe117fik-bru\"},{\"id\":\"oscardelarenta-mini-poppy-demo\",\"title\":\"The Mini Poppy\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Accessory\"}],\"variants\":[{\"color\":{\"name\":\"Saltwater\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$3890.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-mini-poppy-demo/b436edaa-a001-0000-0b00-5bb42c7bae36.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-mini-poppy-demo/7137edaa-a001-0000-0b00-8bfa6317ac84.webp\"}]}],\"description\":\"The Dominican Landscape print brings a painterly expression of place to this compact handbag, nodding to Oscar de la Renta’s heritage and roots in the Dominican Republic. Crafted from full-grain Taurillon leather with a natural pebbled finish, this petite silhouette balances sophistication with practicality, featuring a top handle and removable shoulder strap. A special-edition anniversary embossing commemorates the House’s 60th year.\\n\\nMaterials: 100% Bull Leather.\\n\\nCare: Remove dust with a dry or slightly damp cloth. Avoid prolonged sun exposure and heat sources. Store in original packaging in a cool, dry place. For stains, wipe with lukewarm water or mild soapy water.\",\"buy_link\":\"https://www.oscardelarenta.com/products/the-mini-poppy-26ph1592pcl-slw?variant=52676734714219\"},{\"id\":\"odlr-mixed-botanical-midi-skirt-bru\",\"title\":\"Mixed Botanical Midi Skirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Brown Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2290.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-midi-skirt-bru/4d5896c5-a001-0000-0b00-49a097b0ce4a.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-midi-skirt-bru/4b5896c5-a001-0000-0b00-8be7417e570d.jpg\"}]}],\"description\":\"The season's mixed botanical print in brown multi is cut into a full circle skirt in stretch cotton, the sweep of the hem allowing the vibrant print to move beautifully. A versatile, celebratory piece that pairs effortlessly with the season's knits. Circle skirt silhouette, unlined. Country of Origin: Italy. Style Code: 26FN4042MCK_BRU. 97% Cotton, 3% Elastane. Machine wash cold, do not bleach, tumble dry low, iron on low heat if needed.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-midi-skirt-26fn4042mck-bru?variant=53342642930027\"},{\"id\":\"odlr-mixed-botanical-silk-twill-pant-bmm\",\"title\":\"Mixed Botanical Silk Twill Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Blue Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2690.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-silk-twill-pant-bmm/46eba7b5-a001-0000-0b00-cafb3e97b0cf.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-silk-twill-pant-bmm/f2eaa7b5-a001-0000-0b00-97c1980ca9ab.jpg\"}]}],\"description\":\"The season's mixed botanical print in blue multi is rendered in silk twill for a fluid pant that moves beautifully. The print brings an exuberant painterly quality to the most refined of wardrobe staples.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-silk-twill-pant-26fn3092mbi-bmm\"},{\"id\":\"oscardelarenta-metallic-tassel-earrings-demo\",\"title\":\"Metallic Beaded Tassel Clip-On Earrings\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Earring\"}],\"variants\":[{\"color\":{\"name\":\"Pink\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$450.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-metallic-tassel-earrings-demo/0c4fecaa-a001-0000-0b00-a65ac723f219.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-metallic-tassel-earrings-demo/734fecaa-a001-0000-0b00-749de03edfe0.webp\"}]}],\"description\":\"A long column of metallic glass beads tapers into a dramatic tassel, the navy or pink palette lending a refined, jewel-toned depth. Each earring is handcrafted, making every pair a subtly individual creation.\\n\\nMaterials: 50% Crystal Glass, 25% Polyester Thread, 15% Brass, 10% Cotton.\\n\\nCare: Avoid harsh chemicals, lotions, and perfumes. Do not wear in pool/shower. Wipe with a damp microfiber cloth and store separately in a cloth pouch.\",\"buy_link\":\"https://www.oscardelarenta.com/products/metallic-beaded-tassel-clip-on-earrings-f26j114-pnk?variant=53342647124331\"},{\"id\":\"odlr-knot-clutch-blk\",\"title\":\"Knot Clutch\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Accessory\"}],\"variants\":[{\"color\":{\"name\":\"Black\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$2590.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-knot-clutch-blk/19cc34c5-a001-0000-0b00-b80ef6285a33.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-knot-clutch-blk/c25d34c5-a001-0000-0b00-1f4e2e54e4b2.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-knot-clutch-blk/c25d34c5-a001-0000-0b00-52e964358e1b.jpg\"}]}],\"description\":\"This clutch showcases a clasp intricately knotted into a fluid, sculptural design, subtly evoking the interlocking Oscar 'O' emblem in an abstract form. The clutch's sleek sheen enhances its refined presence, while a removable shoulder strap adds versatility, allowing it to be worn hands-free or carried as a statement piece.\",\"buy_link\":\"https://www.oscardelarenta.com/products/knot-clutch-00nh187clf-blk\"},{\"id\":\"odlr-dominican-landscape-oversized-pullover-bgt\",\"title\":\"Dominican Landscape Oversized Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blue Green Multi\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2690.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-landscape-oversized-pullover-bgt/1bac9eaa-a001-0000-0b00-d068bbb23b1f.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-landscape-oversized-pullover-bgt/83ac9eaa-a001-0000-0b00-d25799134c03.webp\"}]}],\"description\":\"The Dominican Landscape print brings a painterly expression of place to this oversized pullover, nodding to Oscar de la Renta’s heritage and roots in the Dominican Republic. Long sleeves, crew neckline, oversized silhouette, ribbed trim, pullover style. 100% Virgin Wool. Dry clean only.\",\"buy_link\":\"https://www.oscardelarenta.com/products/dominican-landscape-oversized-pullover-26pn104liv-bgt?variant=52676711743851\"},{\"id\":\"psara-set-top\",\"title\":\"Psara Set — Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Brown Paisley\",\"hex\":\"#8a5447\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$825.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/6ab19424-9c01-0000-0b00-29a03b73e919.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/9fb29424-9c01-0000-0b00-dae68d8dd576.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/e2c69424-9c01-0000-0b00-af16cb2a6570.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/34b29424-9c01-0000-0b00-a344e51d9e43.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/33c89424-9c01-0000-0b00-3caed1b65ee6.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-top/66e3c5d7-a001-0000-0b00-79d52f7f3362.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-top/79e3c5d7-a001-0000-0b00-bf323470d77d.jpg\"},{\"tag\":\"back_flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-top/02bab0d7-a001-0000-0b00-d0769e83b55c.png\"},{\"tag\":\"back_model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/50c09424-9c01-0000-0b00-05f16100f709.jpg\"}]}],\"description\":\"The jacket of the Psara set: a fitted brown gabardine shirt-jacket in an all-over bandana paisley print, with a point collar, buttoned cuffs and brown leather X cross-stitching running down both back princess seams. Sold as a set with the Psara wide-leg trousers. Fit: fitted, true to size — MAYKA's model is 164 cm and wears XS. Sizes XS–XL follow EU 34–42.\",\"buy_link\":\"https://maykastore.com/products/psara-set\"},{\"id\":\"odlr-turtleneck-pullover-bsh\",\"title\":\"Turtleneck Wool Short-Sleeve Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blush\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$1290\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-turtleneck-pullover-bsh/fdf4a5a1-a001-0000-0b00-7b72c846c447.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-turtleneck-pullover-bsh/63f5a5a1-a001-0000-0b00-cec5bff51fe8.webp\"}]}],\"description\":\"A fold-over turtleneck in pure wool defines this short-sleeve pullover, creating a graceful, layered neckline that brings a modern sensibility to a classic silhouette. Short sleeves; fold-over turtleneck; unlined. 100% wool. Dry clean only. Made in Italy.\",\"buy_link\":\"https://www.oscardelarenta.com/products/turtleneck-wool-short-sleeve-pullover-26fn104mmr-bsh?variant=53342638604651\"},{\"id\":\"odlr-ombre-crewneck-pullover-pbw\",\"title\":\"Ombré Crewneck Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Pink/Brown\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$1990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-ombre-crewneck-pullover-pbw/ea6a77aa-a001-0000-0b00-99a5b41c369b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-ombre-crewneck-pullover-pbw/c3dd75aa-a001-0000-0b00-6adf0220270e.jpg\"},{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-ombre-crewneck-pullover-pbw/836376aa-a001-0000-0b00-6a376efefe9f.png\"}]}],\"description\":\"A painterly print covers this crew-neck wool pullover in a pink and brown palette, bringing the season's botanical spirit to the knitwear category. The fine wool base provides warmth and a refined, polished hand.\",\"buy_link\":\"https://www.oscardelarenta.com/products/ombre-crewneck-pullover-26fn110omp-pbw\"},{\"id\":\"odlr-mixed-botanical-tie-neck-cardigan-bsm\",\"title\":\"Mixed Botanical Tie-Neck Cardigan\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blush Multi\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-neck-cardigan-bsm/a08e81aa-a001-0000-0b00-66c493f2313e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-neck-cardigan-bsm/223181aa-a001-0000-0b00-55f91cbd75ca.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-neck-cardigan-bsm/dbce87aa-a001-0000-0b00-1c1394c8e4bd.png\"}]}],\"description\":\"Part of the season's coordinated twinset, this all-over floral cardigan pairs beautifully with its matching tank. The cotton-viscose blend provides a fluid hand with just enough structure.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-tie-neck-cardigan-26fn129fts-bsm\"},{\"id\":\"demo-site-mixed-botanical-embroidered-dress\",\"title\":\"Mixed Botanical Embroidered Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Navy\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/demo-site-mixed-botanical-embroidered-dress/18871ba2-a001-0000-0b00-7587d0c631b9.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/demo-site-mixed-botanical-embroidered-dress/20871ba2-a001-0000-0b00-e6010c74da49.jpg\"}]}],\"description\":\"A refined A-line knit dress in navy with delicate embroidery that brings a quiet luxuriance to the clean silhouette. The wool-blend fabric provides both comfort and a polished, structured drape.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-embroidered-dress-26fe186new-nav\"},{\"id\":\"odlr-mixed-botanical-off-shoulder-dress-bsm\",\"title\":\"Mixed Botanical Off-Shoulder Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Blush Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$6290\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-off-shoulder-dress-bsm/0c90d1a6-a001-0000-0b00-58971468447f.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-off-shoulder-dress-bsm/74e9d1a6-a001-0000-0b00-be5dfffe5fa1.png\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-off-shoulder-dress-bsm/0590d1a6-a001-0000-0b00-3c3fe9c61e3c.jpg\"}]}],\"description\":\"Off-shoulder midi dress in mixed botanical print with a twisted, folded neckline. Fitted bodice with a full, gathered skirt. 100% Cotton. Machine wash cold, do not bleach, tumble dry low, iron on low heat if needed.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-off-shoulder-dress-26fn235mvb-bsm\"},{\"id\":\"psara-set-bottom\",\"title\":\"Psara Set — Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Brown Paisley\",\"hex\":\"#8a4d3e\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$825.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/d4e59424-9c01-0000-0b00-14492d3a64aa.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/9be69424-9c01-0000-0b00-2d23ac9f3ac1.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/98f89424-9c01-0000-0b00-c80e39214817.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/22e89424-9c01-0000-0b00-33006640720b.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/80fa9424-9c01-0000-0b00-7746cb9c0f40.jpg\"},{\"tag\":\"back_flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-bottom/1ed7b0d7-a001-0000-0b00-e879e6211c00.png\"},{\"tag\":\"back_model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/a5f49424-9c01-0000-0b00-fb56fe063d71.jpg\"}]}],\"description\":\"The trousers of the Psara set: high-rise wide-leg trousers in brown gabardine with an all-over bandana paisley print, a clean seat and straight full-length legs. Sold as a set with the Psara jacket. Fit: true to size — MAYKA's model is 164 cm and wears XS. Sizes XS–XL follow EU 34–42; also made in Tall (6 cm longer).\",\"buy_link\":\"https://maykastore.com/products/psara-set\"},{\"id\":\"odlr-dominican-mixed-floral-wide-leg-pant-bru\",\"title\":\"Dominican Mixed-Floral Wide Leg Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Brown Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-mixed-floral-wide-leg-pant-bru/75f31bc5-a001-0000-0b00-3d4c2fa41e8f.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-mixed-floral-wide-leg-pant-bru/75f31bc5-a001-0000-0b00-a4052cd9832d.jpg\"}]}],\"description\":\"Crafted from silk twill, these wide-leg pants feature the Dominican Mixed-Floral print, bringing a vibrant, painterly expression to the silhouette. The elastic waistband offers a relaxed, comfortable fit, balancing ease with fluid movement.\",\"buy_link\":\"https://www.oscardelarenta.com/products/dominican-mixed-floral-wide-leg-pant-26pn331moc-bru\"},{\"id\":\"odlr-chine-mixed-floral-sweetheart-gown-swm\",\"title\":\"Chiné Dominican Mixed-Floral Chiffon Sweetheart Gown\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Saltwater Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$10990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-chine-mixed-floral-sweetheart-gown-swm/a9ed9eaa-a001-0000-0b00-8f5e2f8c9642.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-chine-mixed-floral-sweetheart-gown-swm/beed9eaa-a001-0000-0b00-048fe63a617c.webp\"}]}],\"description\":\"A vibrant array of Dominican florals unfolds across this silk chiffon gown, rendered in a Chiné print inspired by the traditional weaving technique. Long sleeves with button cuffs, off shoulder, sweetheart neckline, floor-sweeping hemline with short train, concealed back zipper. 100% Silk, 100% Polyamide. Dry clean only.\",\"buy_link\":\"https://www.oscardelarenta.com/products/chine-dominican-mixed-floral-chiffon-sweetheart-gown-26pn052cms-swm\"},{\"id\":\"odlr-wool-wide-leg-pant-ind\",\"title\":\"Wool Wide-Leg Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Indigo\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2690.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-wool-wide-leg-pant-ind/176ab2b5-a001-0000-0b00-f292101d0fe5.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-wool-wide-leg-pant-ind/196ab2b5-a001-0000-0b00-359e49bbcf1d.jpg\"}]}],\"description\":\"The season's indigo wool drill tailoring is cut into a refined straight-leg trouser with clean, precise lines. A wardrobe foundation that pairs seamlessly with the coordinating tailored separates.\",\"buy_link\":\"https://www.oscardelarenta.com/products/wool-wide-leg-pant-26fn320wdt-ind\"},{\"id\":\"chine-palm-leaves-jacket\",\"title\":\"Chiné Palm Leaves Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Espresso Ivory\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$3490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/chine-palm-leaves-jacket/9b5ec0aa-a001-0000-0b00-10f081694ece.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/chine-palm-leaves-jacket/fd5ec0aa-a001-0000-0b00-2af4f33ea171.webp\"}]}],\"description\":\"Long Sleeves, Shoulder Pads, Open Front, Front Flap Pockets. 100% Polyester; Lining: 100% Silk. Dry clean only. Style Code: 26PN509LCV_EIV. Country of Origin: Italy.\",\"buy_link\":\"https://www.oscardelarenta.com/products/chine-palm-leaves-jacket-26pn509lcv-eiv?variant=52676722753899\"}]"), Ll = {
+var Il = /*#__PURE__*/ JSON.parse("[{\"id\":\"roanne-panelled-knit-maxi-dress-demosite\",\"title\":\"Knit Maxi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Gold\",\"hex\":\"#c9b07e\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/roanne-panelled-knit-maxi-dress-demosite/f6a01f5e-9f01-0000-0b00-46521b5a4bd9.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/roanne-panelled-knit-maxi-dress-demosite/faa01f5e-9f01-0000-0b00-0277b8b29a81.png\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"dalida-knit-dress\",\"title\":\"Dalida Knit Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#201f22\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$628.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dalida-knit-dress/676bdfb9-9f01-0000-0b00-4eac2c59a2cd.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dalida-knit-dress/666bdfb9-9f01-0000-0b00-ba9b1c869102.png\"}]}],\"description\":\"A knit midi dress featuring an open back with bow details.\\n\\n— Midi length\\n\\n— Mock neck\\n\\n— Double bow details in back\\n\\n— Flattering knit blend\",\"buy_link\":\"https://cultgaia.com/products/dalida-dress-black?variant=43517210525770\"},{\"id\":\"nina-embellished-midi-gown\",\"title\":\"Embellished Midi Gown\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"yellow\",\"hex\":\"#ccb100\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$3995.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nina-embellished-midi-gown/d3a8b418-9f01-0000-0b00-d455803e64cb.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nina-embellished-midi-gown/dca8b418-9f01-0000-0b00-78434fc81ee2.png\"}]}],\"description\":\"Designed to turn heads, our best-selling Nina dress is back to drop jaws. This fully beaded beauty is a disco ball’s dream, dripping in multicolored, hand-embellished crystals on a butter yellow base adorned with intricate beading. Its bodycon silhouette sculpts the waist as it scintillates, while the sweetheart neckline and studded straps beautifully illuminate the decolletage (and the dancefloor). This ankle-grazing gem cuts right above your shoes, finished with a back slit that’s both flirtatious and functional--perfect for showing off your moves. It’s guaranteed to be the center of attention, even if you’re seated in the back of the ballroom.\",\"buy_link\":\"https://www.aliceandolivia.com/nina-embellished-midi-gown/CG604E62503F732.html\"},{\"id\":\"seraphis-skirt-black-demosite\",\"title\":\"Seraphis Skirt - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$998\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/seraphis-skirt-black-demosite/d682db81-a001-0000-0b00-68ec45f2c715.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/seraphis-skirt-black-demosite/9683db81-a001-0000-0b00-36706afad490.jpg\"}]}],\"description\":\"A classic black maxi skirt with a low rise fit and delicate lace embroidery.\\n— Maxi length\\n— Lace embroidered hem\\n— Side zipper\\n— Viscose wool blend\\n— Wear as a set with the Nevina Top\",\"buy_link\":\"https://cultgaia.com/products/seraphis-skirt-black\"},{\"id\":\"womens-jeans-demo-site\",\"title\":\"Dark Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Denim\",\"hex\":\"#242b41\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$108.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/womens-jeans-demo-site/4be2b6b9-9f01-0000-0b00-0001b2b73a53.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/womens-jeans-demo-site/50e2b6b9-9f01-0000-0b00-4bdef4ec0a73.png\"}]}],\"description\":\"Citizens of Humanity's 'Nora' jeans offer a tailored approach to a timeless silhouette. They're cut from a stretchy denim that is soft yet durable.\"},{\"id\":\"dries-van-noten-printed-georgette-pants\",\"title\":\"Printed Georgette Straight-Leg Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Purple\"},\"size_groups\":[{\"sizes\":[\"FR 34\",\"FR 36\",\"FR 38\",\"FR 40\",\"FR 42\",\"FR 44\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$745\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dries-van-noten-printed-georgette-pants/5769e16e-a001-0000-0b00-3f21e8bd6e0e.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dries-van-noten-printed-georgette-pants/5769e16e-a001-0000-0b00-dc2e7cc9e0f7.jpg\"}]}],\"description\":\"These georgette pants carry a marbled-clay print, with a drawstring waist lending an ease to the floor-grazing straight-leg silhouette.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/dries-van-noten/clothing/straight-leg/printed-georgette-straight-leg-pants/46376663163086418\"},{\"id\":\"pink-cheetah-sweater-demo-site\",\"title\":\"Pink Cheetah Sweater\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Pink\",\"hex\":\"#624749\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pink-cheetah-sweater-demo-site/45f4c0b9-9f01-0000-0b00-c78901adb88b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pink-cheetah-sweater-demo-site/15f4c0b9-9f01-0000-0b00-fd9d4046d36c.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/new-in?pageNumber=4\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/new-in?pageNumber=4\"},{\"id\":\"magdabutrym-floral-appliqued-off-shoulder-midi-dress\",\"title\":\"Floral-Appliquéd Off-the-Shoulder Wool and Silk-Blend Midi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Gray\",\"hex\":\"#afacac\"},\"size_groups\":[{\"sizes\":[\"FR 34\",\"FR 36\",\"FR 38\",\"FR 40\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$2455\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/magdabutrym-floral-appliqued-off-shoulder-midi-dress/1ce4e16e-a001-0000-0b00-52ccabed9e55.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/magdabutrym-floral-appliqued-off-shoulder-midi-dress/b5e3e16e-a001-0000-0b00-5fe0b6c69894.jpg\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/magdabutrym-floral-appliqued-off-shoulder-midi-dress/ffe3e16e-a001-0000-0b00-041a962f363c.jpg\"}]}],\"description\":\"Tailored from a wool and silk-blend, Magda Butrym's dress has an off-the-shoulder neckline and fitted bodice that narrows into a wrapped waist belt, finished with a signature floral embellishment at one hip. The pencil skirt falls to a midi length.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/magda-butrym/clothing/midi-dresses/floral-appliqued-off-the-shoulder-wool-and-silk-blend-midi-dress/46376663163140618\"},{\"id\":\"ollie-skirt-floral-jacquard-demosite\",\"title\":\"Ollie Skire - Floral Jacquard\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"FLORAL JACQUARD\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$998\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ollie-skirt-floral-jacquard-demosite/a901e26e-a001-0000-0b00-cfad7445304d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ollie-skirt-floral-jacquard-demosite/7f02e26e-a001-0000-0b00-2e74253431d2.jpg\"}]}],\"description\":\"A floral jacquard midi skirt with suiting inpsired details and a low rise fit.\\n— Midi length\\n— Floral jacquard pattern\\n— Low rise\\n— Wear as a set with the Mee Top\",\"buy_link\":\"https://cultgaia.com/products/ollie-skirt-floral-jacquard\"},{\"id\":\"cocktail-dress\",\"title\":\"Cocktail Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Silver\",\"hex\":\"#b1c0ce\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$500.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cocktail-dress/666ab4b9-9f01-0000-0b00-61f244d5c7cf.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cocktail-dress/656ab4b9-9f01-0000-0b00-27f0b493c51b.png\"}]}],\"description\":\"https://cliopeppiatt.co.uk/products/manhattan-mini-dress\",\"buy_link\":\"https://cliopeppiatt.co.uk/products/manhattan-mini-dress\"},{\"id\":\"gianvitorossi-sofia-sling-70\",\"title\":\"Sofia Sling 70\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black Leather\"},\"size_groups\":[{\"sizes\":[\"35\",\"36\",\"36.5\",\"37\",\"38\",\"38.5\",\"39\",\"41.5\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$995.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianvitorossi-sofia-sling-70/109de16e-a001-0000-0b00-13ecb1e605a3.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianvitorossi-sofia-sling-70/239de16e-a001-0000-0b00-8b23ac3e8058.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianvitorossi-sofia-sling-70/139de16e-a001-0000-0b00-a50dd67a052c.jpg\"}]}],\"description\":\"Crafted from leather, Sofia Sling 70 is a pointed-toe slingback defined by the Maison's distinctive 70mm heel. Pointed toe. Buckle closure. 3 inch heel (70mm). Handmade in Italy.\",\"buy_link\":\"https://www.nordstrom.com/s/sofia-sling-70/8867870\"},{\"id\":\"plaid-shirt\",\"title\":\"Plaid shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Green/Blue\",\"hex\":\"#867d74\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$50.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/plaid-shirt/6789f1b9-9f01-0000-0b00-dd08a887b560.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/plaid-shirt/7589f1b9-9f01-0000-0b00-308eed0b2511.png\"}]}],\"description\":\"https://www.cettire.com/products/our-legacy-envelop-shirt-966491756/cmVhY3Rpb24vcHJvZHVjdDpSbWlyYjUyV3ZOaTZ3c0FDcg%3D%3D?lng=en&utm_source=google&utm_medium=cpc&gclid=CjwKCAjwpqHTBhAcEiwAj2AfunFVfPmKwjYSuILkJzXnQHDCRcvDeRPX4_J_0bFcZRmxrdBcw6noGRoC1G4QAvD_BwE&gad_source=1&gad_campaignid=1040313833&gbraid=0AAAAAD-gd10bmu_d_AFckRrag0SDErvl3\",\"buy_link\":\"https://www.cettire.com/products/our-legacy-envelop-shirt-966491756/cmVhY3Rpb24vcHJvZHVjdDpSbWlyYjUyV3ZOaTZ3c0FDcg%3D%3D?lng=en&utm_source=google&utm_medium=cpc&gclid=CjwKCAjwpqHTBhAcEiwAj2AfunFVfPmKwjYSuILkJzXnQHDCRcvDeRPX4_J_0bFcZRmxrdBcw6noGRoC1G4QAvD_BwE&gad_source=1&gad_campaignid=1040313833&gbraid=0AAAAAD-gd10bmu_d_AFckRrag0SDErvl3\"},{\"id\":\"heaven-mayhem-clarke-cuff-silver\",\"title\":\"Clarke Cuff\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bracelet\",\"name\":\"Bracelet\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Silver\"},\"size_groups\":[{\"sizes\":[\"OneSize\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$100\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/heaven-mayhem-clarke-cuff-silver/57a4e16e-a001-0000-0b00-193d931c8e35.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/heaven-mayhem-clarke-cuff-silver/5aa4e16e-a001-0000-0b00-9f0cc650a07a.jpg\"}]}],\"description\":\"This cuff bracelet from Heaven Mayhem is crafted from silver-tone metal and features smooth ridges and an enamel center. Cuff, One Size. Imported, China.\",\"buy_link\":\"https://www.shopbop.com/clarke-cuff-heaven-mayhem/vp/v=1/1541145595.htm\"},{\"id\":\"proenzaschouler-nilo-textured-jacquard-dress\",\"title\":\"Nilo Textured Jacquard Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Copper\",\"hex\":\"#594236\"},\"size_groups\":[{\"sizes\":[\"S\",\"M\",\"L\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$2990\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/proenzaschouler-nilo-textured-jacquard-dress/d44fdb81-a001-0000-0b00-97e127af8931.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/proenzaschouler-nilo-textured-jacquard-dress/d34fdb81-a001-0000-0b00-b1a41ac1a7d9.jpg\"}]}],\"description\":\"Heavyweight jacquard knit with stretch. Thigh-high side slit, fringe trim, scoop neck, sleeveless, pullover design with no closure. Shell: 41% wool/33% viscose/26% polyamide. Trim: 45% wool/25% viscose/20% polyamide/10% cotton. Made in Italy.\",\"buy_link\":\"https://www.shopbop.com/nilo-dress-proenza-schouler/vp/v=1/1502064002.htm\"},{\"id\":\"crepe-mini-dress-demosite\",\"title\":\"Crepe Mini Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Maroon\",\"hex\":\"#551823\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-mini-dress-demosite/0892185e-9f01-0000-0b00-31fe8de11115.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-mini-dress-demosite/0392185e-9f01-0000-0b00-d3f14c387df8.png\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"oversized-sweatshirt-demo-site\",\"title\":\"Oversized Sweatshirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Beige\",\"hex\":\"#aea08f\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/e376c518-9f01-0000-0b00-c40c4eb16dbb.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/d776c518-9f01-0000-0b00-861beb82368d.png\"}]},{\"color\":{\"name\":\"Grey\",\"hex\":\"#55514c\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/667b164d-9f01-0000-0b00-7b6728a32185.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/5b7b164d-9f01-0000-0b00-d7c53d3443b2.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#222023\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/e7c0194d-9f01-0000-0b00-02bf7cc74b89.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/oversized-sweatshirt-demo-site/e5c0194d-9f01-0000-0b00-ea55cce57df3.png\"}]}],\"description\":\"Oversized fit with a lined crossover hood, dropped shoulders, and a kangaroo pocket. Wide cuffs and hem.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1336252003.html\"},{\"id\":\"zara-linen-fringe-jacket\",\"title\":\"Linen Blend Fringe Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Ecru\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$229\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/zara-linen-fringe-jacket/23b8db81-a001-0000-0b00-c8b1dd5d6462.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/zara-linen-fringe-jacket/24b8db81-a001-0000-0b00-245c01a8c8ff.jpg\"}]}],\"description\":\"Jacket made with 36% linen blend yarn. V-neck and long sleeves. Side pockets hidden in the seams. Matching fringe trim detail. Asymmetric hem. Inner lining. Front metal hook closure.\",\"buy_link\":\"https://www.zara.com/us/en/zw-collection-linen-blend-fringe-jacket-p07012800.html\"},{\"id\":\"romma-top-black-demosite\",\"title\":\"Romma Knit Top - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\",\"hex\":\"#141715\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$398\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/romma-top-black-demosite/fe73db81-a001-0000-0b00-5131790d3574.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/romma-top-black-demosite/cf74db81-a001-0000-0b00-8a78d99737ed.jpg\"}]}],\"description\":\"An essential sleeveless knit top with a slight mock neck, cropped hem and cinched waist detailing.\\n— Wool blend\\n— Slight mock neck\\n— Cinching at waist\\n— Wear as a set with the Infinity Skirt\",\"buy_link\":\"https://cultgaia.com/products/romma-top-black\"},{\"id\":\"dress-with-draped-neckline\",\"title\":\"Light Blue Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Light Blue\",\"hex\":\"#a7cbeb\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-draped-neckline/356e2547-9f01-0000-0b00-88c206684442.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-draped-neckline/396e2547-9f01-0000-0b00-e20a63b282a3.png\"}]}],\"description\":\"Satin halter maxi dress with a soft drape. Fitted style with a deep draped neckline and a button-and-loop closure at the nape of the neck. Concealed zipper with hook-and-eye closure at the back and a back vent. Fully lined bodice.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1337767001.html\"},{\"id\":\"tank-top-demo-site\",\"title\":\"Tank Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Blue\",\"hex\":\"#c4e1e2\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/6e93b2b9-9f01-0000-0b00-10b925c33de6.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/6f93b2b9-9f01-0000-0b00-1c660b261f56.png\"}]},{\"color\":{\"name\":\"Yellow\",\"hex\":\"#f1ecb9\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/d6adb2b9-9f01-0000-0b00-94c314727a0e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/dfadb2b9-9f01-0000-0b00-ea57da317d53.png\"}]},{\"color\":{\"name\":\"White\",\"hex\":\"#ebeaef\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/9422b3b9-9f01-0000-0b00-d67a00cb677b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/9522b3b9-9f01-0000-0b00-5bcdb446ca1f.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#1e1d22\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$28.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/df7db3b9-9f01-0000-0b00-10434b08c275.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tank-top-demo-site/e37db3b9-9f01-0000-0b00-bbc79f99d9c0.png\"}]}],\"description\":\"https://www.aritzia.com/us/en/product/homestretch%E2%84%A2-2-rib-frequency-tank/116336.html?color=36528\"},{\"id\":\"wide-leg-jeans-demo-site\",\"title\":\"Wide Leg Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\",\"hex\":\"#e2312e\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/fee313b9-9f01-0000-0b00-4b0f96c331c8.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/f9e313b9-9f01-0000-0b00-cccb379d38d5.png\"}]},{\"color\":{\"name\":\"Pastel Pink\",\"hex\":\"#ebdad4\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/aeaba21c-a001-0000-0b00-c1c2b3516837.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/a8aba21c-a001-0000-0b00-25cecf680619.png\"}]},{\"color\":{\"name\":\"Purple\",\"hex\":\"#331f4d\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/17d3a11c-a001-0000-0b00-3f45fa5fd022.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wide-leg-jeans-demo-site/1ad3a11c-a001-0000-0b00-dd820245b539.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/wide-leg/mid-rise-wide-leg-jeans/46376663163071020\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/wide-leg/mid-rise-wide-leg-jeans/46376663163071020\"},{\"id\":\"tapered-jeans-demo-site\",\"title\":\"Tapered Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Denim Blue\",\"hex\":\"#8396a7\"},\"size_groups\":[{\"sizes\":[\"28/32\",\"29/32\",\"30/32\",\"30/34\",\"31/32\",\"32/32\",\"32/34\",\"33/32\",\"34/32\",\"34/34\",\"36/32\",\"38/32\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-jeans-demo-site/feaab918-9f01-0000-0b00-b9d80926ec29.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-jeans-demo-site/e3aab918-9f01-0000-0b00-4e7bbc68e195.png\"}]}],\"description\":\"Five-pocket jeans in cotton denim with a slight stretch for optimal comfort. Standard waist-to-low fit with a slightly relaxed skinny leg. Standard waistband and zip fly. The perfect match for your favorite t-shirt.\\n\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1315519005.html\"},{\"id\":\"matteau-breton-tee-002\",\"title\":\"Breton Striped Cotton-Jersey T-Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$315\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/304f2d82-a001-0000-0b00-0f28e407d771.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/53ebe16e-a001-0000-0b00-1da08bfb4182.jpg\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/75ebe16e-a001-0000-0b00-7cd741fa526d.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/matteau-breton-tee-002/4febe16e-a001-0000-0b00-5489691452c3.jpg\"}]}],\"description\":\"Matteau's 'Breton' T-shirt in Red, made in Australia from breathable cotton-jersey. Classic nautical white and red striped pattern. Boxy fit with dropped shoulders and wide sleeves, finished with a boat neckline.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/matteau/clothing/t-shirts/breton-striped-cotton-jersey-t-shirt/46376663163044985\"},{\"id\":\"flared-fit-pants-in-stretch-jersey-demosite\",\"title\":\"Flared Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Blue\",\"hex\":\"#222028\"},\"size_groups\":[{\"sizes\":[\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$299.00\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/flared-fit-pants-in-stretch-jersey-demosite/b98de16e-a001-0000-0b00-66235a98249f.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/flared-fit-pants-in-stretch-jersey-demosite/ae8de16e-a001-0000-0b00-6fecdb26a08b.png\"}]}],\"description\":\"Details\\nIn travel-friendly jersey with stretch and crease resistance, these BOSS Womenswear pants have a modern flared profile. Cropped length. Metal detail on waistband.\\nflared fit\\nRegular rise\\nHook and zip closure\\nElastic Waistband\\nFlared leg\\nPockets bottom front: Side pockets\\nPockets bottom back: Welt pocket\\nFit foot width: 52,3 cm (20.6 inches)\",\"buy_link\":\"https://www.hugoboss.com/us/flared-fit-pants-in-stretch-jersey/hbna50563831_404.html\"},{\"id\":\"liberowe-fringed-tweed-jacket\",\"title\":\"Fringed Tweed Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\"},\"size_groups\":[{\"sizes\":[\"x small\",\"small\",\"medium\",\"large\",\"x large\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1950\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/liberowe-fringed-tweed-jacket/e2dce16e-a001-0000-0b00-720239500bd1.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/liberowe-fringed-tweed-jacket/e2dce16e-a001-0000-0b00-e09547472bb2.jpg\"}]}],\"description\":\"Made from wool-blend tweed and tailored with paneled seams that create a softly flared silhouette. Fringed trims frame the neckline, front and hem, with oversized hook-and-eye fastenings.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/liberowe/clothing/casual-jackets/fringed-wool-blend-tweed-jacket/46376663163151712\"},{\"id\":\"slim-fit-vest-with-peplum-hem-demosite\",\"title\":\"Slim-Fit Vest\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Blue\",\"hex\":\"#24252e\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$399.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/2f58641a-a001-0000-0b00-80c6a892d916.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/c757641a-a001-0000-0b00-5c8bdb77ab39.png\"}]},{\"color\":{\"name\":\"Off-white\",\"hex\":\"#e6dfd0\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$399.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/e739651a-a001-0000-0b00-85d0bde6c8e7.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/bc38651a-a001-0000-0b00-ff55ad681c16.png\"}]},{\"color\":{\"name\":\"Red\",\"hex\":\"#ba040b\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$399.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/11e3651a-a001-0000-0b00-13ad21bc1eea.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-vest-with-peplum-hem-demosite/cfe1651a-a001-0000-0b00-ffcc675eb83e.png\"}]}],\"description\":\"With sleeveless styling and a peplum hem, this BOSS Womenswear vest is crafted in comfortable stretch fabric. Streamlined fit. Double-ended front zipper.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/slim-fit-vest-with-peplum-hem/hbna50563813_404.html\"},{\"id\":\"rodarte-floral-midi-dress\",\"title\":\"Floral-Print Silk-Crepe Midi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Lavender Floral\"},\"size_groups\":[{\"sizes\":[\"US0\",\"US2\",\"US4\",\"US6\",\"US8\",\"US10\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1595\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rodarte-floral-midi-dress/6166db81-a001-0000-0b00-3701c412f2bf.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rodarte-floral-midi-dress/6166db81-a001-0000-0b00-5951ce7446e5.jpg\"}]}],\"description\":\"Rodarte's \\\"Lavender Bouquet\\\" midi dress, cut from silk-crepe and adorned with understated botanical motifs. Defined by a one-shoulder neckline with draped sleeve detail for refined dimension.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/rodarte/clothing/midi-dresses/floral-print-silk-crepe-midi-dress/46376663163105286\"},{\"id\":\"cami-top-dove-demosite\",\"title\":\"Cami Top - Dove\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"DOVE\",\"hex\":\"#cdb5a0\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$498\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cami-top-dove-demosite/914ae16e-a001-0000-0b00-1c3e5330869a.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cami-top-dove-demosite/5d4be16e-a001-0000-0b00-99e6a16539ab.jpg\"}]}],\"description\":\"An asymmetrical, shoulder-baring top gathered at the waist and designed in voluminous paneling of mini-pleated plisse.\\n— Asymmetrical silhouette\\n— Relaxed, yet gathered at the waist\\n— Stretch fit\\n— Exposed shoulder\\n— Mini-pleated chintz plisse\",\"buy_link\":\"https://cultgaia.com/products/cami-top-dove\"},{\"id\":\"textured-knit-resort-shirt\",\"title\":\"Textured Knit Resort Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Heathered Oat\",\"hex\":\"#d6cac3\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/eed8ebb9-9f01-0000-0b00-c0e31d044bcd.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/efd8ebb9-9f01-0000-0b00-06bb400d493c.png\"}]},{\"color\":{\"name\":\"Blue\",\"hex\":\"#cfd1d5\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/f601ecb9-9f01-0000-0b00-22c5aba89f4f.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/f601ecb9-9f01-0000-0b00-bfc9d2b73dd3.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#1b1b1e\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/2026ecb9-9f01-0000-0b00-cbbdcf2ae2a2.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/textured-knit-resort-shirt/4b26ecb9-9f01-0000-0b00-606a31a0ecf2.png\"}]}],\"description\":\"Made from 100% organic cotton in a sweater yarn with a jacquard-like texture. Reads elevated, wears relaxed. Button it up with chinos or linen trousers.\",\"buy_link\":\"https://www.everlane.com/products/mens-textured-knit-resort-shirt-heathered-oat\"},{\"id\":\"cardigan-in-a-flowy-fabric-demosite\",\"title\":\"Cardigan in Flowy Fabric\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Green\",\"hex\":\"#144632\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/7f53e16e-a001-0000-0b00-54696801703a.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/2153e16e-a001-0000-0b00-4db39f2c264f.png\"}]},{\"color\":{\"name\":\"Maroon\",\"hex\":\"#541721\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/2758e16e-a001-0000-0b00-69c244b67642.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/2458e16e-a001-0000-0b00-45c7b51e5fa4.png\"}]},{\"color\":{\"name\":\"Sky Blue\",\"hex\":\"#bed3e6\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/705ce16e-a001-0000-0b00-c6f522b99174.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cardigan-in-a-flowy-fabric-demosite/105ce16e-a001-0000-0b00-2160ef76bab3.png\"}]}],\"description\":\"Lightweight ribbed cardigan with a round neck and buttons down the front.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1328852003.html\"},{\"id\":\"denim-jacket-demo-site\",\"title\":\"Denim Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\",\"hex\":\"#e72f31\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/25b1b4b9-9f01-0000-0b00-2462c95817a6.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/21b1b4b9-9f01-0000-0b00-14cdbdd1c442.png\"}]},{\"color\":{\"name\":\"Pastel Pink\",\"hex\":\"#f2dfdb\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/a7d3b4b9-9f01-0000-0b00-20cf0d85b245.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/c6d3b4b9-9f01-0000-0b00-798f2a327298.png\"}]},{\"color\":{\"name\":\"Purple\",\"hex\":\"#36204f\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$150\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/bdfbb4b9-9f01-0000-0b00-ec30cf04265b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/denim-jacket-demo-site/bcfbb4b9-9f01-0000-0b00-5f2d84d4c006.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/casual-jackets/denim-cotton-jacket/46376663163071002\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/alaia/clothing/casual-jackets/denim-cotton-jacket/46376663163071002\"},{\"id\":\"burberry-check-silk-scarf-sand\",\"title\":\"Check Silk Scarf - Sand\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"scarf\",\"name\":\"Scarf\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Sand\"},\"size_groups\":[{\"sizes\":[\"OneSize\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$555\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/burberry-check-silk-scarf-sand/7142e16e-a001-0000-0b00-039518de9b2d.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/burberry-check-silk-scarf-sand/8a42e16e-a001-0000-0b00-c13053fef6e5.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/burberry-check-silk-scarf-sand/7342e16e-a001-0000-0b00-f938536eb2bd.jpg\"}]}],\"description\":\"Fabric: Silk twill. Signature checkered pattern with contrast border. Shell: 100% silk. Made in Italy. Dry clean only.\",\"buy_link\":\"https://www.shopbop.com/check-silk-scarf-burberry/vp/v=1/1533005.htm\"},{\"id\":\"cropped-jacket-demo-site\",\"title\":\"Cropped Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Off White\",\"hex\":\"#ded6ca\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$98.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cropped-jacket-demo-site/f963e78a-9f01-0000-0b00-5cae474a60a9.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cropped-jacket-demo-site/5164e78a-9f01-0000-0b00-aa4f81732e9c.png\"}]}],\"description\":\"https://www.aritzia.com/us/en/product/little-cropped-jacket/125276.html?color=11420\",\"buy_link\":\"https://www.aritzia.com/us/en/product/little-cropped-jacket/125276.html?color=11420\"},{\"id\":\"elene-top-bleu-taormina-paisley\",\"title\":\"Elene Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Taormina Paisley\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$278.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/elene-top-bleu-taormina-paisley/d07ee16e-a001-0000-0b00-f593310d52ae.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/elene-top-bleu-taormina-paisley/da7ee16e-a001-0000-0b00-9f46ee2cefc1.png\"}]}],\"description\":\"Rendered in buttery silk-viscose twill, the Elene Top is patterned with our Taormina Paisley, an intricate motif inspired by 19th-century French Provençal textiles. With a relaxed silhouette, it features full-length sleeves and self-covered buttons down the front.\",\"buy_link\":\"https://www.shopdoen.com/products/elene-top-bleu-taormina-paisley?variant=42264239800433\"},{\"id\":\"mcqueen-shoulder-bow-blouse\",\"title\":\"Shoulder Bow Blouse\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Ivory\"},\"size_groups\":[{\"sizes\":[\"36\",\"38\",\"40\",\"42\",\"44\",\"46\",\"48\",\"50\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"£1100\",\"currency\":\"GBP\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/mcqueen-shoulder-bow-blouse/f9f2e16e-a001-0000-0b00-002004f84938.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/mcqueen-shoulder-bow-blouse/0df3e16e-a001-0000-0b00-e3e9bdeeffe0.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/mcqueen-shoulder-bow-blouse/f6f2e16e-a001-0000-0b00-341cbda41913.jpg\"}]}],\"description\":\"Blouse in light ivory silk crepe de Chine with an asymmetric neckline and shoulder bow detailing. Long sleeves with gathered cuffs. Regular fit. 100% Silk. Made in Italy.\",\"buy_link\":\"https://www.alexandermcqueen.com/en-gb/pr/shoulder-bow-blouse-A004JDQBADT9007.html\"},{\"id\":\"cecilia-pump\",\"title\":\"Cecilia Pump\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Grey Suede\"},\"size_groups\":[{\"sizes\":[\"35\",\"36\",\"36.5\",\"37\",\"37.5\",\"38\",\"38.5\",\"39\",\"39.5\",\"40\",\"40.5\",\"41\",\"42\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$980.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cecilia-pump/5c64e16e-a001-0000-0b00-8e144adb7c65.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cecilia-pump/2163e16e-a001-0000-0b00-4d8ec7a833ae.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cecilia-pump/5364e16e-a001-0000-0b00-384b6edda2fc.png\"}]}],\"description\":\"A refined suede pump designed to gently embrace and visually slim the foot. Crafted in Italy to be exceptionally lightweight. Signature details include sculptural Ona heel and gold staple detail at vamp.\",\"buy_link\":\"https://khaite.com/products/cecilia-pump-50-in-grey?utm_medium=paid&utm_source=shop_campaigns&shpcid=49633&utm_campaign=49633&variant=41569630093375&_su_rec=49vsfQTTHQPbSYeO3y1eiVlcAfzx38R3jt7yCUjv3j4w4iDNiDVst4mD75zT1s7aT2V66NWHNrr71fSde0F4jh1bNp9B1J2hKZ7HP7BWzmK7r5FaMNXv87m6NTtjptGSjh6eTZFLOj4FbRvMSak8FKJ6nfzs8WyNQ1kJDEo3AHFF4_-0iQ4J5VGV4AM1X9v1v-t6YYcuyZdXDdfxeyXF89xaxp7zjOOyo8GkwkifQFC_falaJeRPRe51LIy8uPm-S9DkkHQW6c9uhZVzV9Yd7v1FocgLzBCVFi1Ar4iNde4picbmdRG59Nvq6qxdquKfsC_wne_vAC8TV4qbHqxDUwTT\"},{\"id\":\"leather-pants-demo-site\",\"title\":\"Leather Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#322d31\"},\"size_groups\":[{\"sizes\":[],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$35.90\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/leather-pants-demo-site/ccd4e16e-a001-0000-0b00-d945f30e0c8f.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/leather-pants-demo-site/6ed4e16e-a001-0000-0b00-35e66d0b6e94.png\"}]}],\"description\":\"Description and fitting\\nH&M Premium Selection\\nSoft leather trousers with a low waist and concealed zip, hook, and button fastening. Slanted pockets, welt back pocket with triangular flap and button, horizontal seam at the knees, and a stripe at the front and back.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1334191001.html\"},{\"id\":\"regular-fit-linen-blend-polo-shirt-demo-site\",\"title\":\"Black & White Polo Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Stripes\",\"hex\":\"#171417\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$39.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-linen-blend-polo-shirt-demo-site/80d7bb18-9f01-0000-0b00-59cd96a6ff82.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-linen-blend-polo-shirt-demo-site/1ed7bb18-9f01-0000-0b00-d7e4dc2ff530.png\"}]}],\"description\":\"Polo shirt in a soft linen-blend knit. Features a ribbed V-neck and ribbed trim on the sleeves and hem. Standard fit for a classic and comfortable silhouette.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1311090003.html\"},{\"id\":\"hudson-st-pant-demosite\",\"title\":\"Wide-Leg Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"men\",\"name\":\"Men\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"ermine\",\"hex\":\"#af855d\"},\"size_groups\":[{\"sizes\":[],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$695.00\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/hudson-st-pant-demosite/d3b4e16e-a001-0000-0b00-66ff7bec0579.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/hudson-st-pant-demosite/beb4e16e-a001-0000-0b00-2325509ad765.png\"}]}],\"description\":\"Details\\nRelaxed mid-rise pant in fluid regency stripe. Fabric is a fluid viscose twill in a refined regency stripe, woven with subtle lurex for soft luminosity. Designed with front pleats that open into a draped, wide-leg silhouette. Finished with elasticized back waistband, side seam pockets, a single welt pocket at the back, and subtle topstitch detailing throughout.\",\"buy_link\":\"https://www.twpclothing.com/products/hudson-st-ivory-green?variant=52746923508075\"},{\"id\":\"regular-fit-blazer-in-italian-made-virgin-wool-demosite\",\"title\":\"Regular-Fit Blazer\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#1c1d21\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$599.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-blazer-in-italian-made-virgin-wool-demosite/9b74bf18-9f01-0000-0b00-667a60357b07.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-blazer-in-italian-made-virgin-wool-demosite/8674bf18-9f01-0000-0b00-08be631d307e.png\"}]}],\"description\":\"With natural stretch for ease of movement, this BOSS Womenswear blazer is crafted from long-lasting Italian-made wool. Tailored to a regular fit.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/regular-fit-blazer-in-italian-made-virgin-wool/hbna50490020_404.html\"},{\"id\":\"black-shorts-demo-site\",\"title\":\"Pleated Shorts\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\",\"hex\":\"#262522\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$108.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/013fb7b9-9f01-0000-0b00-929d9e41f7da.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/f73eb7b9-9f01-0000-0b00-629b6c452dd0.png\"}]},{\"color\":{\"name\":\"Beige\",\"hex\":\"#e5dcd0\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$108.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/f77eb7b9-9f01-0000-0b00-86ef17417155.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/fa7eb7b9-9f01-0000-0b00-d8eb2b952474.png\"}]}],\"description\":\"These are pleated shorts with a low rise, relaxed fit and darted back waist for shaping. They're finely tailored from soft stretch fabric that’s lightweight and drapey for everyday wear. This fabric is sourced from a premier Portuguese mill and made with 60% recycled polyester and 29% LENZING™ ECOVERO™ Viscose.\\n\\n\",\"buy_link\":\"https://www.aritzia.com/us/en/product/touchpoint-short/130244.html?color=1274\"},{\"id\":\"regular-fit-shirt-demo-site\",\"title\":\"Striped Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cream/Stripes\",\"hex\":\"#d0c9bb\"},\"size_groups\":[{\"sizes\":[\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$24.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shirt-demo-site/c3b6b818-9f01-0000-0b00-6e8ee0559507.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shirt-demo-site/cdb6b818-9f01-0000-0b00-915f790407cb.png\"}]}],\"description\":\"Short-sleeved shirt in a soft, airy cotton blend fabric. Features an open collar, classic placket, back yoke, and straight hem. Standard fit for a comfortable, classic silhouette.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1309692003.html\"},{\"id\":\"eel-effect-leather-sneakers\",\"title\":\"Eel-effect leather sneakers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"red\"},\"size_groups\":[{\"sizes\":[\"35\",\"36\",\"37\",\"38\",\"39\",\"40\",\"41\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$591.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/eel-effect-leather-sneakers/8e73e16e-a001-0000-0b00-75828a021c90.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/eel-effect-leather-sneakers/c474e16e-a001-0000-0b00-19004a878f73.png\"}]}],\"description\":\"Unexpected color contrasts are a signature of Dries Van Noten. These lace-up shoes are crafted from glossy red leather and shaped to a streamlined silhouette. Crisp white laces and trim highlight the clean lines, creating a striking contrast against the rich surface.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/dries-van-noten/shoes/low-top/eel-effect-leather-sneakers/46376663163048440?cm_mmc=LinkshareUS-_-0c5b5rpoqTU-_-Custom-_-LinkBuilder&utm_source=rakuten&utm_medium=affiliation&utm_campaign=US_3556869&utm_content=US_Vogue&utm_term=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&ranMID=24449&ranEAID=0c5b5rpoqTU&ranSiteID=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&siteID=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&adj_t=663co1a&adj_campaign=US_3556869&linkshare_siteID=0c5b5rpoqTU-FiB5IaT_0jk.K8J5lJctsw&linkshare_affiliate_mid=24449\"},{\"id\":\"relaxed-fit-linen-blend-tailored-trousers-demo-site\",\"title\":\"Linen Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"White\",\"hex\":\"#ffffff\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/b04ebc18-9f01-0000-0b00-2ff2cf7cc633.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/ac4ebc18-9f01-0000-0b00-886f5cf80809.png\"}]},{\"color\":{\"name\":\"Beige\",\"hex\":\"#d5c4ac\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/1f6ef64c-9f01-0000-0b00-71f8c36a934a.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/226ef64c-9f01-0000-0b00-2896ac57a52b.png\"}]},{\"color\":{\"name\":\"Navy\",\"hex\":\"#24293b\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/63ea034d-9f01-0000-0b00-3e94e9e1f415.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-linen-blend-tailored-trousers-demo-site/1fe9034d-9f01-0000-0b00-2d4dfc6d5709.png\"}]}],\"description\":\"Trousers in a lightweight cotton and linen blend with pleats. Features a gathered elasticated waistband, zip and button fastening, side pockets, and welt back pockets. A relaxed fit for a casual yet not oversized silhouette. The linen and cotton blend combines the softness of cotton with the structure of linen to create a textured, breathable fabric with a beautiful drape.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1283074001.html\"},{\"id\":\"crepe-viscose-jersey-dress-abyss-demosite\",\"title\":\"Jersey Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Navy\",\"hex\":\"#222638\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-viscose-jersey-dress-abyss-demosite/ae46f85d-9f01-0000-0b00-aa96f23948a7.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/crepe-viscose-jersey-dress-abyss-demosite/ae46f85d-9f01-0000-0b00-782d404e324c.jpeg\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"relaxed-fit-t-shirt-demo-site\",\"title\":\"Relaxed-Fit T-Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Gray\",\"hex\":\"#656a72\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$12.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/6c226c1a-a001-0000-0b00-6276ad052655.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/1a226c1a-a001-0000-0b00-e98fd7d6ddca.png\"}]},{\"color\":{\"name\":\"White\",\"hex\":\"#ffffff\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$12.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/ccb8a14c-9f01-0000-0b00-784e1fae6a77.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-t-shirt-demo-site/d2b8a14c-9f01-0000-0b00-ec515263934b.png\"}]}],\"description\":\"Relaxed-fit T-shirt in medium-weight cotton jersey with a casual but not oversized silhouette. Ribbed round neck, dropped shoulders, and a straight-cut hem.\",\"buy_link\":\"https://www2.hm.com/en_us/productpage.1309319012.html\"},{\"id\":\"floral-print-pants\",\"title\":\"Floral-Print Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Floral\",\"hex\":\"#bf9677\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$200.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/d909b6b9-9f01-0000-0b00-f48e31d3b35d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/d809b6b9-9f01-0000-0b00-b2112cd7a0e3.png\"}]},{\"color\":{\"name\":\"Black Floral-Print\",\"hex\":\"#2a242b\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$200.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/1b2fb6b9-9f01-0000-0b00-4e94e870165f.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-pants/202fb6b9-9f01-0000-0b00-63714f3ee264.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\"},{\"id\":\"izel-sweater-black-demosite\",\"title\":\"Sweater - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\",\"hex\":\"#181619\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$358\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/izel-sweater-black-demosite/08c4e16e-a001-0000-0b00-5a680f212545.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/izel-sweater-black-demosite/d4c4e16e-a001-0000-0b00-af88a3995e97.jpg\"}]}],\"description\":\"An essential turtleneck bodysuit crafted from a flattering knit blend.\\n— Turtleneck\\n— Snap closure\\n— Knit blend\\n— Figure hugging fabric\",\"buy_link\":\"https://cultgaia.com/products/izel-sweater-black\"},{\"id\":\"couture-virgin-wool-blend-mini-dress-demosite\",\"title\":\"Couture Mini Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/white\",\"hex\":\"#181619\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/couture-virgin-wool-blend-mini-dress-demosite/1bfd1b5e-9f01-0000-0b00-6d49ef98ed30.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/couture-virgin-wool-blend-mini-dress-demosite/1efd1b5e-9f01-0000-0b00-a0ea46aa07f3.png\"}]}],\"description\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\",\"buy_link\":\"https://www.bottegaveneta.com/en-en/crepe-viscose-jersey-dress-abyss-844030V4YX04140.html\"},{\"id\":\"printed-shorts\",\"title\":\"Blue Embroidered Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"White\",\"hex\":\"#91c1cd\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$250.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/printed-shorts/d6241ec8-9f01-0000-0b00-e0a14ce132f3.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/printed-shorts/ae241ec8-9f01-0000-0b00-ee3856729ec1.png\"}]}],\"description\":\"https://isleofmonday.com/products/roberto-cavalli-fw-2002-patchwork-shorts\",\"buy_link\":\"https://isleofmonday.com/products/roberto-cavalli-fw-2002-patchwork-shorts\"},{\"id\":\"simkhai-laia-bustier-strapless-maxi-dress\",\"title\":\"Laia Bustier Strapless Maxi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black Multi\"},\"size_groups\":[{\"sizes\":[\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$695.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/simkhai-laia-bustier-strapless-maxi-dress/738bdb81-a001-0000-0b00-30082a9fa482.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/simkhai-laia-bustier-strapless-maxi-dress/998adb81-a001-0000-0b00-8470d4c0d00a.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/simkhai-laia-bustier-strapless-maxi-dress/d48bdb81-a001-0000-0b00-f3b8d6801f19.png\"}]}],\"description\":\"Features\\nStraight neck\\nZipper closure at back\\nStrapless\\nDrape detail at left hip\\nColor-blocked design\\nTextured design\\nLined\\nImported\\nSize & Fit\\nFits true to size, order your normal size\\nDesigned for a floor-length look\\nApprox. 54.5\\\" from shoulder to hem, based on a size 4\\nMaterials & Care\\n97% polyester/3% spandex; lining: 100% polyester\\nDry clean\",\"buy_link\":\"https://www.bloomingdales.com/shop/product/simkhai-laia-bustier-strapless-maxi-dress?ID=6251579&utm_source=rakuten&utm_medium=affiliate&utm_campaign=affiliates&ranMID=13867&ranEAID=0c5b5rpoqTU&ranSiteID=0c5b5rpoqTU-05Y_FxH7GpR5oqWyPXSZTA&LinkshareID=0c5b5rpoqTU-05Y_FxH7GpR5oqWyPXSZTA&m_sc=aff&PartnerID=LINKSHARE&cm_mmc=LINKSHARE-_-n-_-n-_-n&ranPublisherID=0c5b5rpoqTU&ranLinkID=1&ranLinkTypeID=10&pubNAME=Vogue\"},{\"id\":\"renesme-dress-cheetah\",\"title\":\"Renesme Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cheetah\",\"hex\":\"#bd9068\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$528.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/renesme-dress-cheetah/d8c7b8b9-9f01-0000-0b00-eb61ca59c394.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/renesme-dress-cheetah/d6c7b8b9-9f01-0000-0b00-c254e75d95b0.png\"}]}],\"description\":\"A silk twill midi dress featuring a high neckline and a classic cheetah print.\\n\\n— Midi length\\n\\n— High neck\\n\\n— Adjustable straps\\n\\n— Silk twill\",\"buy_link\":\"https://cultgaia.com/products/renesme-dress-cheetah?variant=43517236248650\"},{\"id\":\"ralphlauren-polo-play-thong-sandal-limeade\",\"title\":\"Polo Play Leather Thong Sandal\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Limeade\"},\"size_groups\":[{\"sizes\":[\"5\",\"5.5\",\"6\",\"6.5\",\"7\",\"7.5\",\"8\",\"8.5\",\"9\",\"9.5\",\"10\",\"11\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$209.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ralphlauren-polo-play-thong-sandal-limeade/bd5edb81-a001-0000-0b00-d3de65e8ff4e.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ralphlauren-polo-play-thong-sandal-limeade/db5edb81-a001-0000-0b00-56c604656b10.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ralphlauren-polo-play-thong-sandal-limeade/bf5edb81-a001-0000-0b00-57e83949789b.jpg\"}]}],\"description\":\"Part of our Polo Play collection, these thong sandals are crafted with full-grain sheep leather in a vibrant selection of colors inspired by Ralph Lauren's iconic Polo shirt. The minimalist silhouette is debossed with our signature Pony at the strap. 0.25\\\" (5mm) heel height. Thong silhouette. Slip-on styling. Upper and lining: 100% leather. Imported.\",\"buy_link\":\"https://www.ralphlauren.com/women-footwear-shoes/polo-play-leather-thong-sandal/0080278625.html\"},{\"id\":\"pucci-printed-mesh-maxi-dress\",\"title\":\"Printed Mesh Maxi Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Beige Print\"},\"size_groups\":[{\"sizes\":[\"IT38\",\"IT40\",\"IT42\",\"IT44\",\"IT46\",\"IT48\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1060\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pucci-printed-mesh-maxi-dress/ec57db81-a001-0000-0b00-376d50e4fca5.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pucci-printed-mesh-maxi-dress/cb57db81-a001-0000-0b00-b84c44920403.jpg\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/pucci-printed-mesh-maxi-dress/ce57db81-a001-0000-0b00-d0f508615e3e.jpg\"}]}],\"description\":\"PUCCI's maxi dress is crafted in Italy from tonal brown mesh with a swirling, wave-like print. Designed in a classic column silhouette that falls to a full length. All-over printing means each piece is one of a kind.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/pucci/clothing/maxi-dresses/printed-mesh-maxi-dress/46376663163078433\"},{\"id\":\"gauze-shirt-boxy-fit\",\"title\":\"Gauze Shirt in Boxy Fit\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Indigo\",\"hex\":\"#3f4f70\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/37b0f1b9-9f01-0000-0b00-0f7af349d4d9.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/3ab0f1b9-9f01-0000-0b00-c4d304c379e7.png\"}]},{\"color\":{\"name\":\"Beige\",\"hex\":\"#9e927f\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/dde0f1b9-9f01-0000-0b00-f82ebbcd62fd.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/e0e0f1b9-9f01-0000-0b00-81561b33814d.png\"}]},{\"color\":{\"name\":\"Black\",\"hex\":\"#191618\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$59.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/63fdf1b9-9f01-0000-0b00-fec4e75c6441.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gauze-shirt-boxy-fit/17fdf1b9-9f01-0000-0b00-2bdb8be55847.png\"}]}],\"description\":\"Gauze weave with crinkled texture. Dropped shoulder, long sleeves with button cuffs. Spread collar, button front.\",\"buy_link\":\"https://www.gapfactory.com/browse/product.do?pid=1176021021&vid=1&pcid=1052118&cid=1052118&nav=meganav%3AMen%3ANew+%26+Featured%3ANew+Arrivals#pdp-page-content\"},{\"id\":\"regular-fit-shorts-demo-site\",\"title\":\"Striped Shorts\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cream/Stripes\",\"hex\":\"#cec6b4\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$19.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shorts-demo-site/28fdf924-9f01-0000-0b00-b13f9c967197.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/regular-fit-shorts-demo-site/ccfcf924-9f01-0000-0b00-0edf59549ab0.png\"}]}],\"description\":\"Shorts in a textured cotton blend fabric with an elasticated waistband and drawstring. Discreet side pockets and an inset back pocket. Standard fit for a classic and comfortable silhouette.\",\"buy_link\":\"https://www2.hm.com/en_us/men/products/shorts.html?patterns=Striped&id=aa14\"},{\"id\":\"canvas-baggy-trouser-jeans\",\"title\":\"Canvas Baggy Trouser Jeans\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Dark Indigo\",\"hex\":\"#131c32\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$50.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/6f81ecb9-9f01-0000-0b00-7e21895c8984.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/7081ecb9-9f01-0000-0b00-2f048368f461.png\"}]},{\"color\":{\"name\":\"Striped\",\"hex\":\"#7e909b\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$50.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/5aa1ecb9-9f01-0000-0b00-28c298b882d8.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-baggy-trouser-jeans/53a1ecb9-9f01-0000-0b00-4929287ddfe3.png\"}]}],\"description\":\"A fit that moves freely. Low slung with a slouchy, loose leg. A baggy canvas jean in a dark indigo wash. Zip fly, front slant pockets and back button-flap patch pockets.\",\"buy_link\":\"https://www.gap.com/browse/product.do?pid=801572002&vid=1#pdp-page-content\"},{\"id\":\"slim-fit-blouse-in-cotton-with-peplum-hem-demosite\",\"title\":\"Slim-Fit Blouse\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"White\",\"hex\":\"#ffffff\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/e9fd661a-a001-0000-0b00-2c40bfd2559e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/a3fc661a-a001-0000-0b00-720a6635427f.png\"}]},{\"color\":{\"name\":\"Blue\",\"hex\":\"#b4cff4\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/2ea8671a-a001-0000-0b00-03c06e6ac6c5.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/fda6671a-a001-0000-0b00-3db5feb46583.png\"}]},{\"color\":{\"name\":\"Mint Green\",\"hex\":\"#d2e3d7\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/0c3c681a-a001-0000-0b00-4918b93026fa.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/db3a681a-a001-0000-0b00-e08a7fb0acde.png\"}]},{\"color\":{\"name\":\"Brown\",\"hex\":\"#765140\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/2127691a-a001-0000-0b00-41189d5d7afc.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-blouse-in-cotton-with-peplum-hem-demosite/f925691a-a001-0000-0b00-86bb9c110fe6.png\"}]}],\"description\":\"With a defined fit flaring to an elegant peplum hem, this HUGO Womenswear blouse is crafted in crisp cotton poplin. Embroidered logo below rear collar.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/slim-fit-blouse-in-cotton-with-peplum-hem/hbna50562961_100.html#cgid=11100\"},{\"id\":\"braiden-top-wren-demosite\",\"title\":\"Braiden Top - Wren\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"WREN\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$898\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/braiden-top-wren-demosite/a13be16e-a001-0000-0b00-e09ce4de2501.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/braiden-top-wren-demosite/7d3ce16e-a001-0000-0b00-e0d9c60f6711.jpg\"}]}],\"description\":\"A braided cotton corset top with thin straps and a sculpted bodice.\\n— Cotton utility fabrication\\n— Braided bodice\\n— Thin straps\\n— Zipper closure\",\"buy_link\":\"https://cultgaia.com/products/braiden-top-wren\"},{\"id\":\"katya-sculpted-bow-romper\",\"title\":\"Sculpted Bow Romper\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/White\",\"hex\":\"#15181d\"},\"size_groups\":[{\"sizes\":[\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$395.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/katya-sculpted-bow-romper/8508b818-9f01-0000-0b00-93500900b1ac.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/katya-sculpted-bow-romper/7e08b818-9f01-0000-0b00-98abf0e2024a.png\"}]}],\"description\":\"A romper that looks like the chicest mini dress. With hidden inner shorts, our Katya guarantees comfort and ease of movement. It’s designed in a matte satin crepe with sculpted seams that define the waist, creating a subtle hourglass shape. The oversized satin bow makes it feminine and fun, while the strapless neckline stays secure thanks to an inner silicone grip. It’s polished, playful, and super photogenic.\",\"buy_link\":\"https://www.aliceandolivia.com/katya-sculpted-bow-romper/CC603210802G980.html\"},{\"id\":\"toryburch-sequin-mesh-top\",\"title\":\"Sequin Mesh Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Snow White / Light Pink\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$299\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-sequin-mesh-top/44b0db81-a001-0000-0b00-bc6f66b6412b.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-sequin-mesh-top/43b0db81-a001-0000-0b00-5aae1b23ff12.jpg\"}]}],\"description\":\"Slim fit sequin mesh top. 92% lyocell, 8% elastane; 100% polyester sequin mesh. Dry clean.\",\"buy_link\":\"https://www.toryburch.com/en-us/clothing/tops/sequin-mesh-top/181581.html\"},{\"id\":\"calf-hair-trousers\",\"title\":\"Calf Hair Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Calf Hair\",\"hex\":\"#3b2b22\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$300.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/calf-hair-trousers/de4e15c8-9f01-0000-0b00-879eeec4306e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/calf-hair-trousers/da4e15c8-9f01-0000-0b00-181fe410a9f4.png\"}]}],\"description\":\"https://isleofmonday.com/products/jitrois-calf-hair-leather-trousers\",\"buy_link\":\"https://isleofmonday.com/products/jitrois-calf-hair-leather-trousers\"},{\"id\":\"gianina-dress-black-demosite\",\"title\":\"Gianina Knit Dress - Black\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"BLACK\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$698\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianina-dress-black-demosite/8495e16e-a001-0000-0b00-58f034ce3eb0.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianina-dress-black-demosite/8195e16e-a001-0000-0b00-fb7a5d9edb83.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/gianina-dress-black-demosite/b296e16e-a001-0000-0b00-6a0b92051987.jpg\"}]}],\"description\":\"Preorder - Estimated Ship Date is Between September 29th and October 5th\\nA high neck knit midi dress featuring an open back with\\nsculptural pearl-like stones woven into delicate crisscross straps.\\n— Midi length\\n— Open back\\n— Stone adorned straps\",\"buy_link\":\"https://cultgaia.com/products/gianina-dress-black\"},{\"id\":\"rohe-textured-fringe-boucle-top\",\"title\":\"Textured Fringe Boucle Top\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Cream\"},\"size_groups\":[{\"sizes\":[\"30\",\"32\",\"34\",\"36\",\"38\",\"40\",\"42\",\"44\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"€495\",\"currency\":\"EUR\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rohe-textured-fringe-boucle-top/5c6ddb81-a001-0000-0b00-0f3c941811bc.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/rohe-textured-fringe-boucle-top/5c6ddb81-a001-0000-0b00-301d24a6504d.jpg\"}]}],\"description\":\"A sleeveless top crafted from textured boucle fringe, with an open neckline and fringe detailing that continues down the sides of the garment. Finished with a button and keyhole opening at the back of the neck. 100% polyester.\",\"buy_link\":\"https://roheframes.com/collections/new-arrivals/products/textured-fringe-boucle-top-cream\"},{\"id\":\"slim-fit-jacket-in-washable-virgin-wool-demo-site\",\"title\":\"Slim-Fit Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Blue\",\"hex\":\"#2c3143\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$699.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-jacket-in-washable-virgin-wool-demo-site/931cba18-9f01-0000-0b00-c272acf8bb59.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/slim-fit-jacket-in-washable-virgin-wool-demo-site/841cba18-9f01-0000-0b00-7781e03af69f.png\"}]}],\"description\":\"In super-lightweight virgin wool with wrinkle recovery, this BOSS Menswear jacket offers easy-care appeal. Clean slim fit. Machine washable.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/slim-fit-jacket-in-washable-virgin-wool/hbna50561991_466.html\"},{\"id\":\"floral-print-shirt-demo-site\",\"title\":\"Floral Print Shirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Floral\",\"hex\":\"#61847d\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$300.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-shirt-demo-site/d749d2b9-9f01-0000-0b00-e4c9ae1dd612.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/floral-print-shirt-demo-site/ce49d2b9-9f01-0000-0b00-48a278299208.png\"}]}],\"description\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/gucci/clothing/shirts/floral-print-silk-twill-shirt/46376663163085053\"},{\"id\":\"ilkyaz-ozel-dusk-satin-fringed-pants\",\"title\":\"Dusk Satin Fringed Wide-Leg Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black\"},\"size_groups\":[{\"sizes\":[\"FR 34\",\"FR 36\",\"FR 38\",\"FR 40\",\"FR 42\",\"FR 44\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$720\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ilkyaz-ozel-dusk-satin-fringed-pants/8cbbe16e-a001-0000-0b00-4b01be12e212.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/ilkyaz-ozel-dusk-satin-fringed-pants/90bbe16e-a001-0000-0b00-0801d9753cf6.jpg\"}]}],\"description\":\"ILKYAZ OZEL's 'Dusk' pants are cut from satin in a structured wide-leg silhouette with a subtle sheen. An elongated belt ties around the waist and is trimmed with fringe that delicately sways with movement.\",\"buy_link\":\"https://www.net-a-porter.com/en-us/shop/product/ilkyaz-ozel/clothing/wide-leg/dusk-satin-fringed-wide-leg-pants/46376663163136455\"},{\"id\":\"toryburch-racerback-tank-003\",\"title\":\"Racerback Tank\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Brown/Navy/White Stripe\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$330\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-racerback-tank-003/e7a8db81-a001-0000-0b00-709c65190bbc.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-racerback-tank-003/eaa8db81-a001-0000-0b00-cca7fbb4b816.jpg\"}]}],\"description\":\"Crafted in Japanese cotton jersey, the striped tank features a scoop neck, sporty racerback and a removable flower pin. Designed for a slim fit.\",\"buy_link\":\"https://www.toryburch.com/en-us/clothing/tops/racerback-tank/185743.html?color=209\"},{\"id\":\"tapered-fit-trousers-in-washable-virgin-wool-demo-site\",\"title\":\"Tapered-Fit Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Blue\",\"hex\":\"#3a3c4f\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$299.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-fit-trousers-in-washable-virgin-wool-demo-site/f3dfba18-9f01-0000-0b00-beb3d85a545d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/tapered-fit-trousers-in-washable-virgin-wool-demo-site/9ddfba18-9f01-0000-0b00-17991d976ace.png\"}]}],\"description\":\"Offering easy care and modern style, these washable BOSS Menswear trousers are crafted in lightweight virgin wool. Tapered fit. Wrinkle resistant.\\n\",\"buy_link\":\"https://www.hugoboss.com/us/tapered-fit-trousers-in-washable-virgin-wool/hbna50561986_466.html\"},{\"id\":\"wool-cashmere-cable-knit-mini-dress-demosite\",\"title\":\"Knit Mini Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Red\",\"hex\":\"#aa0333\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$115.00\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wool-cashmere-cable-knit-mini-dress-demosite/a2c6f05f-9f01-0000-0b00-b0528da206a8.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/wool-cashmere-cable-knit-mini-dress-demosite/4ec6f05f-9f01-0000-0b00-0fd54fd65358.png\"}]}],\"description\":\"https://www.alexandermcqueen.com/en-gb/pr/wool-cashmere-cable-knit-mini-dress-848815Q1BE16062.html\",\"buy_link\":\"https://www.alexandermcqueen.com/en-gb/pr/wool-cashmere-cable-knit-mini-dress-848815Q1BE16062.html\"},{\"id\":\"bebe-dress-etched-floral\",\"title\":\"Bebe Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Floral\",\"hex\":\"#313648\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1598.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/bebe-dress-etched-floral/f46fa98f-9f01-0000-0b00-d70e0b513685.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/bebe-dress-etched-floral/8a6fa98f-9f01-0000-0b00-a56586c17215.png\"}]}],\"description\":\"A mini dress featuring bead and sequin embroidery in our etched floral pattern.\\n\\n— Mini length\\n\\n— Square neckline\\n\\n— Embroidered beaded floral print\\n\\n— Thin straps\",\"buy_link\":\"https://cultgaia.com/products/bebe-dress-etched-floral?variant=43517204594762\"},{\"id\":\"nike-ld1000-suede-black\",\"title\":\"LD-1000 Suede\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Black/Sail/Gum Light Brown/Dark Smoke Grey\"},\"size_groups\":[{\"sizes\":[\"5\",\"5.5\",\"6\",\"6.5\",\"7\",\"7.5\",\"8\",\"8.5\",\"9\",\"9.5\",\"10\",\"10.5\",\"11\",\"11.5\",\"12\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$67.97\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nike-ld1000-suede-black/65fae16e-a001-0000-0b00-ef7cecb6857d.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nike-ld1000-suede-black/7efae16e-a001-0000-0b00-22c9eec2508b.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/nike-ld1000-suede-black/67fae16e-a001-0000-0b00-28939cf67e45.jpg\"}]}],\"description\":\"Back in 1977, the LD-1000 made waves with dramatically flared heel cushioning to support long-distance runners. The retro shape and Waffle outsole make it a staple comfortable enough for everyday wear. Upper combines leather and suede for durability. Foam midsole. Rubber outsole. Shown: Black/Sail/Gum Light Brown/Dark Smoke Grey.\",\"buy_link\":\"https://www.nike.com/t/ld-1000-suede-womens-shoes-gXu3Z9Gy\"},{\"id\":\"dress-with-japanese-sleeves-demo-site\",\"title\":\"Dress with Japanese Sleeves\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Brown\",\"hex\":\"#312b1e\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$14.99\",\"currency\":\"USD\"},\"images\":[{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-japanese-sleeves-demo-site/6cc42647-9f01-0000-0b00-83cef88c5cd8.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/dress-with-japanese-sleeves-demo-site/6ac42647-9f01-0000-0b00-fde14f354eba.png\"}]}],\"description\":\"Fitted midi dress in stretch knit. Features a boat neckline, kimono sleeves, and a gathered waist. Fully lined bodice.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1239334023.html\"},{\"id\":\"cotton-blouse-with-english-embroidery-demosite\",\"title\":\"Blouse with English Embroidery\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"pink\",\"hex\":\"#ebd0c9\"},\"size_groups\":[{\"sizes\":[],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$29.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cotton-blouse-with-english-embroidery-demosite/bc0ebe18-9f01-0000-0b00-083636c033b3.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/cotton-blouse-with-english-embroidery-demosite/b90ebe18-9f01-0000-0b00-1700ffad62dd.png\"}]}],\"description\":\"Short cotton blouse with broderie anglaise and scalloped trim. Deep V-neck with flounce trim and open front with concealed hook-and-eye closure and a thin tie at the waist. Elbow-length sleeves with thin elastic and flounce trim at the cuffs, and elasticated seam with gathers at the waist to create a flared hem.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1332998002.html\"},{\"id\":\"saintlaurent-jill-bootie-stonish-beige\",\"title\":\"Jill Bootie\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"footwear\",\"name\":\"Footwear\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Stonish Beige\"},\"size_groups\":[{\"sizes\":[\"6\",\"7\",\"7.5\",\"8\",\"8.5\",\"9\",\"9.5\",\"10\",\"11\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1700.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/saintlaurent-jill-bootie-stonish-beige/2d7adb81-a001-0000-0b00-f32688c378ed.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/saintlaurent-jill-bootie-stonish-beige/487adb81-a001-0000-0b00-51ddb584bc18.png\"},{\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/saintlaurent-jill-bootie-stonish-beige/307adb81-a001-0000-0b00-cfe19e0dd254.jpg\"}]}],\"description\":\"This butter-soft lambskin bootie crafted in Italy with a square pointed toe and tapered heel presents a clean and contemporary silhouette. 3 3/4\\\" (95mm) heel. Side zip closure. Leather upper, lining and sole. Made in Italy.\",\"buy_link\":\"https://www.nordstrom.com/s/jill-bootie-women/8802961\"},{\"id\":\"relaxed-fit-cotton-cargo-pants-demo-site\",\"title\":\"Cargo Pants\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"bottom\",\"name\":\"Bottom\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Light Beige\",\"hex\":\"#d1baa0\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$34.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/e57bbd18-9f01-0000-0b00-95a0360d164d.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/dc7bbd18-9f01-0000-0b00-282f719b7284.png\"}]},{\"color\":{\"name\":\"Olive Green\",\"hex\":\"#605b44\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$34.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/c832e94c-9f01-0000-0b00-764ea888072b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/relaxed-fit-cotton-cargo-pants-demo-site/ce32e94c-9f01-0000-0b00-f1aaaf46eebf.png\"}]}],\"description\":\"Cargo pants in soft cotton canvas with a concealed drawstring waist and zip and snap button closure. Features slanted pockets, and concealed flap and snap button pockets on the legs and back. Stitched pleats at the knees. Relaxed fit for a casual yet not oversized silhouette.\",\"buy_link\":\"https://www2.hm.com/es_es/productpage.1316423003.html\"},{\"id\":\"linen-dress-demo-site\",\"title\":\"Linen Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Polka Dot\",\"hex\":\"#23211f\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/da12c38a-9f01-0000-0b00-55d1b99514b7.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/ea12c38a-9f01-0000-0b00-a6ab2508e5d6.png\"}]},{\"color\":{\"name\":\"Off White\",\"hex\":\"#ebe7ec\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$44.99\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/4863c48a-9f01-0000-0b00-8f57b87986f6.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/linen-dress-demo-site/b963c48a-9f01-0000-0b00-891128b7398a.png\"}]}],\"description\":\"Smooth linen blend.\\nTank straps.\\nSquare neckline, keyhole with button closure at back.\\nSelect styles have allover print.\",\"buy_link\":\"https://www.gapfactory.com/browse/product.do?pid=845008061&vid=1&tid=gfpl000071&kwid=1&ds_agid=23920023099-&gclsrc=aw.ds&gad_source=1&gad_campaignid=23925131477&gbraid=0AAAAAD_AT8tSTue6G-zdhXTsLQWQtgc5b&gclid=Cj0KCQjwjb3SBhDgARIsAMKiWzirn47hGYO4L8IMAK2VqbhGHzcf7CY7Gt32hFCbSjaC6S8stUlfVqAaAoJ8EALw_wcB#pdp-page-content\"},{\"id\":\"toryburch-mirror-embellished-cotton-dress\",\"title\":\"Mirror Embellished Cotton Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"women\",\"name\":\"Women\",\"garment_count\":0},{\"id\":\"dress\",\"name\":\"Dress\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Pink / Gray\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"$1995\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-mirror-embellished-cotton-dress/82a1db81-a001-0000-0b00-550c70665b62.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/toryburch-mirror-embellished-cotton-dress/82a1db81-a001-0000-0b00-35fba262b651.jpg\"}]}],\"description\":\"Hand-applied mirror embellishment covers this cotton dress, styled with spaghetti straps and a fitted silhouette that falls above the ankle. Ties at the back of the bodice with a hidden side zipper and hook-and-eye closure at the skirt.\",\"buy_link\":\"https://www.toryburch.com/en-us/clothing/dresses/mirror-embellished-cotton-dress/183267.html\"},{\"id\":\"canvas-relaxed-shirt-jacket\",\"title\":\"Canvas Relaxed Shirt Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"id\":\"top\",\"name\":\"Top\",\"garment_count\":0}],\"variants\":[{\"color\":{\"name\":\"Ecru Beige\",\"hex\":\"#968d86\"},\"size_groups\":[{\"sizes\":[\"XXS\",\"XS\",\"S\",\"M\",\"L\",\"XL\",\"XXL\"],\"size_system\":\"US\"}],\"price\":{\"amount\":\"60.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-relaxed-shirt-jacket/7751ecb9-9f01-0000-0b00-28e437ba3e17.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.prod.spreeai.com/garment/demo-site/canvas-relaxed-shirt-jacket/7751ecb9-9f01-0000-0b00-4b24347a5829.png\"}]}],\"description\":\"Smooth cotton canvas shirt jacket in a relaxed fit. Spread collar, button front. Long sleeves with button cuffs. Chest patch pocket, interior patch pocket, side welt pockets.\",\"buy_link\":\"https://www.gap.com/browse/product.do?pid=894748002&vid=1#pdp-page-content\"}]"), Ll = /*#__PURE__*/ JSON.parse("[{\"id\":\"oscardelarenta-crystal-fringe-chandelier-earrings-demo\",\"title\":\"Crystal Fringe Chandelier Earrings\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Earring\"}],\"variants\":[{\"color\":{\"name\":\"Topaz\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$720.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-crystal-fringe-chandelier-earrings-demo/368decaa-a001-0000-0b00-6c4803e28be8.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-crystal-fringe-chandelier-earrings-demo/f08decaa-a001-0000-0b00-e30cea8537db.webp\"}]}],\"description\":\"A faceted crystal stud anchors cascading strands of shimmering rhinestones, creating a dramatic chandelier silhouette. The polished setting is dotted with scattered crystals that amplify the sparkle from every angle.\\n\\nMaterials: 75% Brass, 15% Glass.\\n\\nCare: Avoid harsh chemicals, lotions, and perfumes. Do not wear in pool/shower. Wipe with a damp microfiber cloth and store separately in a cloth pouch.\",\"buy_link\":\"https://www.oscardelarenta.com/products/crystal-fringe-chandelier-earrings-p26j911-top?variant=53069432717675\"},{\"id\":\"dominican-landscape-pencil-skirt\",\"title\":\"Dominican Landscape Pencil Skirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Blue green multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$21900.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/dominican-landscape-pencil-skirt/215797aa-a001-0000-0b00-93d9d425a52f.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/dominican-landscape-pencil-skirt/295797aa-a001-0000-0b00-0cf1cbc77e9c.webp\"}]}],\"description\":\"The Dominican Landscape print brings a painterly expression of place to this pencil skirt, nodding to Oscar de la Renta’s heritage and roots in the Dominican Republic. Sweeping palm trees and beach scenes unfold across the silhouette, capturing the warmth and vibrancy of the island.\\n\\n\",\"buy_link\":\"https://www.oscardelarenta.com/products/dominican-landscape-pencil-skirt-26pn401pta-bgt?variant=52676719804779\"},{\"id\":\"odlr-maple-leaves-faille-dress-grm\",\"title\":\"Maple Leaves Faille Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Green Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$4990\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-maple-leaves-faille-dress-grm/0f51a6a6-a001-0000-0b00-088e5d4720c6.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-maple-leaves-faille-dress-grm/2151a6a6-a001-0000-0b00-91cfc0546cb2.jpg\"}]}],\"description\":\"Sleeveless scoop-neck cocktail dress in green-multi maple leaf print faille.\",\"buy_link\":\"https://www.oscardelarenta.com/products/maple-leaves-faille-dress-26fn264fpf-grm\"},{\"id\":\"odlr-hibiscus-embroidered-knit-pullover-brn\",\"title\":\"Hibiscus Embroidered Knit Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Brown\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$1990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-hibiscus-embroidered-knit-pullover-brn/25cf52c5-a001-0000-0b00-b10e99040de2.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-hibiscus-embroidered-knit-pullover-brn/2dcf52c5-a001-0000-0b00-5660f9799cd1.png\"}]}],\"description\":\"Delicate hibiscus embroidery blooms across this refined knit pullover, adding dimensional texture to the clean silhouette. The softly structured shape is framed by a high neckline and ribbed trims for a polished finish.\",\"buy_link\":\"https://www.oscardelarenta.com/products/hibiscus-embroidered-knit-pullover-26pe159chi-brn\"},{\"id\":\"odlr-mixed-botanical-cropped-jacket-nav\",\"title\":\"Mixed Botanical Cropped Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Navy\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-cropped-jacket-nav/da8b3fa2-a001-0000-0b00-f3c4381029e4.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-cropped-jacket-nav/3a8c3fa2-a001-0000-0b00-c07a1d787e72.webp\"}]}],\"description\":\"A collared knit jacket in a refined navy wool-blend, with delicate embroidery that adds an artful dimension to the structured knit surface. A versatile layering piece that bridges tailoring and knitwear with ease. Long sleeves, collared neckline, unlined. Country of Origin: Italy. Style Code: 26FE187NEW_NAV. 97% Wool, 2% Polyamide, 1% Elastane. Dry clean only. Do not wash, bleach, iron, steam, or tumble dry.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-cropped-jacket-26fe187new-nav?variant=53342635000171\"},{\"id\":\"odlr-mixed-botanical-tie-detailed-blouse-bsm\",\"title\":\"Mixed Botanical Tie-Detailed Blouse\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blush Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2290.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-detailed-blouse-bsm/70ccddaa-a001-0000-0b00-856a9e1f7577.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-detailed-blouse-bsm/be43ddaa-a001-0000-0b00-19e2edef59a5.jpg\"}]}],\"description\":\"A garden in full bloom rendered in lightweight cotton voile, this blouse captures the season's botanical spirit with an all-over mixed floral print. A delicate tie detail at the neckline lends an effortlessly refined finish.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-tie-detailed-blouse-26fn716mbv-bsm\"},{\"id\":\"odlr-embossed-mini-tro-bag-cog\",\"title\":\"Embossed Mini TRO Bag\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Accessory\"}],\"variants\":[{\"color\":{\"name\":\"Cognac\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$3390.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-embossed-mini-tro-bag-cog/920c10c5-a001-0000-0b00-f97edc895300.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-embossed-mini-tro-bag-cog/990c10c5-a001-0000-0b00-c6ce7591721b.jpg\"}]}],\"description\":\"The house's signature Mini TRO silhouette is rendered in richly textured embossed calfskin, the structured crossbody form offering a refined versatility suited to any occasion. A push-lock closure and chain strap complete the polished, compact design.\",\"buy_link\":\"https://www.oscardelarenta.com/products/embossed-mini-tro-bag-26fh003ecf-cog\"},{\"id\":\"odlr-faded-mixed-botanical-denim-pant-whm\",\"title\":\"Faded Mixed Botanical Denim Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"White Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-faded-mixed-botanical-denim-pant-whm/dbaa33c5-a001-0000-0b00-73799ddf2284.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-faded-mixed-botanical-denim-pant-whm/dbaa33c5-a001-0000-0b00-a22ae8164841.jpg\"}]}],\"description\":\"The season's faded mixed botanical print is applied to cotton denim for a relaxed pant with a distinctive, artisanal aesthetic. The washed treatment lends the botanical motifs a painterly, sun-faded quality.\",\"buy_link\":\"https://www.oscardelarenta.com/products/faded-mixed-botanical-denim-pant-26fn3182fbn-whm\"},{\"id\":\"odlr-beaded-floral-embroidered-pencil-dress-ivr\",\"title\":\"Beaded Floral Embroidered Pencil Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Ivory\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$5990\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/042b60a7-a001-0000-0b00-41bfdd1e6785.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/20f35fa7-a001-0000-0b00-533bdaa5e4c1.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/e7ab61a7-a001-0000-0b00-668786ace10e.png\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-beaded-floral-embroidered-pencil-dress-ivr/e0ab61a7-a001-0000-0b00-e15740fef422.png\"}]}],\"description\":\"Beaded floral embroidery is worked across the surface of this short-sleeve stretch wool cocktail dress, each bloom adding a luminous, celebratory dimension. The ivory colorway renders the embellishment in full relief.\",\"buy_link\":\"https://www.oscardelarenta.com/products/beaded-floral-embroidered-pencil-dress-26fe639dsw-ivr\"},{\"id\":\"tinos-dress\",\"title\":\"Tinos Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Dove Grey\",\"hex\":\"#595450\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$660.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/ee289024-9c01-0000-0b00-3b00c93d8ed9.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/e7319024-9c01-0000-0b00-a44fe9a0d5f1.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/732a9024-9c01-0000-0b00-e990a140bf47.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/762a9024-9c01-0000-0b00-bb30b5151c4e.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/tinos-dress/49d9c5d7-a001-0000-0b00-8137fc1ed7d3.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/tinos-dress/93d9c5d7-a001-0000-0b00-7c58828f9333.jpg\"},{\"tag\":\"back_flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/tinos-dress/3082b0d7-a001-0000-0b00-314251c4d555.png\"},{\"tag\":\"back_model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/tinos-dress/2f319024-9c01-0000-0b00-aa77af0d3e84.jpg\"}]}],\"description\":\"A long-sleeve rib-knit bodice meets a pleated crepe midi skirt, cinched at the waist by a double grey leather belt and set with rows of metal eyelets. A concealed zip runs the length of the back. Fabric: knit & crepe. Fit: true to size — MAYKA's model is 164 cm (bust 82, waist 64, hips 91 cm) and wears XS. Sizes XS–XL follow EU 34–42; also made in Tall (6 cm longer).\",\"buy_link\":\"https://maykastore.com/products/tinos-dress\"},{\"id\":\"odlr-mixed-botanical-embroidered-oversized-pullover-bru\",\"title\":\"Mixed Botanical Embroidered Oversized Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Brown Multi\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$3990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-embroidered-oversized-pullover-bru/654cd8aa-a001-0000-0b00-a5966393b007.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-embroidered-oversized-pullover-bru/26ddd6aa-a001-0000-0b00-05a6f2bef2a6.jpg\"},{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-embroidered-oversized-pullover-bru/3545d7aa-a001-0000-0b00-602a0f3e78a2.png\"}]}],\"description\":\"A large-scale floral intarsia pattern is worked entirely by hand into this luxurious wool-cotton pullover, each bloom rendered with the precision of a painting. A singular piece that carries the craft and artistry of the house.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-embroidered-oversized-pullover-26fe117fik-bru\"},{\"id\":\"oscardelarenta-mini-poppy-demo\",\"title\":\"The Mini Poppy\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Accessory\"}],\"variants\":[{\"color\":{\"name\":\"Saltwater\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$3890.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-mini-poppy-demo/b436edaa-a001-0000-0b00-5bb42c7bae36.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-mini-poppy-demo/7137edaa-a001-0000-0b00-8bfa6317ac84.webp\"}]}],\"description\":\"The Dominican Landscape print brings a painterly expression of place to this compact handbag, nodding to Oscar de la Renta’s heritage and roots in the Dominican Republic. Crafted from full-grain Taurillon leather with a natural pebbled finish, this petite silhouette balances sophistication with practicality, featuring a top handle and removable shoulder strap. A special-edition anniversary embossing commemorates the House’s 60th year.\\n\\nMaterials: 100% Bull Leather.\\n\\nCare: Remove dust with a dry or slightly damp cloth. Avoid prolonged sun exposure and heat sources. Store in original packaging in a cool, dry place. For stains, wipe with lukewarm water or mild soapy water.\",\"buy_link\":\"https://www.oscardelarenta.com/products/the-mini-poppy-26ph1592pcl-slw?variant=52676734714219\"},{\"id\":\"odlr-mixed-botanical-midi-skirt-bru\",\"title\":\"Mixed Botanical Midi Skirt\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Brown Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2290.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-midi-skirt-bru/4d5896c5-a001-0000-0b00-49a097b0ce4a.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-midi-skirt-bru/4b5896c5-a001-0000-0b00-8be7417e570d.jpg\"}]}],\"description\":\"The season's mixed botanical print in brown multi is cut into a full circle skirt in stretch cotton, the sweep of the hem allowing the vibrant print to move beautifully. A versatile, celebratory piece that pairs effortlessly with the season's knits. Circle skirt silhouette, unlined. Country of Origin: Italy. Style Code: 26FN4042MCK_BRU. 97% Cotton, 3% Elastane. Machine wash cold, do not bleach, tumble dry low, iron on low heat if needed.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-midi-skirt-26fn4042mck-bru?variant=53342642930027\"},{\"id\":\"odlr-mixed-botanical-silk-twill-pant-bmm\",\"title\":\"Mixed Botanical Silk Twill Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Blue Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2690.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-silk-twill-pant-bmm/46eba7b5-a001-0000-0b00-cafb3e97b0cf.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-silk-twill-pant-bmm/f2eaa7b5-a001-0000-0b00-97c1980ca9ab.jpg\"}]}],\"description\":\"The season's mixed botanical print in blue multi is rendered in silk twill for a fluid pant that moves beautifully. The print brings an exuberant painterly quality to the most refined of wardrobe staples.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-silk-twill-pant-26fn3092mbi-bmm\"},{\"id\":\"oscardelarenta-metallic-tassel-earrings-demo\",\"title\":\"Metallic Beaded Tassel Clip-On Earrings\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Earring\"}],\"variants\":[{\"color\":{\"name\":\"Pink\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$450.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-metallic-tassel-earrings-demo/0c4fecaa-a001-0000-0b00-a65ac723f219.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/oscardelarenta-metallic-tassel-earrings-demo/734fecaa-a001-0000-0b00-749de03edfe0.webp\"}]}],\"description\":\"A long column of metallic glass beads tapers into a dramatic tassel, the navy or pink palette lending a refined, jewel-toned depth. Each earring is handcrafted, making every pair a subtly individual creation.\\n\\nMaterials: 50% Crystal Glass, 25% Polyester Thread, 15% Brass, 10% Cotton.\\n\\nCare: Avoid harsh chemicals, lotions, and perfumes. Do not wear in pool/shower. Wipe with a damp microfiber cloth and store separately in a cloth pouch.\",\"buy_link\":\"https://www.oscardelarenta.com/products/metallic-beaded-tassel-clip-on-earrings-f26j114-pnk?variant=53342647124331\"},{\"id\":\"odlr-knot-clutch-blk\",\"title\":\"Knot Clutch\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Accessory\"}],\"variants\":[{\"color\":{\"name\":\"Black\"},\"size_groups\":[{\"sizes\":[\"OS\"]}],\"price\":{\"amount\":\"$2590.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-knot-clutch-blk/19cc34c5-a001-0000-0b00-b80ef6285a33.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-knot-clutch-blk/c25d34c5-a001-0000-0b00-1f4e2e54e4b2.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-knot-clutch-blk/c25d34c5-a001-0000-0b00-52e964358e1b.jpg\"}]}],\"description\":\"This clutch showcases a clasp intricately knotted into a fluid, sculptural design, subtly evoking the interlocking Oscar 'O' emblem in an abstract form. The clutch's sleek sheen enhances its refined presence, while a removable shoulder strap adds versatility, allowing it to be worn hands-free or carried as a statement piece.\",\"buy_link\":\"https://www.oscardelarenta.com/products/knot-clutch-00nh187clf-blk\"},{\"id\":\"odlr-dominican-landscape-oversized-pullover-bgt\",\"title\":\"Dominican Landscape Oversized Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blue Green Multi\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2690.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-landscape-oversized-pullover-bgt/1bac9eaa-a001-0000-0b00-d068bbb23b1f.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-landscape-oversized-pullover-bgt/83ac9eaa-a001-0000-0b00-d25799134c03.webp\"}]}],\"description\":\"The Dominican Landscape print brings a painterly expression of place to this oversized pullover, nodding to Oscar de la Renta’s heritage and roots in the Dominican Republic. Long sleeves, crew neckline, oversized silhouette, ribbed trim, pullover style. 100% Virgin Wool. Dry clean only.\",\"buy_link\":\"https://www.oscardelarenta.com/products/dominican-landscape-oversized-pullover-26pn104liv-bgt?variant=52676711743851\"},{\"id\":\"psara-set-top\",\"title\":\"Psara Set — Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Brown Paisley\",\"hex\":\"#8a5447\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$825.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/6ab19424-9c01-0000-0b00-29a03b73e919.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/9fb29424-9c01-0000-0b00-dae68d8dd576.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/e2c69424-9c01-0000-0b00-af16cb2a6570.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/34b29424-9c01-0000-0b00-a344e51d9e43.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/33c89424-9c01-0000-0b00-3caed1b65ee6.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-top/66e3c5d7-a001-0000-0b00-79d52f7f3362.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-top/79e3c5d7-a001-0000-0b00-bf323470d77d.jpg\"},{\"tag\":\"back_flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-top/02bab0d7-a001-0000-0b00-d0769e83b55c.png\"},{\"tag\":\"back_model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-top/50c09424-9c01-0000-0b00-05f16100f709.jpg\"}]}],\"description\":\"The jacket of the Psara set: a fitted brown gabardine shirt-jacket in an all-over bandana paisley print, with a point collar, buttoned cuffs and brown leather X cross-stitching running down both back princess seams. Sold as a set with the Psara wide-leg trousers. Fit: fitted, true to size — MAYKA's model is 164 cm and wears XS. Sizes XS–XL follow EU 34–42.\",\"buy_link\":\"https://maykastore.com/products/psara-set\"},{\"id\":\"odlr-turtleneck-pullover-bsh\",\"title\":\"Turtleneck Wool Short-Sleeve Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blush\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$1290\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-turtleneck-pullover-bsh/fdf4a5a1-a001-0000-0b00-7b72c846c447.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-turtleneck-pullover-bsh/63f5a5a1-a001-0000-0b00-cec5bff51fe8.webp\"}]}],\"description\":\"A fold-over turtleneck in pure wool defines this short-sleeve pullover, creating a graceful, layered neckline that brings a modern sensibility to a classic silhouette. Short sleeves; fold-over turtleneck; unlined. 100% wool. Dry clean only. Made in Italy.\",\"buy_link\":\"https://www.oscardelarenta.com/products/turtleneck-wool-short-sleeve-pullover-26fn104mmr-bsh?variant=53342638604651\"},{\"id\":\"odlr-ombre-crewneck-pullover-pbw\",\"title\":\"Ombré Crewneck Pullover\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Pink/Brown\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$1990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-ombre-crewneck-pullover-pbw/ea6a77aa-a001-0000-0b00-99a5b41c369b.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-ombre-crewneck-pullover-pbw/c3dd75aa-a001-0000-0b00-6adf0220270e.jpg\"},{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-ombre-crewneck-pullover-pbw/836376aa-a001-0000-0b00-6a376efefe9f.png\"}]}],\"description\":\"A painterly print covers this crew-neck wool pullover in a pink and brown palette, bringing the season's botanical spirit to the knitwear category. The fine wool base provides warmth and a refined, polished hand.\",\"buy_link\":\"https://www.oscardelarenta.com/products/ombre-crewneck-pullover-26fn110omp-pbw\"},{\"id\":\"odlr-mixed-botanical-tie-neck-cardigan-bsm\",\"title\":\"Mixed Botanical Tie-Neck Cardigan\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Blush Multi\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-neck-cardigan-bsm/a08e81aa-a001-0000-0b00-66c493f2313e.png\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-neck-cardigan-bsm/223181aa-a001-0000-0b00-55f91cbd75ca.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-tie-neck-cardigan-bsm/dbce87aa-a001-0000-0b00-1c1394c8e4bd.png\"}]}],\"description\":\"Part of the season's coordinated twinset, this all-over floral cardigan pairs beautifully with its matching tank. The cotton-viscose blend provides a fluid hand with just enough structure.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-tie-neck-cardigan-26fn129fts-bsm\"},{\"id\":\"demo-site-mixed-botanical-embroidered-dress\",\"title\":\"Mixed Botanical Embroidered Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Navy\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$2990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/demo-site-mixed-botanical-embroidered-dress/18871ba2-a001-0000-0b00-7587d0c631b9.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/demo-site-mixed-botanical-embroidered-dress/20871ba2-a001-0000-0b00-e6010c74da49.jpg\"}]}],\"description\":\"A refined A-line knit dress in navy with delicate embroidery that brings a quiet luxuriance to the clean silhouette. The wool-blend fabric provides both comfort and a polished, structured drape.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-embroidered-dress-26fe186new-nav\"},{\"id\":\"odlr-mixed-botanical-off-shoulder-dress-bsm\",\"title\":\"Mixed Botanical Off-Shoulder Dress\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Blush Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$6290\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-off-shoulder-dress-bsm/0c90d1a6-a001-0000-0b00-58971468447f.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-off-shoulder-dress-bsm/74e9d1a6-a001-0000-0b00-be5dfffe5fa1.png\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-mixed-botanical-off-shoulder-dress-bsm/0590d1a6-a001-0000-0b00-3c3fe9c61e3c.jpg\"}]}],\"description\":\"Off-shoulder midi dress in mixed botanical print with a twisted, folded neckline. Fitted bodice with a full, gathered skirt. 100% Cotton. Machine wash cold, do not bleach, tumble dry low, iron on low heat if needed.\",\"buy_link\":\"https://www.oscardelarenta.com/products/mixed-botanical-off-shoulder-dress-26fn235mvb-bsm\"},{\"id\":\"psara-set-bottom\",\"title\":\"Psara Set — Trousers\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Brown Paisley\",\"hex\":\"#8a4d3e\"},\"size_groups\":[{\"sizes\":[\"XS\",\"S\",\"M\",\"L\",\"XL\"]}],\"price\":{\"amount\":\"$825.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/d4e59424-9c01-0000-0b00-14492d3a64aa.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/9be69424-9c01-0000-0b00-2d23ac9f3ac1.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/98f89424-9c01-0000-0b00-c80e39214817.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/22e89424-9c01-0000-0b00-33006640720b.jpg\"},{\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/80fa9424-9c01-0000-0b00-7746cb9c0f40.jpg\"},{\"tag\":\"back_flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/psara-set-bottom/1ed7b0d7-a001-0000-0b00-e879e6211c00.png\"},{\"tag\":\"back_model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/spree/psara-set-bottom/a5f49424-9c01-0000-0b00-fb56fe063d71.jpg\"}]}],\"description\":\"The trousers of the Psara set: high-rise wide-leg trousers in brown gabardine with an all-over bandana paisley print, a clean seat and straight full-length legs. Sold as a set with the Psara jacket. Fit: true to size — MAYKA's model is 164 cm and wears XS. Sizes XS–XL follow EU 34–42; also made in Tall (6 cm longer).\",\"buy_link\":\"https://maykastore.com/products/psara-set\"},{\"id\":\"odlr-dominican-mixed-floral-wide-leg-pant-bru\",\"title\":\"Dominican Mixed-Floral Wide Leg Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Brown Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-mixed-floral-wide-leg-pant-bru/75f31bc5-a001-0000-0b00-3d4c2fa41e8f.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-dominican-mixed-floral-wide-leg-pant-bru/75f31bc5-a001-0000-0b00-a4052cd9832d.jpg\"}]}],\"description\":\"Crafted from silk twill, these wide-leg pants feature the Dominican Mixed-Floral print, bringing a vibrant, painterly expression to the silhouette. The elastic waistband offers a relaxed, comfortable fit, balancing ease with fluid movement.\",\"buy_link\":\"https://www.oscardelarenta.com/products/dominican-mixed-floral-wide-leg-pant-26pn331moc-bru\"},{\"id\":\"odlr-chine-mixed-floral-sweetheart-gown-swm\",\"title\":\"Chiné Dominican Mixed-Floral Chiffon Sweetheart Gown\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Dress\"}],\"variants\":[{\"color\":{\"name\":\"Saltwater Multi\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$10990.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-chine-mixed-floral-sweetheart-gown-swm/a9ed9eaa-a001-0000-0b00-8f5e2f8c9642.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-chine-mixed-floral-sweetheart-gown-swm/beed9eaa-a001-0000-0b00-048fe63a617c.webp\"}]}],\"description\":\"A vibrant array of Dominican florals unfolds across this silk chiffon gown, rendered in a Chiné print inspired by the traditional weaving technique. Long sleeves with button cuffs, off shoulder, sweetheart neckline, floor-sweeping hemline with short train, concealed back zipper. 100% Silk, 100% Polyamide. Dry clean only.\",\"buy_link\":\"https://www.oscardelarenta.com/products/chine-dominican-mixed-floral-chiffon-sweetheart-gown-26pn052cms-swm\"},{\"id\":\"odlr-wool-wide-leg-pant-ind\",\"title\":\"Wool Wide-Leg Pant\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Bottom\"}],\"variants\":[{\"color\":{\"name\":\"Indigo\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$2690.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-wool-wide-leg-pant-ind/176ab2b5-a001-0000-0b00-f292101d0fe5.jpg\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/odlr-wool-wide-leg-pant-ind/196ab2b5-a001-0000-0b00-359e49bbcf1d.jpg\"}]}],\"description\":\"The season's indigo wool drill tailoring is cut into a refined straight-leg trouser with clean, precise lines. A wardrobe foundation that pairs seamlessly with the coordinating tailored separates.\",\"buy_link\":\"https://www.oscardelarenta.com/products/wool-wide-leg-pant-26fn320wdt-ind\"},{\"id\":\"chine-palm-leaves-jacket\",\"title\":\"Chiné Palm Leaves Jacket\",\"partner_id\":\"demo-site\",\"categories\":[{\"name\":\"Women\"},{\"name\":\"Top\"}],\"variants\":[{\"color\":{\"name\":\"Espresso Ivory\"},\"size_groups\":[{\"sizes\":[\"00\",\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\"]}],\"price\":{\"amount\":\"$3490.00\",\"currency\":\"USD\"},\"images\":[{\"tag\":\"flat\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/chine-palm-leaves-jacket/9b5ec0aa-a001-0000-0b00-10f081694ece.webp\"},{\"tag\":\"model\",\"url\":\"https://api-minio.dev.spreeai.com/garment/demo-site/chine-palm-leaves-jacket/fd5ec0aa-a001-0000-0b00-2af4f33ea171.webp\"}]}],\"description\":\"Long Sleeves, Shoulder Pads, Open Front, Front Flap Pockets. 100% Polyester; Lining: 100% Silk. Dry clean only. Style Code: 26PN509LCV_EIV. Country of Origin: Italy.\",\"buy_link\":\"https://www.oscardelarenta.com/products/chine-palm-leaves-jacket-26pn509lcv-eiv?variant=52676722753899\"}]"), Rl = {
 	"https://api-minio.prod.spreeai.com/garment/demo-site/bebe-dress-etched-floral/8a6fa98f-9f01-0000-0b00-a56586c17215.png": "/spreeai-always-on-demo/online/catalog/632d2dd119341260f7f3.webp",
 	"https://api-minio.prod.spreeai.com/garment/demo-site/bebe-dress-etched-floral/f46fa98f-9f01-0000-0b00-d70e0b513685.png": "/spreeai-always-on-demo/online/catalog/6db615bb8e5c01c2e76c.webp",
 	"https://api-minio.prod.spreeai.com/garment/demo-site/black-shorts-demo-site/013fb7b9-9f01-0000-0b00-929d9e41f7da.png": "/spreeai-always-on-demo/online/catalog/d3f71f7f1dde2939d35d.webp",
@@ -6471,8 +6481,8 @@ var Fl = /*#__PURE__*/ JSON.parse("[{\"id\":\"roanne-panelled-knit-maxi-dress-de
 	"https://api-minio.prod.spreeai.com/garment/demo-site/wool-cashmere-cable-knit-mini-dress-demosite/a2c6f05f-9f01-0000-0b00-b0528da206a8.png": "/spreeai-always-on-demo/online/catalog/909683b3875fd302c86c.webp",
 	"https://api-minio.prod.spreeai.com/garment/demo-site/zara-linen-fringe-jacket/23b8db81-a001-0000-0b00-c8b1dd5d6462.jpg": "/spreeai-always-on-demo/online/catalog/eca67c7acfd8a53aa476.webp",
 	"https://api-minio.prod.spreeai.com/garment/demo-site/zara-linen-fringe-jacket/24b8db81-a001-0000-0b00-245c01a8c8ff.jpg": "/spreeai-always-on-demo/online/catalog/47d0e5a9d88cabc25f8a.webp"
-}, Rl = (e) => Ll[e] || e;
-function zl(e, t = "dev") {
+}, zl = (e) => Rl[e] || e;
+function Bl(e, t = "dev") {
 	return e.flatMap((e) => {
 		if (!e || typeof e.id != "string" || typeof e.title != "string" || !Array.isArray(e.variants)) return [];
 		let n = e.variants[0], r = e.variants.flatMap((e) => e.images || []).filter((e) => /^https:\/\/(api-minio\.(?:dev|prod)\.spreeai\.com|assets\.spreeai\.com)\//.test(e.url)) || [];
@@ -6506,18 +6516,18 @@ function zl(e, t = "dev") {
 			details: "Product imagery, available demo sizes and listed price are supplied by the official SPREEAI demo catalog.",
 			retailerUrl: e.buy_link && /^https:\/\//.test(e.buy_link) ? e.buy_link : void 0,
 			material: e.description?.match(/(?:Materials?|Composition|Fabric):[^\n]+/i)?.[0] || "Composition and care details are confirmed by the retailer.",
-			image: Rl(i.url),
-			model: Rl(a.url),
-			source: r.map((e) => Rl(e.url)),
+			image: zl(i.url),
+			model: zl(a.url),
+			source: r.map((e) => zl(e.url)),
 			sizes: f
 		}];
 	});
 }
-var Bl = window.PARTNER_DEMO?.products || [...zl(Il), ...zl(Fl, "prod")];
+var U = window.PARTNER_DEMO?.products || [...Bl(Ll), ...Bl(Il, "prod")];
 //#endregion
 //#region src/always-on/CompleteLook.tsx
 function Vl({ product: e, value: t, onDefault: n, onChange: r }) {
-	let i = Oi(e), a = ni(e.sizes), o = a ? e.sizes[0] : i.recommended;
+	let i = ki(e), a = ri(e.sizes), o = a ? e.sizes[0] : i.recommended;
 	return (0, d.useEffect)(() => {
 		!t && o && n(o);
 	}, [o, t]), /* @__PURE__ */ (0, y.jsxs)("div", {
@@ -6531,13 +6541,13 @@ function Vl({ product: e, value: t, onDefault: n, onChange: r }) {
 				children: "Select size"
 			}), e.sizes.map((e) => /* @__PURE__ */ (0, y.jsxs)("option", {
 				value: e,
-				children: [ri(e), e === i.recommended ? " · " + (i.recommendationSource === "twin" ? "Starting size" : "Recommended") : ""]
+				children: [ii(e), e === i.recommended ? " · " + (i.recommendationSource === "twin" ? "Starting size" : "Recommended") : ""]
 			}, e))]
-		}), !a && /* @__PURE__ */ (0, y.jsxs)("small", { children: [i.recommended ? `Your ${i.recommendationSource === "twin" ? "starting" : "recommended"} size: ${ri(i.recommended)}. ` : "", "Choose a size to see this piece on you."] })]
+		}), !a && /* @__PURE__ */ (0, y.jsxs)("small", { children: [i.recommended ? `Your ${i.recommendationSource === "twin" ? "starting" : "recommended"} size: ${ii(i.recommended)}. ` : "", "Choose a size to see this piece on you."] })]
 	});
 }
 function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize: i }) {
-	let { identity: a, version: o } = gr(), [s, c] = zn("outfit-ids-" + (e?.id || "stylist"), () => t?.map((e) => e.id) || [e?.previewAvailable === !1 ? Bl.find((e) => e.previewAvailable !== !1) : e || Bl.find((e) => e.category === "Dresses") || Bl[0], Bl.find((t) => t.category === "Accessories" && t.id !== e?.id && (t.environment || "dev") === (e?.environment || "dev"))].filter((e) => !!e).map((e) => e.id)), [l, u] = (0, d.useState)(0), [f, p] = (0, d.useState)(""), [m, h] = (0, d.useState)(!1), [g, _] = (0, d.useState)(""), [v, x] = (0, d.useState)(!1), [S, C] = (0, d.useState)(""), [w, T] = zn("outfit-sizes-" + (e?.id || "stylist"), {});
+	let { identity: a, version: o } = _r(), [s, c] = Bn("outfit-ids-" + (e?.id || "stylist"), () => t?.map((e) => e.id) || [e?.previewAvailable === !1 ? U.find((e) => e.previewAvailable !== !1) : e || U.find((e) => e.category === "Dresses") || U[0], U.find((t) => t.category === "Accessories" && t.id !== e?.id && (t.environment || "dev") === (e?.environment || "dev"))].filter((e) => !!e).map((e) => e.id)), [l, u] = (0, d.useState)(0), [f, p] = (0, d.useState)(""), [m, h] = (0, d.useState)(!1), [g, _] = (0, d.useState)(""), [v, x] = (0, d.useState)(!1), [S, C] = (0, d.useState)(""), [w, T] = Bn("outfit-sizes-" + (e?.id || "stylist"), {});
 	(0, d.useEffect)(() => {
 		e && r && T((t) => t[e.id] === r ? t : {
 			...t,
@@ -6546,9 +6556,9 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 	}, [e?.id, r]);
 	let ee = !!window.PARTNER_DEMO, te = [];
 	try {
-		te = JSON.parse(sessionStorage.getItem("ao-looks:" + (a?.id || "guest")) || "[]").filter((e) => e.items?.every((e) => Bl.some((t) => t.id === e)));
+		te = JSON.parse(sessionStorage.getItem("ao-looks:" + (a?.id || "guest")) || "[]").filter((e) => e.items?.every((e) => U.some((t) => t.id === e)));
 	} catch {}
-	let E = s.map((e) => Bl.find((t) => t.id === e)).filter(Boolean), D = Di(E, "", "", l), ne = (0, d.useMemo)(() => Zn(a?.id || ""), [
+	let E = s.map((e) => U.find((t) => t.id === e)).filter(Boolean), D = Oi(E, "", "", l), ne = (0, d.useMemo)(() => Qn(a?.id || ""), [
 		a?.id,
 		o,
 		s.join("|"),
@@ -6558,7 +6568,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 		C(""), x(!1);
 	}, [o]), (0, d.useEffect)(() => {
 		let e = E.filter((e) => w[e.id]);
-		a && e.length && nr({
+		a && e.length && rr({
 			id: o + ":outfit-sizes:" + s.join("|") + ":" + JSON.stringify(w),
 			kind: "sizing",
 			identityId: a.id,
@@ -6620,10 +6630,10 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 								children: "View full look"
 							})]
 						}),
-						/* @__PURE__ */ (0, y.jsx)(Pl, {}),
+						/* @__PURE__ */ (0, y.jsx)(Fl, {}),
 						/* @__PURE__ */ (0, y.jsx)("div", {
 							className: "complete-editorial",
-							children: re ? /* @__PURE__ */ (0, y.jsx)(Mi, {
+							children: re ? /* @__PURE__ */ (0, y.jsx)(Ni, {
 								product: re,
 								selectedSize: w[re.id]
 							}, re.id) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsx)("button", {
@@ -6737,7 +6747,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 											items: s,
 											sizes: { ...w },
 											person: 1,
-											previewId: D.url ? Ci(E.map((e) => e.garmentId), "", "", E[0]?.environment || "dev") : void 0
+											previewId: D.url ? wi(E.map((e) => e.garmentId), "", "", E[0]?.environment || "dev") : void 0
 										}])), _("Saved in this browser session.");
 									} catch {
 										_("Saving is unavailable in this browser.");
@@ -6753,18 +6763,18 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 					]
 				})]
 			}),
-			/* @__PURE__ */ (0, y.jsx)(oc, {
+			/* @__PURE__ */ (0, y.jsx)(sc, {
 				open: v,
 				onOpenChange: x,
-				children: /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+				children: /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 					className: "native-zoom personal-zoom",
 					"aria-describedby": "outfit-zoom-description",
 					children: [
-						/* @__PURE__ */ (0, y.jsx)(Cc, {
+						/* @__PURE__ */ (0, y.jsx)(wc, {
 							className: "sr-only",
 							children: "Your complete look"
 						}),
-						/* @__PURE__ */ (0, y.jsx)(Tc, {
+						/* @__PURE__ */ (0, y.jsx)(Ec, {
 							id: "outfit-zoom-description",
 							className: "sr-only",
 							children: D.url ? "Your personalized outfit preview." : "Original collection model photography."
@@ -6781,41 +6791,41 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 										E.length === 1 ? "piece" : "pieces"
 									]
 								})] })]
-							}), /* @__PURE__ */ (0, y.jsx)(Dc, {
+							}), /* @__PURE__ */ (0, y.jsx)(Oc, {
 								"aria-label": "Close outfit viewer",
 								children: "×"
 							})]
 						}),
-						/* @__PURE__ */ (0, y.jsx)(al, {
+						/* @__PURE__ */ (0, y.jsx)(ol, {
 							allowOriginal: !!D.url,
 							src: ie,
 							alt: D.url ? `Your selected look on ${a?.name}` : "Original collection model photography"
 						}, ie),
-						D.url && /* @__PURE__ */ (0, y.jsx)(il, {})
+						D.url && /* @__PURE__ */ (0, y.jsx)(al, {})
 					]
 				})] })
 			}),
-			/* @__PURE__ */ (0, y.jsx)(oc, {
+			/* @__PURE__ */ (0, y.jsx)(sc, {
 				open: m,
 				onOpenChange: h,
-				children: /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+				children: /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 					className: "modal wide finishing-picker",
 					"aria-describedby": "finishing-description",
 					children: [
-						/* @__PURE__ */ (0, y.jsx)(Dc, {
+						/* @__PURE__ */ (0, y.jsx)(Oc, {
 							className: "close",
 							"aria-label": "Close finishing piece picker",
 							children: "×"
 						}),
-						/* @__PURE__ */ (0, y.jsx)(Cc, { children: "Find the finishing piece." }),
-						/* @__PURE__ */ (0, y.jsx)(Tc, {
+						/* @__PURE__ */ (0, y.jsx)(wc, { children: "Find the finishing piece." }),
+						/* @__PURE__ */ (0, y.jsx)(Ec, {
 							id: "finishing-description",
 							children: "Choose a complementary piece to add to your outfit. This curated demo only offers loaded garments; alternative dresses are explored in Compare looks."
 						}),
 						/* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "outfit-picker",
 							children: [
-								ee && !Bl.some((e) => e.previewAvailable !== !1 && !s.includes(e.id) && !E.some((t) => t.category === e.category || t.category === "Dresses" || e.category === "Dresses")) && /* @__PURE__ */ (0, y.jsx)("p", {
+								ee && !U.some((e) => e.previewAvailable !== !1 && !s.includes(e.id) && !E.some((t) => t.category === e.category || t.category === "Dresses" || e.category === "Dresses")) && /* @__PURE__ */ (0, y.jsx)("p", {
 									role: "status",
 									children: "No complementary garments are loaded for this selection yet. You can save this look, choose another piece, or compare alternatives in Compare looks."
 								}),
@@ -6831,7 +6841,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 									className: "eyebrow",
 									children: "MAKE IT YOURS"
 								}),
-								/* @__PURE__ */ (0, y.jsx)("div", { children: Bl.filter((t) => t.previewAvailable !== !1 && !s.includes(t.id) && (!ee || !E.some((e) => e.category === t.category || e.category === "Dresses" || t.category === "Dresses")) && t.name.toLowerCase().includes(f.toLowerCase()) && (t.environment || "dev") === (e?.environment || E[0]?.environment || "dev")).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
+								/* @__PURE__ */ (0, y.jsx)("div", { children: U.filter((t) => t.previewAvailable !== !1 && !s.includes(t.id) && (!ee || !E.some((e) => e.category === t.category || e.category === "Dresses" || t.category === "Dresses")) && t.name.toLowerCase().includes(f.toLowerCase()) && (t.environment || "dev") === (e?.environment || E[0]?.environment || "dev")).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
 									onClick: () => {
 										c([...s, e.id]), h(!1);
 									},
@@ -7486,7 +7496,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 })), ql = /* @__PURE__ */ o(((e, t) => {
 	t.exports = Kl();
 })), Jl = /* @__PURE__ */ o(((e) => {
-	var t = ql(), n = u(), r = va();
+	var t = ql(), n = u(), r = ya();
 	function i(e) {
 		var t = "https://react.dev/errors/" + e;
 		if (1 < arguments.length) {
@@ -7656,14 +7666,14 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		return null;
 	}
-	var T = Object.assign, ee = Symbol.for("react.element"), te = Symbol.for("react.transitional.element"), E = Symbol.for("react.portal"), D = Symbol.for("react.fragment"), ne = Symbol.for("react.strict_mode"), re = Symbol.for("react.profiler"), ie = Symbol.for("react.consumer"), ae = Symbol.for("react.context"), O = Symbol.for("react.forward_ref"), oe = Symbol.for("react.suspense"), se = Symbol.for("react.suspense_list"), ce = Symbol.for("react.memo"), k = Symbol.for("react.lazy"), le = Symbol.for("react.activity"), ue = Symbol.for("react.legacy_hidden"), de = Symbol.for("react.memo_cache_sentinel"), A = Symbol.for("react.view_transition"), j = Symbol.for("react.recoverable"), M = Symbol.iterator;
-	function fe(e) {
-		return typeof e != "object" || !e ? null : (e = M && e[M] || e["@@iterator"], typeof e == "function" ? e : null);
+	var T = Object.assign, ee = Symbol.for("react.element"), te = Symbol.for("react.transitional.element"), E = Symbol.for("react.portal"), D = Symbol.for("react.fragment"), ne = Symbol.for("react.strict_mode"), re = Symbol.for("react.profiler"), ie = Symbol.for("react.consumer"), ae = Symbol.for("react.context"), O = Symbol.for("react.forward_ref"), oe = Symbol.for("react.suspense"), se = Symbol.for("react.suspense_list"), ce = Symbol.for("react.memo"), k = Symbol.for("react.lazy"), le = Symbol.for("react.activity"), ue = Symbol.for("react.legacy_hidden"), de = Symbol.for("react.memo_cache_sentinel"), A = Symbol.for("react.view_transition"), fe = Symbol.for("react.recoverable"), j = Symbol.iterator;
+	function pe(e) {
+		return typeof e != "object" || !e ? null : (e = j && e[j] || e["@@iterator"], typeof e == "function" ? e : null);
 	}
-	var pe = Symbol.for("react.client.reference");
-	function me(e) {
+	var me = Symbol.for("react.client.reference");
+	function he(e) {
 		if (e == null) return null;
-		if (typeof e == "function") return e.$$typeof === pe ? null : e.displayName || e.name || null;
+		if (typeof e == "function") return e.$$typeof === me ? null : e.displayName || e.name || null;
 		if (typeof e == "string") return e;
 		switch (e) {
 			case D: return "Fragment";
@@ -7681,33 +7691,33 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case O:
 				var t = e.render;
 				return e = e.displayName, e ||= (e = t.displayName || t.name || "", e === "" ? "ForwardRef" : "ForwardRef(" + e + ")"), e;
-			case ce: return t = e.displayName || null, t === null ? me(e.type) || "Memo" : t;
+			case ce: return t = e.displayName || null, t === null ? he(e.type) || "Memo" : t;
 			case k:
 				t = e._payload, e = e._init;
 				try {
-					return me(e(t));
+					return he(e(t));
 				} catch {}
 		}
 		return null;
 	}
-	var he = Array.isArray, N = n.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, P = r.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ge = {
+	var ge = Array.isArray, M = n.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, N = r.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, _e = {
 		pending: !1,
 		data: null,
 		method: null,
 		action: null
-	}, _e = [], ve = -1;
-	function ye(e) {
+	}, ve = [], ye = -1;
+	function be(e) {
 		return { current: e };
 	}
-	function be(e) {
-		0 > ve || (e.current = _e[ve], _e[ve] = null, ve--);
+	function xe(e) {
+		0 > ye || (e.current = ve[ye], ve[ye] = null, ye--);
 	}
-	function F(e, t) {
-		ve++, _e[ve] = e.current, e.current = t;
+	function P(e, t) {
+		ye++, ve[ye] = e.current, e.current = t;
 	}
-	var xe = ye(null), Se = ye(null), Ce = ye(null), we = ye(null);
-	function Te(e, t) {
-		switch (F(Ce, t), F(Se, e), F(xe, null), t.nodeType) {
+	var Se = be(null), Ce = be(null), we = be(null), Te = be(null);
+	function Ee(e, t) {
+		switch (P(we, t), P(Ce, e), P(Se, null), t.nodeType) {
 			case 9:
 			case 11:
 				e = (e = t.documentElement) && (e = e.namespaceURI) ? up(e) : 0;
@@ -7723,34 +7733,34 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				default: e = 0;
 			}
 		}
-		be(xe), F(xe, e);
+		xe(Se), P(Se, e);
 	}
-	function Ee() {
-		be(xe), be(Se), be(Ce);
-	}
-	function De(e) {
-		var t = e.memoizedState;
-		t !== null && (sh._currentValue = t.memoizedState, F(we, e)), t = xe.current;
-		var n = dp(t, e.type);
-		t !== n && (F(Se, e), F(xe, n));
+	function De() {
+		xe(Se), xe(Ce), xe(we);
 	}
 	function Oe(e) {
-		Se.current === e && (be(xe), be(Se)), we.current === e && (be(we), sh._currentValue = ge);
+		var t = e.memoizedState;
+		t !== null && (sh._currentValue = t.memoizedState, P(Te, e)), t = Se.current;
+		var n = dp(t, e.type);
+		t !== n && (P(Ce, e), P(Se, n));
 	}
-	var ke, Ae;
-	function je(e) {
-		if (ke === void 0) try {
+	function ke(e) {
+		Ce.current === e && (xe(Se), xe(Ce)), Te.current === e && (xe(Te), sh._currentValue = _e);
+	}
+	var Ae, je;
+	function Me(e) {
+		if (Ae === void 0) try {
 			throw Error();
 		} catch (e) {
 			var t = e.stack.trim().match(/\n( *(at )?)/);
-			ke = t && t[1] || "", Ae = -1 < e.stack.indexOf("\n    at") ? " (<anonymous>)" : -1 < e.stack.indexOf("@") ? "@unknown:0:0" : "";
+			Ae = t && t[1] || "", je = -1 < e.stack.indexOf("\n    at") ? " (<anonymous>)" : -1 < e.stack.indexOf("@") ? "@unknown:0:0" : "";
 		}
-		return "\n" + ke + e + Ae;
+		return "\n" + Ae + e + je;
 	}
-	var Me = !1;
-	function Ne(e, t) {
-		if (!e || Me) return "";
-		Me = !0;
+	var Ne = !1;
+	function Pe(e, t) {
+		if (!e || Ne) return "";
+		Ne = !0;
 		var n = Error.prepareStackTrace;
 		Error.prepareStackTrace = void 0;
 		try {
@@ -7821,50 +7831,50 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 			}
 		} finally {
-			Me = !1, Error.prepareStackTrace = n;
+			Ne = !1, Error.prepareStackTrace = n;
 		}
-		return (n = e ? e.displayName || e.name : "") ? je(n) : "";
+		return (n = e ? e.displayName || e.name : "") ? Me(n) : "";
 	}
-	function Pe(e, t) {
+	function Fe(e, t) {
 		switch (e.tag) {
 			case 26:
 			case 27:
-			case 5: return je(e.type);
-			case 16: return je("Lazy");
-			case 13: return e.child !== t && t !== null ? je("Suspense Fallback") : je("Suspense");
-			case 19: return je("SuspenseList");
+			case 5: return Me(e.type);
+			case 16: return Me("Lazy");
+			case 13: return e.child !== t && t !== null ? Me("Suspense Fallback") : Me("Suspense");
+			case 19: return Me("SuspenseList");
 			case 0:
-			case 15: return Ne(e.type, !1);
-			case 11: return Ne(e.type.render, !1);
-			case 1: return Ne(e.type, !0);
-			case 31: return je("Activity");
-			case 30: return je("ViewTransition");
+			case 15: return Pe(e.type, !1);
+			case 11: return Pe(e.type.render, !1);
+			case 1: return Pe(e.type, !0);
+			case 31: return Me("Activity");
+			case 30: return Me("ViewTransition");
 			default: return "";
 		}
 	}
-	function Fe(e) {
+	function Ie(e) {
 		try {
 			var t = "", n = null;
 			do
-				t += Pe(e, n), n = e, e = e.return;
+				t += Fe(e, n), n = e, e = e.return;
 			while (e);
 			return t;
 		} catch (e) {
 			return "\nError generating stack: " + e.message + "\n" + e.stack;
 		}
 	}
-	var Ie = Object.prototype.hasOwnProperty, Le = t.unstable_scheduleCallback, Re = t.unstable_cancelCallback, ze = t.unstable_shouldYield, Be = t.unstable_requestPaint, Ve = t.unstable_now, He = t.unstable_getCurrentPriorityLevel, Ue = t.unstable_ImmediatePriority, We = t.unstable_UserBlockingPriority, Ge = t.unstable_NormalPriority, Ke = t.unstable_LowPriority, qe = t.unstable_IdlePriority, Je = t.log, Ye = t.unstable_setDisableYieldValue, Xe = null, Ze = null;
-	function Qe(e) {
-		if (typeof Je == "function" && Ye(e), Ze && typeof Ze.setStrictMode == "function") try {
-			Ze.setStrictMode(Xe, e);
+	var Le = Object.prototype.hasOwnProperty, Re = t.unstable_scheduleCallback, ze = t.unstable_cancelCallback, Be = t.unstable_shouldYield, Ve = t.unstable_requestPaint, He = t.unstable_now, Ue = t.unstable_getCurrentPriorityLevel, We = t.unstable_ImmediatePriority, Ge = t.unstable_UserBlockingPriority, Ke = t.unstable_NormalPriority, qe = t.unstable_LowPriority, Je = t.unstable_IdlePriority, Ye = t.log, Xe = t.unstable_setDisableYieldValue, Ze = null, Qe = null;
+	function $e(e) {
+		if (typeof Ye == "function" && Xe(e), Qe && typeof Qe.setStrictMode == "function") try {
+			Qe.setStrictMode(Ze, e);
 		} catch {}
 	}
-	var $e = Math.clz32 ? Math.clz32 : nt, et = Math.log, tt = Math.LN2;
-	function nt(e) {
-		return e >>>= 0, e === 0 ? 32 : 31 - (et(e) / tt | 0) | 0;
+	var et = Math.clz32 ? Math.clz32 : rt, tt = Math.log, nt = Math.LN2;
+	function rt(e) {
+		return e >>>= 0, e === 0 ? 32 : 31 - (tt(e) / nt | 0) | 0;
 	}
-	var rt = 256, it = 262144, at = 4194304;
-	function ot(e) {
+	var it = 256, at = 262144, ot = 4194304;
+	function st(e) {
 		var t = e & 42;
 		if (t !== 0) return t;
 		switch (e & -e) {
@@ -7902,27 +7912,27 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			default: return e;
 		}
 	}
-	function st(e, t, n) {
+	function ct(e, t, n) {
 		var r = e.pendingLanes;
 		if (r === 0) return 0;
 		var i = 0, a = e.suspendedLanes, o = e.pingedLanes;
 		e = e.warmLanes;
 		var s = r & 134217727;
-		return s === 0 ? (s = r & ~a, s === 0 ? o === 0 ? n || (n = r & ~e, n !== 0 && (i = ot(n))) : i = ot(o) : i = ot(s)) : (r = s & ~a, r === 0 ? (o &= s, o === 0 ? n || (n = s & ~e, n !== 0 && (i = ot(n))) : i = ot(o)) : i = ot(r)), i === 0 ? 0 : t !== 0 && t !== i && (t & a) === 0 && (a = i & -i, n = t & -t, a >= n || a === 32 && n & 4194048) ? t : i;
-	}
-	function ct(e, t) {
-		return (e.pendingLanes & ~(e.suspendedLanes & ~e.pingedLanes) & t) === 0;
+		return s === 0 ? (s = r & ~a, s === 0 ? o === 0 ? n || (n = r & ~e, n !== 0 && (i = st(n))) : i = st(o) : i = st(s)) : (r = s & ~a, r === 0 ? (o &= s, o === 0 ? n || (n = s & ~e, n !== 0 && (i = st(n))) : i = st(o)) : i = st(r)), i === 0 ? 0 : t !== 0 && t !== i && (t & a) === 0 && (a = i & -i, n = t & -t, a >= n || a === 32 && n & 4194048) ? t : i;
 	}
 	function lt(e, t) {
+		return (e.pendingLanes & ~(e.suspendedLanes & ~e.pingedLanes) & t) === 0;
+	}
+	function ut(e, t) {
 		t & 8 && (t |= t & 32);
 		var n = e.entangledLanes;
 		if (n !== 0) for (e = e.entanglements, n &= t; 0 < n;) {
-			var r = 31 - $e(n), i = 1 << r;
+			var r = 31 - et(n), i = 1 << r;
 			t |= e[r], n &= ~i;
 		}
 		return t;
 	}
-	function ut(e, t) {
+	function dt(e, t) {
 		switch (e) {
 			case 1:
 			case 2:
@@ -7958,23 +7968,23 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			default: return -1;
 		}
 	}
-	function dt() {
-		var e = at;
-		return at <<= 1, !(at & 62914560) && (at = 4194304), e;
+	function ft() {
+		var e = ot;
+		return ot <<= 1, !(ot & 62914560) && (ot = 4194304), e;
 	}
-	function ft(e) {
+	function pt(e) {
 		for (var t = [], n = 0; 31 > n; n++) t.push(e);
 		return t;
 	}
-	function pt(e, t) {
+	function mt(e, t) {
 		e.pendingLanes |= t, t !== 268435456 && (e.suspendedLanes = 0, e.pingedLanes = 0, e.warmLanes = 0);
 	}
-	function mt(e, t, n, r, i, a) {
+	function ht(e, t, n, r, i, a) {
 		var o = e.pendingLanes;
 		e.pendingLanes = n, e.suspendedLanes = 0, e.pingedLanes = 0, e.warmLanes = 0, e.expiredLanes &= n, e.entangledLanes &= n, e.errorRecoveryDisabledLanes &= n, e.shellSuspendCounter = 0;
 		var s = e.entanglements, c = e.expirationTimes, l = e.hiddenUpdates;
 		for (n = o & ~n; 0 < n;) {
-			var u = 31 - $e(n), d = 1 << u;
+			var u = 31 - et(n), d = 1 << u;
 			s[u] = 0, c[u] = -1;
 			var f = l[u];
 			if (f !== null) for (l[u] = null, u = 0; u < f.length; u++) {
@@ -7983,25 +7993,25 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 			n &= ~d;
 		}
-		r !== 0 && ht(e, r, 0), a !== 0 && i === 0 && e.tag !== 0 && (e.suspendedLanes |= a & ~(o & ~t));
+		r !== 0 && gt(e, r, 0), a !== 0 && i === 0 && e.tag !== 0 && (e.suspendedLanes |= a & ~(o & ~t));
 	}
-	function ht(e, t, n) {
+	function gt(e, t, n) {
 		e.pendingLanes |= t, e.suspendedLanes &= ~t;
-		var r = 31 - $e(t);
+		var r = 31 - et(t);
 		e.entangledLanes |= t, e.entanglements[r] = e.entanglements[r] | 1073741824 | n & 261930;
 	}
-	function gt(e, t) {
+	function _t(e, t) {
 		var n = e.entangledLanes |= t;
 		for (e = e.entanglements; n;) {
-			var r = 31 - $e(n), i = 1 << r;
+			var r = 31 - et(n), i = 1 << r;
 			i & t | e[r] & t && (e[r] |= t), n &= ~i;
 		}
 	}
-	function _t(e, t) {
+	function vt(e, t) {
 		var n = t & -t;
-		return n = n & 42 ? 1 : vt(n), (n & (e.suspendedLanes | t)) === 0 ? n : 0;
+		return n = n & 42 ? 1 : yt(n), (n & (e.suspendedLanes | t)) === 0 ? n : 0;
 	}
-	function vt(e) {
+	function yt(e) {
 		switch (e) {
 			case 2:
 				e = 1;
@@ -8039,32 +8049,32 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		return e;
 	}
-	function yt(e) {
+	function bt(e) {
 		return e &= -e, 2 < e ? 8 < e ? e & 134217727 ? 32 : 268435456 : 8 : 2;
 	}
-	function bt() {
-		var e = P.p;
+	function xt() {
+		var e = N.p;
 		return e === 0 ? (e = window.event, e === void 0 ? 32 : Ch(e.type)) : e;
 	}
-	function xt(e, t) {
-		var n = P.p;
+	function St(e, t) {
+		var n = N.p;
 		try {
-			return P.p = e, t();
+			return N.p = e, t();
 		} finally {
-			P.p = n;
+			N.p = n;
 		}
 	}
-	var St = Math.random().toString(36).slice(2), Ct = "__reactFiber$" + St, wt = "__reactProps$" + St, Tt = "__reactContainer$" + St, Et = "__reactEvents$" + St, Dt = "__reactListeners$" + St, Ot = "__reactHandles$" + St, kt = "__reactResources$" + St, At = "__reactMarker$" + St, jt = "__reactLoad$" + St;
-	function Mt(e) {
-		delete e[Ct], delete e[wt], delete e[Dt], delete e[Ot];
-	}
+	var Ct = Math.random().toString(36).slice(2), wt = "__reactFiber$" + Ct, Tt = "__reactProps$" + Ct, Et = "__reactContainer$" + Ct, Dt = "__reactEvents$" + Ct, Ot = "__reactListeners$" + Ct, kt = "__reactHandles$" + Ct, At = "__reactResources$" + Ct, jt = "__reactMarker$" + Ct, Mt = "__reactLoad$" + Ct;
 	function Nt(e) {
+		delete e[wt], delete e[Tt], delete e[Ot], delete e[kt];
+	}
+	function Pt(e) {
 		var t;
-		if (t = e[Ct]) return t;
+		if (t = e[wt]) return t;
 		for (var n = e.parentNode; n;) {
-			if (t = n[Tt] || n[Ct]) {
+			if (t = n[Et] || n[wt]) {
 				if (n = t.alternate, t.child !== null || n !== null && n.child !== null) for (e = fm(e); e !== null;) {
-					if (n = e[Ct]) return n;
+					if (n = e[wt]) return n;
 					e = fm(e);
 				}
 				return t;
@@ -8073,49 +8083,49 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		return null;
 	}
-	function Pt(e) {
-		if (e = e[Ct] || e[Tt]) {
+	function Ft(e) {
+		if (e = e[wt] || e[Et]) {
 			var t = e.tag;
 			if (t === 5 || t === 6 || t === 13 || t === 31 || t === 26 || t === 27 || t === 3) return e;
 		}
 		return null;
 	}
-	function Ft(e) {
+	function It(e) {
 		var t = e.tag;
 		if (t === 5 || t === 26 || t === 27 || t === 6) return e.stateNode;
 		throw Error(i(33));
 	}
-	function It(e) {
-		var t = e[kt];
-		return t ||= e[kt] = {
+	function Lt(e) {
+		var t = e[At];
+		return t ||= e[At] = {
 			hoistableStyles: /* @__PURE__ */ new Map(),
 			hoistableScripts: /* @__PURE__ */ new Map()
 		}, t;
 	}
-	function Lt(e) {
-		e[At] = !0;
-	}
 	function Rt(e) {
-		e[jt] = void 0;
+		e[jt] = !0;
 	}
-	var zt = /* @__PURE__ */ new Set(), Bt = {};
-	function Vt(e, t) {
-		Ht(e, t), Ht(e + "Capture", t);
+	function zt(e) {
+		e[Mt] = void 0;
 	}
+	var Bt = /* @__PURE__ */ new Set(), Vt = {};
 	function Ht(e, t) {
-		for (Bt[e] = t, e = 0; e < t.length; e++) zt.add(t[e]);
+		Ut(e, t), Ut(e + "Capture", t);
 	}
-	var Ut = RegExp("^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"), Wt = {}, Gt = {};
-	function Kt(e) {
-		return Ie.call(Gt, e) ? !0 : Ie.call(Wt, e) ? !1 : Ut.test(e) ? Gt[e] = !0 : (Wt[e] = !0, !1);
+	function Ut(e, t) {
+		for (Vt[e] = t, e = 0; e < t.length; e++) Bt.add(t[e]);
 	}
-	var I = !1;
-	function qt() {
-		var e = I;
-		return I = !1, e;
+	var Wt = RegExp("^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$"), Gt = {}, Kt = {};
+	function qt(e) {
+		return Le.call(Kt, e) ? !0 : Le.call(Gt, e) ? !1 : Wt.test(e) ? Kt[e] = !0 : (Gt[e] = !0, !1);
 	}
-	function Jt(e, t, n) {
-		if (Kt(t)) {
+	var F = !1;
+	function Jt() {
+		var e = F;
+		return F = !1, e;
+	}
+	function Yt(e, t, n) {
+		if (qt(t)) {
 			if (n === null) e.removeAttribute(t);
 			else {
 				switch (typeof n) {
@@ -8135,7 +8145,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 		}
 	}
-	function Yt(e, t, n) {
+	function Xt(e, t, n) {
 		if (n === null) e.removeAttribute(t);
 		else {
 			switch (typeof n) {
@@ -8149,7 +8159,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			e.setAttribute(t, n);
 		}
 	}
-	function Xt(e, t, n, r) {
+	function Zt(e, t, n, r) {
 		if (r === null) e.removeAttribute(n);
 		else {
 			switch (typeof r) {
@@ -8163,7 +8173,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			e.setAttributeNS(t, n, r);
 		}
 	}
-	function Zt(e) {
+	function Qt(e) {
 		switch (typeof e) {
 			case "bigint":
 			case "boolean":
@@ -8174,11 +8184,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			default: return "";
 		}
 	}
-	function Qt(e) {
+	function $t(e) {
 		var t = e.type;
 		return (e = e.nodeName) && e.toLowerCase() === "input" && (t === "checkbox" || t === "radio");
 	}
-	function $t(e, t, n) {
+	function en(e, t, n) {
 		var r = Object.getOwnPropertyDescriptor(e.constructor.prototype, t);
 		if (!e.hasOwnProperty(t) && r !== void 0 && typeof r.get == "function" && typeof r.set == "function") {
 			var i = r.get, a = r.set;
@@ -8203,48 +8213,48 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			};
 		}
 	}
-	function en(e) {
+	function tn(e) {
 		if (!e._valueTracker) {
-			var t = Qt(e) ? "checked" : "value";
-			e._valueTracker = $t(e, t, "" + e[t]);
+			var t = $t(e) ? "checked" : "value";
+			e._valueTracker = en(e, t, "" + e[t]);
 		}
 	}
-	function tn(e) {
+	function nn(e) {
 		if (!e) return !1;
 		var t = e._valueTracker;
 		if (!t) return !0;
 		var n = t.getValue(), r = "";
-		return e && (r = Qt(e) ? e.checked ? "true" : "false" : e.value), e = r, e !== n && (t.setValue(e), !0);
+		return e && (r = $t(e) ? e.checked ? "true" : "false" : e.value), e = r, e !== n && (t.setValue(e), !0);
 	}
-	var nn = /[\n"\\]/g;
-	function rn(e) {
-		return e.replace(nn, function(e) {
+	var rn = /[\n"\\]/g;
+	function an(e) {
+		return e.replace(rn, function(e) {
 			return "\\" + e.charCodeAt(0).toString(16) + " ";
 		});
 	}
-	function an(e, t, n, r, i, a, o, s) {
-		e.name = "", o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" ? e.type = o : e.removeAttribute("type"), t == null ? o !== "submit" && o !== "reset" || e.removeAttribute("value") : o === "number" ? (t === 0 && e.value === "" || e.value != t) && (e.value = "" + Zt(t)) : e.value !== "" + Zt(t) && (e.value = "" + Zt(t)), t == null ? n == null ? r != null && e.removeAttribute("value") : sn(e, Zt(n)) : o === "number" && e.value == t ? sn(e, Zt(e.value)) : sn(e, Zt(t)), i == null && a != null && (e.defaultChecked = !!a), i != null && (e.checked = i && typeof i != "function" && typeof i != "symbol"), s != null && typeof s != "function" && typeof s != "symbol" && typeof s != "boolean" ? e.name = "" + Zt(s) : e.removeAttribute("name");
-	}
 	function on(e, t, n, r, i, a, o, s) {
+		e.name = "", o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" ? e.type = o : e.removeAttribute("type"), t == null ? o !== "submit" && o !== "reset" || e.removeAttribute("value") : o === "number" ? (t === 0 && e.value === "" || e.value != t) && (e.value = "" + Qt(t)) : e.value !== "" + Qt(t) && (e.value = "" + Qt(t)), t == null ? n == null ? r != null && e.removeAttribute("value") : cn(e, Qt(n)) : o === "number" && e.value == t ? cn(e, Qt(e.value)) : cn(e, Qt(t)), i == null && a != null && (e.defaultChecked = !!a), i != null && (e.checked = i && typeof i != "function" && typeof i != "symbol"), s != null && typeof s != "function" && typeof s != "symbol" && typeof s != "boolean" ? e.name = "" + Qt(s) : e.removeAttribute("name");
+	}
+	function sn(e, t, n, r, i, a, o, s) {
 		if (a != null && typeof a != "function" && typeof a != "symbol" && typeof a != "boolean" && (e.type = a), t != null || n != null) {
 			if (!(a !== "submit" && a !== "reset" || t != null)) {
-				en(e);
+				tn(e);
 				return;
 			}
-			n = n == null ? "" : "" + Zt(n), t = t == null ? n : "" + Zt(t), s || t === e.value || (e.value = t), e.defaultValue = t;
+			n = n == null ? "" : "" + Qt(n), t = t == null ? n : "" + Qt(t), s || t === e.value || (e.value = t), e.defaultValue = t;
 		}
-		r ??= i, r = typeof r != "function" && typeof r != "symbol" && !!r, e.checked = s ? e.checked : !!r, e.defaultChecked = !!r, o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" && (e.name = o), en(e);
+		r ??= i, r = typeof r != "function" && typeof r != "symbol" && !!r, e.checked = s ? e.checked : !!r, e.defaultChecked = !!r, o != null && typeof o != "function" && typeof o != "symbol" && typeof o != "boolean" && (e.name = o), tn(e);
 	}
-	function sn(e, t) {
+	function cn(e, t) {
 		e.defaultValue !== "" + t && (e.defaultValue = "" + t);
 	}
-	function cn(e, t, n, r) {
+	function ln(e, t, n, r) {
 		if (e = e.options, t) {
 			t = {};
 			for (var i = 0; i < n.length; i++) t["$" + n[i]] = !0;
 			for (n = 0; n < e.length; n++) i = t.hasOwnProperty("$" + e[n].value), e[n].selected !== i && (e[n].selected = i), i && r && (e[n].defaultSelected = !0);
 		} else {
-			for (n = "" + Zt(n), t = null, i = 0; i < e.length; i++) {
+			for (n = "" + Qt(n), t = null, i = 0; i < e.length; i++) {
 				if (e[i].value === n) {
 					e[i].selected = !0, r && (e[i].defaultSelected = !0);
 					return;
@@ -8254,18 +8264,18 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			t !== null && (t.selected = !0);
 		}
 	}
-	function ln(e, t, n) {
-		if (t != null && (t = "" + Zt(t), t !== e.value && (e.value = t), n == null)) {
+	function un(e, t, n) {
+		if (t != null && (t = "" + Qt(t), t !== e.value && (e.value = t), n == null)) {
 			e.defaultValue !== t && (e.defaultValue = t);
 			return;
 		}
-		e.defaultValue = n == null ? "" : "" + Zt(n);
+		e.defaultValue = n == null ? "" : "" + Qt(n);
 	}
-	function un(e, t, n, r) {
+	function dn(e, t, n, r) {
 		if (t == null) {
 			if (r != null) {
 				if (n != null) throw Error(i(92));
-				if (he(r)) {
+				if (ge(r)) {
 					if (1 < r.length) throw Error(i(93));
 					r = r[0];
 				}
@@ -8273,9 +8283,9 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 			n ??= "", t = n;
 		}
-		n = Zt(t), e.defaultValue = n, r = e.textContent, r === n && r !== "" && r !== null && (e.value = r), en(e);
+		n = Qt(t), e.defaultValue = n, r = e.textContent, r === n && r !== "" && r !== null && (e.value = r), tn(e);
 	}
-	function dn(e, t) {
+	function fn(e, t) {
 		if (t) {
 			var n = e.firstChild;
 			if (n && n === e.lastChild && n.nodeType === 3) {
@@ -8285,19 +8295,19 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		e.textContent = t;
 	}
-	var fn = new Set("animationIterationCount aspectRatio borderImageOutset borderImageSlice borderImageWidth boxFlex boxFlexGroup boxOrdinalGroup columnCount columns flex flexGrow flexPositive flexShrink flexNegative flexOrder gridArea gridRow gridRowEnd gridRowSpan gridRowStart gridColumn gridColumnEnd gridColumnSpan gridColumnStart fontWeight lineClamp lineHeight opacity order orphans scale tabSize widows zIndex zoom fillOpacity floodOpacity stopOpacity strokeDasharray strokeDashoffset strokeMiterlimit strokeOpacity strokeWidth MozAnimationIterationCount MozBoxFlex MozBoxFlexGroup MozLineClamp msAnimationIterationCount msFlex msZoom msFlexGrow msFlexNegative msFlexOrder msFlexPositive msFlexShrink msGridColumn msGridColumnSpan msGridRow msGridRowSpan WebkitAnimationIterationCount WebkitBoxFlex WebKitBoxFlexGroup WebkitBoxOrdinalGroup WebkitColumnCount WebkitColumns WebkitFlex WebkitFlexGrow WebkitFlexPositive WebkitFlexShrink WebkitLineClamp".split(" "));
-	function pn(e, t, n) {
-		var r = t.indexOf("--") === 0;
-		n == null || typeof n == "boolean" || n === "" ? r ? e.setProperty(t, "") : t === "float" ? e.cssFloat = "" : e[t] = "" : r ? e.setProperty(t, n) : typeof n != "number" || n === 0 || fn.has(t) ? t === "float" ? e.cssFloat = n : e[t] = ("" + n).trim() : e[t] = n + "px";
-	}
+	var pn = new Set("animationIterationCount aspectRatio borderImageOutset borderImageSlice borderImageWidth boxFlex boxFlexGroup boxOrdinalGroup columnCount columns flex flexGrow flexPositive flexShrink flexNegative flexOrder gridArea gridRow gridRowEnd gridRowSpan gridRowStart gridColumn gridColumnEnd gridColumnSpan gridColumnStart fontWeight lineClamp lineHeight opacity order orphans scale tabSize widows zIndex zoom fillOpacity floodOpacity stopOpacity strokeDasharray strokeDashoffset strokeMiterlimit strokeOpacity strokeWidth MozAnimationIterationCount MozBoxFlex MozBoxFlexGroup MozLineClamp msAnimationIterationCount msFlex msZoom msFlexGrow msFlexNegative msFlexOrder msFlexPositive msFlexShrink msGridColumn msGridColumnSpan msGridRow msGridRowSpan WebkitAnimationIterationCount WebkitBoxFlex WebKitBoxFlexGroup WebkitBoxOrdinalGroup WebkitColumnCount WebkitColumns WebkitFlex WebkitFlexGrow WebkitFlexPositive WebkitFlexShrink WebkitLineClamp".split(" "));
 	function mn(e, t, n) {
+		var r = t.indexOf("--") === 0;
+		n == null || typeof n == "boolean" || n === "" ? r ? e.setProperty(t, "") : t === "float" ? e.cssFloat = "" : e[t] = "" : r ? e.setProperty(t, n) : typeof n != "number" || n === 0 || pn.has(t) ? t === "float" ? e.cssFloat = n : e[t] = ("" + n).trim() : e[t] = n + "px";
+	}
+	function hn(e, t, n) {
 		if (t != null && typeof t != "object") throw Error(i(62));
 		if (e = e.style, n != null) {
-			for (var r in n) !n.hasOwnProperty(r) || t != null && t.hasOwnProperty(r) || (r.indexOf("--") === 0 ? e.setProperty(r, "") : r === "float" ? e.cssFloat = "" : e[r] = "", I = !0);
-			for (var a in t) r = t[a], t.hasOwnProperty(a) && n[a] !== r && (pn(e, a, r), I = !0);
-		} else for (var o in t) t.hasOwnProperty(o) && pn(e, o, t[o]);
+			for (var r in n) !n.hasOwnProperty(r) || t != null && t.hasOwnProperty(r) || (r.indexOf("--") === 0 ? e.setProperty(r, "") : r === "float" ? e.cssFloat = "" : e[r] = "", F = !0);
+			for (var a in t) r = t[a], t.hasOwnProperty(a) && n[a] !== r && (mn(e, a, r), F = !0);
+		} else for (var o in t) t.hasOwnProperty(o) && mn(e, o, t[o]);
 	}
-	function hn(e) {
+	function gn(e) {
 		if (e.indexOf("-") === -1) return !1;
 		switch (e) {
 			case "annotation-xml":
@@ -8311,7 +8321,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			default: return !0;
 		}
 	}
-	var gn = /* @__PURE__ */ new Map([
+	var _n = /* @__PURE__ */ new Map([
 		["acceptCharset", "accept-charset"],
 		["htmlFor", "for"],
 		["httpEquiv", "http-equiv"],
@@ -8391,56 +8401,56 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		["writingMode", "writing-mode"],
 		["xmlnsXlink", "xmlns:xlink"],
 		["xHeight", "x-height"]
-	]), _n = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;
-	function vn(e) {
-		return _n.test("" + e) ? "javascript:throw new Error('React has blocked a javascript: URL as a security precaution.')" : e;
+	]), vn = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;
+	function yn(e) {
+		return vn.test("" + e) ? "javascript:throw new Error('React has blocked a javascript: URL as a security precaution.')" : e;
 	}
-	function yn() {}
-	var bn = null;
-	function xn(e) {
+	function bn() {}
+	var xn = null;
+	function Sn(e) {
 		return e = e.target || e.srcElement || window, e.correspondingUseElement && (e = e.correspondingUseElement), e.nodeType === 3 ? e.parentNode : e;
 	}
-	var Sn = null, Cn = null;
-	function wn(e) {
-		var t = Pt(e);
+	var Cn = null, wn = null;
+	function Tn(e) {
+		var t = Ft(e);
 		if (t && (e = t.stateNode)) {
-			var n = e[wt] || null;
+			var n = e[Tt] || null;
 			a: switch (e = t.stateNode, t.type) {
 				case "input":
-					if (an(e, n.value, n.defaultValue, n.defaultValue, n.checked, n.defaultChecked, n.type, n.name), t = n.name, n.type === "radio" && t != null) {
+					if (on(e, n.value, n.defaultValue, n.defaultValue, n.checked, n.defaultChecked, n.type, n.name), t = n.name, n.type === "radio" && t != null) {
 						for (n = e; n.parentNode;) n = n.parentNode;
-						for (n = n.querySelectorAll("input[name=\"" + rn("" + t) + "\"][type=\"radio\"]"), t = 0; t < n.length; t++) {
+						for (n = n.querySelectorAll("input[name=\"" + an("" + t) + "\"][type=\"radio\"]"), t = 0; t < n.length; t++) {
 							var r = n[t];
 							if (r !== e && r.form === e.form) {
-								var a = r[wt] || null;
+								var a = r[Tt] || null;
 								if (!a) throw Error(i(90));
-								an(r, a.value, a.defaultValue, a.defaultValue, a.checked, a.defaultChecked, a.type, a.name);
+								on(r, a.value, a.defaultValue, a.defaultValue, a.checked, a.defaultChecked, a.type, a.name);
 							}
 						}
-						for (t = 0; t < n.length; t++) r = n[t], r.form === e.form && tn(r);
+						for (t = 0; t < n.length; t++) r = n[t], r.form === e.form && nn(r);
 					}
 					break a;
 				case "textarea":
-					ln(e, n.value, n.defaultValue);
+					un(e, n.value, n.defaultValue);
 					break a;
-				case "select": t = n.value, t != null && cn(e, !!n.multiple, t, !1);
+				case "select": t = n.value, t != null && ln(e, !!n.multiple, t, !1);
 			}
 		}
 	}
-	var Tn = !1;
-	function En(e, t, n) {
-		if (Tn) return e(t, n);
-		Tn = !0;
+	var En = !1;
+	function Dn(e, t, n) {
+		if (En) return e(t, n);
+		En = !0;
 		try {
 			return e(t);
 		} finally {
-			if (Tn = !1, (Sn !== null || Cn !== null) && (zd(), Sn && (t = Sn, e = Cn, Cn = Sn = null, wn(t), e))) for (t = 0; t < e.length; t++) wn(e[t]);
+			if (En = !1, (Cn !== null || wn !== null) && (zd(), Cn && (t = Cn, e = wn, wn = Cn = null, Tn(t), e))) for (t = 0; t < e.length; t++) Tn(e[t]);
 		}
 	}
-	function Dn(e, t) {
+	function On(e, t) {
 		var n = e.stateNode;
 		if (n === null) return null;
-		var r = n[wt] || null;
+		var r = n[Tt] || null;
 		if (r === null) return null;
 		n = r[t];
 		a: switch (t) {
@@ -8463,54 +8473,54 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (n && typeof n != "function") throw Error(i(231, t, typeof n));
 		return n;
 	}
-	var On = typeof window < "u" && window.document !== void 0 && window.document.createElement !== void 0, kn = !1;
-	if (On) try {
-		var An = {};
-		Object.defineProperty(An, "passive", { get: function() {
-			kn = !0;
-		} }), window.addEventListener("test", An, An), window.removeEventListener("test", An, An);
+	var kn = typeof window < "u" && window.document !== void 0 && window.document.createElement !== void 0, An = !1;
+	if (kn) try {
+		var jn = {};
+		Object.defineProperty(jn, "passive", { get: function() {
+			An = !0;
+		} }), window.addEventListener("test", jn, jn), window.removeEventListener("test", jn, jn);
 	} catch {
-		kn = !1;
+		An = !1;
 	}
-	var jn = null, Mn = null, Nn = null;
-	function Pn() {
-		if (Nn) return Nn;
-		var e, t = Mn, n = t.length, r, i = "value" in jn ? jn.value : jn.textContent, a = i.length;
+	var Mn = null, Nn = null, Pn = null;
+	function Fn() {
+		if (Pn) return Pn;
+		var e, t = Nn, n = t.length, r, i = "value" in Mn ? Mn.value : Mn.textContent, a = i.length;
 		for (e = 0; e < n && t[e] === i[e]; e++);
 		var o = n - e;
 		for (r = 1; r <= o && t[n - r] === i[a - r]; r++);
-		return Nn = i.slice(e, 1 < r ? 1 - r : void 0);
+		return Pn = i.slice(e, 1 < r ? 1 - r : void 0);
 	}
-	function Fn(e) {
+	function In(e) {
 		var t = e.keyCode;
 		return "charCode" in e ? (e = e.charCode, e === 0 && t === 13 && (e = 13)) : e = t, e === 10 && (e = 13), 32 <= e || e === 13 ? e : 0;
 	}
-	function In() {
+	function Ln() {
 		return !0;
 	}
-	function Ln() {
+	function Rn() {
 		return !1;
 	}
-	function Rn(e) {
+	function zn(e) {
 		function t(t, n, r, i, a) {
 			for (var o in this._reactName = t, this._targetInst = r, this.type = n, this.nativeEvent = i, this.target = a, this.currentTarget = null, e) e.hasOwnProperty(o) && (t = e[o], this[o] = t ? t(i) : i[o]);
-			return this.isDefaultPrevented = (i.defaultPrevented == null ? !1 === i.returnValue : i.defaultPrevented) ? In : Ln, this.isPropagationStopped = Ln, this;
+			return this.isDefaultPrevented = (i.defaultPrevented == null ? !1 === i.returnValue : i.defaultPrevented) ? Ln : Rn, this.isPropagationStopped = Rn, this;
 		}
 		return T(t.prototype, {
 			preventDefault: function() {
 				this.defaultPrevented = !0;
 				var e = this.nativeEvent;
-				e && (e.preventDefault ? e.preventDefault() : typeof e.returnValue != "unknown" && (e.returnValue = !1), this.isDefaultPrevented = In);
+				e && (e.preventDefault ? e.preventDefault() : typeof e.returnValue != "unknown" && (e.returnValue = !1), this.isDefaultPrevented = Ln);
 			},
 			stopPropagation: function() {
 				var e = this.nativeEvent;
-				e && (e.stopPropagation ? e.stopPropagation() : typeof e.cancelBubble != "unknown" && (e.cancelBubble = !0), this.isPropagationStopped = In);
+				e && (e.stopPropagation ? e.stopPropagation() : typeof e.cancelBubble != "unknown" && (e.cancelBubble = !0), this.isPropagationStopped = Ln);
 			},
 			persist: function() {},
-			isPersistent: In
+			isPersistent: Ln
 		}), t;
 	}
-	var zn = {
+	var Bn = {
 		eventPhase: 0,
 		bubbles: 0,
 		cancelable: 0,
@@ -8519,10 +8529,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		},
 		defaultPrevented: 0,
 		isTrusted: 0
-	}, Bn = Rn(zn), Vn = T({}, zn, {
+	}, Vn = zn(Bn), Hn = T({}, Bn, {
 		view: 0,
 		detail: 0
-	}), Hn = Rn(Vn), Un, Wn, Gn, Kn = T({}, Vn, {
+	}), Un = zn(Hn), Wn, Gn, Kn, qn = T({}, Hn, {
 		screenX: 0,
 		screenY: 0,
 		clientX: 0,
@@ -8533,25 +8543,25 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		shiftKey: 0,
 		altKey: 0,
 		metaKey: 0,
-		getModifierState: rr,
+		getModifierState: ir,
 		button: 0,
 		buttons: 0,
 		relatedTarget: function(e) {
 			return e.relatedTarget === void 0 ? e.fromElement === e.srcElement ? e.toElement : e.fromElement : e.relatedTarget;
 		},
 		movementX: function(e) {
-			return "movementX" in e ? e.movementX : (e !== Gn && (Gn && e.type === "mousemove" ? (Un = e.screenX - Gn.screenX, Wn = e.screenY - Gn.screenY) : Wn = Un = 0, Gn = e), Un);
+			return "movementX" in e ? e.movementX : (e !== Kn && (Kn && e.type === "mousemove" ? (Wn = e.screenX - Kn.screenX, Gn = e.screenY - Kn.screenY) : Gn = Wn = 0, Kn = e), Wn);
 		},
 		movementY: function(e) {
-			return "movementY" in e ? e.movementY : Wn;
+			return "movementY" in e ? e.movementY : Gn;
 		}
-	}), qn = Rn(Kn), Jn = Rn(T({}, Kn, { dataTransfer: 0 })), Yn = Rn(T({}, Vn, { relatedTarget: 0 })), Xn = Rn(T({}, zn, {
+	}), Jn = zn(qn), Yn = zn(T({}, qn, { dataTransfer: 0 })), Xn = zn(T({}, Hn, { relatedTarget: 0 })), Zn = zn(T({}, Bn, {
 		animationName: 0,
 		elapsedTime: 0,
 		pseudoElement: 0
-	})), Zn = Rn(T({}, zn, { clipboardData: function(e) {
+	})), Qn = zn(T({}, Bn, { clipboardData: function(e) {
 		return "clipboardData" in e ? e.clipboardData : window.clipboardData;
-	} })), Qn = Rn(T({}, zn, { data: 0 })), $n = {
+	} })), $n = zn(T({}, Bn, { data: 0 })), er = {
 		Esc: "Escape",
 		Spacebar: " ",
 		Left: "ArrowLeft",
@@ -8564,7 +8574,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		Apps: "ContextMenu",
 		Scroll: "ScrollLock",
 		MozPrintableKey: "Unidentified"
-	}, er = {
+	}, tr = {
 		8: "Backspace",
 		9: "Tab",
 		12: "Clear",
@@ -8601,26 +8611,26 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		144: "NumLock",
 		145: "ScrollLock",
 		224: "Meta"
-	}, tr = {
+	}, nr = {
 		Alt: "altKey",
 		Control: "ctrlKey",
 		Meta: "metaKey",
 		Shift: "shiftKey"
 	};
-	function nr(e) {
+	function rr(e) {
 		var t = this.nativeEvent;
-		return t.getModifierState ? t.getModifierState(e) : (e = tr[e]) ? !!t[e] : !1;
+		return t.getModifierState ? t.getModifierState(e) : (e = nr[e]) ? !!t[e] : !1;
 	}
-	function rr() {
-		return nr;
+	function ir() {
+		return rr;
 	}
-	var ir = Rn(T({}, Vn, {
+	var ar = zn(T({}, Hn, {
 		key: function(e) {
 			if (e.key) {
-				var t = $n[e.key] || e.key;
+				var t = er[e.key] || e.key;
 				if (t !== "Unidentified") return t;
 			}
-			return e.type === "keypress" ? (e = Fn(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? er[e.keyCode] || "Unidentified" : "";
+			return e.type === "keypress" ? (e = In(e), e === 13 ? "Enter" : String.fromCharCode(e)) : e.type === "keydown" || e.type === "keyup" ? tr[e.keyCode] || "Unidentified" : "";
 		},
 		code: 0,
 		location: 0,
@@ -8630,17 +8640,17 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		metaKey: 0,
 		repeat: 0,
 		locale: 0,
-		getModifierState: rr,
+		getModifierState: ir,
 		charCode: function(e) {
-			return e.type === "keypress" ? Fn(e) : 0;
+			return e.type === "keypress" ? In(e) : 0;
 		},
 		keyCode: function(e) {
 			return e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
 		},
 		which: function(e) {
-			return e.type === "keypress" ? Fn(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
+			return e.type === "keypress" ? In(e) : e.type === "keydown" || e.type === "keyup" ? e.keyCode : 0;
 		}
-	})), ar = Rn(T({}, Kn, {
+	})), or = zn(T({}, qn, {
 		pointerId: 0,
 		width: 0,
 		height: 0,
@@ -8651,7 +8661,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		twist: 0,
 		pointerType: 0,
 		isPrimary: 0
-	})), or = Rn(T({}, zn, { submitter: 0 })), sr = Rn(T({}, Vn, {
+	})), sr = zn(T({}, Bn, { submitter: 0 })), cr = zn(T({}, Hn, {
 		touches: 0,
 		targetTouches: 0,
 		changedTouches: 0,
@@ -8659,12 +8669,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		metaKey: 0,
 		ctrlKey: 0,
 		shiftKey: 0,
-		getModifierState: rr
-	})), cr = Rn(T({}, zn, {
+		getModifierState: ir
+	})), lr = zn(T({}, Bn, {
 		propertyName: 0,
 		elapsedTime: 0,
 		pseudoElement: 0
-	})), lr = Rn(T({}, Kn, {
+	})), ur = zn(T({}, qn, {
 		deltaX: function(e) {
 			return "deltaX" in e ? e.deltaX : "wheelDeltaX" in e ? -e.wheelDeltaX : 0;
 		},
@@ -8673,21 +8683,21 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		},
 		deltaZ: 0,
 		deltaMode: 0
-	})), ur = Rn(T({}, zn, {
+	})), dr = zn(T({}, Bn, {
 		newState: 0,
 		oldState: 0,
 		source: 0
-	})), dr = [
+	})), fr = [
 		9,
 		13,
 		27,
 		32
-	], L = On && "CompositionEvent" in window, fr = null;
-	On && "documentMode" in document && (fr = document.documentMode);
-	var pr = On && "TextEvent" in window && !fr, mr = On && (!L || fr && 8 < fr && 11 >= fr), hr = " ", gr = !1;
-	function _r(e, t) {
+	], I = kn && "CompositionEvent" in window, pr = null;
+	kn && "documentMode" in document && (pr = document.documentMode);
+	var mr = kn && "TextEvent" in window && !pr, hr = kn && (!I || pr && 8 < pr && 11 >= pr), gr = " ", _r = !1;
+	function vr(e, t) {
 		switch (e) {
-			case "keyup": return dr.indexOf(t.keyCode) !== -1;
+			case "keyup": return fr.indexOf(t.keyCode) !== -1;
 			case "keydown": return t.keyCode !== 229;
 			case "keypress":
 			case "mousedown":
@@ -8695,20 +8705,20 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			default: return !1;
 		}
 	}
-	function vr(e) {
+	function yr(e) {
 		return e = e.detail, typeof e == "object" && "data" in e ? e.data : null;
 	}
-	var yr = !1;
-	function br(e, t) {
+	var br = !1;
+	function xr(e, t) {
 		switch (e) {
-			case "compositionend": return vr(t);
-			case "keypress": return t.which === 32 ? (gr = !0, hr) : null;
-			case "textInput": return e = t.data, e === hr && gr ? null : e;
+			case "compositionend": return yr(t);
+			case "keypress": return t.which === 32 ? (_r = !0, gr) : null;
+			case "textInput": return e = t.data, e === gr && _r ? null : e;
 			default: return null;
 		}
 	}
-	function xr(e, t) {
-		if (yr) return e === "compositionend" || !L && _r(e, t) ? (e = Pn(), Nn = Mn = jn = null, yr = !1, e) : null;
+	function Sr(e, t) {
+		if (br) return e === "compositionend" || !I && vr(e, t) ? (e = Fn(), Pn = Nn = Mn = null, br = !1, e) : null;
 		switch (e) {
 			case "paste": return null;
 			case "keypress":
@@ -8717,11 +8727,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					if (t.which) return String.fromCharCode(t.which);
 				}
 				return null;
-			case "compositionend": return mr && t.locale !== "ko" ? null : t.data;
+			case "compositionend": return hr && t.locale !== "ko" ? null : t.data;
 			default: return null;
 		}
 	}
-	var Sr = {
+	var Cr = {
 		color: !0,
 		date: !0,
 		datetime: !0,
@@ -8738,76 +8748,76 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		url: !0,
 		week: !0
 	};
-	function Cr(e) {
+	function wr(e) {
 		var t = e && e.nodeName && e.nodeName.toLowerCase();
-		return t === "input" ? !!Sr[e.type] : t === "textarea";
+		return t === "input" ? !!Cr[e.type] : t === "textarea";
 	}
-	function wr(e, t, n, r) {
-		Sn ? Cn ? Cn.push(r) : Cn = [r] : Sn = r, t = Jf(t, "onChange"), 0 < t.length && (n = new Bn("onChange", "change", null, n, r), e.push({
+	function Tr(e, t, n, r) {
+		Cn ? wn ? wn.push(r) : wn = [r] : Cn = r, t = Jf(t, "onChange"), 0 < t.length && (n = new Vn("onChange", "change", null, n, r), e.push({
 			event: n,
 			listeners: t
 		}));
 	}
-	var Tr = null, Er = null;
-	function Dr(e) {
+	var Er = null, Dr = null;
+	function Or(e) {
 		Vf(e, 0);
 	}
-	function Or(e) {
-		if (tn(Ft(e))) return e;
+	function kr(e) {
+		if (nn(It(e))) return e;
 	}
-	function kr(e, t) {
+	function Ar(e, t) {
 		if (e === "change") return t;
 	}
-	var Ar = !1;
-	if (On) {
-		var jr;
-		if (On) {
-			var Mr = "oninput" in document;
-			if (!Mr) {
-				var Nr = document.createElement("div");
-				Nr.setAttribute("oninput", "return;"), Mr = typeof Nr.oninput == "function";
+	var jr = !1;
+	if (kn) {
+		var Mr;
+		if (kn) {
+			var Nr = "oninput" in document;
+			if (!Nr) {
+				var Pr = document.createElement("div");
+				Pr.setAttribute("oninput", "return;"), Nr = typeof Pr.oninput == "function";
 			}
-			jr = Mr;
-		} else jr = !1;
-		Ar = jr && (!document.documentMode || 9 < document.documentMode);
+			Mr = Nr;
+		} else Mr = !1;
+		jr = Mr && (!document.documentMode || 9 < document.documentMode);
 	}
-	function Pr() {
-		Tr && (Tr.detachEvent("onpropertychange", Fr), Er = Tr = null);
+	function Fr() {
+		Er && (Er.detachEvent("onpropertychange", Ir), Dr = Er = null);
 	}
-	function Fr(e) {
-		if (e.propertyName === "value" && Or(Er)) {
+	function Ir(e) {
+		if (e.propertyName === "value" && kr(Dr)) {
 			var t = [];
-			wr(t, Er, e, xn(e)), En(Dr, t);
+			Tr(t, Dr, e, Sn(e)), Dn(Or, t);
 		}
 	}
-	function Ir(e, t, n) {
-		e === "focusin" ? (Pr(), Tr = t, Er = n, Tr.attachEvent("onpropertychange", Fr)) : e === "focusout" && Pr();
+	function Lr(e, t, n) {
+		e === "focusin" ? (Fr(), Er = t, Dr = n, Er.attachEvent("onpropertychange", Ir)) : e === "focusout" && Fr();
 	}
-	function Lr(e) {
-		if (e === "selectionchange" || e === "keyup" || e === "keydown") return Or(Er);
-	}
-	function Rr(e, t) {
-		if (e === "click") return Or(t);
+	function Rr(e) {
+		if (e === "selectionchange" || e === "keyup" || e === "keydown") return kr(Dr);
 	}
 	function zr(e, t) {
-		if (e === "input" || e === "change") return Or(t);
+		if (e === "click") return kr(t);
 	}
 	function Br(e, t) {
+		if (e === "input" || e === "change") return kr(t);
+	}
+	function Vr(e, t) {
 		return e === t && (e !== 0 || 1 / e == 1 / t) || e !== e && t !== t;
 	}
-	var Vr = typeof Object.is == "function" ? Object.is : Br;
-	function Hr(e, t) {
-		if (Vr(e, t)) return !0;
+	var Hr = typeof Object.is == "function" ? Object.is : Vr;
+	function Ur(e, t) {
+		if (Hr(e, t)) return !0;
 		if (typeof e != "object" || !e || typeof t != "object" || !t) return !1;
 		var n = Object.keys(e), r = Object.keys(t);
 		if (n.length !== r.length) return !1;
 		for (r = 0; r < n.length; r++) {
 			var i = n[r];
-			if (!Ie.call(t, i) || !Vr(e[i], t[i])) return !1;
+			if (!Le.call(t, i) || !Hr(e[i], t[i])) return !1;
 		}
 		return !0;
 	}
-	function Ur(e) {
+	function Wr(e) {
 		if (e ||= typeof document < "u" ? document : void 0, e === void 0) return null;
 		try {
 			return e.activeElement || e.body;
@@ -8815,12 +8825,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			return e.body;
 		}
 	}
-	function Wr(e) {
+	function Gr(e) {
 		for (; e && e.firstChild;) e = e.firstChild;
 		return e;
 	}
-	function Gr(e, t) {
-		var n = Wr(e);
+	function Kr(e, t) {
+		var n = Gr(e);
 		e = 0;
 		for (var r; n;) {
 			if (n.nodeType === 3) {
@@ -8840,15 +8850,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				n = void 0;
 			}
-			n = Wr(n);
+			n = Gr(n);
 		}
 	}
-	function Kr(e, t) {
-		return e && t ? e === t ? !0 : e && e.nodeType === 3 ? !1 : t && t.nodeType === 3 ? Kr(e, t.parentNode) : "contains" in e ? e.contains(t) : e.compareDocumentPosition ? !!(e.compareDocumentPosition(t) & 16) : !1 : !1;
+	function qr(e, t) {
+		return e && t ? e === t ? !0 : e && e.nodeType === 3 ? !1 : t && t.nodeType === 3 ? qr(e, t.parentNode) : "contains" in e ? e.contains(t) : e.compareDocumentPosition ? !!(e.compareDocumentPosition(t) & 16) : !1 : !1;
 	}
-	function qr(e) {
+	function Jr(e) {
 		e = e != null && e.ownerDocument != null && e.ownerDocument.defaultView != null ? e.ownerDocument.defaultView : window;
-		for (var t = Ur(e.document); t instanceof e.HTMLIFrameElement;) {
+		for (var t = Wr(e.document); t instanceof e.HTMLIFrameElement;) {
 			try {
 				var n = typeof t.contentWindow.location.href == "string";
 			} catch {
@@ -8856,18 +8866,18 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 			if (n) e = t.contentWindow;
 			else break;
-			t = Ur(e.document);
+			t = Wr(e.document);
 		}
 		return t;
 	}
-	function Jr(e) {
+	function Yr(e) {
 		var t = e && e.nodeName && e.nodeName.toLowerCase();
 		return t && (t === "input" && (e.type === "text" || e.type === "search" || e.type === "tel" || e.type === "url" || e.type === "password") || t === "textarea" || e.contentEditable === "true");
 	}
-	var Yr = On && "documentMode" in document && 11 >= document.documentMode, Xr = null, Zr = null, Qr = null, $r = !1;
-	function ei(e, t, n) {
+	var Xr = kn && "documentMode" in document && 11 >= document.documentMode, Zr = null, Qr = null, $r = null, ei = !1;
+	function ti(e, t, n) {
 		var r = n.window === n ? n.document : n.nodeType === 9 ? n : n.ownerDocument;
-		$r || Xr == null || Xr !== Ur(r) || (r = Xr, "selectionStart" in r && Jr(r) ? r = {
+		ei || Zr == null || Zr !== Wr(r) || (r = Zr, "selectionStart" in r && Yr(r) ? r = {
 			start: r.selectionStart,
 			end: r.selectionEnd
 		} : (r = (r.ownerDocument && r.ownerDocument.defaultView || window).getSelection(), r = {
@@ -8875,46 +8885,46 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			anchorOffset: r.anchorOffset,
 			focusNode: r.focusNode,
 			focusOffset: r.focusOffset
-		}), Qr && Hr(Qr, r) || (Qr = r, r = Jf(Zr, "onSelect"), 0 < r.length && (t = new Bn("onSelect", "select", null, t, n), e.push({
+		}), $r && Ur($r, r) || ($r = r, r = Jf(Qr, "onSelect"), 0 < r.length && (t = new Vn("onSelect", "select", null, t, n), e.push({
 			event: t,
 			listeners: r
-		}), t.target = Xr)));
+		}), t.target = Zr)));
 	}
-	function ti(e, t) {
+	function ni(e, t) {
 		var n = {};
 		return n[e.toLowerCase()] = t.toLowerCase(), n["Webkit" + e] = "webkit" + t, n["Moz" + e] = "moz" + t, n;
 	}
-	var ni = {
-		animationend: ti("Animation", "AnimationEnd"),
-		animationiteration: ti("Animation", "AnimationIteration"),
-		animationstart: ti("Animation", "AnimationStart"),
-		transitionrun: ti("Transition", "TransitionRun"),
-		transitionstart: ti("Transition", "TransitionStart"),
-		transitioncancel: ti("Transition", "TransitionCancel"),
-		transitionend: ti("Transition", "TransitionEnd")
-	}, ri = {}, ii = {};
-	On && (ii = document.createElement("div").style, "AnimationEvent" in window || (delete ni.animationend.animation, delete ni.animationiteration.animation, delete ni.animationstart.animation), "TransitionEvent" in window || delete ni.transitionend.transition);
-	function ai(e) {
-		if (ri[e]) return ri[e];
-		if (!ni[e]) return e;
-		var t = ni[e], n;
-		for (n in t) if (t.hasOwnProperty(n) && n in ii) return ri[e] = t[n];
+	var ri = {
+		animationend: ni("Animation", "AnimationEnd"),
+		animationiteration: ni("Animation", "AnimationIteration"),
+		animationstart: ni("Animation", "AnimationStart"),
+		transitionrun: ni("Transition", "TransitionRun"),
+		transitionstart: ni("Transition", "TransitionStart"),
+		transitioncancel: ni("Transition", "TransitionCancel"),
+		transitionend: ni("Transition", "TransitionEnd")
+	}, ii = {}, ai = {};
+	kn && (ai = document.createElement("div").style, "AnimationEvent" in window || (delete ri.animationend.animation, delete ri.animationiteration.animation, delete ri.animationstart.animation), "TransitionEvent" in window || delete ri.transitionend.transition);
+	function oi(e) {
+		if (ii[e]) return ii[e];
+		if (!ri[e]) return e;
+		var t = ri[e], n;
+		for (n in t) if (t.hasOwnProperty(n) && n in ai) return ii[e] = t[n];
 		return e;
 	}
-	var oi = ai("animationend"), si = ai("animationiteration"), ci = ai("animationstart"), li = ai("transitionrun"), ui = ai("transitionstart"), di = ai("transitioncancel"), fi = ai("transitionend"), pi = /* @__PURE__ */ new Map(), mi = "abort auxClick beforeToggle cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error fullscreenChange fullscreenError gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(" ");
-	mi.push("scrollEnd");
-	function hi(e, t) {
-		pi.set(e, t), Vt(t, [e]);
+	var si = oi("animationend"), ci = oi("animationiteration"), li = oi("animationstart"), ui = oi("transitionrun"), di = oi("transitionstart"), fi = oi("transitioncancel"), pi = oi("transitionend"), mi = /* @__PURE__ */ new Map(), hi = "abort auxClick beforeToggle cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error fullscreenChange fullscreenError gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(" ");
+	hi.push("scrollEnd");
+	function gi(e, t) {
+		mi.set(e, t), Ht(t, [e]);
 	}
-	var gi = 0;
-	function R(e, t) {
+	var _i = 0;
+	function L(e, t) {
 		if (e.name != null && e.name !== "auto") return e.name;
 		if (t.autoName !== null) return t.autoName;
 		e = bd.identifierPrefix;
-		var n = gi++;
+		var n = _i++;
 		return e = "_" + e + "t_" + n.toString(32) + "_", t.autoName = e;
 	}
-	function _i(e) {
+	function vi(e) {
 		if (e == null || typeof e == "string") return e;
 		var t = null, n = Od;
 		if (n !== null) for (var r = 0; r < n.length; r++) {
@@ -8926,10 +8936,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		return t ?? e.default;
 	}
-	function vi(e, t) {
-		return e = _i(e), t = _i(t), t == null ? e === "auto" ? null : e : t === "auto" ? null : t;
+	function yi(e, t) {
+		return e = vi(e), t = vi(t), t == null ? e === "auto" ? null : e : t === "auto" ? null : t;
 	}
-	var yi = typeof reportError == "function" ? reportError : function(e) {
+	var bi = typeof reportError == "function" ? reportError : function(e) {
 		if (typeof window == "object" && typeof window.ErrorEvent == "function") {
 			var t = new window.ErrorEvent("error", {
 				bubbles: !0,
@@ -8943,62 +8953,62 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			return;
 		}
 		console.error(e);
-	}, bi = [], xi = 0, Si = 0;
-	function Ci() {
-		for (var e = xi, t = Si = xi = 0; t < e;) {
-			var n = bi[t];
-			bi[t++] = null;
-			var r = bi[t];
-			bi[t++] = null;
-			var i = bi[t];
-			bi[t++] = null;
-			var a = bi[t];
-			if (bi[t++] = null, r !== null && i !== null) {
+	}, xi = [], Si = 0, Ci = 0;
+	function wi() {
+		for (var e = Si, t = Ci = Si = 0; t < e;) {
+			var n = xi[t];
+			xi[t++] = null;
+			var r = xi[t];
+			xi[t++] = null;
+			var i = xi[t];
+			xi[t++] = null;
+			var a = xi[t];
+			if (xi[t++] = null, r !== null && i !== null) {
 				var o = r.pending;
 				o === null ? i.next = i : (i.next = o.next, o.next = i), r.pending = i;
 			}
-			a !== 0 && Di(n, i, a);
+			a !== 0 && Oi(n, i, a);
 		}
 	}
-	function wi(e, t, n, r) {
-		bi[xi++] = e, bi[xi++] = t, bi[xi++] = n, bi[xi++] = r, Si |= r, e.lanes |= r, e = e.alternate, e !== null && (e.lanes |= r);
-	}
 	function Ti(e, t, n, r) {
-		return wi(e, t, n, r), Oi(e);
+		xi[Si++] = e, xi[Si++] = t, xi[Si++] = n, xi[Si++] = r, Ci |= r, e.lanes |= r, e = e.alternate, e !== null && (e.lanes |= r);
 	}
-	function Ei(e, t) {
-		return wi(e, null, null, t), Oi(e);
+	function Ei(e, t, n, r) {
+		return Ti(e, t, n, r), ki(e);
 	}
-	function Di(e, t, n) {
+	function Di(e, t) {
+		return Ti(e, null, null, t), ki(e);
+	}
+	function Oi(e, t, n) {
 		e.lanes |= n;
 		var r = e.alternate;
 		r !== null && (r.lanes |= n);
 		for (var i = !1, a = e.return; a !== null;) a.childLanes |= n, r = a.alternate, r !== null && (r.childLanes |= n), a.tag === 22 && (e = a.stateNode, e === null || e._visibility & 1 || (i = !0)), e = a, a = a.return;
-		return e.tag === 3 ? (a = e.stateNode, i && t !== null && (i = 31 - $e(n), e = a.hiddenUpdates, r = e[i], r === null ? e[i] = [t] : r.push(t), t.lane = n | 536870912), a) : null;
+		return e.tag === 3 ? (a = e.stateNode, i && t !== null && (i = 31 - et(n), e = a.hiddenUpdates, r = e[i], r === null ? e[i] = [t] : r.push(t), t.lane = n | 536870912), a) : null;
 	}
-	function Oi(e) {
+	function ki(e) {
 		if (50 < kd) throw kd = 0, Ad = null, Error(i(185));
 		for (var t = e.return; t !== null;) e = t, t = e.return;
 		return e.tag === 3 ? e.stateNode : null;
 	}
-	var ki = {};
-	function Ai(e, t, n, r) {
+	var Ai = {};
+	function ji(e, t, n, r) {
 		this.tag = e, this.key = n, this.sibling = this.child = this.return = this.stateNode = this.type = this.elementType = null, this.index = 0, this.refCleanup = this.ref = null, this.pendingProps = t, this.dependencies = this.memoizedState = this.updateQueue = this.memoizedProps = null, this.mode = r, this.subtreeFlags = this.flags = 0, this.deletions = null, this.childLanes = this.lanes = 0, this.alternate = null;
 	}
-	function ji(e, t, n, r) {
-		return new Ai(e, t, n, r);
+	function Mi(e, t, n, r) {
+		return new ji(e, t, n, r);
 	}
-	function Mi(e) {
+	function Ni(e) {
 		return e = e.prototype, !(!e || !e.isReactComponent);
 	}
-	function Ni(e, t) {
+	function Pi(e, t) {
 		var n = e.alternate;
-		return n === null ? (n = ji(e.tag, t, e.key, e.mode), n.elementType = e.elementType, n.type = e.type, n.stateNode = e.stateNode, n.alternate = e, e.alternate = n) : (n.pendingProps = t, n.type = e.type, n.flags = 0, n.subtreeFlags = 0, n.deletions = null), n.flags = e.flags & 1206910976, n.childLanes = e.childLanes, n.lanes = e.lanes, n.child = e.child, n.memoizedProps = e.memoizedProps, n.memoizedState = e.memoizedState, n.updateQueue = e.updateQueue, t = e.dependencies, n.dependencies = t === null ? null : {
+		return n === null ? (n = Mi(e.tag, t, e.key, e.mode), n.elementType = e.elementType, n.type = e.type, n.stateNode = e.stateNode, n.alternate = e, e.alternate = n) : (n.pendingProps = t, n.type = e.type, n.flags = 0, n.subtreeFlags = 0, n.deletions = null), n.flags = e.flags & 1206910976, n.childLanes = e.childLanes, n.lanes = e.lanes, n.child = e.child, n.memoizedProps = e.memoizedProps, n.memoizedState = e.memoizedState, n.updateQueue = e.updateQueue, t = e.dependencies, n.dependencies = t === null ? null : {
 			lanes: t.lanes,
 			firstContext: t.firstContext
 		}, n.sibling = e.sibling, n.index = e.index, n.ref = e.ref, n.refCleanup = e.refCleanup, n;
 	}
-	function Pi(e, t) {
+	function Fi(e, t) {
 		e.flags &= 1206910978;
 		var n = e.alternate;
 		return n === null ? (e.childLanes = 0, e.lanes = t, e.child = null, e.subtreeFlags = 0, e.memoizedProps = null, e.memoizedState = null, e.updateQueue = null, e.dependencies = null, e.stateNode = null) : (e.childLanes = n.childLanes, e.lanes = n.lanes, e.child = n.child, e.subtreeFlags = 0, e.deletions = null, e.memoizedProps = n.memoizedProps, e.memoizedState = n.memoizedState, e.updateQueue = n.updateQueue, e.type = n.type, t = n.dependencies, e.dependencies = t === null ? null : {
@@ -9006,21 +9016,21 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			firstContext: t.firstContext
 		}), e;
 	}
-	function Fi(e, t, n, r, a, o) {
+	function Ii(e, t, n, r, a, o) {
 		var s = 0;
-		if (r = e, typeof r == "function") Mi(r) && (s = 1);
-		else if (typeof r == "string") s = qm(e, n, xe.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
+		if (r = e, typeof r == "function") Ni(r) && (s = 1);
+		else if (typeof r == "string") s = qm(e, n, Se.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
 		else a: switch (r) {
-			case le: return e = ji(31, n, t, a), e.elementType = le, e.lanes = o, e;
-			case D: return Ii(n.children, a, o, t);
+			case le: return e = Mi(31, n, t, a), e.elementType = le, e.lanes = o, e;
+			case D: return Li(n.children, a, o, t);
 			case ne:
 				s = 8, a |= 24;
 				break;
-			case re: return e = ji(12, n, t, a | 2), e.elementType = re, e.lanes = o, e;
-			case oe: return e = ji(13, n, t, a), e.elementType = oe, e.lanes = o, e;
-			case se: return e = ji(19, n, t, a), e.elementType = se, e.lanes = o, e;
+			case re: return e = Mi(12, n, t, a | 2), e.elementType = re, e.lanes = o, e;
+			case oe: return e = Mi(13, n, t, a), e.elementType = oe, e.lanes = o, e;
+			case se: return e = Mi(19, n, t, a), e.elementType = se, e.lanes = o, e;
 			case ue:
-			case A: return e = a | 32, e = ji(30, n, t, e), e.elementType = A, e.lanes = o, e.stateNode = {
+			case A: return e = a | 32, e = Mi(30, n, t, e), e.elementType = A, e.lanes = o, e.stateNode = {
 				autoName: null,
 				paired: null,
 				clones: null,
@@ -9046,74 +9056,74 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				s = 29, n = Error(i(130, e === null ? "null" : typeof e, "")), r = null;
 		}
-		return t = ji(s, n, t, a), t.elementType = e, t.type = r, t.lanes = o, t;
+		return t = Mi(s, n, t, a), t.elementType = e, t.type = r, t.lanes = o, t;
 	}
-	function Ii(e, t, n, r) {
-		return e = ji(7, e, r, t), e.lanes = n, e;
+	function Li(e, t, n, r) {
+		return e = Mi(7, e, r, t), e.lanes = n, e;
 	}
-	function Li(e, t, n) {
-		return e = ji(6, e, null, t), e.lanes = n, e;
+	function Ri(e, t, n) {
+		return e = Mi(6, e, null, t), e.lanes = n, e;
 	}
-	function Ri(e) {
-		var t = ji(18, null, null, 0);
+	function zi(e) {
+		var t = Mi(18, null, null, 0);
 		return t.stateNode = e, t;
 	}
-	function zi(e, t, n) {
-		return t = ji(4, e.children === null ? [] : e.children, e.key, t), t.lanes = n, t.stateNode = {
+	function Bi(e, t, n) {
+		return t = Mi(4, e.children === null ? [] : e.children, e.key, t), t.lanes = n, t.stateNode = {
 			containerInfo: e.containerInfo,
 			pendingChildren: null,
 			implementation: e.implementation
 		}, t;
 	}
-	var Bi = /* @__PURE__ */ new WeakMap();
-	function Vi(e, t) {
+	var Vi = /* @__PURE__ */ new WeakMap();
+	function Hi(e, t) {
 		if (typeof e == "object" && e) {
-			var n = Bi.get(e);
+			var n = Vi.get(e);
 			return n === void 0 ? (t = {
 				value: e,
 				source: t,
-				stack: Fe(t)
-			}, Bi.set(e, t), t) : n;
+				stack: Ie(t)
+			}, Vi.set(e, t), t) : n;
 		}
 		return {
 			value: e,
 			source: t,
-			stack: Fe(t)
+			stack: Ie(t)
 		};
 	}
-	var Hi = [], Ui = 0, Wi = null, Gi = 0, Ki = [], qi = 0, Ji = null, Yi = 1, Xi = "";
-	function Zi(e, t) {
-		Hi[Ui++] = Gi, Hi[Ui++] = Wi, Wi = e, Gi = t;
+	var Ui = [], Wi = 0, Gi = null, Ki = 0, qi = [], Ji = 0, Yi = null, Xi = 1, Zi = "";
+	function Qi(e, t) {
+		Ui[Wi++] = Ki, Ui[Wi++] = Gi, Gi = e, Ki = t;
 	}
-	function Qi(e, t, n) {
-		Ki[qi++] = Yi, Ki[qi++] = Xi, Ki[qi++] = Ji, Ji = e;
-		var r = Yi;
-		e = Xi;
-		var i = 32 - $e(r) - 1;
+	function $i(e, t, n) {
+		qi[Ji++] = Xi, qi[Ji++] = Zi, qi[Ji++] = Yi, Yi = e;
+		var r = Xi;
+		e = Zi;
+		var i = 32 - et(r) - 1;
 		r &= ~(1 << i), n += 1;
-		var a = 32 - $e(t) + i;
+		var a = 32 - et(t) + i;
 		if (30 < a) {
 			var o = i - i % 5;
-			a = (r & (1 << o) - 1).toString(32), r >>= o, i -= o, Yi = 1 << 32 - $e(t) + i | n << i | r, Xi = a + e;
-		} else Yi = 1 << a | n << i | r, Xi = e;
-	}
-	function $i(e) {
-		e.return !== null && (Zi(e, 1), Qi(e, 1, 0));
+			a = (r & (1 << o) - 1).toString(32), r >>= o, i -= o, Xi = 1 << 32 - et(t) + i | n << i | r, Zi = a + e;
+		} else Xi = 1 << a | n << i | r, Zi = e;
 	}
 	function ea(e) {
-		for (; e === Wi;) Wi = Hi[--Ui], Hi[Ui] = null, Gi = Hi[--Ui], Hi[Ui] = null;
-		for (; e === Ji;) Ji = Ki[--qi], Ki[qi] = null, Xi = Ki[--qi], Ki[qi] = null, Yi = Ki[--qi], Ki[qi] = null;
+		e.return !== null && (Qi(e, 1), $i(e, 1, 0));
 	}
-	function ta(e, t) {
-		Ki[qi++] = Yi, Ki[qi++] = Xi, Ki[qi++] = Ji, Yi = t.id, Xi = t.overflow, Ji = e;
+	function ta(e) {
+		for (; e === Gi;) Gi = Ui[--Wi], Ui[Wi] = null, Ki = Ui[--Wi], Ui[Wi] = null;
+		for (; e === Yi;) Yi = qi[--Ji], qi[Ji] = null, Zi = qi[--Ji], qi[Ji] = null, Xi = qi[--Ji], qi[Ji] = null;
 	}
-	var na = null, z = null, B = !1, ra = null, ia = !1, aa = Error(i(519));
-	function oa(e) {
-		throw fa(Vi(Error(i(418, 1 < arguments.length && arguments[1] !== void 0 && arguments[1] ? "text" : "HTML", "")), e)), aa;
+	function na(e, t) {
+		qi[Ji++] = Xi, qi[Ji++] = Zi, qi[Ji++] = Yi, Xi = t.id, Zi = t.overflow, Yi = e;
 	}
+	var ra = null, R = null, z = !1, ia = null, aa = !1, oa = Error(i(519));
 	function sa(e) {
+		throw pa(Hi(Error(i(418, 1 < arguments.length && arguments[1] !== void 0 && arguments[1] ? "text" : "HTML", "")), e)), oa;
+	}
+	function ca(e) {
 		var t = e.stateNode, n = e.type, r = e.memoizedProps;
-		switch (t[Ct] = e, t[wt] = r, n) {
+		switch (t[wt] = e, t[Tt] = r, n) {
 			case "dialog":
 				Q("cancel", t), Q("close", t);
 				break;
@@ -9138,67 +9148,67 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				Q("toggle", t);
 				break;
 			case "input":
-				Q("invalid", t), on(t, r.value, r.defaultValue, r.checked, r.defaultChecked, r.type, r.name, !0);
+				Q("invalid", t), sn(t, r.value, r.defaultValue, r.checked, r.defaultChecked, r.type, r.name, !0);
 				break;
 			case "select":
 				Q("invalid", t);
 				break;
-			case "textarea": Q("invalid", t), un(t, r.value, r.defaultValue, r.children);
+			case "textarea": Q("invalid", t), dn(t, r.value, r.defaultValue, r.children);
 		}
-		n = r.children, typeof n != "string" && typeof n != "number" && typeof n != "bigint" || t.textContent === "" + n || !0 === r.suppressHydrationWarning || ep(t.textContent, n) ? (r.popover != null && (Q("beforetoggle", t), Q("toggle", t)), r.onScroll != null && Q("scroll", t), r.onScrollEnd != null && Q("scrollend", t), r.onClick != null && (t.onclick = yn), t = !0) : t = !1, t || oa(e, !0);
+		n = r.children, typeof n != "string" && typeof n != "number" && typeof n != "bigint" || t.textContent === "" + n || !0 === r.suppressHydrationWarning || ep(t.textContent, n) ? (r.popover != null && (Q("beforetoggle", t), Q("toggle", t)), r.onScroll != null && Q("scroll", t), r.onScrollEnd != null && Q("scrollend", t), r.onClick != null && (t.onclick = bn), t = !0) : t = !1, t || sa(e, !0);
 	}
-	function ca(e) {
-		for (na = e.return; na;) switch (na.tag) {
+	function la(e) {
+		for (ra = e.return; ra;) switch (ra.tag) {
 			case 5:
 			case 31:
 			case 13:
-				ia = !1;
+				aa = !1;
 				return;
 			case 27:
 			case 3:
-				ia = !0;
+				aa = !0;
 				return;
-			default: na = na.return;
+			default: ra = ra.return;
 		}
 	}
-	function la(e) {
-		if (e !== na) return !1;
-		if (!B) return ca(e), B = !0, !1;
+	function ua(e) {
+		if (e !== ra) return !1;
+		if (!z) return la(e), z = !0, !1;
 		var t = e.tag, n;
-		if ((n = t !== 3 && t !== 27) && ((n = t === 5) && (n = e.type, n = n === "form" || n === "button" || pp(e.type, e.memoizedProps)), n = !n), n && z && oa(e), ca(e), t === 13) {
+		if ((n = t !== 3 && t !== 27) && ((n = t === 5) && (n = e.type, n = n === "form" || n === "button" || pp(e.type, e.memoizedProps)), n = !n), n && R && sa(e), la(e), t === 13) {
 			if (e = e.memoizedState, e = e === null ? null : e.dehydrated, !e) throw Error(i(317));
-			z = dm(e);
+			R = dm(e);
 		} else if (t === 31) {
 			if (e = e.memoizedState, e = e === null ? null : e.dehydrated, !e) throw Error(i(317));
-			z = dm(e);
-		} else t === 27 ? (t = z, Sp(e.type) ? (e = um, um = null, z = e) : z = t) : z = na ? lm(e.stateNode.nextSibling) : null;
+			R = dm(e);
+		} else t === 27 ? (t = R, Sp(e.type) ? (e = um, um = null, R = e) : R = t) : R = ra ? lm(e.stateNode.nextSibling) : null;
 		return !0;
 	}
-	function ua() {
-		z = na = null, B = !1;
-	}
 	function da() {
-		var e = ra;
-		return e !== null && (fd === null ? fd = e : fd.push.apply(fd, e), ra = null), e;
+		R = ra = null, z = !1;
 	}
-	function fa(e) {
-		ra === null ? ra = [e] : ra.push(e);
+	function fa() {
+		var e = ia;
+		return e !== null && (fd === null ? fd = e : fd.push.apply(fd, e), ia = null), e;
 	}
-	var pa = ye(null), ma = null, ha = null;
-	function ga(e, t, n) {
-		F(pa, t._currentValue), t._currentValue = n;
+	function pa(e) {
+		ia === null ? ia = [e] : ia.push(e);
 	}
-	function _a(e) {
-		e._currentValue = pa.current, be(pa);
+	var ma = be(null), ha = null, ga = null;
+	function _a(e, t, n) {
+		P(ma, t._currentValue), t._currentValue = n;
 	}
-	function ya(e, t, n) {
+	function va(e) {
+		e._currentValue = ma.current, xe(ma);
+	}
+	function ba(e, t, n) {
 		for (; e !== null;) {
 			var r = e.alternate;
 			if ((e.childLanes & t) === t ? r !== null && (r.childLanes & t) !== t && (r.childLanes |= t) : (e.childLanes |= t, r !== null && (r.childLanes |= t)), e === n) break;
 			e = e.return;
 		}
 	}
-	function ba(e, t, n, r) {
+	function xa(e, t, n, r) {
 		var a = e.child;
 		for (a !== null && (a.return = e); a !== null;) {
 			var o = a.dependencies;
@@ -9209,15 +9219,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					var c = o;
 					o = a;
 					for (var l = 0; l < t.length; l++) if (c.context === t[l]) {
-						o.lanes |= n, c = o.alternate, c !== null && (c.lanes |= n), ya(o.return, n, e), r || (s = null);
+						o.lanes |= n, c = o.alternate, c !== null && (c.lanes |= n), ba(o.return, n, e), r || (s = null);
 						break a;
 					}
 					o = c.next;
 				}
 			} else if (a.tag === 18) {
 				if (s = a.return, s === null) throw Error(i(341));
-				s.lanes |= n, o = s.alternate, o !== null && (o.lanes |= n), ya(s, n, e), s = null;
-			} else a.tag === 13 && a.memoizedState !== null && a.memoizedState.dehydrated === null ? (a.lanes |= n, s = a.alternate, s !== null && (s.lanes |= n), ya(a.return, n, e), s = a.child, s = s === null ? null : s.sibling) : s = a.child;
+				s.lanes |= n, o = s.alternate, o !== null && (o.lanes |= n), ba(s, n, e), s = null;
+			} else a.tag === 13 && a.memoizedState !== null && a.memoizedState.dehydrated === null ? (a.lanes |= n, s = a.alternate, s !== null && (s.lanes |= n), ba(a.return, n, e), s = a.child, s = s === null ? null : s.sibling) : s = a.child;
 			if (s !== null) s.return = a;
 			else for (s = a; s !== null;) {
 				if (s === e) {
@@ -9233,7 +9243,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			a = s;
 		}
 	}
-	function xa(e, t, n, r) {
+	function Sa(e, t, n, r) {
 		e = null;
 		for (var a = t, o = !1; a !== null;) {
 			if (!o) {
@@ -9245,48 +9255,48 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				if (s === null) throw Error(i(387));
 				if (s = s.memoizedProps, s !== null) {
 					var c = a.type;
-					Vr(a.pendingProps.value, s.value) || (e === null ? e = [c] : e.push(c));
+					Hr(a.pendingProps.value, s.value) || (e === null ? e = [c] : e.push(c));
 				}
-			} else if (a === we.current) {
+			} else if (a === Te.current) {
 				if (s = a.alternate, s === null) throw Error(i(387));
 				s.memoizedState.memoizedState !== a.memoizedState.memoizedState && (e === null ? e = [sh] : e.push(sh));
 			}
 			a = a.return;
 		}
-		return e !== null && ba(t, e, n, r), t.flags |= 262144, e !== null;
+		return e !== null && xa(t, e, n, r), t.flags |= 262144, e !== null;
 	}
-	function Sa(e) {
+	function Ca(e) {
 		for (e = e.firstContext; e !== null;) {
-			if (!Vr(e.context._currentValue, e.memoizedValue)) return !0;
+			if (!Hr(e.context._currentValue, e.memoizedValue)) return !0;
 			e = e.next;
 		}
 		return !1;
 	}
-	function Ca(e) {
-		ma = e, ha = null, e = e.dependencies, e !== null && (e.firstContext = null);
-	}
 	function wa(e) {
-		return Ea(ma, e);
+		ha = e, ga = null, e = e.dependencies, e !== null && (e.firstContext = null);
 	}
-	function Ta(e, t) {
-		return ma === null && Ca(e), Ea(e, t);
+	function Ta(e) {
+		return Da(ha, e);
 	}
 	function Ea(e, t) {
+		return ha === null && wa(e), Da(e, t);
+	}
+	function Da(e, t) {
 		var n = t._currentValue;
 		if (t = {
 			context: t,
 			memoizedValue: n,
 			next: null
-		}, ha === null) {
+		}, ga === null) {
 			if (e === null) throw Error(i(308));
-			ha = t, e.dependencies = {
+			ga = t, e.dependencies = {
 				lanes: 0,
 				firstContext: t
 			}, e.flags |= 524288;
-		} else ha = ha.next = t;
+		} else ga = ga.next = t;
 		return n;
 	}
-	var Da = typeof AbortController < "u" ? AbortController : function() {
+	var Oa = typeof AbortController < "u" ? AbortController : function() {
 		var e = [], t = this.signal = {
 			aborted: !1,
 			addEventListener: function(t, n) {
@@ -9298,7 +9308,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				return e();
 			});
 		};
-	}, Oa = t.unstable_scheduleCallback, ka = t.unstable_NormalPriority, Aa = {
+	}, ka = t.unstable_scheduleCallback, Aa = t.unstable_NormalPriority, ja = {
 		$$typeof: ae,
 		Consumer: null,
 		Provider: null,
@@ -9306,19 +9316,19 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		_currentValue2: null,
 		_threadCount: 0
 	};
-	function ja() {
+	function Ma() {
 		return {
-			controller: new Da(),
+			controller: new Oa(),
 			data: /* @__PURE__ */ new Map(),
 			refCount: 0
 		};
 	}
-	function Ma(e) {
-		e.refCount--, e.refCount === 0 && Oa(ka, function() {
+	function Na(e) {
+		e.refCount--, e.refCount === 0 && ka(Aa, function() {
 			e.controller.abort();
 		});
 	}
-	function Na(e, t) {
+	function Pa(e, t) {
 		if (e.pendingLanes & 4194048) {
 			var n = e.transitionTypes;
 			for (n === null && (n = e.transitionTypes = []), e = 0; e < t.length; e++) {
@@ -9327,16 +9337,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 		}
 	}
-	var Pa = null;
-	function Fa(e) {
+	var Fa = null;
+	function Ia(e) {
 		var t = e.transitionTypes;
 		return e.transitionTypes = null, t;
 	}
-	var Ia = null, La = 0, Ra = 0, za = null;
-	function Ba(e, t) {
-		if (Ia === null) {
-			var n = Ia = [];
-			La = 0, Ra = Pf(), za = {
+	var La = null, Ra = 0, za = 0, Ba = null;
+	function Va(e, t) {
+		if (La === null) {
+			var n = La = [];
+			Ra = 0, za = Pf(), Ba = {
 				status: "pending",
 				value: void 0,
 				then: function(e) {
@@ -9344,17 +9354,17 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 			};
 		}
-		return La++, t.then(Va, Va), t;
+		return Ra++, t.then(Ha, Ha), t;
 	}
-	function Va() {
-		if (--La === 0 && (Pa = null, Ia !== null)) {
-			za !== null && (za.status = "fulfilled");
-			var e = Ia;
-			Ia = null, Ra = 0, za = null;
+	function Ha() {
+		if (--Ra === 0 && (Fa = null, La !== null)) {
+			Ba !== null && (Ba.status = "fulfilled");
+			var e = La;
+			La = null, za = 0, Ba = null;
 			for (var t = 0; t < e.length; t++) (0, e[t])();
 		}
 	}
-	function Ha(e, t) {
+	function Ua(e, t) {
 		var n = [], r = {
 			status: "pending",
 			value: null,
@@ -9370,46 +9380,46 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			for (r.status = "rejected", r.reason = e, e = 0; e < n.length; e++) (0, n[e])(void 0);
 		}), r;
 	}
-	var Ua = N.S;
-	N.S = function(e, t) {
-		if (hd = Ve(), typeof t == "object" && t && typeof t.then == "function" && Ba(e, t), Pa !== null) for (var n = bf; n !== null;) Na(n, Pa), n = n.next;
+	var Wa = M.S;
+	M.S = function(e, t) {
+		if (hd = He(), typeof t == "object" && t && typeof t.then == "function" && Va(e, t), Fa !== null) for (var n = bf; n !== null;) Pa(n, Fa), n = n.next;
 		if (n = e.types, n !== null) {
-			for (var r = bf; r !== null;) Na(r, n), r = r.next;
-			if (Ra !== 0) {
-				r = Pa, r === null && (r = Pa = []);
+			for (var r = bf; r !== null;) Pa(r, n), r = r.next;
+			if (za !== 0) {
+				r = Fa, r === null && (r = Fa = []);
 				for (var i = 0; i < n.length; i++) {
 					var a = n[i];
 					r.indexOf(a) === -1 && r.push(a);
 				}
 			}
 		}
-		Ua !== null && Ua(e, t);
+		Wa !== null && Wa(e, t);
 	};
-	var Wa = ye(null);
-	function Ga() {
-		var e = Wa.current;
+	var Ga = be(null);
+	function Ka() {
+		var e = Ga.current;
 		return e === null ? q.pooledCache : e;
 	}
-	function Ka(e, t) {
-		t === null ? F(Wa, Wa.current) : F(Wa, t.pool);
+	function qa(e, t) {
+		t === null ? P(Ga, Ga.current) : P(Ga, t.pool);
 	}
-	function qa() {
-		var e = Ga();
+	function Ja() {
+		var e = Ka();
 		return e === null ? null : {
-			parent: Aa._currentValue,
+			parent: ja._currentValue,
 			pool: e
 		};
 	}
-	var Ja = Error(i(460)), Ya = Error(i(474)), Xa = Error(i(542)), Za = { then: function() {} };
-	function Qa(e) {
+	var Ya = Error(i(460)), Xa = Error(i(474)), Za = Error(i(542)), Qa = { then: function() {} };
+	function $a(e) {
 		return e = e.status, e === "fulfilled" || e === "rejected";
 	}
-	function $a(e, t, n) {
-		switch (n = e[n], n === void 0 ? e.push(t) : n !== t && (t.then(yn, yn), t = n), t.status) {
+	function eo(e, t, n) {
+		switch (n = e[n], n === void 0 ? e.push(t) : n !== t && (t.then(bn, bn), t = n), t.status) {
 			case "fulfilled": return t.value;
-			case "rejected": throw e = t.reason, ro(e), e === void 0 && !("reason" in t) ? Error(i(600)) : e;
+			case "rejected": throw e = t.reason, io(e), e === void 0 && !("reason" in t) ? Error(i(600)) : e;
 			default:
-				if (typeof t.status == "string") t.then(yn, yn);
+				if (typeof t.status == "string") t.then(bn, bn);
 				else {
 					if (e = q, e !== null && 100 < e.shellSuspendCounter) throw Error(i(482));
 					e = t, e.status = "pending", e.then(function(e) {
@@ -9426,40 +9436,40 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				switch (t.status) {
 					case "fulfilled": return t.value;
-					case "rejected": throw e = t.reason, ro(e), e;
+					case "rejected": throw e = t.reason, io(e), e;
 				}
-				throw to = t, Ja;
+				throw no = t, Ya;
 		}
 	}
-	function eo(e) {
+	function to(e) {
 		try {
 			var t = e._init;
 			return t(e._payload);
 		} catch (e) {
-			throw typeof e == "object" && e && typeof e.then == "function" ? (to = e, Ja) : e;
+			throw typeof e == "object" && e && typeof e.then == "function" ? (no = e, Ya) : e;
 		}
 	}
-	var to = null;
-	function no() {
-		if (to === null) throw Error(i(459));
-		var e = to;
-		return to = null, e;
+	var no = null;
+	function ro() {
+		if (no === null) throw Error(i(459));
+		var e = no;
+		return no = null, e;
 	}
-	function ro(e) {
-		if (e === Ja || e === Xa) throw Error(i(483));
+	function io(e) {
+		if (e === Ya || e === Za) throw Error(i(483));
 	}
-	var io = null, ao = 0;
-	function oo(e) {
-		var t = ao;
-		return ao += 1, io === null && (io = []), $a(io, e, t);
-	}
-	function so(e, t) {
-		t = t.props.ref, e.ref = t === void 0 ? null : t;
+	var ao = null, oo = 0;
+	function so(e) {
+		var t = oo;
+		return oo += 1, ao === null && (ao = []), eo(ao, e, t);
 	}
 	function co(e, t) {
+		t = t.props.ref, e.ref = t === void 0 ? null : t;
+	}
+	function lo(e, t) {
 		throw t.$$typeof === ee ? Error(i(525)) : (e = Object.prototype.toString.call(t), Error(i(31, e === "[object Object]" ? "object with keys {" + Object.keys(t).join(", ") + "}" : e)));
 	}
-	function lo(e) {
+	function uo(e) {
 		function t(t, n) {
 			if (e) {
 				var r = t.deletions;
@@ -9476,7 +9486,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			return t;
 		}
 		function a(e, t) {
-			return e = Ni(e, t), e.index = 0, e.sibling = null, e;
+			return e = Pi(e, t), e.index = 0, e.sibling = null, e;
 		}
 		function o(t, n, r) {
 			return t.index = r, e ? (r = t.alternate, r === null ? (t.flags |= 134217730, n) : (r = r.index, r < n ? (t.flags |= 2, n) : r)) : (t.flags |= 1048576, n);
@@ -9485,30 +9495,30 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			return e && t.alternate === null && (t.flags |= 134217730), t;
 		}
 		function c(e, t, n, r) {
-			return t === null || t.tag !== 6 ? (t = Li(n, e.mode, r), t.return = e, t) : (t = a(t, n), t.return = e, t);
+			return t === null || t.tag !== 6 ? (t = Ri(n, e.mode, r), t.return = e, t) : (t = a(t, n), t.return = e, t);
 		}
 		function l(e, t, n, r) {
 			var i = n.type;
-			return i === D ? (e = d(e, t, n.props.children, r, n.key), so(e, n), e) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === k && eo(i) === t.type) ? (t = a(t, n.props), so(t, n), t.return = e, t) : (t = Fi(n.type, n.key, n.props, null, e.mode, r), so(t, n), t.return = e, t);
+			return i === D ? (e = d(e, t, n.props.children, r, n.key), co(e, n), e) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === k && to(i) === t.type) ? (t = a(t, n.props), co(t, n), t.return = e, t) : (t = Ii(n.type, n.key, n.props, null, e.mode, r), co(t, n), t.return = e, t);
 		}
 		function u(e, t, n, r) {
-			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = zi(n, e.mode, r), t.return = e, t) : (t = a(t, n.children || []), t.return = e, t);
+			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = Bi(n, e.mode, r), t.return = e, t) : (t = a(t, n.children || []), t.return = e, t);
 		}
 		function d(e, t, n, r, i) {
-			return t === null || t.tag !== 7 ? (t = Ii(n, e.mode, r, i), t.return = e, t) : (t = a(t, n), t.return = e, t);
+			return t === null || t.tag !== 7 ? (t = Li(n, e.mode, r, i), t.return = e, t) : (t = a(t, n), t.return = e, t);
 		}
 		function f(e, t, n) {
-			if (typeof t == "string" && t !== "" || typeof t == "number" || typeof t == "bigint") return t = Li("" + t, e.mode, n), t.return = e, t;
+			if (typeof t == "string" && t !== "" || typeof t == "number" || typeof t == "bigint") return t = Ri("" + t, e.mode, n), t.return = e, t;
 			if (typeof t == "object" && t) {
 				switch (t.$$typeof) {
-					case te: return n = Fi(t.type, t.key, t.props, null, e.mode, n), so(n, t), n.return = e, n;
-					case E: return t = zi(t, e.mode, n), t.return = e, t;
-					case k: return t = eo(t), f(e, t, n);
+					case te: return n = Ii(t.type, t.key, t.props, null, e.mode, n), co(n, t), n.return = e, n;
+					case E: return t = Bi(t, e.mode, n), t.return = e, t;
+					case k: return t = to(t), f(e, t, n);
 				}
-				if (he(t) || fe(t)) return t = Ii(t, e.mode, n, null), t.return = e, t;
-				if (typeof t.then == "function") return f(e, oo(t), n);
-				if (t.$$typeof === ae) return f(e, Ta(e, t), n);
-				co(e, t);
+				if (ge(t) || pe(t)) return t = Li(t, e.mode, n, null), t.return = e, t;
+				if (typeof t.then == "function") return f(e, so(t), n);
+				if (t.$$typeof === ae) return f(e, Ea(e, t), n);
+				lo(e, t);
 			}
 			return null;
 		}
@@ -9519,12 +9529,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				switch (n.$$typeof) {
 					case te: return n.key === i ? l(e, t, n, r) : null;
 					case E: return n.key === i ? u(e, t, n, r) : null;
-					case k: return n = eo(n), p(e, t, n, r);
+					case k: return n = to(n), p(e, t, n, r);
 				}
-				if (he(n) || fe(n)) return i === null ? d(e, t, n, r, null) : null;
-				if (typeof n.then == "function") return p(e, t, oo(n), r);
-				if (n.$$typeof === ae) return p(e, t, Ta(e, n), r);
-				co(e, n);
+				if (ge(n) || pe(n)) return i === null ? d(e, t, n, r, null) : null;
+				if (typeof n.then == "function") return p(e, t, so(n), r);
+				if (n.$$typeof === ae) return p(e, t, Ea(e, n), r);
+				lo(e, n);
 			}
 			return null;
 		}
@@ -9534,12 +9544,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				switch (r.$$typeof) {
 					case te: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
 					case E: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
-					case k: return r = eo(r), m(e, t, n, r, i);
+					case k: return r = to(r), m(e, t, n, r, i);
 				}
-				if (he(r) || fe(r)) return e = e.get(n) || null, d(t, e, r, i, null);
-				if (typeof r.then == "function") return m(e, t, n, oo(r), i);
-				if (r.$$typeof === ae) return m(e, t, n, Ta(t, r), i);
-				co(t, r);
+				if (ge(r) || pe(r)) return e = e.get(n) || null, d(t, e, r, i, null);
+				if (typeof r.then == "function") return m(e, t, n, so(r), i);
+				if (r.$$typeof === ae) return m(e, t, n, Ea(t, r), i);
+				lo(t, r);
 			}
 			return null;
 		}
@@ -9553,15 +9563,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				e && d && _.alternate === null && t(i, d), a = o(_, a, h), u === null ? l = _ : u.sibling = _, u = _, d = g;
 			}
-			if (h === s.length) return n(i, d), B && Zi(i, h), l;
+			if (h === s.length) return n(i, d), z && Qi(i, h), l;
 			if (d === null) {
 				for (; h < s.length; h++) d = f(i, s[h], c), d !== null && (a = o(d, a, h), u === null ? l = d : u.sibling = d, u = d);
-				return B && Zi(i, h), l;
+				return z && Qi(i, h), l;
 			}
 			for (d = r(d); h < s.length; h++) g = m(d, i, h, s[h], c), g !== null && (e && (_ = g.alternate, _ !== null && d.delete(_.key === null ? h : _.key)), a = o(g, a, h), u === null ? l = g : u.sibling = g, u = g);
 			return e && d.forEach(function(e) {
 				return t(i, e);
-			}), B && Zi(i, h), l;
+			}), z && Qi(i, h), l;
 		}
 		function g(a, s, c, l) {
 			if (c == null) throw Error(i(151));
@@ -9574,15 +9584,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				e && h && y.alternate === null && t(a, h), s = o(y, s, g), d === null ? u = y : d.sibling = y, d = y, h = _;
 			}
-			if (v.done) return n(a, h), B && Zi(a, g), u;
+			if (v.done) return n(a, h), z && Qi(a, g), u;
 			if (h === null) {
 				for (; !v.done; g++, v = c.next()) v = f(a, v.value, l), v !== null && (s = o(v, s, g), d === null ? u = v : d.sibling = v, d = v);
-				return B && Zi(a, g), u;
+				return z && Qi(a, g), u;
 			}
 			for (h = r(h); !v.done; g++, v = c.next()) v = m(h, a, g, v.value, l), v !== null && (e && (_ = v.alternate, _ !== null && h.delete(_.key === null ? g : _.key)), s = o(v, s, g), d === null ? u = v : d.sibling = v, d = v);
 			return e && h.forEach(function(e) {
 				return t(a, e);
-			}), B && Zi(a, g), u;
+			}), z && Qi(a, g), u;
 		}
 		function _(e, r, o, c) {
 			if (typeof o == "object" && o && o.type === D && o.key === null && o.props.ref === void 0 && (o = o.props.children), typeof o == "object" && o) {
@@ -9593,11 +9603,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								if (r.key === l) {
 									if (l = o.type, l === D) {
 										if (r.tag === 7) {
-											n(e, r.sibling), c = a(r, o.props.children), so(c, o), c.return = e, e = c;
+											n(e, r.sibling), c = a(r, o.props.children), co(c, o), c.return = e, e = c;
 											break a;
 										}
-									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === k && eo(l) === r.type) {
-										n(e, r.sibling), c = a(r, o.props), so(c, o), c.return = e, e = c;
+									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === k && to(l) === r.type) {
+										n(e, r.sibling), c = a(r, o.props), co(c, o), c.return = e, e = c;
 										break a;
 									}
 									n(e, r);
@@ -9605,7 +9615,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								}
 								t(e, r), r = r.sibling;
 							}
-							o.type === D ? (c = Ii(o.props.children, e.mode, c, o.key), so(c, o), c.return = e, e = c) : (c = Fi(o.type, o.key, o.props, null, e.mode, c), so(c, o), c.return = e, e = c);
+							o.type === D ? (c = Li(o.props.children, e.mode, c, o.key), co(c, o), c.return = e, e = c) : (c = Ii(o.type, o.key, o.props, null, e.mode, c), co(c, o), c.return = e, e = c);
 						}
 						return s(e);
 					case E:
@@ -9621,36 +9631,36 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								}
 								t(e, r), r = r.sibling;
 							}
-							c = zi(o, e.mode, c), c.return = e, e = c;
+							c = Bi(o, e.mode, c), c.return = e, e = c;
 						}
 						return s(e);
-					case k: return o = eo(o), _(e, r, o, c);
+					case k: return o = to(o), _(e, r, o, c);
 				}
-				if (he(o)) return h(e, r, o, c);
-				if (fe(o)) {
-					if (l = fe(o), typeof l != "function") throw Error(i(150));
+				if (ge(o)) return h(e, r, o, c);
+				if (pe(o)) {
+					if (l = pe(o), typeof l != "function") throw Error(i(150));
 					return o = l.call(o), g(e, r, o, c);
 				}
-				if (typeof o.then == "function") return _(e, r, oo(o), c);
-				if (o.$$typeof === ae) return _(e, r, Ta(e, o), c);
-				co(e, o);
+				if (typeof o.then == "function") return _(e, r, so(o), c);
+				if (o.$$typeof === ae) return _(e, r, Ea(e, o), c);
+				lo(e, o);
 			}
-			return typeof o == "string" && o !== "" || typeof o == "number" || typeof o == "bigint" ? (o = "" + o, r !== null && r.tag === 6 ? (n(e, r.sibling), c = a(r, o), c.return = e, e = c) : (n(e, r), c = Li(o, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
+			return typeof o == "string" && o !== "" || typeof o == "number" || typeof o == "bigint" ? (o = "" + o, r !== null && r.tag === 6 ? (n(e, r.sibling), c = a(r, o), c.return = e, e = c) : (n(e, r), c = Ri(o, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
 		}
 		return function(e, t, n, r) {
 			try {
-				ao = 0;
+				oo = 0;
 				var i = _(e, t, n, r);
-				return io = null, i;
+				return ao = null, i;
 			} catch (t) {
-				if (t === Ja || t === Xa) throw t;
-				var a = ji(29, t, null, e.mode);
+				if (t === Ya || t === Za) throw t;
+				var a = Mi(29, t, null, e.mode);
 				return a.lanes = r, a.return = e, a;
 			}
 		};
 	}
-	var uo = lo(!0), fo = lo(!1), po = !1;
-	function mo(e) {
+	var fo = uo(!0), po = uo(!1), mo = !1;
+	function ho(e) {
 		e.updateQueue = {
 			baseState: e.memoizedState,
 			firstBaseUpdate: null,
@@ -9663,7 +9673,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			callbacks: null
 		};
 	}
-	function ho(e, t) {
+	function go(e, t) {
 		e = e.updateQueue, t.updateQueue === e && (t.updateQueue = {
 			baseState: e.baseState,
 			firstBaseUpdate: e.firstBaseUpdate,
@@ -9672,7 +9682,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			callbacks: null
 		});
 	}
-	function go(e) {
+	function _o(e) {
 		return {
 			lane: e,
 			tag: 0,
@@ -9681,22 +9691,22 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			next: null
 		};
 	}
-	function _o(e, t, n) {
+	function vo(e, t, n) {
 		var r = e.updateQueue;
 		if (r === null) return null;
 		if (r = r.shared, K & 2) {
 			var i = r.pending;
-			return i === null ? t.next = t : (t.next = i.next, i.next = t), r.pending = t, t = Oi(e), Di(e, null, n), t;
+			return i === null ? t.next = t : (t.next = i.next, i.next = t), r.pending = t, t = ki(e), Oi(e, null, n), t;
 		}
-		return wi(e, r, t, n), Oi(e);
+		return Ti(e, r, t, n), ki(e);
 	}
-	function vo(e, t, n) {
+	function yo(e, t, n) {
 		if (t = t.updateQueue, t !== null && (t = t.shared, n & 4194048)) {
 			var r = t.lanes;
-			r &= e.pendingLanes, n |= r, t.lanes = n, gt(e, n);
+			r &= e.pendingLanes, n |= r, t.lanes = n, _t(e, n);
 		}
 	}
-	function yo(e, t) {
+	function bo(e, t) {
 		var n = e.updateQueue, r = e.alternate;
 		if (r !== null && (r = r.updateQueue, n === r)) {
 			var i = null, a = null;
@@ -9724,17 +9734,17 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		e = n.lastBaseUpdate, e === null ? n.firstBaseUpdate = t : e.next = t, n.lastBaseUpdate = t;
 	}
-	var bo = !1;
-	function xo() {
-		if (bo) {
-			var e = za;
+	var xo = !1;
+	function So() {
+		if (xo) {
+			var e = Ba;
 			if (e !== null) throw e;
 		}
 	}
-	function So(e, t, n, r) {
-		bo = !1;
+	function Co(e, t, n, r) {
+		xo = !1;
 		var i = e.updateQueue;
-		po = !1;
+		mo = !1;
 		var a = i.firstBaseUpdate, o = i.lastBaseUpdate, s = i.shared.pending;
 		if (s !== null) {
 			i.shared.pending = null;
@@ -9749,7 +9759,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			do {
 				var f = s.lane & -536870913, p = f !== s.lane;
 				if (p ? (Y & f) === f : (r & f) === f) {
-					f !== 0 && f === Ra && (bo = !0), u !== null && (u = u.next = {
+					f !== 0 && f === za && (xo = !0), u !== null && (u = u.next = {
 						lane: 0,
 						tag: s.tag,
 						payload: s.payload,
@@ -9773,7 +9783,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								if (m = h.payload, f = typeof m == "function" ? m.call(g, d, f) : m, f == null) break a;
 								d = T({}, d, f);
 								break a;
-							case 2: po = !0;
+							case 2: mo = !0;
 						}
 					}
 					f = s.callback, f !== null && (e.flags |= 64, p && (e.flags |= 8192), p = i.callbacks, p === null ? i.callbacks = [f] : p.push(f));
@@ -9792,49 +9802,49 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			u === null && (c = d), i.baseState = c, i.firstBaseUpdate = l, i.lastBaseUpdate = u, a === null && (i.shared.lanes = 0), od |= o, e.lanes = o, e.memoizedState = d;
 		}
 	}
-	function Co(e, t) {
+	function wo(e, t) {
 		if (typeof e != "function") throw Error(i(191, e));
 		e.call(t);
 	}
-	function wo(e, t) {
+	function To(e, t) {
 		var n = e.callbacks;
-		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) Co(n[e], t);
+		if (n !== null) for (e.callbacks = null, e = 0; e < n.length; e++) wo(n[e], t);
 	}
-	var To = ye(null), Eo = ye(0);
-	function Do(e, t) {
-		e = id, F(Eo, e), F(To, t), id = e | t.baseLanes;
-	}
-	function Oo() {
-		F(Eo, id), F(To, To.current);
+	var Eo = be(null), Do = be(0);
+	function Oo(e, t) {
+		e = id, P(Do, e), P(Eo, t), id = e | t.baseLanes;
 	}
 	function ko() {
-		id = Eo.current, be(To), be(Eo);
+		P(Do, id), P(Eo, Eo.current);
 	}
-	var Ao = ye(null), jo = null;
-	function Mo(e) {
-		var t = e.alternate;
-		F(Lo, Lo.current & 1), F(Ao, e), jo === null && (t === null || To.current !== null || t.memoizedState !== null) && (jo = e);
+	function Ao() {
+		id = Do.current, xe(Eo), xe(Do);
 	}
+	var jo = be(null), Mo = null;
 	function No(e) {
-		F(Lo, Lo.current), F(Ao, e), jo === null && (jo = e);
+		var t = e.alternate;
+		P(Ro, Ro.current & 1), P(jo, e), Mo === null && (t === null || Eo.current !== null || t.memoizedState !== null) && (Mo = e);
 	}
 	function Po(e) {
-		e.tag === 22 ? (F(Lo, Lo.current), F(Ao, e), jo === null && (jo = e)) : Fo();
+		P(Ro, Ro.current), P(jo, e), Mo === null && (Mo = e);
 	}
-	function Fo() {
-		F(Lo, Lo.current), F(Ao, Ao.current);
+	function Fo(e) {
+		e.tag === 22 ? (P(Ro, Ro.current), P(jo, e), Mo === null && (Mo = e)) : Io();
 	}
-	function Io(e) {
-		be(Ao), jo === e && (jo = null), be(Lo);
+	function Io() {
+		P(Ro, Ro.current), P(jo, jo.current);
 	}
-	var Lo = ye(0);
-	function Ro(e, t) {
-		F(Ao, Ao.current), F(Lo, t);
+	function Lo(e) {
+		xe(jo), Mo === e && (Mo = null), xe(Ro);
 	}
-	function zo(e) {
-		be(Lo), be(Ao), jo === e && (jo = null);
+	var Ro = be(0);
+	function zo(e, t) {
+		P(jo, jo.current), P(Ro, t);
 	}
 	function Bo(e) {
+		xe(Ro), xe(jo), Mo === e && (Mo = null);
+	}
+	function Vo(e) {
 		for (var t = e; t !== null;) {
 			if (t.tag === 13) {
 				var n = t.memoizedState;
@@ -9854,59 +9864,59 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		return null;
 	}
-	var Vo = 0, V = null, H = null, Ho = null, Uo = !1, Wo = !1, Go = !1, Ko = 0, qo = 0, Jo = null, Yo = 0;
-	function Xo() {
+	var Ho = 0, B = null, V = null, Uo = null, Wo = !1, Go = !1, Ko = !1, qo = 0, Jo = 0, Yo = null, Xo = 0;
+	function Zo() {
 		throw Error(i(321));
 	}
-	function Zo(e, t) {
+	function Qo(e, t) {
 		if (t === null) return !1;
-		for (var n = 0; n < t.length && n < e.length; n++) if (!Vr(e[n], t[n])) return !1;
+		for (var n = 0; n < t.length && n < e.length; n++) if (!Hr(e[n], t[n])) return !1;
 		return !0;
 	}
-	function Qo(e, t, n, r, i, a) {
-		return Vo = a, V = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, N.H = e === null || e.memoizedState === null ? hc : gc, Go = !1, a = n(r, i), Go = !1, Wo && (a = es(t, n, r, i)), $o(e), a;
+	function $o(e, t, n, r, i, a) {
+		return Ho = a, B = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, M.H = e === null || e.memoizedState === null ? gc : _c, Ko = !1, a = n(r, i), Ko = !1, Go && (a = ts(t, n, r, i)), es(e), a;
 	}
-	function $o(e) {
-		N.H = mc;
-		var t = H !== null && H.next !== null;
-		if (Vo = 0, Ho = H = V = null, Uo = !1, qo = 0, Jo = null, t) throw Error(i(300));
-		e === null || Nc || (e = e.dependencies, e !== null && Sa(e) && (Nc = !0));
+	function es(e) {
+		M.H = hc;
+		var t = V !== null && V.next !== null;
+		if (Ho = 0, Uo = V = B = null, Wo = !1, Jo = 0, Yo = null, t) throw Error(i(300));
+		e === null || Pc || (e = e.dependencies, e !== null && Ca(e) && (Pc = !0));
 	}
-	function es(e, t, n, r) {
-		V = e;
+	function ts(e, t, n, r) {
+		B = e;
 		var a = 0;
 		do {
-			if (Wo && (Jo = null), qo = 0, Wo = !1, 25 <= a) throw Error(i(301));
-			if (a += 1, Ho = H = null, e.updateQueue != null) {
+			if (Go && (Yo = null), Jo = 0, Go = !1, 25 <= a) throw Error(i(301));
+			if (a += 1, Uo = V = null, e.updateQueue != null) {
 				var o = e.updateQueue;
 				o.lastEffect = null, o.events = null, o.stores = null, o.memoCache != null && (o.memoCache.index = 0);
 			}
-			N.H = _c, o = t(n, r);
-		} while (Wo);
+			M.H = vc, o = t(n, r);
+		} while (Go);
 		return o;
 	}
-	function ts() {
-		var e = N.H, t = e.useState()[0];
-		return t = typeof t.then == "function" ? cs(t) : t, e = e.useState()[0], (H === null ? null : H.memoizedState) !== e && (V.flags |= 1024), t;
-	}
 	function ns() {
-		var e = Ko !== 0;
-		return Ko = 0, e;
+		var e = M.H, t = e.useState()[0];
+		return t = typeof t.then == "function" ? ls(t) : t, e = e.useState()[0], (V === null ? null : V.memoizedState) !== e && (B.flags |= 1024), t;
 	}
-	function rs(e, t, n) {
+	function rs() {
+		var e = qo !== 0;
+		return qo = 0, e;
+	}
+	function is(e, t, n) {
 		t.updateQueue = e.updateQueue, t.flags &= -2053, e.lanes &= ~n;
 	}
-	function is(e) {
-		if (Uo) {
+	function as(e) {
+		if (Wo) {
 			for (e = e.memoizedState; e !== null;) {
 				var t = e.queue;
 				t !== null && (t.pending = null), e = e.next;
 			}
-			Uo = !1;
+			Wo = !1;
 		}
-		Vo = 0, Ho = H = V = null, Wo = !1, qo = Ko = 0, Jo = null;
+		Ho = 0, Uo = V = B = null, Go = !1, Jo = qo = 0, Yo = null;
 	}
-	function as() {
+	function os() {
 		var e = {
 			memoizedState: null,
 			baseState: null,
@@ -9914,28 +9924,28 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			queue: null,
 			next: null
 		};
-		return Ho === null ? V.memoizedState = Ho = e : Ho = Ho.next = e, Ho;
-	}
-	function os() {
-		if (H === null) {
-			var e = V.alternate;
-			e = e === null ? null : e.memoizedState;
-		} else e = H.next;
-		var t = Ho === null ? V.memoizedState : Ho.next;
-		if (t !== null) Ho = t, H = e;
-		else {
-			if (e === null) throw V.alternate === null ? Error(i(467)) : Error(i(310));
-			H = e, e = {
-				memoizedState: H.memoizedState,
-				baseState: H.baseState,
-				baseQueue: H.baseQueue,
-				queue: H.queue,
-				next: null
-			}, Ho === null ? V.memoizedState = Ho = e : Ho = Ho.next = e;
-		}
-		return Ho;
+		return Uo === null ? B.memoizedState = Uo = e : Uo = Uo.next = e, Uo;
 	}
 	function ss() {
+		if (V === null) {
+			var e = B.alternate;
+			e = e === null ? null : e.memoizedState;
+		} else e = V.next;
+		var t = Uo === null ? B.memoizedState : Uo.next;
+		if (t !== null) Uo = t, V = e;
+		else {
+			if (e === null) throw B.alternate === null ? Error(i(467)) : Error(i(310));
+			V = e, e = {
+				memoizedState: V.memoizedState,
+				baseState: V.baseState,
+				baseQueue: V.baseQueue,
+				queue: V.queue,
+				next: null
+			}, Uo === null ? B.memoizedState = Uo = e : Uo = Uo.next = e;
+		}
+		return Uo;
+	}
+	function cs() {
 		return {
 			lastEffect: null,
 			events: null,
@@ -9943,22 +9953,22 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			memoCache: null
 		};
 	}
-	function cs(e) {
-		var t = qo;
-		return qo += 1, Jo === null && (Jo = []), e = $a(Jo, e, t), t = V, (Ho === null ? t.memoizedState : Ho.next) === null && (t = t.alternate, N.H = t === null || t.memoizedState === null ? hc : gc), e;
-	}
 	function ls(e) {
+		var t = Jo;
+		return Jo += 1, Yo === null && (Yo = []), e = eo(Yo, e, t), t = B, (Uo === null ? t.memoizedState : Uo.next) === null && (t = t.alternate, M.H = t === null || t.memoizedState === null ? gc : _c), e;
+	}
+	function us(e) {
 		if (typeof e == "object" && e) {
-			if (typeof e.then == "function") return cs(e);
-			if (e.$$typeof === j) return;
-			if (e.$$typeof === ae) return wa(e);
+			if (typeof e.then == "function") return ls(e);
+			if (e.$$typeof === fe) return;
+			if (e.$$typeof === ae) return Ta(e);
 		}
 		throw Error(i(438, String(e)));
 	}
-	function us(e) {
-		var t = null, n = V.updateQueue;
+	function ds(e) {
+		var t = null, n = B.updateQueue;
 		if (n !== null && (t = n.memoCache), t == null) {
-			var r = V.alternate;
+			var r = B.alternate;
 			r !== null && (r = r.updateQueue, r !== null && (r = r.memoCache, r != null && (t = {
 				data: r.data.map(function(e) {
 					return e.slice();
@@ -9969,16 +9979,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (t ??= {
 			data: [],
 			index: 0
-		}, n === null && (n = ss(), V.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = de;
+		}, n === null && (n = cs(), B.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = de;
 		return t.index++, n;
 	}
-	function ds(e, t) {
+	function fs(e, t) {
 		return typeof t == "function" ? t(e) : t;
 	}
-	function fs(e) {
-		return ps(os(), H, e);
+	function ps(e) {
+		return ms(ss(), V, e);
 	}
-	function ps(e, t, n) {
+	function ms(e, t, n) {
 		var r = e.queue;
 		if (r === null) throw Error(i(311));
 		r.lastRenderedReducer = n;
@@ -9996,7 +10006,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			var c = s = null, l = null, u = t, d = !1;
 			do {
 				var f = u.lane & -536870913;
-				if (f === u.lane ? (Vo & f) === f : (Y & f) === f) {
+				if (f === u.lane ? (Ho & f) === f : (Y & f) === f) {
 					var p = u.revertLane;
 					if (p === 0) l !== null && (l = l.next = {
 						lane: 0,
@@ -10006,9 +10016,9 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						hasEagerState: u.hasEagerState,
 						eagerState: u.eagerState,
 						next: null
-					}), f === Ra && (d = !0);
-					else if ((Vo & p) === p) {
-						u = u.next, p === Ra && (d = !0);
+					}), f === za && (d = !0);
+					else if ((Ho & p) === p) {
+						u = u.next, p === za && (d = !0);
 						continue;
 					} else f = {
 						lane: 0,
@@ -10018,8 +10028,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						hasEagerState: u.hasEagerState,
 						eagerState: u.eagerState,
 						next: null
-					}, l === null ? (c = l = f, s = o) : l = l.next = f, V.lanes |= p, od |= p;
-					f = u.action, Go && n(o, f), o = u.hasEagerState ? u.eagerState : n(o, f);
+					}, l === null ? (c = l = f, s = o) : l = l.next = f, B.lanes |= p, od |= p;
+					f = u.action, Ko && n(o, f), o = u.hasEagerState ? u.eagerState : n(o, f);
 				} else p = {
 					lane: f,
 					revertLane: u.revertLane,
@@ -10028,16 +10038,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					hasEagerState: u.hasEagerState,
 					eagerState: u.eagerState,
 					next: null
-				}, l === null ? (c = l = p, s = o) : l = l.next = p, V.lanes |= f, od |= f;
+				}, l === null ? (c = l = p, s = o) : l = l.next = p, B.lanes |= f, od |= f;
 				u = u.next;
 			} while (u !== null && u !== t);
-			if (l === null ? s = o : l.next = c, !Vr(o, e.memoizedState) && (Nc = !0, d && (n = za, n !== null))) throw n;
+			if (l === null ? s = o : l.next = c, !Hr(o, e.memoizedState) && (Pc = !0, d && (n = Ba, n !== null))) throw n;
 			e.memoizedState = o, e.baseState = s, e.baseQueue = l, r.lastRenderedState = o;
 		}
 		return a === null && (r.lanes = 0), [e.memoizedState, r.dispatch];
 	}
-	function ms(e) {
-		var t = os(), n = t.queue;
+	function hs(e) {
+		var t = ss(), n = t.queue;
 		if (n === null) throw Error(i(311));
 		n.lastRenderedReducer = e;
 		var r = n.dispatch, a = n.pending, o = t.memoizedState;
@@ -10047,61 +10057,61 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			do
 				o = e(o, s.action), s = s.next;
 			while (s !== a);
-			Vr(o, t.memoizedState) || (Nc = !0), t.memoizedState = o, t.baseQueue === null && (t.baseState = o), n.lastRenderedState = o;
+			Hr(o, t.memoizedState) || (Pc = !0), t.memoizedState = o, t.baseQueue === null && (t.baseState = o), n.lastRenderedState = o;
 		}
 		return [o, r];
 	}
-	function hs(e, t, n) {
-		var r = V, a = os(), o = B;
+	function gs(e, t, n) {
+		var r = B, a = ss(), o = z;
 		if (o) {
 			if (n === void 0) throw Error(i(407));
 			n = n();
 		} else n = t();
-		var s = !Vr((H || a).memoizedState, n);
-		if (s && (a.memoizedState = n, Nc = !0), a = a.queue, Bs(vs.bind(null, r, a, e), [e]), e = a.getSnapshot !== t || s || Ho !== null && !!(Ho.memoizedState.tag & 1), Fs(e ? 9 : 8, { destroy: void 0 }, _s.bind(null, r, a, n, t), null), e) {
+		var s = !Hr((V || a).memoizedState, n);
+		if (s && (a.memoizedState = n, Pc = !0), a = a.queue, Vs(ys.bind(null, r, a, e), [e]), e = a.getSnapshot !== t || s || Uo !== null && !!(Uo.memoizedState.tag & 1), Is(e ? 9 : 8, { destroy: void 0 }, vs.bind(null, r, a, n, t), null), e) {
 			if (r.flags |= 2048, q === null) throw Error(i(349));
-			o || Vo & 127 || gs(r, t, n);
+			o || Ho & 127 || _s(r, t, n);
 		}
 		return n;
 	}
-	function gs(e, t, n) {
+	function _s(e, t, n) {
 		e.flags |= 16384, e = {
 			getSnapshot: t,
 			value: n
-		}, t = V.updateQueue, t === null ? (t = ss(), V.updateQueue = t, t.stores = [e]) : (n = t.stores, n === null ? t.stores = [e] : n.push(e));
+		}, t = B.updateQueue, t === null ? (t = cs(), B.updateQueue = t, t.stores = [e]) : (n = t.stores, n === null ? t.stores = [e] : n.push(e));
 	}
-	function _s(e, t, n, r) {
-		t.value = n, t.getSnapshot = r, ys(t) && bs(e);
+	function vs(e, t, n, r) {
+		t.value = n, t.getSnapshot = r, bs(t) && xs(e);
 	}
-	function vs(e, t, n) {
+	function ys(e, t, n) {
 		return n(function() {
-			ys(t) && bs(e);
+			bs(t) && xs(e);
 		});
 	}
-	function ys(e) {
+	function bs(e) {
 		var t = e.getSnapshot;
 		e = e.value;
 		try {
 			var n = t();
-			return !Vr(e, n);
+			return !Hr(e, n);
 		} catch {
 			return !0;
 		}
 	}
-	function bs(e) {
-		var t = Ei(e, 2);
+	function xs(e) {
+		var t = Di(e, 2);
 		t !== null && Pd(t, e, 2);
 	}
-	function xs(e) {
-		var t = as();
+	function Ss(e) {
+		var t = os();
 		if (typeof e == "function") {
 			var n = e;
-			if (e = n(), Go) {
-				Qe(!0);
+			if (e = n(), Ko) {
+				$e(!0);
 				try {
 					n();
 				} finally {
-					Qe(!1);
+					$e(!1);
 				}
 			}
 		}
@@ -10109,15 +10119,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			pending: null,
 			lanes: 0,
 			dispatch: null,
-			lastRenderedReducer: ds,
+			lastRenderedReducer: fs,
 			lastRenderedState: e
 		}, t;
 	}
-	function Ss(e, t, n, r) {
-		return e.baseState = n, ps(e, H, typeof r == "function" ? r : ds);
+	function Cs(e, t, n, r) {
+		return e.baseState = n, ms(e, V, typeof r == "function" ? r : fs);
 	}
-	function Cs(e, t, n, r, a) {
-		if (dc(e)) throw Error(i(485));
+	function ws(e, t, n, r, a) {
+		if (fc(e)) throw Error(i(485));
 		if (e = t.action, e !== null) {
 			var o = {
 				payload: a,
@@ -10132,65 +10142,65 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					o.listeners.push(e);
 				}
 			};
-			N.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, ws(t, o)) : (o.next = n.next, t.pending = n.next = o);
+			M.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, Ts(t, o)) : (o.next = n.next, t.pending = n.next = o);
 		}
 	}
-	function ws(e, t) {
+	function Ts(e, t) {
 		var n = t.action, r = t.payload, i = e.state;
 		if (t.isTransition) {
-			var a = N.T, o = {};
-			o.types = a === null ? null : a.types, N.T = o;
+			var a = M.T, o = {};
+			o.types = a === null ? null : a.types, M.T = o;
 			try {
-				var s = n(i, r), c = N.S;
-				c !== null && c(o, s), Ts(e, t, s);
+				var s = n(i, r), c = M.S;
+				c !== null && c(o, s), Es(e, t, s);
 			} catch (n) {
-				Ds(e, t, n);
+				Os(e, t, n);
 			} finally {
-				a !== null && o.types !== null && (a.types = o.types), N.T = a;
+				a !== null && o.types !== null && (a.types = o.types), M.T = a;
 			}
 		} else try {
-			a = n(i, r), Ts(e, t, a);
+			a = n(i, r), Es(e, t, a);
 		} catch (n) {
-			Ds(e, t, n);
+			Os(e, t, n);
 		}
 	}
-	function Ts(e, t, n) {
-		typeof n == "object" && n && typeof n.then == "function" ? n.then(function(n) {
-			Es(e, t, n);
-		}, function(n) {
-			return Ds(e, t, n);
-		}) : Es(e, t, n);
-	}
 	function Es(e, t, n) {
-		t.status = "fulfilled", t.value = n, Os(t), e.state = n, t = e.pending, t !== null && (n = t.next, n === t ? e.pending = null : (n = n.next, t.next = n, ws(e, n)));
+		typeof n == "object" && n && typeof n.then == "function" ? n.then(function(n) {
+			Ds(e, t, n);
+		}, function(n) {
+			return Os(e, t, n);
+		}) : Ds(e, t, n);
 	}
 	function Ds(e, t, n) {
+		t.status = "fulfilled", t.value = n, ks(t), e.state = n, t = e.pending, t !== null && (n = t.next, n === t ? e.pending = null : (n = n.next, t.next = n, Ts(e, n)));
+	}
+	function Os(e, t, n) {
 		var r = e.pending;
 		if (e.pending = null, r !== null) {
 			r = r.next;
 			do
-				t.status = "rejected", t.reason = n, Os(t), t = t.next;
+				t.status = "rejected", t.reason = n, ks(t), t = t.next;
 			while (t !== r);
 		}
 		e.action = null;
 	}
-	function Os(e) {
+	function ks(e) {
 		e = e.listeners;
 		for (var t = 0; t < e.length; t++) (0, e[t])();
 	}
-	function ks(e, t) {
+	function As(e, t) {
 		return t;
 	}
-	function As(e, t) {
-		if (B) {
+	function js(e, t) {
+		if (z) {
 			var n = q.formState;
 			if (n !== null) {
 				a: {
-					var r = V;
-					if (B) {
-						if (z) {
+					var r = B;
+					if (z) {
+						if (R) {
 							b: {
-								for (var i = z, a = ia; i.nodeType !== 8;) {
+								for (var i = R, a = aa; i.nodeType !== 8;) {
 									if (!a) {
 										i = null;
 										break b;
@@ -10203,59 +10213,59 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								a = i.data, i = a === "F!" || a === "F" ? i : null;
 							}
 							if (i) {
-								z = lm(i.nextSibling), r = i.data === "F!";
+								R = lm(i.nextSibling), r = i.data === "F!";
 								break a;
 							}
 						}
-						oa(r);
+						sa(r);
 					}
 					r = !1;
 				}
 				r && (t = n[0]);
 			}
 		}
-		return n = as(), n.memoizedState = n.baseState = t, r = {
+		return n = os(), n.memoizedState = n.baseState = t, r = {
 			pending: null,
 			lanes: 0,
 			dispatch: null,
-			lastRenderedReducer: ks,
+			lastRenderedReducer: As,
 			lastRenderedState: t
-		}, n.queue = r, n = cc.bind(null, V, r), r.dispatch = n, r = xs(!1), a = uc.bind(null, V, !1, r.queue), r = as(), i = {
+		}, n.queue = r, n = lc.bind(null, B, r), r.dispatch = n, r = Ss(!1), a = dc.bind(null, B, !1, r.queue), r = os(), i = {
 			state: t,
 			dispatch: null,
 			action: e,
 			pending: null
-		}, r.queue = i, n = Cs.bind(null, V, i, a, n), i.dispatch = n, r.memoizedState = e, [
+		}, r.queue = i, n = ws.bind(null, B, i, a, n), i.dispatch = n, r.memoizedState = e, [
 			t,
 			n,
 			!1
 		];
 	}
-	function js(e) {
-		return Ms(os(), H, e);
+	function Ms(e) {
+		return Ns(ss(), V, e);
 	}
-	function Ms(e, t, n) {
-		if (t = ps(e, t, ks)[0], e = fs(ds)[0], typeof t == "object" && t && typeof t.then == "function") try {
-			var r = cs(t);
+	function Ns(e, t, n) {
+		if (t = ms(e, t, As)[0], e = ps(fs)[0], typeof t == "object" && t && typeof t.then == "function") try {
+			var r = ls(t);
 		} catch (e) {
-			throw e === Ja ? Xa : e;
+			throw e === Ya ? Za : e;
 		}
 		else r = t;
-		t = os();
+		t = ss();
 		var i = t.queue, a = i.dispatch;
-		return n !== t.memoizedState && (V.flags |= 2048, Fs(9, { destroy: void 0 }, Ns.bind(null, i, n), null)), [
+		return n !== t.memoizedState && (B.flags |= 2048, Is(9, { destroy: void 0 }, Ps.bind(null, i, n), null)), [
 			r,
 			a,
 			e
 		];
 	}
-	function Ns(e, t) {
+	function Ps(e, t) {
 		e.action = t;
 	}
-	function Ps(e) {
-		var t = os(), n = H;
-		if (n !== null) return Ms(t, n, e);
-		os(), t = t.memoizedState, n = os();
+	function Fs(e) {
+		var t = ss(), n = V;
+		if (n !== null) return Ns(t, n, e);
+		ss(), t = t.memoizedState, n = ss();
 		var r = n.queue.dispatch;
 		return n.memoizedState = e, [
 			t,
@@ -10263,46 +10273,46 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			!1
 		];
 	}
-	function Fs(e, t, n, r) {
+	function Is(e, t, n, r) {
 		return e = {
 			tag: e,
 			create: n,
 			deps: r,
 			inst: t,
 			next: null
-		}, t = V.updateQueue, t === null && (t = ss(), V.updateQueue = t), n = t.lastEffect, n === null ? t.lastEffect = e.next = e : (r = n.next, n.next = e, e.next = r, t.lastEffect = e), e;
+		}, t = B.updateQueue, t === null && (t = cs(), B.updateQueue = t), n = t.lastEffect, n === null ? t.lastEffect = e.next = e : (r = n.next, n.next = e, e.next = r, t.lastEffect = e), e;
 	}
-	function Is() {
-		return os().memoizedState;
-	}
-	function Ls(e, t, n, r) {
-		var i = as();
-		V.flags |= e, i.memoizedState = Fs(1 | t, { destroy: void 0 }, n, r === void 0 ? null : r);
+	function Ls() {
+		return ss().memoizedState;
 	}
 	function Rs(e, t, n, r) {
 		var i = os();
+		B.flags |= e, i.memoizedState = Is(1 | t, { destroy: void 0 }, n, r === void 0 ? null : r);
+	}
+	function zs(e, t, n, r) {
+		var i = ss();
 		r = r === void 0 ? null : r;
 		var a = i.memoizedState.inst;
-		H !== null && r !== null && Zo(r, H.memoizedState.deps) ? i.memoizedState = Fs(t, a, n, r) : (V.flags |= e, i.memoizedState = Fs(1 | t, a, n, r));
-	}
-	function zs(e, t) {
-		Ls(8390656, 8, e, t);
+		V !== null && r !== null && Qo(r, V.memoizedState.deps) ? i.memoizedState = Is(t, a, n, r) : (B.flags |= e, i.memoizedState = Is(1 | t, a, n, r));
 	}
 	function Bs(e, t) {
-		Rs(2048, 8, e, t);
+		Rs(8390656, 8, e, t);
 	}
-	function Vs(e) {
-		V.flags |= 4;
-		var t = V.updateQueue;
-		if (t === null) t = ss(), V.updateQueue = t, t.events = [e];
+	function Vs(e, t) {
+		zs(2048, 8, e, t);
+	}
+	function Hs(e) {
+		B.flags |= 4;
+		var t = B.updateQueue;
+		if (t === null) t = cs(), B.updateQueue = t, t.events = [e];
 		else {
 			var n = t.events;
 			n === null ? t.events = [e] : n.push(e);
 		}
 	}
-	function Hs(e) {
-		var t = os().memoizedState;
-		return Vs({
+	function Us(e) {
+		var t = ss().memoizedState;
+		return Hs({
 			ref: t,
 			nextImpl: e
 		}), function() {
@@ -10310,13 +10320,13 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			return t.impl.apply(void 0, arguments);
 		};
 	}
-	function Us(e, t) {
-		return Rs(4, 2, e, t);
-	}
 	function Ws(e, t) {
-		return Rs(4, 4, e, t);
+		return zs(4, 2, e, t);
 	}
 	function Gs(e, t) {
+		return zs(4, 4, e, t);
+	}
+	function Ks(e, t) {
 		if (typeof t == "function") {
 			e = e();
 			var n = t(e);
@@ -10328,76 +10338,76 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			t.current = null;
 		};
 	}
-	function Ks(e, t, n) {
-		n = n == null ? null : n.concat([e]), Rs(4, 4, Gs.bind(null, t, e), n);
+	function qs(e, t, n) {
+		n = n == null ? null : n.concat([e]), zs(4, 4, Ks.bind(null, t, e), n);
 	}
-	function qs() {}
-	function Js(e, t) {
-		var n = os();
-		t = t === void 0 ? null : t;
-		var r = n.memoizedState;
-		return t !== null && Zo(t, r[1]) ? r[0] : (n.memoizedState = [e, t], e);
-	}
+	function Js() {}
 	function Ys(e, t) {
-		var n = os();
+		var n = ss();
 		t = t === void 0 ? null : t;
 		var r = n.memoizedState;
-		if (t !== null && Zo(t, r[1])) return r[0];
-		if (r = e(), Go) {
-			Qe(!0);
+		return t !== null && Qo(t, r[1]) ? r[0] : (n.memoizedState = [e, t], e);
+	}
+	function Xs(e, t) {
+		var n = ss();
+		t = t === void 0 ? null : t;
+		var r = n.memoizedState;
+		if (t !== null && Qo(t, r[1])) return r[0];
+		if (r = e(), Ko) {
+			$e(!0);
 			try {
 				e();
 			} finally {
-				Qe(!1);
+				$e(!1);
 			}
 		}
 		return n.memoizedState = [r, t], r;
 	}
-	function Xs(e, t, n) {
-		return n === void 0 || Vo & 1073741824 && !(Y & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = Md(), V.lanes |= e, od |= e, n);
+	function Zs(e, t, n) {
+		return n === void 0 || Ho & 1073741824 && !(Y & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = Md(), B.lanes |= e, od |= e, n);
 	}
-	function Zs(e, t, n, r) {
-		return Vr(n, t) ? n : To.current === null ? !(Vo & 106) || Vo & 1073741824 && !(Y & 261930) ? (Nc = !0, e.memoizedState = n) : (e = Md(), V.lanes |= e, od |= e, t) : (e = Xs(e, n, r), Vr(e, t) || (Nc = !0), e);
+	function Qs(e, t, n, r) {
+		return Hr(n, t) ? n : Eo.current === null ? !(Ho & 106) || Ho & 1073741824 && !(Y & 261930) ? (Pc = !0, e.memoizedState = n) : (e = Md(), B.lanes |= e, od |= e, t) : (e = Zs(e, n, r), Hr(e, t) || (Pc = !0), e);
 	}
-	function Qs(e, t, n, r, i) {
-		var a = P.p;
-		P.p = a !== 0 && 8 > a ? a : 8;
-		var o = N.T, s = {};
-		s.types = o === null ? null : o.types, N.T = s, uc(e, !1, t, n);
+	function $s(e, t, n, r, i) {
+		var a = N.p;
+		N.p = a !== 0 && 8 > a ? a : 8;
+		var o = M.T, s = {};
+		s.types = o === null ? null : o.types, M.T = s, dc(e, !1, t, n);
 		try {
-			var c = i(), l = N.S;
-			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? lc(e, t, Ha(c, r), jd(e)) : lc(e, t, r, jd(e));
+			var c = i(), l = M.S;
+			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? uc(e, t, Ua(c, r), jd(e)) : uc(e, t, r, jd(e));
 		} catch (n) {
-			lc(e, t, {
+			uc(e, t, {
 				then: function() {},
 				status: "rejected",
 				reason: n
 			}, jd());
 		} finally {
-			P.p = a, o !== null && s.types !== null && (o.types = s.types), N.T = o;
+			N.p = a, o !== null && s.types !== null && (o.types = s.types), M.T = o;
 		}
 	}
-	function $s() {}
-	function ec(e, t, n, r) {
+	function ec() {}
+	function tc(e, t, n, r) {
 		if (e.tag !== 5) throw Error(i(476));
-		var a = tc(e).queue;
-		Qs(e, a, t, ge, n === null ? $s : function() {
-			return nc(e), n(r);
+		var a = nc(e).queue;
+		$s(e, a, t, _e, n === null ? ec : function() {
+			return rc(e), n(r);
 		});
 	}
-	function tc(e) {
+	function nc(e) {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
-			memoizedState: ge,
-			baseState: ge,
+			memoizedState: _e,
+			baseState: _e,
 			baseQueue: null,
 			queue: {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
-				lastRenderedReducer: ds,
-				lastRenderedState: ge
+				lastRenderedReducer: fs,
+				lastRenderedState: _e
 			},
 			next: null
 		};
@@ -10410,40 +10420,40 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				pending: null,
 				lanes: 0,
 				dispatch: null,
-				lastRenderedReducer: ds,
+				lastRenderedReducer: fs,
 				lastRenderedState: n
 			},
 			next: null
 		}, e.memoizedState = t, e = e.alternate, e !== null && (e.memoizedState = t), t;
 	}
-	function nc(e) {
-		var t = tc(e);
-		t.next === null && (t = e.alternate.memoizedState), lc(e, t.next.queue, {}, jd());
-	}
-	function rc() {
-		return wa(sh);
+	function rc(e) {
+		var t = nc(e);
+		t.next === null && (t = e.alternate.memoizedState), uc(e, t.next.queue, {}, jd());
 	}
 	function ic() {
-		return os().memoizedState;
+		return Ta(sh);
 	}
 	function ac() {
-		return os().memoizedState;
+		return ss().memoizedState;
 	}
-	function oc(e) {
+	function oc() {
+		return ss().memoizedState;
+	}
+	function sc(e) {
 		for (var t = e.return; t !== null;) {
 			switch (t.tag) {
 				case 24:
 				case 3:
 					var n = jd();
-					e = go(n);
-					var r = _o(t, e, n);
-					r !== null && (Pd(r, t, n), vo(r, t, n)), t = { cache: ja() }, e.payload = t;
+					e = _o(n);
+					var r = vo(t, e, n);
+					r !== null && (Pd(r, t, n), yo(r, t, n)), t = { cache: Ma() }, e.payload = t;
 					return;
 			}
 			t = t.return;
 		}
 	}
-	function sc(e, t, n) {
+	function cc(e, t, n) {
 		var r = jd();
 		n = {
 			lane: r,
@@ -10453,12 +10463,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			hasEagerState: !1,
 			eagerState: null,
 			next: null
-		}, dc(e) ? fc(t, n) : (n = Ti(e, t, n, r), n !== null && (Pd(n, e, r), pc(n, t, r)));
+		}, fc(e) ? pc(t, n) : (n = Ei(e, t, n, r), n !== null && (Pd(n, e, r), mc(n, t, r)));
 	}
-	function cc(e, t, n) {
-		lc(e, t, n, jd());
+	function lc(e, t, n) {
+		uc(e, t, n, jd());
 	}
-	function lc(e, t, n, r) {
+	function uc(e, t, n, r) {
 		var i = {
 			lane: r,
 			revertLane: 0,
@@ -10468,18 +10478,18 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			eagerState: null,
 			next: null
 		};
-		if (dc(e)) fc(t, i);
+		if (fc(e)) pc(t, i);
 		else {
 			var a = e.alternate;
 			if (e.lanes === 0 && (a === null || a.lanes === 0) && (a = t.lastRenderedReducer, a !== null)) try {
 				var o = t.lastRenderedState, s = a(o, n);
-				if (i.hasEagerState = !0, i.eagerState = s, Vr(s, o)) return wi(e, t, i, 0), q === null && Ci(), !1;
+				if (i.hasEagerState = !0, i.eagerState = s, Hr(s, o)) return Ti(e, t, i, 0), q === null && wi(), !1;
 			} catch {}
-			if (n = Ti(e, t, i, r), n !== null) return Pd(n, e, r), pc(n, t, r), !0;
+			if (n = Ei(e, t, i, r), n !== null) return Pd(n, e, r), mc(n, t, r), !0;
 		}
 		return !1;
 	}
-	function uc(e, t, n, r) {
+	function dc(e, t, n, r) {
 		if (r = {
 			lane: 2,
 			revertLane: Pf(),
@@ -10488,91 +10498,91 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			hasEagerState: !1,
 			eagerState: null,
 			next: null
-		}, dc(e)) {
+		}, fc(e)) {
 			if (t) throw Error(i(479));
-		} else t = Ti(e, n, r, 2), t !== null && Pd(t, e, 2);
+		} else t = Ei(e, n, r, 2), t !== null && Pd(t, e, 2);
 	}
-	function dc(e) {
+	function fc(e) {
 		var t = e.alternate;
-		return e === V || t !== null && t === V;
+		return e === B || t !== null && t === B;
 	}
-	function fc(e, t) {
-		Wo = Uo = !0;
+	function pc(e, t) {
+		Go = Wo = !0;
 		var n = e.pending;
 		n === null ? t.next = t : (t.next = n.next, n.next = t), e.pending = t;
 	}
-	function pc(e, t, n) {
+	function mc(e, t, n) {
 		if (n & 4194048) {
 			var r = t.lanes;
-			r &= e.pendingLanes, n |= r, t.lanes = n, gt(e, n);
+			r &= e.pendingLanes, n |= r, t.lanes = n, _t(e, n);
 		}
 	}
-	var mc = {
-		readContext: wa,
-		use: ls,
-		useCallback: Xo,
-		useContext: Xo,
-		useEffect: Xo,
-		useImperativeHandle: Xo,
-		useLayoutEffect: Xo,
-		useInsertionEffect: Xo,
-		useMemo: Xo,
-		useReducer: Xo,
-		useRef: Xo,
-		useState: Xo,
-		useDebugValue: Xo,
-		useDeferredValue: Xo,
-		useTransition: Xo,
-		useSyncExternalStore: Xo,
-		useId: Xo,
-		useHostTransitionStatus: Xo,
-		useFormState: Xo,
-		useActionState: Xo,
-		useOptimistic: Xo,
-		useMemoCache: Xo,
-		useCacheRefresh: Xo,
-		useEffectEvent: Xo
-	}, hc = {
-		readContext: wa,
-		use: ls,
+	var hc = {
+		readContext: Ta,
+		use: us,
+		useCallback: Zo,
+		useContext: Zo,
+		useEffect: Zo,
+		useImperativeHandle: Zo,
+		useLayoutEffect: Zo,
+		useInsertionEffect: Zo,
+		useMemo: Zo,
+		useReducer: Zo,
+		useRef: Zo,
+		useState: Zo,
+		useDebugValue: Zo,
+		useDeferredValue: Zo,
+		useTransition: Zo,
+		useSyncExternalStore: Zo,
+		useId: Zo,
+		useHostTransitionStatus: Zo,
+		useFormState: Zo,
+		useActionState: Zo,
+		useOptimistic: Zo,
+		useMemoCache: Zo,
+		useCacheRefresh: Zo,
+		useEffectEvent: Zo
+	}, gc = {
+		readContext: Ta,
+		use: us,
 		useCallback: function(e, t) {
-			return as().memoizedState = [e, t === void 0 ? null : t], e;
+			return os().memoizedState = [e, t === void 0 ? null : t], e;
 		},
-		useContext: wa,
-		useEffect: zs,
+		useContext: Ta,
+		useEffect: Bs,
 		useImperativeHandle: function(e, t, n) {
-			n = n == null ? null : n.concat([e]), Ls(4194308, 4, Gs.bind(null, t, e), n);
+			n = n == null ? null : n.concat([e]), Rs(4194308, 4, Ks.bind(null, t, e), n);
 		},
 		useLayoutEffect: function(e, t) {
-			return Ls(4194308, 4, e, t);
+			return Rs(4194308, 4, e, t);
 		},
 		useInsertionEffect: function(e, t) {
-			Ls(4, 2, e, t);
+			Rs(4, 2, e, t);
 		},
 		useMemo: function(e, t) {
-			var n = as();
+			var n = os();
 			t = t === void 0 ? null : t;
 			var r = e();
-			if (Go) {
-				Qe(!0);
+			if (Ko) {
+				$e(!0);
 				try {
 					e();
 				} finally {
-					Qe(!1);
+					$e(!1);
 				}
 			}
 			return n.memoizedState = [r, t], r;
 		},
 		useReducer: function(e, t, n) {
-			var r = as();
+			var r = os();
 			if (n !== void 0) {
 				var i = n(t);
-				if (Go) {
-					Qe(!0);
+				if (Ko) {
+					$e(!0);
 					try {
 						n(t);
 					} finally {
-						Qe(!1);
+						$e(!1);
 					}
 				}
 			} else i = t;
@@ -10582,54 +10592,54 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				dispatch: null,
 				lastRenderedReducer: e,
 				lastRenderedState: i
-			}, r.queue = e, e = e.dispatch = sc.bind(null, V, e), [r.memoizedState, e];
+			}, r.queue = e, e = e.dispatch = cc.bind(null, B, e), [r.memoizedState, e];
 		},
 		useRef: function(e) {
-			var t = as();
+			var t = os();
 			return e = { current: e }, t.memoizedState = e;
 		},
 		useState: function(e) {
-			e = xs(e);
-			var t = e.queue, n = cc.bind(null, V, t);
+			e = Ss(e);
+			var t = e.queue, n = lc.bind(null, B, t);
 			return t.dispatch = n, [e.memoizedState, n];
 		},
-		useDebugValue: qs,
+		useDebugValue: Js,
 		useDeferredValue: function(e, t) {
-			return Xs(as(), e, t);
+			return Zs(os(), e, t);
 		},
 		useTransition: function() {
-			var e = xs(!1);
-			return e = Qs.bind(null, V, e.queue, !0, !1), as().memoizedState = e, [!1, e];
+			var e = Ss(!1);
+			return e = $s.bind(null, B, e.queue, !0, !1), os().memoizedState = e, [!1, e];
 		},
 		useSyncExternalStore: function(e, t, n) {
-			var r = V, a = as();
-			if (B) {
+			var r = B, a = os();
+			if (z) {
 				if (n === void 0) throw Error(i(407));
 				n = n();
 			} else {
 				if (n = t(), q === null) throw Error(i(349));
-				Y & 127 || gs(r, t, n);
+				Y & 127 || _s(r, t, n);
 			}
 			a.memoizedState = n;
 			var o = {
 				value: n,
 				getSnapshot: t
 			};
-			return a.queue = o, zs(vs.bind(null, r, o, e), [e]), r.flags |= 2048, Fs(9, { destroy: void 0 }, _s.bind(null, r, o, n, t), null), n;
+			return a.queue = o, Bs(ys.bind(null, r, o, e), [e]), r.flags |= 2048, Is(9, { destroy: void 0 }, vs.bind(null, r, o, n, t), null), n;
 		},
 		useId: function() {
-			var e = as(), t = q.identifierPrefix;
-			if (B) {
-				var n = Xi, r = Yi;
-				n = (r & ~(1 << 32 - $e(r) - 1)).toString(32) + n, t = "_" + t + "R_" + n, n = Ko++, 0 < n && (t += "H" + n.toString(32)), t += "_";
-			} else n = Yo++, t = "_" + t + "r_" + n.toString(32) + "_";
+			var e = os(), t = q.identifierPrefix;
+			if (z) {
+				var n = Zi, r = Xi;
+				n = (r & ~(1 << 32 - et(r) - 1)).toString(32) + n, t = "_" + t + "R_" + n, n = qo++, 0 < n && (t += "H" + n.toString(32)), t += "_";
+			} else n = Xo++, t = "_" + t + "r_" + n.toString(32) + "_";
 			return e.memoizedState = t;
 		},
-		useHostTransitionStatus: rc,
-		useFormState: As,
-		useActionState: As,
+		useHostTransitionStatus: ic,
+		useFormState: js,
+		useActionState: js,
 		useOptimistic: function(e) {
-			var t = as();
+			var t = os();
 			t.memoizedState = t.baseState = e;
 			var n = {
 				pending: null,
@@ -10638,132 +10648,132 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				lastRenderedReducer: null,
 				lastRenderedState: null
 			};
-			return t.queue = n, t = uc.bind(null, V, !0, n), n.dispatch = t, [e, t];
+			return t.queue = n, t = dc.bind(null, B, !0, n), n.dispatch = t, [e, t];
 		},
-		useMemoCache: us,
+		useMemoCache: ds,
 		useCacheRefresh: function() {
-			return as().memoizedState = oc.bind(null, V);
+			return os().memoizedState = sc.bind(null, B);
 		},
 		useEffectEvent: function(e) {
-			var t = as(), n = { impl: e };
+			var t = os(), n = { impl: e };
 			return t.memoizedState = n, function() {
 				if (K & 2) throw Error(i(440));
 				return n.impl.apply(void 0, arguments);
 			};
 		}
-	}, gc = {
-		readContext: wa,
-		use: ls,
-		useCallback: Js,
-		useContext: wa,
-		useEffect: Bs,
-		useImperativeHandle: Ks,
-		useInsertionEffect: Us,
-		useLayoutEffect: Ws,
-		useMemo: Ys,
-		useReducer: fs,
-		useRef: Is,
-		useState: function() {
-			return fs(ds);
-		},
-		useDebugValue: qs,
-		useDeferredValue: function(e, t) {
-			return Zs(os(), H.memoizedState, e, t);
-		},
-		useTransition: function() {
-			var e = fs(ds)[0], t = os().memoizedState;
-			return [typeof e == "boolean" ? e : cs(e), t];
-		},
-		useSyncExternalStore: hs,
-		useId: ic,
-		useHostTransitionStatus: rc,
-		useFormState: js,
-		useActionState: js,
-		useOptimistic: function(e, t) {
-			return Ss(os(), H, e, t);
-		},
-		useMemoCache: us,
-		useCacheRefresh: ac,
-		useEffectEvent: Hs
 	}, _c = {
-		readContext: wa,
-		use: ls,
-		useCallback: Js,
-		useContext: wa,
-		useEffect: Bs,
-		useImperativeHandle: Ks,
-		useInsertionEffect: Us,
-		useLayoutEffect: Ws,
-		useMemo: Ys,
-		useReducer: ms,
-		useRef: Is,
+		readContext: Ta,
+		use: us,
+		useCallback: Ys,
+		useContext: Ta,
+		useEffect: Vs,
+		useImperativeHandle: qs,
+		useInsertionEffect: Ws,
+		useLayoutEffect: Gs,
+		useMemo: Xs,
+		useReducer: ps,
+		useRef: Ls,
 		useState: function() {
-			return ms(ds);
+			return ps(fs);
 		},
-		useDebugValue: qs,
+		useDebugValue: Js,
 		useDeferredValue: function(e, t) {
-			var n = os();
-			return H === null ? Xs(n, e, t) : Zs(n, H.memoizedState, e, t);
+			return Qs(ss(), V.memoizedState, e, t);
 		},
 		useTransition: function() {
-			var e = ms(ds)[0], t = os().memoizedState;
-			return [typeof e == "boolean" ? e : cs(e), t];
+			var e = ps(fs)[0], t = ss().memoizedState;
+			return [typeof e == "boolean" ? e : ls(e), t];
 		},
-		useSyncExternalStore: hs,
-		useId: ic,
-		useHostTransitionStatus: rc,
-		useFormState: Ps,
-		useActionState: Ps,
+		useSyncExternalStore: gs,
+		useId: ac,
+		useHostTransitionStatus: ic,
+		useFormState: Ms,
+		useActionState: Ms,
 		useOptimistic: function(e, t) {
-			var n = os();
-			return H === null ? (n.baseState = e, [e, n.queue.dispatch]) : Ss(n, H, e, t);
+			return Cs(ss(), V, e, t);
 		},
-		useMemoCache: us,
-		useCacheRefresh: ac,
-		useEffectEvent: Hs
+		useMemoCache: ds,
+		useCacheRefresh: oc,
+		useEffectEvent: Us
+	}, vc = {
+		readContext: Ta,
+		use: us,
+		useCallback: Ys,
+		useContext: Ta,
+		useEffect: Vs,
+		useImperativeHandle: qs,
+		useInsertionEffect: Ws,
+		useLayoutEffect: Gs,
+		useMemo: Xs,
+		useReducer: hs,
+		useRef: Ls,
+		useState: function() {
+			return hs(fs);
+		},
+		useDebugValue: Js,
+		useDeferredValue: function(e, t) {
+			var n = ss();
+			return V === null ? Zs(n, e, t) : Qs(n, V.memoizedState, e, t);
+		},
+		useTransition: function() {
+			var e = hs(fs)[0], t = ss().memoizedState;
+			return [typeof e == "boolean" ? e : ls(e), t];
+		},
+		useSyncExternalStore: gs,
+		useId: ac,
+		useHostTransitionStatus: ic,
+		useFormState: Fs,
+		useActionState: Fs,
+		useOptimistic: function(e, t) {
+			var n = ss();
+			return V === null ? (n.baseState = e, [e, n.queue.dispatch]) : Cs(n, V, e, t);
+		},
+		useMemoCache: ds,
+		useCacheRefresh: oc,
+		useEffectEvent: Us
 	};
-	function vc(e, t, n, r) {
+	function yc(e, t, n, r) {
 		t = e.memoizedState, n = n(r, t), n = n == null ? t : T({}, t, n), e.memoizedState = n, e.lanes === 0 && (e.updateQueue.baseState = n);
 	}
-	var yc = {
+	var bc = {
 		enqueueSetState: function(e, t, n) {
 			e = e._reactInternals;
-			var r = jd(), i = go(r);
-			i.payload = t, n != null && (i.callback = n), t = _o(e, i, r), t !== null && (Pd(t, e, r), vo(t, e, r));
+			var r = jd(), i = _o(r);
+			i.payload = t, n != null && (i.callback = n), t = vo(e, i, r), t !== null && (Pd(t, e, r), yo(t, e, r));
 		},
 		enqueueReplaceState: function(e, t, n) {
 			e = e._reactInternals;
-			var r = jd(), i = go(r);
-			i.tag = 1, i.payload = t, n != null && (i.callback = n), t = _o(e, i, r), t !== null && (Pd(t, e, r), vo(t, e, r));
+			var r = jd(), i = _o(r);
+			i.tag = 1, i.payload = t, n != null && (i.callback = n), t = vo(e, i, r), t !== null && (Pd(t, e, r), yo(t, e, r));
 		},
 		enqueueForceUpdate: function(e, t) {
 			e = e._reactInternals;
-			var n = jd(), r = go(n);
-			r.tag = 2, t != null && (r.callback = t), t = _o(e, r, n), t !== null && (Pd(t, e, n), vo(t, e, n));
+			var n = jd(), r = _o(n);
+			r.tag = 2, t != null && (r.callback = t), t = vo(e, r, n), t !== null && (Pd(t, e, n), yo(t, e, n));
 		}
 	};
-	function bc(e, t, n, r, i, a, o) {
-		return e = e.stateNode, typeof e.shouldComponentUpdate == "function" ? e.shouldComponentUpdate(r, a, o) : t.prototype && t.prototype.isPureReactComponent ? !Hr(n, r) || !Hr(i, a) : !0;
+	function xc(e, t, n, r, i, a, o) {
+		return e = e.stateNode, typeof e.shouldComponentUpdate == "function" ? e.shouldComponentUpdate(r, a, o) : t.prototype && t.prototype.isPureReactComponent ? !Ur(n, r) || !Ur(i, a) : !0;
 	}
-	function xc(e, t, n, r) {
-		e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(n, r), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(n, r), t.state !== e && yc.enqueueReplaceState(t, t.state, null);
+	function Sc(e, t, n, r) {
+		e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(n, r), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(n, r), t.state !== e && bc.enqueueReplaceState(t, t.state, null);
 	}
-	function Sc(e, t) {
+	function Cc(e, t) {
 		var n = t;
 		if ("ref" in t) for (var r in n = {}, t) r !== "ref" && (n[r] = t[r]);
 		if (e = e.defaultProps) for (var i in n === t && (n = T({}, n)), e) n[i] === void 0 && (n[i] = e[i]);
 		return n;
 	}
-	function Cc(e) {
-		yi(e);
-	}
 	function wc(e) {
-		console.error(e);
+		bi(e);
 	}
 	function Tc(e) {
-		yi(e);
+		console.error(e);
 	}
-	function Ec(e, t) {
+	function Ec(e) {
+		bi(e);
+	}
+	function Dc(e, t) {
 		try {
 			var n = e.onUncaughtError;
 			n(t.value, { componentStack: t.stack });
@@ -10773,7 +10783,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			});
 		}
 	}
-	function Dc(e, t, n) {
+	function Oc(e, t, n) {
 		try {
 			var r = e.onCaughtError;
 			r(n.value, {
@@ -10786,39 +10796,39 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			});
 		}
 	}
-	function Oc(e, t, n) {
-		return n = go(n), n.tag = 3, n.payload = { element: null }, n.callback = function() {
-			Ec(e, t);
+	function kc(e, t, n) {
+		return n = _o(n), n.tag = 3, n.payload = { element: null }, n.callback = function() {
+			Dc(e, t);
 		}, n;
 	}
-	function kc(e) {
-		return e = go(e), e.tag = 3, e;
+	function Ac(e) {
+		return e = _o(e), e.tag = 3, e;
 	}
-	function Ac(e, t, n, r) {
+	function jc(e, t, n, r) {
 		var i = n.type.getDerivedStateFromError;
 		if (typeof i == "function") {
 			var a = r.value;
 			e.payload = function() {
 				return i(a);
 			}, e.callback = function() {
-				Dc(t, n, r);
+				Oc(t, n, r);
 			};
 		}
 		var o = n.stateNode;
 		o !== null && typeof o.componentDidCatch == "function" && (e.callback = function() {
-			Dc(t, n, r), typeof i != "function" && (vd === null ? vd = /* @__PURE__ */ new Set([this]) : vd.add(this));
+			Oc(t, n, r), typeof i != "function" && (vd === null ? vd = /* @__PURE__ */ new Set([this]) : vd.add(this));
 			var e = r.stack;
 			this.componentDidCatch(r.value, { componentStack: e === null ? "" : e });
 		});
 	}
-	function jc(e, t, n, r, a) {
+	function Mc(e, t, n, r, a) {
 		if (n.flags |= 32768, typeof r == "object" && r && typeof r.then == "function") {
-			if (t = n.alternate, t !== null && xa(t, n, a, !0), n = Ao.current, n !== null) {
+			if (t = n.alternate, t !== null && Sa(t, n, a, !0), n = jo.current, n !== null) {
 				switch (n.tag) {
 					case 31:
 					case 13:
-					case 19: return jo === null ? Kd() : n.alternate === null && ad === 0 && (ad = 3), n.flags &= -257, n.flags |= 65536, n.lanes = a, r === Za ? n.flags |= 16384 : (t = n.updateQueue, t === null ? n.updateQueue = /* @__PURE__ */ new Set([r]) : t.add(r), mf(e, r, a)), !1;
-					case 22: return n.flags |= 65536, r === Za ? n.flags |= 16384 : (t = n.updateQueue, t === null ? (t = {
+					case 19: return Mo === null ? Kd() : n.alternate === null && ad === 0 && (ad = 3), n.flags &= -257, n.flags |= 65536, n.lanes = a, r === Qa ? n.flags |= 16384 : (t = n.updateQueue, t === null ? n.updateQueue = /* @__PURE__ */ new Set([r]) : t.add(r), mf(e, r, a)), !1;
+					case 22: return n.flags |= 65536, r === Qa ? n.flags |= 16384 : (t = n.updateQueue, t === null ? (t = {
 						transitions: null,
 						markerInstances: null,
 						retryQueue: /* @__PURE__ */ new Set([r])
@@ -10828,15 +10838,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 			return mf(e, r, a), Kd(), !1;
 		}
-		if (B) return t = Ao.current, t === null ? (r !== aa && (t = Error(i(423), { cause: r }), fa(Vi(t, n))), e = e.current.alternate, e.flags |= 65536, a &= -a, e.lanes |= a, r = Vi(r, n), a = Oc(e.stateNode, r, a), yo(e, a), ad !== 4 && (ad = 2)) : (!(t.flags & 65536) && (t.flags |= 256), t.flags |= 65536, t.lanes = a, r !== aa && (e = Error(i(422), { cause: r }), fa(Vi(e, n)))), !1;
+		if (z) return t = jo.current, t === null ? (r !== oa && (t = Error(i(423), { cause: r }), pa(Hi(t, n))), e = e.current.alternate, e.flags |= 65536, a &= -a, e.lanes |= a, r = Hi(r, n), a = kc(e.stateNode, r, a), bo(e, a), ad !== 4 && (ad = 2)) : (!(t.flags & 65536) && (t.flags |= 256), t.flags |= 65536, t.lanes = a, r !== oa && (e = Error(i(422), { cause: r }), pa(Hi(e, n)))), !1;
 		var o = Error(i(520), { cause: r });
-		if (o = Vi(o, n), dd === null ? dd = [o] : dd.push(o), ad !== 4 && (ad = 2), t === null) return !0;
-		r = Vi(r, n), n = t;
+		if (o = Hi(o, n), dd === null ? dd = [o] : dd.push(o), ad !== 4 && (ad = 2), t === null) return !0;
+		r = Hi(r, n), n = t;
 		do {
 			switch (n.tag) {
-				case 3: return n.flags |= 65536, e = a & -a, n.lanes |= e, e = Oc(n.stateNode, r, e), yo(n, e), !1;
+				case 3: return n.flags |= 65536, e = a & -a, n.lanes |= e, e = kc(n.stateNode, r, e), bo(n, e), !1;
 				case 1:
-					if (t = n.type, o = n.stateNode, !(n.flags & 128) && (typeof t.getDerivedStateFromError == "function" || o !== null && typeof o.componentDidCatch == "function" && (vd === null || !vd.has(o)))) return n.flags |= 65536, a &= -a, n.lanes |= a, a = kc(a), Ac(a, e, n, r), yo(n, a), !1;
+					if (t = n.type, o = n.stateNode, !(n.flags & 128) && (typeof t.getDerivedStateFromError == "function" || o !== null && typeof o.componentDidCatch == "function" && (vd === null || !vd.has(o)))) return n.flags |= 65536, a &= -a, n.lanes |= a, a = Ac(a), jc(a, e, n, r), bo(n, a), !1;
 					break;
 				case 22: if (n.memoizedState !== null) return n.flags |= 65536, !1;
 			}
@@ -10844,41 +10854,41 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		} while (n !== null);
 		return !1;
 	}
-	var Mc = Error(i(461)), Nc = !1;
-	function Pc(e, t, n, r) {
-		t.child = e === null ? fo(t, null, n, r) : uo(t, e.child, n, r);
+	var Nc = Error(i(461)), Pc = !1;
+	function Fc(e, t, n, r) {
+		t.child = e === null ? po(t, null, n, r) : fo(t, e.child, n, r);
 	}
-	function Fc(e, t, n, r, i) {
+	function Ic(e, t, n, r, i) {
 		n = n.render;
 		var a = t.ref;
 		if ("ref" in r) {
 			var o = {};
 			for (var s in r) s !== "ref" && (o[s] = r[s]);
 		} else o = r;
-		return Ca(t), r = Qo(e, t, n, o, a, i), s = ns(), e !== null && !Nc ? (rs(e, t, i), ll(e, t, i)) : (B && s && $i(t), t.flags |= 1, Pc(e, t, r, i), t.child);
-	}
-	function Ic(e, t, n, r, i) {
-		if (e === null) {
-			var a = n.type;
-			return typeof a == "function" && !Mi(a) && a.defaultProps === void 0 && n.compare === null ? (t.tag = 15, t.type = a, Lc(e, t, a, r, i)) : (e = Fi(n.type, null, r, t, t.mode, i), e.ref = t.ref, e.return = t, t.child = e);
-		}
-		if (a = e.child, !ul(e, i)) {
-			var o = a.memoizedProps;
-			if (n = n.compare, n = n === null ? Hr : n, n(o, r) && e.ref === t.ref) return ll(e, t, i);
-		}
-		return t.flags |= 1, e = Ni(a, r), e.ref = t.ref, e.return = t, t.child = e;
+		return wa(t), r = $o(e, t, n, o, a, i), s = rs(), e !== null && !Pc ? (is(e, t, i), ul(e, t, i)) : (z && s && ea(t), t.flags |= 1, Fc(e, t, r, i), t.child);
 	}
 	function Lc(e, t, n, r, i) {
+		if (e === null) {
+			var a = n.type;
+			return typeof a == "function" && !Ni(a) && a.defaultProps === void 0 && n.compare === null ? (t.tag = 15, t.type = a, Rc(e, t, a, r, i)) : (e = Ii(n.type, null, r, t, t.mode, i), e.ref = t.ref, e.return = t, t.child = e);
+		}
+		if (a = e.child, !dl(e, i)) {
+			var o = a.memoizedProps;
+			if (n = n.compare, n = n === null ? Ur : n, n(o, r) && e.ref === t.ref) return ul(e, t, i);
+		}
+		return t.flags |= 1, e = Pi(a, r), e.ref = t.ref, e.return = t, t.child = e;
+	}
+	function Rc(e, t, n, r, i) {
 		if (e !== null) {
 			var a = e.memoizedProps;
-			if (Hr(a, r) && e.ref === t.ref) {
-				if (Nc = !1, t.pendingProps = r = a, ul(e, i)) e.flags & 131072 && (Nc = !0);
-				else return t.lanes = e.lanes, ll(e, t, i);
+			if (Ur(a, r) && e.ref === t.ref) {
+				if (Pc = !1, t.pendingProps = r = a, dl(e, i)) e.flags & 131072 && (Pc = !0);
+				else return t.lanes = e.lanes, ul(e, t, i);
 			}
 		}
-		return Gc(e, t, n, r, i);
+		return Kc(e, t, n, r, i);
 	}
-	function Rc(e, t, n, r) {
+	function zc(e, t, n, r) {
 		var i = r.children, a = e === null ? null : e.memoizedState;
 		if (e === null && t.stateNode === null && (t.stateNode = {
 			_visibility: 1,
@@ -10891,17 +10901,17 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					for (r = t.child = e.child, i = 0; r !== null;) i = i | r.lanes | r.childLanes, r = r.sibling;
 					r = i & ~a;
 				} else r = 0, t.child = null;
-				return Bc(e, t, a, n, r);
+				return Vc(e, t, a, n, r);
 			}
 			if (n & 536870912) t.memoizedState = {
 				baseLanes: 0,
 				cachePool: null
-			}, e !== null && Ka(t, a === null ? null : a.cachePool), a === null ? Oo() : Do(t, a), Po(t);
-			else return r = t.lanes = 536870912, Bc(e, t, a === null ? n : a.baseLanes | n, n, r);
-		} else a === null ? (e !== null && Ka(t, null), Oo(), Fo()) : (Ka(t, a.cachePool), Do(t, a), Fo(), t.memoizedState = null);
-		return Pc(e, t, i, n), t.child;
+			}, e !== null && qa(t, a === null ? null : a.cachePool), a === null ? ko() : Oo(t, a), Fo(t);
+			else return r = t.lanes = 536870912, Vc(e, t, a === null ? n : a.baseLanes | n, n, r);
+		} else a === null ? (e !== null && qa(t, null), ko(), Io()) : (qa(t, a.cachePool), Oo(t, a), Io(), t.memoizedState = null);
+		return Fc(e, t, i, n), t.child;
 	}
-	function zc(e, t) {
+	function Bc(e, t) {
 		return e !== null && e.tag === 22 || t.stateNode !== null || (t.stateNode = {
 			_visibility: 1,
 			_pendingMarkers: null,
@@ -10909,68 +10919,68 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			_transitions: null
 		}), t.sibling;
 	}
-	function Bc(e, t, n, r, i) {
-		var a = Ga();
+	function Vc(e, t, n, r, i) {
+		var a = Ka();
 		return a = a === null ? null : {
-			parent: Aa._currentValue,
+			parent: ja._currentValue,
 			pool: a
 		}, t.memoizedState = {
 			baseLanes: n,
 			cachePool: a
-		}, e !== null && Ka(t, null), Oo(), Po(t), e !== null && xa(e, t, r, !0), t.childLanes = i, null;
+		}, e !== null && qa(t, null), ko(), Fo(t), e !== null && Sa(e, t, r, !0), t.childLanes = i, null;
 	}
-	function Vc(e, t) {
-		return t = el({
+	function Hc(e, t) {
+		return t = tl({
 			mode: t.mode,
 			children: t.children
 		}, e.mode), t.ref = e.ref, e.child = t, t.return = e, t;
 	}
-	function Hc(e, t, n) {
-		return uo(t, e.child, null, n), e = Vc(t, t.pendingProps), e.flags |= 2, Io(t), t.memoizedState = null, e;
-	}
 	function Uc(e, t, n) {
+		return fo(t, e.child, null, n), e = Hc(t, t.pendingProps), e.flags |= 2, Lo(t), t.memoizedState = null, e;
+	}
+	function Wc(e, t, n) {
 		var r = t.pendingProps, a = !!(t.flags & 128);
 		if (t.flags &= -129, e === null) {
-			if (B) {
-				if (r.mode === "hidden") return e = Vc(t, r), t.lanes = 536870912, e.memoizedState = {
+			if (z) {
+				if (r.mode === "hidden") return e = Hc(t, r), t.lanes = 536870912, e.memoizedState = {
 					baseLanes: 0,
 					cachePool: null
-				}, zc(null, e);
-				if (No(t), (e = z) ? (e = am(e, ia), e = e !== null && e.data === "&" ? e : null, e !== null && (t.memoizedState = {
+				}, Bc(null, e);
+				if (Po(t), (e = R) ? (e = am(e, aa), e = e !== null && e.data === "&" ? e : null, e !== null && (t.memoizedState = {
 					dehydrated: e,
-					treeContext: Ji === null ? null : {
-						id: Yi,
-						overflow: Xi
+					treeContext: Yi === null ? null : {
+						id: Xi,
+						overflow: Zi
 					},
 					retryLane: 536870912,
 					hydrationErrors: null
-				}, n = Ri(e), n.return = t, t.child = n, na = t, z = null)) : e = null, e === null) throw oa(t);
+				}, n = zi(e), n.return = t, t.child = n, ra = t, R = null)) : e = null, e === null) throw sa(t);
 				return t.lanes = 536870912, null;
 			}
-			return Vc(t, r);
+			return Hc(t, r);
 		}
 		var o = e.memoizedState;
 		if (o !== null) {
 			var s = o.dehydrated;
-			if (No(t), a) {
-				if (t.flags & 256) t.flags &= -257, t = Hc(e, t, n);
+			if (Po(t), a) {
+				if (t.flags & 256) t.flags &= -257, t = Uc(e, t, n);
 				else if (t.memoizedState !== null) t.child = e.child, t.flags |= 128, t = null;
 				else throw Error(i(558));
-			} else if (Nc || xa(e, t, n, !1), a = (n & e.childLanes) !== 0, Nc || a) {
-				if (To.current === null) {
-					if (r = q, r !== null && (s = _t(r, n), s !== 0 && s !== o.retryLane)) throw o.retryLane = s, Ei(e, s), Pd(r, e, s), Mc;
+			} else if (Pc || Sa(e, t, n, !1), a = (n & e.childLanes) !== 0, Pc || a) {
+				if (Eo.current === null) {
+					if (r = q, r !== null && (s = vt(r, n), s !== 0 && s !== o.retryLane)) throw o.retryLane = s, Di(e, s), Pd(r, e, s), Nc;
 					Kd();
 				}
-				t = Hc(e, t, n);
-			} else e = o.treeContext, z = lm(s.nextSibling), na = t, B = !0, ra = null, ia = !1, e !== null && ta(t, e), t = Vc(t, r), t.flags |= 134221824;
+				t = Uc(e, t, n);
+			} else e = o.treeContext, R = lm(s.nextSibling), ra = t, z = !0, ia = null, aa = !1, e !== null && na(t, e), t = Hc(t, r), t.flags |= 134221824;
 			return t;
 		}
-		return e = Ni(e.child, {
+		return e = Pi(e.child, {
 			mode: r.mode,
 			children: r.children
 		}), e.ref = t.ref, t.child = e, e.return = t, e;
 	}
-	function Wc(e, t) {
+	function Gc(e, t) {
 		var n = t.ref;
 		if (n === null) e !== null && e.ref !== null && (t.flags |= 4194816);
 		else {
@@ -10978,135 +10988,135 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			(e === null || e.ref !== n) && (t.flags |= 4194816);
 		}
 	}
-	function Gc(e, t, n, r, i) {
-		return Ca(t), n = Qo(e, t, n, r, void 0, i), r = ns(), e !== null && !Nc ? (rs(e, t, i), ll(e, t, i)) : (B && r && $i(t), t.flags |= 1, Pc(e, t, n, i), t.child);
+	function Kc(e, t, n, r, i) {
+		return wa(t), n = $o(e, t, n, r, void 0, i), r = rs(), e !== null && !Pc ? (is(e, t, i), ul(e, t, i)) : (z && r && ea(t), t.flags |= 1, Fc(e, t, n, i), t.child);
 	}
-	function Kc(e, t, n, r, i, a) {
-		return Ca(t), t.updateQueue = null, n = es(t, r, n, i), $o(e), r = ns(), e !== null && !Nc ? (rs(e, t, a), ll(e, t, a)) : (B && r && $i(t), t.flags |= 1, Pc(e, t, n, a), t.child);
+	function qc(e, t, n, r, i, a) {
+		return wa(t), t.updateQueue = null, n = ts(t, r, n, i), es(e), r = rs(), e !== null && !Pc ? (is(e, t, a), ul(e, t, a)) : (z && r && ea(t), t.flags |= 1, Fc(e, t, n, a), t.child);
 	}
-	function qc(e, t, n, r, i) {
-		if (Ca(t), t.stateNode === null) {
-			var a = ki, o = n.contextType;
-			typeof o == "object" && o && (a = wa(o)), a = new n(r, a), t.memoizedState = a.state !== null && a.state !== void 0 ? a.state : null, a.updater = yc, t.stateNode = a, a._reactInternals = t, a = t.stateNode, a.props = r, a.state = t.memoizedState, a.refs = {}, mo(t), o = n.contextType, a.context = typeof o == "object" && o ? wa(o) : ki, a.state = t.memoizedState, o = n.getDerivedStateFromProps, typeof o == "function" && (vc(t, n, o, r), a.state = t.memoizedState), typeof n.getDerivedStateFromProps == "function" || typeof a.getSnapshotBeforeUpdate == "function" || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (o = a.state, typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount(), o !== a.state && yc.enqueueReplaceState(a, a.state, null), So(t, r, a, i), xo(), a.state = t.memoizedState), typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !0;
+	function Jc(e, t, n, r, i) {
+		if (wa(t), t.stateNode === null) {
+			var a = Ai, o = n.contextType;
+			typeof o == "object" && o && (a = Ta(o)), a = new n(r, a), t.memoizedState = a.state !== null && a.state !== void 0 ? a.state : null, a.updater = bc, t.stateNode = a, a._reactInternals = t, a = t.stateNode, a.props = r, a.state = t.memoizedState, a.refs = {}, ho(t), o = n.contextType, a.context = typeof o == "object" && o ? Ta(o) : Ai, a.state = t.memoizedState, o = n.getDerivedStateFromProps, typeof o == "function" && (yc(t, n, o, r), a.state = t.memoizedState), typeof n.getDerivedStateFromProps == "function" || typeof a.getSnapshotBeforeUpdate == "function" || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (o = a.state, typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount(), o !== a.state && bc.enqueueReplaceState(a, a.state, null), Co(t, r, a, i), So(), a.state = t.memoizedState), typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !0;
 		} else if (e === null) {
 			a = t.stateNode;
-			var s = t.memoizedProps, c = Sc(n, s);
+			var s = t.memoizedProps, c = Cc(n, s);
 			a.props = c;
 			var l = a.context, u = n.contextType;
-			o = ki, typeof u == "object" && u && (o = wa(u));
+			o = Ai, typeof u == "object" && u && (o = Ta(u));
 			var d = n.getDerivedStateFromProps;
-			u = typeof d == "function" || typeof a.getSnapshotBeforeUpdate == "function", s = t.pendingProps !== s, u || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (s || l !== o) && xc(t, a, r, o), po = !1;
+			u = typeof d == "function" || typeof a.getSnapshotBeforeUpdate == "function", s = t.pendingProps !== s, u || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (s || l !== o) && Sc(t, a, r, o), mo = !1;
 			var f = t.memoizedState;
-			a.state = f, So(t, r, a, i), xo(), l = t.memoizedState, s || f !== l || po ? (typeof d == "function" && (vc(t, n, d, r), l = t.memoizedState), (c = po || bc(t, n, c, r, f, l, o)) ? (u || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount()), typeof a.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = r, t.memoizedState = l), a.props = r, a.state = l, a.context = o, r = c) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !1);
+			a.state = f, Co(t, r, a, i), So(), l = t.memoizedState, s || f !== l || mo ? (typeof d == "function" && (yc(t, n, d, r), l = t.memoizedState), (c = mo || xc(t, n, c, r, f, l, o)) ? (u || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount()), typeof a.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = r, t.memoizedState = l), a.props = r, a.state = l, a.context = o, r = c) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !1);
 		} else {
-			a = t.stateNode, ho(e, t), o = t.memoizedProps, u = Sc(n, o), a.props = u, d = t.pendingProps, f = a.context, l = n.contextType, c = ki, typeof l == "object" && l && (c = wa(l)), s = n.getDerivedStateFromProps, (l = typeof s == "function" || typeof a.getSnapshotBeforeUpdate == "function") || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (o !== d || f !== c) && xc(t, a, r, c), po = !1, f = t.memoizedState, a.state = f, So(t, r, a, i), xo();
+			a = t.stateNode, go(e, t), o = t.memoizedProps, u = Cc(n, o), a.props = u, d = t.pendingProps, f = a.context, l = n.contextType, c = Ai, typeof l == "object" && l && (c = Ta(l)), s = n.getDerivedStateFromProps, (l = typeof s == "function" || typeof a.getSnapshotBeforeUpdate == "function") || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (o !== d || f !== c) && Sc(t, a, r, c), mo = !1, f = t.memoizedState, a.state = f, Co(t, r, a, i), So();
 			var p = t.memoizedState;
-			o !== d || f !== p || po || e !== null && e.dependencies !== null && Sa(e.dependencies) ? (typeof s == "function" && (vc(t, n, s, r), p = t.memoizedState), (u = po || bc(t, n, u, r, f, p, c) || e !== null && e.dependencies !== null && Sa(e.dependencies)) ? (l || typeof a.UNSAFE_componentWillUpdate != "function" && typeof a.componentWillUpdate != "function" || (typeof a.componentWillUpdate == "function" && a.componentWillUpdate(r, p, c), typeof a.UNSAFE_componentWillUpdate == "function" && a.UNSAFE_componentWillUpdate(r, p, c)), typeof a.componentDidUpdate == "function" && (t.flags |= 4), typeof a.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), t.memoizedProps = r, t.memoizedState = p), a.props = r, a.state = p, a.context = c, r = u) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), r = !1);
+			o !== d || f !== p || mo || e !== null && e.dependencies !== null && Ca(e.dependencies) ? (typeof s == "function" && (yc(t, n, s, r), p = t.memoizedState), (u = mo || xc(t, n, u, r, f, p, c) || e !== null && e.dependencies !== null && Ca(e.dependencies)) ? (l || typeof a.UNSAFE_componentWillUpdate != "function" && typeof a.componentWillUpdate != "function" || (typeof a.componentWillUpdate == "function" && a.componentWillUpdate(r, p, c), typeof a.UNSAFE_componentWillUpdate == "function" && a.UNSAFE_componentWillUpdate(r, p, c)), typeof a.componentDidUpdate == "function" && (t.flags |= 4), typeof a.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), t.memoizedProps = r, t.memoizedState = p), a.props = r, a.state = p, a.context = c, r = u) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), r = !1);
 		}
-		return a = r, Wc(e, t), r = !!(t.flags & 128), a || r ? (a = t.stateNode, n = r && typeof n.getDerivedStateFromError != "function" ? null : a.render(), t.flags |= 1, e !== null && r ? (t.child = uo(t, e.child, null, i), t.child = uo(t, null, n, i)) : Pc(e, t, n, i), t.memoizedState = a.state, e = t.child) : e = ll(e, t, i), e;
+		return a = r, Gc(e, t), r = !!(t.flags & 128), a || r ? (a = t.stateNode, n = r && typeof n.getDerivedStateFromError != "function" ? null : a.render(), t.flags |= 1, e !== null && r ? (t.child = fo(t, e.child, null, i), t.child = fo(t, null, n, i)) : Fc(e, t, n, i), t.memoizedState = a.state, e = t.child) : e = ul(e, t, i), e;
 	}
-	function Jc(e, t, n, r) {
-		return ua(), t.flags |= 256, Pc(e, t, n, r), t.child;
+	function Yc(e, t, n, r) {
+		return da(), t.flags |= 256, Fc(e, t, n, r), t.child;
 	}
-	var Yc = {
+	var Xc = {
 		dehydrated: null,
 		treeContext: null,
 		retryLane: 0,
 		hydrationErrors: null
 	};
-	function Xc(e) {
+	function Zc(e) {
 		return {
 			baseLanes: e,
-			cachePool: qa()
+			cachePool: Ja()
 		};
 	}
-	function Zc(e, t, n) {
+	function Qc(e, t, n) {
 		return e = e === null ? 0 : e.childLanes & ~n, t && (e |= ld), e;
 	}
-	function Qc(e, t, n) {
+	function $c(e, t, n) {
 		var r = t.pendingProps, i = !1, a = !!(t.flags & 128), o;
-		if ((o = a) || (o = e !== null && e.memoizedState === null ? !1 : !!(Lo.current & 2)), o && (i = !0, t.flags &= -129), o = !!(t.flags & 32), t.flags &= -33, e === null) {
-			if (B) {
-				if (i ? Mo(t) : Fo(), (e = z) ? (e = am(e, ia), e = e !== null && e.data !== "&" ? e : null, e !== null && (t.memoizedState = {
+		if ((o = a) || (o = e !== null && e.memoizedState === null ? !1 : !!(Ro.current & 2)), o && (i = !0, t.flags &= -129), o = !!(t.flags & 32), t.flags &= -33, e === null) {
+			if (z) {
+				if (i ? No(t) : Io(), (e = R) ? (e = am(e, aa), e = e !== null && e.data !== "&" ? e : null, e !== null && (t.memoizedState = {
 					dehydrated: e,
-					treeContext: Ji === null ? null : {
-						id: Yi,
-						overflow: Xi
+					treeContext: Yi === null ? null : {
+						id: Xi,
+						overflow: Zi
 					},
 					retryLane: 536870912,
 					hydrationErrors: null
-				}, n = Ri(e), n.return = t, t.child = n, na = t, z = null)) : e = null, e === null) throw oa(t);
+				}, n = zi(e), n.return = t, t.child = n, ra = t, R = null)) : e = null, e === null) throw sa(t);
 				return t.lanes = sm(e) ? 32 : 536870912, null;
 			}
-			return a = r.children, r = r.fallback, i ? (Fo(), i = t.mode, a = el({
+			return a = r.children, r = r.fallback, i ? (Io(), i = t.mode, a = tl({
 				mode: "hidden",
 				children: a
-			}, i), r = Ii(r, i, n, null), a.return = t, r.return = t, a.sibling = r, t.child = a, r = t.child, r.memoizedState = Xc(n), r.childLanes = Zc(e, o, n), t.memoizedState = Yc, zc(null, r)) : (Mo(t), $c(t, a));
+			}, i), r = Li(r, i, n, null), a.return = t, r.return = t, a.sibling = r, t.child = a, r = t.child, r.memoizedState = Zc(n), r.childLanes = Qc(e, o, n), t.memoizedState = Xc, Bc(null, r)) : (No(t), el(t, a));
 		}
 		var s = e.memoizedState;
 		if (s !== null) {
 			var c = s.dehydrated;
-			if (c !== null) return nl(e, t, a, o, r, c, s, n);
+			if (c !== null) return rl(e, t, a, o, r, c, s, n);
 		}
-		return i ? (Fo(), i = r.fallback, a = t.mode, s = e.child, c = s.sibling, r = Ni(s, {
+		return i ? (Io(), i = r.fallback, a = t.mode, s = e.child, c = s.sibling, r = Pi(s, {
 			mode: "hidden",
 			children: r.children
-		}), r.subtreeFlags = s.subtreeFlags & 1206910976, c === null ? (i = Ii(i, a, n, null), i.flags |= 2) : i = Ni(c, i), i.return = t, r.return = t, r.sibling = i, t.child = r, zc(null, r), r = t.child, i = e.child.memoizedState, i === null ? i = Xc(n) : (a = i.cachePool, a === null ? a = qa() : (s = Aa._currentValue, a = a.parent === s ? a : {
+		}), r.subtreeFlags = s.subtreeFlags & 1206910976, c === null ? (i = Li(i, a, n, null), i.flags |= 2) : i = Pi(c, i), i.return = t, r.return = t, r.sibling = i, t.child = r, Bc(null, r), r = t.child, i = e.child.memoizedState, i === null ? i = Zc(n) : (a = i.cachePool, a === null ? a = Ja() : (s = ja._currentValue, a = a.parent === s ? a : {
 			parent: s,
 			pool: s
 		}), i = {
 			baseLanes: i.baseLanes | n,
 			cachePool: a
-		}), r.memoizedState = i, r.childLanes = Zc(e, o, n), t.memoizedState = Yc, zc(e.child, r)) : (Mo(t), n = e.child, e = n.sibling, n = Ni(n, {
+		}), r.memoizedState = i, r.childLanes = Qc(e, o, n), t.memoizedState = Xc, Bc(e.child, r)) : (No(t), n = e.child, e = n.sibling, n = Pi(n, {
 			mode: "visible",
 			children: r.children
 		}), n.return = t, n.sibling = null, e !== null && (o = t.deletions, o === null ? (t.deletions = [e], t.flags |= 16) : o.push(e)), t.child = n, t.memoizedState = null, n);
 	}
-	function $c(e, t) {
-		return t = el({
+	function el(e, t) {
+		return t = tl({
 			mode: "visible",
 			children: t
 		}, e.mode), t.return = e, e.child = t;
 	}
-	function el(e, t) {
-		return e = ji(22, e, null, t), e.lanes = 0, e;
+	function tl(e, t) {
+		return e = Mi(22, e, null, t), e.lanes = 0, e;
 	}
-	function tl(e, t, n) {
-		return uo(t, e.child, null, n), e = $c(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
+	function nl(e, t, n) {
+		return fo(t, e.child, null, n), e = el(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
 	}
-	function nl(e, t, n, r, a, o, s, c) {
-		if (n) return t.flags & 256 ? (Mo(t), t.flags &= -257, tl(e, t, c)) : t.memoizedState === null ? (Fo(), o = a.fallback, s = t.mode, a = el({
+	function rl(e, t, n, r, a, o, s, c) {
+		if (n) return t.flags & 256 ? (No(t), t.flags &= -257, nl(e, t, c)) : t.memoizedState === null ? (Io(), o = a.fallback, s = t.mode, a = tl({
 			mode: "visible",
 			children: a.children
-		}, s), o = Ii(o, s, c, null), o.flags |= 2, a.return = t, o.return = t, a.sibling = o, t.child = a, uo(t, e.child, null, c), a = t.child, a.memoizedState = Xc(c), a.childLanes = Zc(e, r, c), t.memoizedState = Yc, zc(null, a)) : (Fo(), t.child = e.child, t.flags |= 128, null);
-		if (Mo(t), sm(o)) {
+		}, s), o = Li(o, s, c, null), o.flags |= 2, a.return = t, o.return = t, a.sibling = o, t.child = a, fo(t, e.child, null, c), a = t.child, a.memoizedState = Zc(c), a.childLanes = Qc(e, r, c), t.memoizedState = Xc, Bc(null, a)) : (Io(), t.child = e.child, t.flags |= 128, null);
+		if (No(t), sm(o)) {
 			if (r = o.nextSibling && o.nextSibling.dataset, r) var l = r.dgst;
-			return r = l, r !== "" && (a = Error(i(419)), a.stack = "", a.digest = r, fa({
+			return r = l, r !== "" && (a = Error(i(419)), a.stack = "", a.digest = r, pa({
 				value: a,
 				source: null,
 				stack: null
-			})), tl(e, t, c);
+			})), nl(e, t, c);
 		}
-		if (Nc || xa(e, t, c, !1), r = (c & e.childLanes) !== 0, Nc || r) {
-			if (To.current !== null) return tl(e, t, c);
-			if (r = q, r !== null && (a = _t(r, c), a !== 0 && a !== s.retryLane)) throw s.retryLane = a, Ei(e, a), Pd(r, e, a), Mc;
-			return om(o) || Kd(), tl(e, t, c);
+		if (Pc || Sa(e, t, c, !1), r = (c & e.childLanes) !== 0, Pc || r) {
+			if (Eo.current !== null) return nl(e, t, c);
+			if (r = q, r !== null && (a = vt(r, c), a !== 0 && a !== s.retryLane)) throw s.retryLane = a, Di(e, a), Pd(r, e, a), Nc;
+			return om(o) || Kd(), nl(e, t, c);
 		}
-		return om(o) ? (t.flags |= 192, t.child = e.child, null) : (e = s.treeContext, z = lm(o.nextSibling), na = t, B = !0, ra = null, ia = !1, e !== null && ta(t, e), t = $c(t, a.children), t.flags |= 134221824, t);
+		return om(o) ? (t.flags |= 192, t.child = e.child, null) : (e = s.treeContext, R = lm(o.nextSibling), ra = t, z = !0, ia = null, aa = !1, e !== null && na(t, e), t = el(t, a.children), t.flags |= 134221824, t);
 	}
-	function rl(e, t, n) {
+	function il(e, t, n) {
 		e.lanes |= t;
 		var r = e.alternate;
-		r !== null && (r.lanes |= t), ya(e.return, t, n);
+		r !== null && (r.lanes |= t), ba(e.return, t, n);
 	}
-	function il(e) {
+	function al(e) {
 		for (var t = null; e !== null;) {
 			var n = e.alternate;
-			n !== null && Bo(n) === null && (t = e), e = e.sibling;
+			n !== null && Vo(n) === null && (t = e), e = e.sibling;
 		}
 		return t;
 	}
-	function al(e, t, n, r, i, a) {
+	function ol(e, t, n, r, i, a) {
 		var o = e.memoizedState;
 		o === null ? e.memoizedState = {
 			isBackwards: t,
@@ -11118,22 +11128,22 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			treeForkCount: a
 		} : (o.isBackwards = t, o.rendering = null, o.renderingStartTime = 0, o.last = r, o.tail = n, o.tailMode = i, o.treeForkCount = a);
 	}
-	function ol(e) {
+	function sl(e) {
 		var t = e.child;
 		for (e.child = null; t !== null;) {
 			var n = t.sibling;
 			t.sibling = e.child, e.child = t, t = n;
 		}
 	}
-	function sl(e, t, n) {
+	function cl(e, t, n) {
 		var r = t.pendingProps, i = r.revealOrder, a = r.tail;
 		r = r.children;
-		var o = Lo.current;
-		if (t.flags & 128) return Ro(t, o), null;
+		var o = Ro.current;
+		if (t.flags & 128) return zo(t, o), null;
 		var s = !!(o & 2);
-		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, Ro(t, o), i === "backwards" && e !== null ? (ol(e), Pc(e, t, r, n), ol(e)) : Pc(e, t, r, n), r = B ? Gi : 0, !s && e !== null && e.flags & 128) a: for (e = t.child; e !== null;) {
-			if (e.tag === 13) e.memoizedState !== null && rl(e, n, t);
-			else if (e.tag === 19) rl(e, n, t);
+		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, zo(t, o), i === "backwards" && e !== null ? (sl(e), Fc(e, t, r, n), sl(e)) : Fc(e, t, r, n), r = z ? Ki : 0, !s && e !== null && e.flags & 128) a: for (e = t.child; e !== null;) {
+			if (e.tag === 13) e.memoizedState !== null && il(e, n, t);
+			else if (e.tag === 19) il(e, n, t);
 			else if (e.child !== null) {
 				e.child.return = e, e = e.child;
 				continue;
@@ -11147,142 +11157,142 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		switch (i) {
 			case "backwards":
-				n = il(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null, ol(t)), al(t, !0, i, null, a, r);
+				n = al(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null, sl(t)), ol(t, !0, i, null, a, r);
 				break;
 			case "unstable_legacy-backwards":
 				for (n = null, i = t.child, t.child = null; i !== null;) {
-					if (e = i.alternate, e !== null && Bo(e) === null) {
+					if (e = i.alternate, e !== null && Vo(e) === null) {
 						t.child = i;
 						break;
 					}
 					e = i.sibling, i.sibling = n, n = i, i = e;
 				}
-				al(t, !0, n, null, a, r);
+				ol(t, !0, n, null, a, r);
 				break;
 			case "together":
-				al(t, !1, null, null, void 0, r);
+				ol(t, !1, null, null, void 0, r);
 				break;
 			case "independent":
 				t.memoizedState = null;
 				break;
-			default: n = il(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null), al(t, !1, i, n, a, r);
+			default: n = al(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null), ol(t, !1, i, n, a, r);
 		}
 		return t.child;
 	}
-	function cl(e, t, n) {
-		var r = t.pendingProps;
-		return ga(t, t.type, r.value), Pc(e, t, r.children, n), t.child;
-	}
 	function ll(e, t, n) {
+		var r = t.pendingProps;
+		return _a(t, t.type, r.value), Fc(e, t, r.children, n), t.child;
+	}
+	function ul(e, t, n) {
 		if (e !== null && (t.dependencies = e.dependencies), od |= t.lanes, (n & t.childLanes) === 0) {
 			if (e !== null) {
-				if (xa(e, t, n, !1), (n & t.childLanes) === 0) return null;
+				if (Sa(e, t, n, !1), (n & t.childLanes) === 0) return null;
 			} else return null;
 		}
 		if (e !== null && t.child !== e.child) throw Error(i(153));
 		if (t.child !== null) {
-			for (e = t.child, n = Ni(e, e.pendingProps), t.child = n, n.return = t; e.sibling !== null;) e = e.sibling, n = n.sibling = Ni(e, e.pendingProps), n.return = t;
+			for (e = t.child, n = Pi(e, e.pendingProps), t.child = n, n.return = t; e.sibling !== null;) e = e.sibling, n = n.sibling = Pi(e, e.pendingProps), n.return = t;
 			n.sibling = null;
 		}
 		return t.child;
 	}
-	function ul(e, t) {
-		return (e.lanes & t) !== 0 || (e = e.dependencies, !!(e !== null && Sa(e)));
+	function dl(e, t) {
+		return (e.lanes & t) !== 0 || (e = e.dependencies, !!(e !== null && Ca(e)));
 	}
-	function dl(e, t, n) {
+	function fl(e, t, n) {
 		switch (t.tag) {
 			case 3:
-				Te(t, t.stateNode.containerInfo), ga(t, Aa, e.memoizedState.cache), ua();
+				Ee(t, t.stateNode.containerInfo), _a(t, ja, e.memoizedState.cache), da();
 				break;
 			case 27:
 			case 5:
-				De(t);
+				Oe(t);
 				break;
 			case 4:
-				Te(t, t.stateNode.containerInfo);
+				Ee(t, t.stateNode.containerInfo);
 				break;
 			case 10:
-				ga(t, t.type, t.memoizedProps.value);
+				_a(t, t.type, t.memoizedProps.value);
 				break;
 			case 31:
-				if (t.memoizedState !== null) return t.flags |= 128, No(t), null;
+				if (t.memoizedState !== null) return t.flags |= 128, Po(t), null;
 				break;
 			case 13:
 				var r = t.memoizedState;
 				if (r !== null) {
-					if (r.dehydrated !== null) return Mo(t), t.flags |= 128, null;
-					r = xa(e, t, n, !1);
+					if (r.dehydrated !== null) return No(t), t.flags |= 128, null;
+					r = Sa(e, t, n, !1);
 					var i = t.child.childLanes;
-					return r || (n & i) !== 0 ? Qc(e, t, n) : (Mo(t), e = ll(e, t, n), e === null ? null : e.sibling);
+					return r || (n & i) !== 0 ? $c(e, t, n) : (No(t), e = ul(e, t, n), e === null ? null : e.sibling);
 				}
-				Mo(t);
+				No(t);
 				break;
 			case 19:
-				if (t.flags & 128) return sl(e, t, n);
-				if (i = !!(e.flags & 128), r = (n & t.childLanes) !== 0, r ||= (xa(e, t, n, !1), (n & t.childLanes) !== 0), i) {
-					if (r) return sl(e, t, n);
+				if (t.flags & 128) return cl(e, t, n);
+				if (i = !!(e.flags & 128), r = (n & t.childLanes) !== 0, r ||= (Sa(e, t, n, !1), (n & t.childLanes) !== 0), i) {
+					if (r) return cl(e, t, n);
 					t.flags |= 128;
 				}
-				if (i = t.memoizedState, i !== null && (i.rendering = null, i.tail = null, i.lastEffect = null), Ro(t, Lo.current), r) break;
+				if (i = t.memoizedState, i !== null && (i.rendering = null, i.tail = null, i.lastEffect = null), zo(t, Ro.current), r) break;
 				return null;
-			case 22: return t.lanes = 0, Rc(e, t, n, t.pendingProps);
-			case 24: ga(t, Aa, e.memoizedState.cache);
+			case 22: return t.lanes = 0, zc(e, t, n, t.pendingProps);
+			case 24: _a(t, ja, e.memoizedState.cache);
 		}
-		return ll(e, t, n);
+		return ul(e, t, n);
 	}
-	function fl(e, t, n) {
+	function pl(e, t, n) {
 		if (e !== null) {
-			if (e.memoizedProps !== t.pendingProps) Nc = !0;
+			if (e.memoizedProps !== t.pendingProps) Pc = !0;
 			else {
-				if (!ul(e, n) && !(t.flags & 128)) return Nc = !1, dl(e, t, n);
-				Nc = !!(e.flags & 131072);
+				if (!dl(e, n) && !(t.flags & 128)) return Pc = !1, fl(e, t, n);
+				Pc = !!(e.flags & 131072);
 			}
-		} else Nc = !1, B && t.flags & 1048576 && Qi(t, Gi, t.index);
+		} else Pc = !1, z && t.flags & 1048576 && $i(t, Ki, t.index);
 		switch (t.lanes = 0, t.tag) {
 			case 16:
 				a: {
 					var r = t.pendingProps;
-					if (e = eo(t.elementType), t.type = e, typeof e == "function") Mi(e) ? (r = Sc(e, r), t.tag = 1, t = qc(null, t, e, r, n)) : (t.tag = 0, t = Gc(null, t, e, r, n));
+					if (e = to(t.elementType), t.type = e, typeof e == "function") Ni(e) ? (r = Cc(e, r), t.tag = 1, t = Jc(null, t, e, r, n)) : (t.tag = 0, t = Kc(null, t, e, r, n));
 					else {
 						if (e != null) {
 							var a = e.$$typeof;
 							if (a === O) {
-								t.tag = 11, t = Fc(null, t, e, r, n);
+								t.tag = 11, t = Ic(null, t, e, r, n);
 								break a;
 							}
 							if (a === ce) {
-								t.tag = 14, t = Ic(null, t, e, r, n);
+								t.tag = 14, t = Lc(null, t, e, r, n);
 								break a;
 							}
 							if (a === ae) {
-								t.tag = 10, t.type = e, t = cl(null, t, n);
+								t.tag = 10, t.type = e, t = ll(null, t, n);
 								break a;
 							}
 						}
-						throw t = me(e) || e, Error(i(306, t, ""));
+						throw t = he(e) || e, Error(i(306, t, ""));
 					}
 				}
 				return t;
-			case 0: return Gc(e, t, t.type, t.pendingProps, n);
-			case 1: return r = t.type, a = Sc(r, t.pendingProps), qc(e, t, r, a, n);
+			case 0: return Kc(e, t, t.type, t.pendingProps, n);
+			case 1: return r = t.type, a = Cc(r, t.pendingProps), Jc(e, t, r, a, n);
 			case 3:
 				a: {
-					if (Te(t, t.stateNode.containerInfo), e === null) throw Error(i(387));
+					if (Ee(t, t.stateNode.containerInfo), e === null) throw Error(i(387));
 					r = t.pendingProps;
 					var o = t.memoizedState;
-					a = o.element, ho(e, t), So(t, r, null, n);
+					a = o.element, go(e, t), Co(t, r, null, n);
 					var s = t.memoizedState;
-					if (r = s.cache, ga(t, Aa, r), r !== o.cache && ba(t, [Aa], n, !0), xo(), r = s.element, o.isDehydrated) {
+					if (r = s.cache, _a(t, ja, r), r !== o.cache && xa(t, [ja], n, !0), So(), r = s.element, o.isDehydrated) {
 						if (o = {
 							element: r,
 							isDehydrated: !1,
 							cache: s.cache
 						}, t.updateQueue.baseState = o, t.memoizedState = o, t.flags & 256) {
-							t = Jc(e, t, r, n);
+							t = Yc(e, t, r, n);
 							break a;
 						}
 						if (r !== a) {
-							a = Vi(Error(i(424)), t), fa(a), t = Jc(e, t, r, n);
+							a = Hi(Error(i(424)), t), pa(a), t = Yc(e, t, r, n);
 							break a;
 						}
 						switch (e = t.stateNode.containerInfo, e.nodeType) {
@@ -11291,76 +11301,76 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								break;
 							default: e = e.nodeName === "HTML" ? e.ownerDocument.body : e;
 						}
-						for (z = lm(e.firstChild), na = t, B = !0, ra = null, ia = !0, n = fo(t, null, r, n), t.child = n; n;) n.flags = n.flags & -3 | 134221824, n = n.sibling;
+						for (R = lm(e.firstChild), ra = t, z = !0, ia = null, aa = !0, n = po(t, null, r, n), t.child = n; n;) n.flags = n.flags & -3 | 134221824, n = n.sibling;
 					} else {
-						if (ua(), r === a) {
-							t = ll(e, t, n);
+						if (da(), r === a) {
+							t = ul(e, t, n);
 							break a;
 						}
-						Pc(e, t, r, n);
+						Fc(e, t, r, n);
 					}
 					t = t.child;
 				}
 				return t;
-			case 26: return Wc(e, t), e === null ? (n = Nm(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : B || (t.stateNode = fp(t.type, t.pendingProps, Ce.current, t)) : t.memoizedState = Nm(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
-			case 27: return De(t), e === null && B && (r = t.stateNode = hm(t.type, t.pendingProps, Ce.current), na = t, ia = !0, a = z, Sp(t.type) ? (um = a, z = lm(r.firstChild)) : z = a), Pc(e, t, t.pendingProps.children, n), Wc(e, t), e === null && (t.flags |= 4194304), t.child;
-			case 5: return e === null && B && ((a = r = z) && (r = rm(r, t.type, t.pendingProps, ia), r === null ? a = !1 : (t.stateNode = r, na = t, z = lm(r.firstChild), ia = !1, a = !0)), a || oa(t)), De(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(a, o) ? r = null : s !== null && pp(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = Qo(e, t, ts, null, null, n), sh._currentValue = a), Wc(e, t), Pc(e, t, r, n), t.child;
-			case 6: return e === null && B && ((e = n = z) && (n = im(n, t.pendingProps, ia), n === null ? e = !1 : (t.stateNode = n, na = t, z = null, e = !0)), e || oa(t)), null;
-			case 13: return Qc(e, t, n);
-			case 4: return Te(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = uo(t, null, r, n) : Pc(e, t, r, n), t.child;
-			case 11: return Fc(e, t, t.type, t.pendingProps, n);
-			case 7: return r = t.pendingProps, Wc(e, t), Pc(e, t, r, n), t.child;
-			case 8: return Pc(e, t, t.pendingProps.children, n), t.child;
-			case 12: return Pc(e, t, t.pendingProps.children, n), t.child;
-			case 10: return cl(e, t, n);
-			case 9: return a = t.type._context, r = t.pendingProps.children, Ca(t), a = wa(a), r = r(a), t.flags |= 1, Pc(e, t, r, n), t.child;
-			case 14: return Ic(e, t, t.type, t.pendingProps, n);
-			case 15: return Lc(e, t, t.type, t.pendingProps, n);
-			case 19: return sl(e, t, n);
-			case 31: return Uc(e, t, n);
-			case 22: return Rc(e, t, n, t.pendingProps);
-			case 24: return Ca(t), r = wa(Aa), e === null ? (a = Ga(), a === null && (a = q, o = ja(), a.pooledCache = o, o.refCount++, o !== null && (a.pooledCacheLanes |= n), a = o), t.memoizedState = {
+			case 26: return Gc(e, t), e === null ? (n = Nm(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : z || (t.stateNode = fp(t.type, t.pendingProps, we.current, t)) : t.memoizedState = Nm(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
+			case 27: return Oe(t), e === null && z && (r = t.stateNode = hm(t.type, t.pendingProps, we.current), ra = t, aa = !0, a = R, Sp(t.type) ? (um = a, R = lm(r.firstChild)) : R = a), Fc(e, t, t.pendingProps.children, n), Gc(e, t), e === null && (t.flags |= 4194304), t.child;
+			case 5: return e === null && z && ((a = r = R) && (r = rm(r, t.type, t.pendingProps, aa), r === null ? a = !1 : (t.stateNode = r, ra = t, R = lm(r.firstChild), aa = !1, a = !0)), a || sa(t)), Oe(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(a, o) ? r = null : s !== null && pp(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = $o(e, t, ns, null, null, n), sh._currentValue = a), Gc(e, t), Fc(e, t, r, n), t.child;
+			case 6: return e === null && z && ((e = n = R) && (n = im(n, t.pendingProps, aa), n === null ? e = !1 : (t.stateNode = n, ra = t, R = null, e = !0)), e || sa(t)), null;
+			case 13: return $c(e, t, n);
+			case 4: return Ee(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = fo(t, null, r, n) : Fc(e, t, r, n), t.child;
+			case 11: return Ic(e, t, t.type, t.pendingProps, n);
+			case 7: return r = t.pendingProps, Gc(e, t), Fc(e, t, r, n), t.child;
+			case 8: return Fc(e, t, t.pendingProps.children, n), t.child;
+			case 12: return Fc(e, t, t.pendingProps.children, n), t.child;
+			case 10: return ll(e, t, n);
+			case 9: return a = t.type._context, r = t.pendingProps.children, wa(t), a = Ta(a), r = r(a), t.flags |= 1, Fc(e, t, r, n), t.child;
+			case 14: return Lc(e, t, t.type, t.pendingProps, n);
+			case 15: return Rc(e, t, t.type, t.pendingProps, n);
+			case 19: return cl(e, t, n);
+			case 31: return Wc(e, t, n);
+			case 22: return zc(e, t, n, t.pendingProps);
+			case 24: return wa(t), r = Ta(ja), e === null ? (a = Ka(), a === null && (a = q, o = Ma(), a.pooledCache = o, o.refCount++, o !== null && (a.pooledCacheLanes |= n), a = o), t.memoizedState = {
 				parent: r,
 				cache: a
-			}, mo(t), ga(t, Aa, a)) : ((e.lanes & n) !== 0 && (ho(e, t), So(t, null, null, n), xo()), a = e.memoizedState, o = t.memoizedState, a.parent === r ? (r = o.cache, ga(t, Aa, r), r !== a.cache && ba(t, [Aa], n, !0)) : (a = {
+			}, ho(t), _a(t, ja, a)) : ((e.lanes & n) !== 0 && (go(e, t), Co(t, null, null, n), So()), a = e.memoizedState, o = t.memoizedState, a.parent === r ? (r = o.cache, _a(t, ja, r), r !== a.cache && xa(t, [ja], n, !0)) : (a = {
 				parent: r,
 				cache: r
-			}, t.memoizedState = a, t.lanes === 0 && (t.memoizedState = t.updateQueue.baseState = a), ga(t, Aa, r))), Pc(e, t, t.pendingProps.children, n), t.child;
+			}, t.memoizedState = a, t.lanes === 0 && (t.memoizedState = t.updateQueue.baseState = a), _a(t, ja, r))), Fc(e, t, t.pendingProps.children, n), t.child;
 			case 30: return t.stateNode === null && (t.stateNode = {
 				autoName: null,
 				paired: null,
 				clones: null,
 				ref: null
-			}), r = t.pendingProps, r.name != null && r.name !== "auto" ? t.flags |= e === null ? 18882560 : 18874368 : B && $i(t), e !== null && e.memoizedProps.name !== r.name ? t.flags |= 4194816 : Wc(e, t), Pc(e, t, r.children, n), t.child;
+			}), r = t.pendingProps, r.name != null && r.name !== "auto" ? t.flags |= e === null ? 18882560 : 18874368 : z && ea(t), e !== null && e.memoizedProps.name !== r.name ? t.flags |= 4194816 : Gc(e, t), Fc(e, t, r.children, n), t.child;
 			case 29: throw t.pendingProps;
 		}
 		throw Error(i(156, t.tag));
 	}
-	function pl(e) {
+	function ml(e) {
 		e.flags |= 4;
 	}
-	function ml(e, t, n, r, i) {
+	function hl(e, t, n, r, i) {
 		var a;
 		if ((a = !!(e.mode & 32)) && (a = n === null ? Jm(t, r) : Jm(t, r) && (r.src !== n.src || r.srcSet !== n.srcSet)), a) {
 			if (e.flags |= 16777216, (i & 335544128) === i) {
 				if (e.stateNode.complete) e.flags |= 8192;
 				else if (Ud()) e.flags |= 8192;
-				else throw to = Za, Ya;
+				else throw no = Qa, Xa;
 			}
 		} else e.flags &= -16777217;
 	}
-	function hl(e, t) {
+	function gl(e, t) {
 		if (t.type !== "stylesheet" || t.state.loading & 4) e.flags &= -16777217;
 		else if (e.flags |= 16777216, !Ym(t)) {
 			if (Ud()) e.flags |= 8192;
-			else throw to = Za, Ya;
+			else throw no = Qa, Xa;
 		}
 	}
-	function gl(e, t) {
-		t !== null && (e.flags |= 4), e.flags & 16384 && (t = e.tag === 22 ? 536870912 : dt(), e.lanes |= t, ud |= t);
-	}
 	function _l(e, t) {
-		if (!B) switch (e.tailMode) {
+		t !== null && (e.flags |= 4), e.flags & 16384 && (t = e.tag === 22 ? 536870912 : ft(), e.lanes |= t, ud |= t);
+	}
+	function vl(e, t) {
+		if (!z) switch (e.tailMode) {
 			case "visible": break;
 			case "collapsed":
 				for (var n = e.tail, r = null; n !== null;) n.alternate !== null && (r = n), n = n.sibling;
@@ -11371,15 +11381,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				n === null ? e.tail = null : n.sibling = null;
 		}
 	}
-	function U(e) {
+	function H(e) {
 		var t = e.alternate !== null && e.alternate.child === e.child, n = 0, r = 0;
 		if (t) for (var i = e.child; i !== null;) n |= i.lanes | i.childLanes, r |= i.subtreeFlags & 1206910976, r |= i.flags & 1206910976, i.return = e, i = i.sibling;
 		else for (i = e.child; i !== null;) n |= i.lanes | i.childLanes, r |= i.subtreeFlags, r |= i.flags, i.return = e, i = i.sibling;
 		return e.subtreeFlags |= r, e.childLanes = n, t;
 	}
-	function vl(e, t, n) {
+	function yl(e, t, n) {
 		var r = t.pendingProps;
-		switch (ea(t), t.tag) {
+		switch (ta(t), t.tag) {
 			case 16:
 			case 15:
 			case 0:
@@ -11388,32 +11398,32 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case 8:
 			case 12:
 			case 9:
-			case 14: return U(t), null;
-			case 1: return U(t), null;
-			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), _a(Aa), Ee(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (la(t) ? pl(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, da())), U(t), null;
+			case 14: return H(t), null;
+			case 1: return H(t), null;
+			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), va(ja), De(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (ua(t) ? ml(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, fa())), H(t), null;
 			case 26:
 				var a = t.type, o = t.memoizedState;
-				return e === null ? (pl(t), o === null ? (U(t), ml(t, a, null, r, n)) : (U(t), hl(t, o))) : o ? o === e.memoizedState ? (U(t), t.flags &= -16777217) : (pl(t), U(t), hl(t, o)) : (e = e.memoizedProps, e !== r && pl(t), U(t), ml(t, a, e, r, n)), null;
+				return e === null ? (ml(t), o === null ? (H(t), hl(t, a, null, r, n)) : (H(t), gl(t, o))) : o ? o === e.memoizedState ? (H(t), t.flags &= -16777217) : (ml(t), H(t), gl(t, o)) : (e = e.memoizedProps, e !== r && ml(t), H(t), hl(t, a, e, r, n)), null;
 			case 27:
-				if (Oe(t), n = Ce.current, a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && pl(t);
+				if (ke(t), n = we.current, a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && ml(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(i(166));
-						return U(t), t.subtreeFlags &= -33554433, null;
+						return H(t), t.subtreeFlags &= -33554433, null;
 					}
-					e = xe.current, la(t) ? sa(t, e) : (e = hm(a, r, n), t.stateNode = e, pl(t));
+					e = Se.current, ua(t) ? ca(t, e) : (e = hm(a, r, n), t.stateNode = e, ml(t));
 				}
-				return U(t), t.subtreeFlags &= -33554433, null;
+				return H(t), t.subtreeFlags &= -33554433, null;
 			case 5:
-				if (Oe(t), a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && pl(t);
+				if (ke(t), a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && ml(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(i(166));
-						return U(t), t.subtreeFlags &= -33554433, null;
+						return H(t), t.subtreeFlags &= -33554433, null;
 					}
-					if (o = xe.current, la(t)) sa(t, o);
+					if (o = Se.current, ua(t)) ca(t, o);
 					else {
-						var s = lp(Ce.current);
+						var s = lp(we.current);
 						switch (o) {
 							case 1:
 								o = s.createElementNS("http://www.w3.org/2000/svg", a);
@@ -11437,7 +11447,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								default: o = typeof r.is == "string" ? s.createElement(a, { is: r.is }) : s.createElement(a);
 							}
 						}
-						o[Ct] = t, o[wt] = r;
+						o[wt] = t, o[Tt] = r;
 						a: for (s = t.child; s !== null;) {
 							if (s.tag === 5 || s.tag === 6) o.appendChild(s.stateNode);
 							else if (s.tag !== 4 && s.tag !== 27 && s.child !== null) {
@@ -11464,71 +11474,71 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								break a;
 							default: r = !1;
 						}
-						r && pl(t);
+						r && ml(t);
 					}
 				}
-				return U(t), t.subtreeFlags &= -33554433, ml(t, t.type, e === null ? null : e.memoizedProps, t.pendingProps, n), null;
+				return H(t), t.subtreeFlags &= -33554433, hl(t, t.type, e === null ? null : e.memoizedProps, t.pendingProps, n), null;
 			case 6:
-				if (e && t.stateNode != null) e.memoizedProps !== r && pl(t);
+				if (e && t.stateNode != null) e.memoizedProps !== r && ml(t);
 				else {
 					if (typeof r != "string" && t.stateNode === null) throw Error(i(166));
-					if (e = Ce.current, la(t)) {
-						if (e = t.stateNode, n = t.memoizedProps, r = null, a = na, a !== null) switch (a.tag) {
+					if (e = we.current, ua(t)) {
+						if (e = t.stateNode, n = t.memoizedProps, r = null, a = ra, a !== null) switch (a.tag) {
 							case 27:
 							case 5: r = a.memoizedProps;
 						}
-						e[Ct] = t, e = !!(e.nodeValue === n || r !== null && !0 === r.suppressHydrationWarning || ep(e.nodeValue, n)), e || oa(t, !0);
-					} else e = lp(e).createTextNode(r), e[Ct] = t, t.stateNode = e;
+						e[wt] = t, e = !!(e.nodeValue === n || r !== null && !0 === r.suppressHydrationWarning || ep(e.nodeValue, n)), e || sa(t, !0);
+					} else e = lp(e).createTextNode(r), e[wt] = t, t.stateNode = e;
 				}
-				return U(t), null;
+				return H(t), null;
 			case 31:
 				if (n = t.memoizedState, e === null || e.memoizedState !== null) {
-					if (r = la(t), n !== null) {
+					if (r = ua(t), n !== null) {
 						if (e === null) {
 							if (!r) throw Error(i(318));
 							if (e = t.memoizedState, e = e === null ? null : e.dehydrated, !e) throw Error(i(557));
-							e[Ct] = t;
-						} else ua(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
-						U(t), e = !1;
-					} else n = da(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = n), e = !0;
-					if (!e) return t.flags & 256 ? (Io(t), t) : (Io(t), null);
+							e[wt] = t;
+						} else da(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
+						H(t), e = !1;
+					} else n = fa(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = n), e = !0;
+					if (!e) return t.flags & 256 ? (Lo(t), t) : (Lo(t), null);
 					if (t.flags & 128) throw Error(i(558));
 				}
-				return U(t), null;
+				return H(t), null;
 			case 13:
 				if (r = t.memoizedState, e === null || e.memoizedState !== null && e.memoizedState.dehydrated !== null) {
-					if (a = la(t), r !== null && r.dehydrated !== null) {
+					if (a = ua(t), r !== null && r.dehydrated !== null) {
 						if (e === null) {
 							if (!a) throw Error(i(318));
 							if (a = t.memoizedState, a = a === null ? null : a.dehydrated, !a) throw Error(i(317));
-							a[Ct] = t;
-						} else ua(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
-						U(t), a = !1;
-					} else a = da(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = a), a = !0;
-					if (!a) return t.flags & 256 ? (Io(t), t) : (Io(t), null);
+							a[wt] = t;
+						} else da(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
+						H(t), a = !1;
+					} else a = fa(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = a), a = !0;
+					if (!a) return t.flags & 256 ? (Lo(t), t) : (Lo(t), null);
 				}
-				return Io(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, a = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (a = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== a && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), gl(t, t.updateQueue), U(t), null);
-			case 4: return Ee(), e === null && Wf(t.stateNode.containerInfo), t.flags |= 67108864, U(t), null;
-			case 10: return _a(t.type), U(t), null;
+				return Lo(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, a = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (a = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== a && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), _l(t, t.updateQueue), H(t), null);
+			case 4: return De(), e === null && Wf(t.stateNode.containerInfo), t.flags |= 67108864, H(t), null;
+			case 10: return va(t.type), H(t), null;
 			case 19:
-				if (zo(t), r = t.memoizedState, r === null) return U(t), null;
+				if (Bo(t), r = t.memoizedState, r === null) return H(t), null;
 				if (a = !!(t.flags & 128), o = r.rendering, o === null) {
-					if (a) _l(r, !1);
+					if (a) vl(r, !1);
 					else {
 						if (ad !== 0 || e !== null && e.flags & 128) for (e = t.child; e !== null;) {
-							if (o = Bo(e), o !== null) {
-								for (t.flags |= 128, _l(r, !1), e = o.updateQueue, t.updateQueue = e, gl(t, e), t.subtreeFlags = 0, e = n, n = t.child; n !== null;) Pi(n, e), n = n.sibling;
-								return Ro(t, Lo.current & 1 | 2), B && Zi(t, r.treeForkCount), t.child;
+							if (o = Vo(e), o !== null) {
+								for (t.flags |= 128, vl(r, !1), e = o.updateQueue, t.updateQueue = e, _l(t, e), t.subtreeFlags = 0, e = n, n = t.child; n !== null;) Fi(n, e), n = n.sibling;
+								return zo(t, Ro.current & 1 | 2), z && Qi(t, r.treeForkCount), t.child;
 							}
 							e = e.sibling;
 						}
-						r.tail !== null && Ve() > gd && (t.flags |= 128, a = !0, _l(r, !1), t.lanes = 4194304);
+						r.tail !== null && He() > gd && (t.flags |= 128, a = !0, vl(r, !1), t.lanes = 4194304);
 					}
 				} else {
 					if (!a) {
-						if (e = Bo(o), e !== null) {
-							if (t.flags |= 128, a = !0, e = e.updateQueue, t.updateQueue = e, gl(t, e), _l(r, !0), r.tail === null && r.tailMode !== "collapsed" && r.tailMode !== "visible" && !o.alternate && !B) return U(t), null;
-						} else 2 * Ve() - r.renderingStartTime > gd && n !== 536870912 && (t.flags |= 128, a = !0, _l(r, !1), t.lanes = 4194304);
+						if (e = Vo(o), e !== null) {
+							if (t.flags |= 128, a = !0, e = e.updateQueue, t.updateQueue = e, _l(t, e), vl(r, !0), r.tail === null && r.tailMode !== "collapsed" && r.tailMode !== "visible" && !o.alternate && !z) return H(t), null;
+						} else 2 * He() - r.renderingStartTime > gd && n !== 536870912 && (t.flags |= 128, a = !0, vl(r, !1), t.lanes = 4194304);
 					}
 					r.isBackwards ? (o.sibling = t.child, t.child = o) : (e = r.last, e === null ? t.child = o : e.sibling = o, r.last = o);
 				}
@@ -11544,79 +11554,79 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						}
 						n = !0;
 					}
-					return r.rendering = e, r.tail = e.sibling, r.renderingStartTime = Ve(), e.sibling = null, o = Lo.current, o = a ? o & 1 | 2 : o & 1, r.tailMode === "visible" || r.tailMode === "collapsed" || !n || B ? Ro(t, o) : (n = o, F(Ao, t), F(Lo, n), jo === null && (jo = t)), B && Zi(t, r.treeForkCount), e;
+					return r.rendering = e, r.tail = e.sibling, r.renderingStartTime = He(), e.sibling = null, o = Ro.current, o = a ? o & 1 | 2 : o & 1, r.tailMode === "visible" || r.tailMode === "collapsed" || !n || z ? zo(t, o) : (n = o, P(jo, t), P(Ro, n), Mo === null && (Mo = t)), z && Qi(t, r.treeForkCount), e;
 				}
-				return U(t), null;
+				return H(t), null;
 			case 22:
-			case 23: return Io(t), ko(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (U(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : U(t), n = t.updateQueue, n !== null && gl(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && be(Wa), null;
-			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), _a(Aa), U(t), null;
+			case 23: return Lo(t), Ao(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && _l(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && xe(Ga), null;
+			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), va(ja), H(t), null;
 			case 25: return null;
-			case 30: return t.flags |= 33554432, U(t), null;
+			case 30: return t.flags |= 33554432, H(t), null;
 		}
 		throw Error(i(156, t.tag));
 	}
-	function yl(e, t) {
-		switch (ea(t), t.tag) {
+	function bl(e, t) {
+		switch (ta(t), t.tag) {
 			case 1: return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 3: return _a(Aa), Ee(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
+			case 3: return va(ja), De(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
 			case 26:
 			case 27:
-			case 5: return Oe(t), null;
+			case 5: return ke(t), null;
 			case 31:
 				if (t.memoizedState !== null) {
-					if (Io(t), t.alternate === null) throw Error(i(340));
-					ua();
+					if (Lo(t), t.alternate === null) throw Error(i(340));
+					da();
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 13:
-				if (Io(t), e = t.memoizedState, e !== null && e.dehydrated !== null) {
+				if (Lo(t), e = t.memoizedState, e !== null && e.dehydrated !== null) {
 					if (t.alternate === null) throw Error(i(340));
-					ua();
+					da();
 				}
 				return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 19: return zo(t), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, e = t.memoizedState, e !== null && (e.rendering = null, e.tail = null), t.flags |= 4, t) : null;
-			case 4: return Ee(), null;
-			case 10: return _a(t.type), null;
+			case 19: return Bo(t), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, e = t.memoizedState, e !== null && (e.rendering = null, e.tail = null), t.flags |= 4, t) : null;
+			case 4: return De(), null;
+			case 10: return va(t.type), null;
 			case 22:
-			case 23: return Io(t), ko(), e !== null && be(Wa), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
-			case 24: return _a(Aa), null;
+			case 23: return Lo(t), Ao(), e !== null && xe(Ga), e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
+			case 24: return va(ja), null;
 			case 25: return null;
 			default: return null;
 		}
 	}
-	function bl(e, t) {
-		switch (ea(t), t.tag) {
+	function xl(e, t) {
+		switch (ta(t), t.tag) {
 			case 3:
-				_a(Aa), Ee();
+				va(ja), De();
 				break;
 			case 26:
 			case 27:
 			case 5:
-				Oe(t);
+				ke(t);
 				break;
 			case 4:
-				Ee();
+				De();
 				break;
 			case 31:
-				t.memoizedState !== null && Io(t);
+				t.memoizedState !== null && Lo(t);
 				break;
 			case 13:
-				Io(t);
+				Lo(t);
 				break;
 			case 19:
-				zo(t);
+				Bo(t);
 				break;
 			case 10:
-				_a(t.type);
+				va(t.type);
 				break;
 			case 22:
 			case 23:
-				Io(t), ko(), e !== null && be(Wa);
+				Lo(t), Ao(), e !== null && xe(Ga);
 				break;
-			case 24: _a(Aa);
+			case 24: va(ja);
 		}
 	}
-	function xl(e, t) {
+	function Sl(e, t) {
 		try {
 			var n = t.updateQueue, r = n === null ? null : n.lastEffect;
 			if (r !== null) {
@@ -11635,7 +11645,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			Z(t, t.return, e);
 		}
 	}
-	function Sl(e, t, n) {
+	function Cl(e, t, n) {
 		try {
 			var r = t.updateQueue, i = r === null ? null : r.lastEffect;
 			if (i !== null) {
@@ -11661,26 +11671,26 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			Z(t, t.return, e);
 		}
 	}
-	function Cl(e) {
+	function wl(e) {
 		var t = e.updateQueue;
 		if (t !== null) {
 			var n = e.stateNode;
 			try {
-				wo(t, n);
+				To(t, n);
 			} catch (t) {
 				Z(e, e.return, t);
 			}
 		}
 	}
-	function wl(e, t, n) {
-		n.props = Sc(e.type, e.memoizedProps), n.state = e.memoizedState;
+	function Tl(e, t, n) {
+		n.props = Cc(e.type, e.memoizedProps), n.state = e.memoizedState;
 		try {
 			n.componentWillUnmount();
 		} catch (n) {
 			Z(e, t, n);
 		}
 	}
-	function Tl(e, t) {
+	function El(e, t) {
 		try {
 			var n = e.ref;
 			if (n !== null) {
@@ -11691,7 +11701,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						var r = e.stateNode;
 						break;
 					case 30:
-						var i = e.stateNode, a = R(e.memoizedProps, i);
+						var i = e.stateNode, a = L(e.memoizedProps, i);
 						(i.ref === null || i.ref.name !== a) && (i.ref = Pp(a)), r = i.ref;
 						break;
 					case 7:
@@ -11709,7 +11719,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			Z(e, t, n);
 		}
 	}
-	function El(e, t) {
+	function Dl(e, t) {
 		var n = e.ref, r = e.refCleanup;
 		if (n !== null) {
 			if (typeof r == "function") try {
@@ -11727,22 +11737,22 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			else n.current = null;
 		}
 	}
-	function Dl(e, t) {
+	function Ol(e, t) {
 		if ((e.tag === 5 || e.tag === 27 || e.tag === 6) && e.alternate === null && t !== null) for (var n = 0; n < t.length; n++) em(e.stateNode, t[n]);
 	}
-	function Ol(e) {
-		for (var t = e.return; t !== null && (jl(t) && em(e.stateNode, t.stateNode), !Al(t));) t = t.return;
-	}
 	function kl(e) {
-		for (var t = e.return; t !== null && (jl(t) && tm(e.stateNode, t.stateNode), !Al(t));) t = t.return;
+		for (var t = e.return; t !== null && (Ml(t) && em(e.stateNode, t.stateNode), !jl(t));) t = t.return;
 	}
 	function Al(e) {
-		return e.tag === 5 || e.tag === 3 || e.tag === 27;
+		for (var t = e.return; t !== null && (Ml(t) && tm(e.stateNode, t.stateNode), !jl(t));) t = t.return;
 	}
 	function jl(e) {
-		return e && e.tag === 7 && e.stateNode !== null;
+		return e.tag === 5 || e.tag === 3 || e.tag === 27;
 	}
 	function Ml(e) {
+		return e && e.tag === 7 && e.stateNode !== null;
+	}
+	function Nl(e) {
 		var t = e.type, n = e.memoizedProps, r = e.stateNode;
 		try {
 			a: switch (t) {
@@ -11758,21 +11768,21 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			Z(e, e.return, t);
 		}
 	}
-	function Nl(e, t, n) {
+	function Pl(e, t, n) {
 		try {
 			var r = e.stateNode;
-			ip(r, e.type, n, t), r[wt] = t;
+			ip(r, e.type, n, t), r[Tt] = t;
 		} catch (t) {
 			Z(e, e.return, t);
 		}
 	}
-	function Pl(e) {
+	function Fl(e) {
 		return e.tag === 5 || e.tag === 3 || e.tag === 26 || e.tag === 27 && Sp(e.type) || e.tag === 4;
 	}
-	function Fl(e) {
+	function Il(e) {
 		a: for (;;) {
 			for (; e.sibling === null;) {
-				if (e.return === null || Pl(e.return)) return null;
+				if (e.return === null || Fl(e.return)) return null;
 				e = e.return;
 			}
 			for (e.sibling.return = e.return, e = e.sibling; e.tag !== 5 && e.tag !== 6 && e.tag !== 18;) {
@@ -11782,28 +11792,28 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			if (!(e.flags & 2)) return e.stateNode;
 		}
 	}
-	function Il(e, t, n, r) {
-		var i = e.tag;
-		if (i === 5 || i === 6) i = e.stateNode, t ? (n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n).insertBefore(i, t) : (t = n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n, t.appendChild(i), n = n._reactRootContainer, n != null || t.onclick !== null || (t.onclick = yn)), Dl(e, r), I = !0;
-		else if (i !== 4 && (i === 27 && (Dl(e, r), r = null, Sp(e.type) && (n = e.stateNode, t = null)), e = e.child, e !== null)) for (Il(e, t, n, r), e = e.sibling; e !== null;) Il(e, t, n, r), e = e.sibling;
-	}
 	function Ll(e, t, n, r) {
 		var i = e.tag;
-		if (i === 5 || i === 6) i = e.stateNode, t ? n.insertBefore(i, t) : n.appendChild(i), Dl(e, r), I = !0;
-		else if (i !== 4 && (i === 27 && (Dl(e, r), r = null, Sp(e.type) && (n = e.stateNode)), e = e.child, e !== null)) for (Ll(e, t, n, r), e = e.sibling; e !== null;) Ll(e, t, n, r), e = e.sibling;
+		if (i === 5 || i === 6) i = e.stateNode, t ? (n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n).insertBefore(i, t) : (t = n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n, t.appendChild(i), n = n._reactRootContainer, n != null || t.onclick !== null || (t.onclick = bn)), Ol(e, r), F = !0;
+		else if (i !== 4 && (i === 27 && (Ol(e, r), r = null, Sp(e.type) && (n = e.stateNode, t = null)), e = e.child, e !== null)) for (Ll(e, t, n, r), e = e.sibling; e !== null;) Ll(e, t, n, r), e = e.sibling;
 	}
-	function Rl(e) {
+	function Rl(e, t, n, r) {
+		var i = e.tag;
+		if (i === 5 || i === 6) i = e.stateNode, t ? n.insertBefore(i, t) : n.appendChild(i), Ol(e, r), F = !0;
+		else if (i !== 4 && (i === 27 && (Ol(e, r), r = null, Sp(e.type) && (n = e.stateNode)), e = e.child, e !== null)) for (Rl(e, t, n, r), e = e.sibling; e !== null;) Rl(e, t, n, r), e = e.sibling;
+	}
+	function zl(e) {
 		var t = e.stateNode, n = e.memoizedProps;
 		try {
 			for (var r = e.type, i = t.attributes; i.length;) t.removeAttributeNode(i[0]);
-			np(t, r, n), t[Ct] = e, t[wt] = n;
+			np(t, r, n), t[wt] = e, t[Tt] = n;
 		} catch (t) {
 			Z(e, e.return, t);
 		}
 	}
-	var zl = !1, Bl = null;
+	var Bl = !1, U = null;
 	function Vl(e) {
-		(e.tag === 30 || e.subtreeFlags & 33554432) && (zl = !0);
+		(e.tag === 30 || e.subtreeFlags & 33554432) && (Bl = !0);
 	}
 	var Hl = null;
 	function Ul() {
@@ -11822,7 +11832,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					var s = Op(o);
 					r.push(s), s.view && (a = !0);
 				} else a || Op(o).view && (a = !0);
-				zl = !0, Tp(o, Wl === 0 ? t : t + "_" + Wl, n), Wl++;
+				Bl = !0, Tp(o, Wl === 0 ? t : t + "_" + Wl, n), Wl++;
 			} else (e.tag !== 22 || e.memoizedState === null) && (e.tag === 30 && i || Kl(e.child, t, n, r, i) && (a = !0));
 			e = e.sibling;
 		}
@@ -11837,21 +11847,21 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				var t = e.memoizedProps;
 				if (t.name == null || t.name === "auto") throw Error(i(544));
 				var n = t.name;
-				t = vi(t.default, t.share), t !== "none" && (Gl(e, n, t, null, !1) || Jl(e.child, !1));
+				t = yi(t.default, t.share), t !== "none" && (Gl(e, n, t, null, !1) || Jl(e.child, !1));
 			}
 			e = e.sibling;
 		}
 	}
 	function Xl(e, t) {
 		if (e.tag === 30) {
-			var n = e.stateNode, r = e.memoizedProps, i = R(r, n), a = vi(r.default, n.paired ? r.share : r.enter);
+			var n = e.stateNode, r = e.memoizedProps, i = L(r, n), a = yi(r.default, n.paired ? r.share : r.enter);
 			a === "none" ? Yl(e) : Gl(e, i, a, null, !1) ? (Yl(e), n.paired || t || Nd(e, r.onEnter)) : Jl(e.child, !1);
 		} else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) Xl(e, t), e = e.sibling;
 		else Yl(e);
 	}
 	function Zl(e) {
-		if (Bl !== null && Bl.size !== 0) {
-			var t = Bl;
+		if (U !== null && U.size !== 0) {
+			var t = U;
 			if (e.subtreeFlags & 18874368) for (e = e.child; e !== null;) {
 				if (e.tag !== 22 || e.memoizedState === null) {
 					if (e.tag === 30 && e.flags & 18874368) {
@@ -11859,7 +11869,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						if (r != null && r !== "auto") {
 							var i = t.get(r);
 							if (i !== void 0) {
-								var a = vi(n.default, n.share);
+								var a = yi(n.default, n.share);
 								if (a !== "none" && (Gl(e, r, a, null, !1) ? (a = e.stateNode, i.paired = a, a.paired = i, Nd(e, n.onShare)) : Jl(e.child, !1)), t.delete(r), t.size === 0) break;
 							}
 						}
@@ -11872,16 +11882,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function Ql(e) {
 		if (e.tag === 30) {
-			var t = e.memoizedProps, n = R(t, e.stateNode), r = Bl === null ? void 0 : Bl.get(n), i = vi(t.default, r === void 0 ? t.exit : t.share);
-			i !== "none" && (Gl(e, n, i, null, !1) ? r === void 0 ? Nd(e, t.onExit) : (i = e.stateNode, r.paired = i, i.paired = r, Bl.delete(n), Nd(e, t.onShare)) : Jl(e.child, !1)), Bl !== null && Zl(e);
+			var t = e.memoizedProps, n = L(t, e.stateNode), r = U === null ? void 0 : U.get(n), i = yi(t.default, r === void 0 ? t.exit : t.share);
+			i !== "none" && (Gl(e, n, i, null, !1) ? r === void 0 ? Nd(e, t.onExit) : (i = e.stateNode, r.paired = i, i.paired = r, U.delete(n), Nd(e, t.onShare)) : Jl(e.child, !1)), U !== null && Zl(e);
 		} else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) Ql(e), e = e.sibling;
-		else Bl !== null && Zl(e);
+		else U !== null && Zl(e);
 	}
 	function $l(e) {
 		for (e = e.child; e !== null;) {
 			if (e.tag === 30) {
-				var t = e.memoizedProps, n = R(t, e.stateNode);
-				t = vi(t.default, t.update), e.flags &= -5, t !== "none" && Gl(e, n, t, e.memoizedState = [], !1);
+				var t = e.memoizedProps, n = L(t, e.stateNode);
+				t = yi(t.default, t.update), e.flags &= -5, t !== "none" && Gl(e, n, t, e.memoizedState = [], !1);
 			} else e.subtreeFlags & 33554432 && $l(e);
 			e = e.sibling;
 		}
@@ -11933,7 +11943,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	function iu(e, t) {
 		for (e = e.child; e !== null;) {
 			if (e.tag === 30) {
-				var n = e.memoizedProps, r = e.stateNode, i = R(n, r), a = vi(n.default, n.update);
+				var n = e.memoizedProps, r = e.stateNode, i = L(n, r), a = yi(n.default, n.update);
 				if (t) {
 					r = r.clones;
 					var o = r === null ? null : r.map(kp);
@@ -11947,7 +11957,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	var au = !1, W = !1, ou = !1, su = !1, cu = typeof WeakSet == "function" ? WeakSet : Set, lu = null, uu = !1, du = !1, fu = !1, pu = !1;
 	function mu(e, t, n) {
-		if (e = e.containerInfo, sp = gh, e = qr(e), Jr(e)) {
+		if (e = e.containerInfo, sp = gh, e = Jr(e), Yr(e)) {
 			if ("selectionStart" in e) var r = {
 				start: e.selectionStart,
 				end: e.selectionEnd
@@ -12006,7 +12016,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				r = e.child, (e.subtreeFlags & t) !== 0 && r !== null ? (r.return = e, lu = r) : (n && $l(e), hu(n));
 			}
 		}
-		Bl = null;
+		U = null;
 	}
 	function hu(e) {
 		for (; lu !== null;) {
@@ -12020,7 +12030,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						n = void 0, a = r.memoizedProps, r = r.memoizedState;
 						var o = t.stateNode;
 						try {
-							var s = Sc(t.type, a);
+							var s = Cc(t.type, a);
 							n = o.getSnapshotBeforeUpdate(s, r), o.__reactInternalSnapshotBeforeUpdate = n;
 						} catch (e) {
 							Z(t, t.return, e);
@@ -12047,7 +12057,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				case 4:
 				case 17: break;
 				case 30:
-					n && r !== null && (n = R(r.memoizedProps, r.stateNode), a = t.memoizedProps, a = vi(a.default, a.update), a !== "none" && Gl(r, n, a, r.memoizedState = [], !0));
+					n && r !== null && (n = L(r.memoizedProps, r.stateNode), a = t.memoizedProps, a = yi(a.default, a.update), a !== "none" && Gl(r, n, a, r.memoizedState = [], !0));
 					break;
 				default: if (a & 1024) throw Error(i(163));
 			}
@@ -12064,7 +12074,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case 0:
 			case 11:
 			case 15:
-				Fu(e, n), r & 4 && xl(5, n);
+				Fu(e, n), r & 4 && Sl(5, n);
 				break;
 			case 1:
 				if (Fu(e, n), r & 4) {
@@ -12074,7 +12084,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						Z(n, n.return, e);
 					}
 					else {
-						var i = Sc(n.type, t.memoizedProps);
+						var i = Cc(n.type, t.memoizedProps);
 						t = t.memoizedState;
 						try {
 							e.componentDidUpdate(i, t, e.__reactInternalSnapshotBeforeUpdate);
@@ -12083,7 +12093,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						}
 					}
 				}
-				r & 64 && Cl(n), r & 512 && Tl(n, n.return);
+				r & 64 && wl(n), r & 512 && El(n, n.return);
 				break;
 			case 3:
 				if (Fu(e, n), r & 64 && (e = n.updateQueue, e !== null)) {
@@ -12095,16 +12105,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						case 1: t = n.child.stateNode;
 					}
 					try {
-						wo(e, t);
+						To(e, t);
 					} catch (e) {
 						Z(n, n.return, e);
 					}
 				}
 				break;
-			case 27: t === null && r & 4 && Rl(n);
+			case 27: t === null && r & 4 && zl(n);
 			case 26:
 			case 5:
-				Fu(e, n), t === null && r & 4 && Ml(n), r & 512 && Tl(n, n.return);
+				Fu(e, n), t === null && r & 4 && Nl(n), r & 512 && El(n, n.return);
 				break;
 			case 12:
 				Fu(e, n);
@@ -12122,9 +12132,9 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				break;
 			case 30:
-				Fu(e, n), r & 512 && Tl(n, n.return);
+				Fu(e, n), r & 512 && El(n, n.return);
 				break;
-			case 7: r & 512 && Tl(n, n.return);
+			case 7: r & 512 && El(n, n.return);
 			default: Fu(e, n);
 		}
 	}
@@ -12151,7 +12161,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				break;
 			case 6:
 				try {
-					e.stateNode.nodeValue = t ? "" : e.memoizedProps, I = !0;
+					e.stateNode.nodeValue = t ? "" : e.memoizedProps, F = !0;
 				} catch (t) {
 					Z(e, e.return, t);
 				}
@@ -12190,35 +12200,35 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function yu(e) {
 		var t = e.alternate;
-		t !== null && (e.alternate = null, yu(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && Mt(t)), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
+		t !== null && (e.alternate = null, yu(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && Nt(t)), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
 	}
 	var bu = null, xu = !1;
 	function Su(e, t, n) {
 		for (n = n.child; n !== null;) Cu(e, t, n), n = n.sibling;
 	}
 	function Cu(e, t, n) {
-		if (Ze && typeof Ze.onCommitFiberUnmount == "function") try {
-			Ze.onCommitFiberUnmount(Xe, n);
+		if (Qe && typeof Qe.onCommitFiberUnmount == "function") try {
+			Qe.onCommitFiberUnmount(Ze, n);
 		} catch {}
 		switch (n.tag) {
 			case 26:
-				W || El(n, t), Su(e, t, n), n.memoizedState ? n.memoizedState.count-- : n.stateNode && !W && (n = n.stateNode, n.parentNode.removeChild(n));
+				W || Dl(n, t), Su(e, t, n), n.memoizedState ? n.memoizedState.count-- : n.stateNode && !W && (n = n.stateNode, n.parentNode.removeChild(n));
 				break;
 			case 27:
-				W || El(n, t), kl(n);
+				W || Dl(n, t), Al(n);
 				var r = bu, i = xu;
 				Sp(n.type) && (bu = n.stateNode, xu = !1), Su(e, t, n), gm(n.stateNode, n.type, n.memoizedProps), bu = r, xu = i;
 				break;
-			case 5: W || El(n, t), kl(n);
+			case 5: W || Dl(n, t), Al(n);
 			case 6:
-				if (n.tag === 6 && kl(n), r = bu, i = xu, bu = null, Su(e, t, n), bu = r, xu = i, bu !== null) {
+				if (n.tag === 6 && Al(n), r = bu, i = xu, bu = null, Su(e, t, n), bu = r, xu = i, bu !== null) {
 					if (xu) try {
-						(bu.nodeType === 9 ? bu.body : bu.nodeName === "HTML" ? bu.ownerDocument.body : bu).removeChild(n.stateNode), I = !0;
+						(bu.nodeType === 9 ? bu.body : bu.nodeName === "HTML" ? bu.ownerDocument.body : bu).removeChild(n.stateNode), F = !0;
 					} catch (e) {
 						Z(n, t, e);
 					}
 					else try {
-						bu.removeChild(n.stateNode), I = !0;
+						bu.removeChild(n.stateNode), F = !0;
 					} catch (e) {
 						Z(n, t, e);
 					}
@@ -12234,10 +12244,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case 11:
 			case 14:
 			case 15:
-				Sl(2, n, t), W || Sl(4, n, t), Su(e, t, n);
+				Cl(2, n, t), W || Cl(4, n, t), Su(e, t, n);
 				break;
 			case 1:
-				W || (El(n, t), r = n.stateNode, typeof r.componentWillUnmount == "function" && wl(n, t, r)), Su(e, t, n);
+				W || (Dl(n, t), r = n.stateNode, typeof r.componentWillUnmount == "function" && Tl(n, t, r)), Su(e, t, n);
 				break;
 			case 21:
 				Su(e, t, n);
@@ -12246,10 +12256,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				W = (r = W) || n.memoizedState !== null, Su(e, t, n), W = r;
 				break;
 			case 30:
-				El(n, t), Su(e, t, n);
+				Dl(n, t), Su(e, t, n);
 				break;
 			case 7:
-				W || El(n, t), Su(e, t, n);
+				W || Dl(n, t), Su(e, t, n);
 				break;
 			default: Su(e, t, n);
 		}
@@ -12331,13 +12341,13 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					var s = r[o];
 					s.ref.impl = s.nextImpl;
 				}
-				Ou(t, e, n), ju(e), a & 4 && (Sl(3, e, e.return), xl(3, e), Sl(5, e, e.return));
+				Ou(t, e, n), ju(e), a & 4 && (Cl(3, e, e.return), Sl(3, e), Cl(5, e, e.return));
 				break;
 			case 1:
-				Ou(t, e, n), ju(e), a & 512 && (W || r === null || El(r, r.return)), a & 64 && au && (e = e.updateQueue, e !== null && (t = e.callbacks, t !== null && (n = e.shared.hiddenCallbacks, e.shared.hiddenCallbacks = n === null ? t : n.concat(t))));
+				Ou(t, e, n), ju(e), a & 512 && (W || r === null || Dl(r, r.return)), a & 64 && au && (e = e.updateQueue, e !== null && (t = e.callbacks, t !== null && (n = e.shared.hiddenCallbacks, e.shared.hiddenCallbacks = n === null ? t : n.concat(t))));
 				break;
 			case 26:
-				if (o = ku, Ou(t, e, n), ju(e), a & 512 && (W || r === null || El(r, r.return)), a & 4) {
+				if (o = ku, Ou(t, e, n), ju(e), a & 512 && (W || r === null || Dl(r, r.return)), a & 4) {
 					if (a = r === null ? null : r.memoizedState, n = e.memoizedState, r === null) {
 						if (n === null) {
 							if (e.stateNode === null) {
@@ -12347,7 +12357,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 										t = e.type, n = e.memoizedProps, a = o.ownerDocument || o;
 										b: switch (t) {
 											case "title":
-												r = a.getElementsByTagName("title")[0], (!r || r[At] || r[Ct] || r.namespaceURI === "http://www.w3.org/2000/svg" || r.hasAttribute("itemprop")) && (r = a.createElement(t), a.head.insertBefore(r, a.querySelector("head > title"))), np(r, t, n), r[Ct] = e, Lt(r), t = r;
+												r = a.getElementsByTagName("title")[0], (!r || r[jt] || r[wt] || r.namespaceURI === "http://www.w3.org/2000/svg" || r.hasAttribute("itemprop")) && (r = a.createElement(t), a.head.insertBefore(r, a.querySelector("head > title"))), np(r, t, n), r[wt] = e, Rt(r), t = r;
 												break a;
 											case "link":
 												if (o = Gm("link", "href", a).get(t + (n.href || ""))) {
@@ -12369,50 +12379,50 @@ var Kl = /* @__PURE__ */ o(((e) => {
 												break;
 											default: throw Error(i(468, t));
 										}
-										r[Ct] = e, Lt(r), t = r;
+										r[wt] = e, Rt(r), t = r;
 									}
 									e.stateNode = t;
 								}
 							} else au || Km(o, e.type, e.stateNode);
 						} else e.stateNode = Bm(o, n, e.memoizedProps);
-					} else a === n ? n === null && e.stateNode !== null && Nl(e, e.memoizedProps, r.memoizedProps) : (a === null ? (t = r.stateNode, t === null || W || t.parentNode.removeChild(t)) : a.count--, n === null ? au || Km(o, e.type, e.stateNode) : Bm(o, n, e.memoizedProps));
+					} else a === n ? n === null && e.stateNode !== null && Pl(e, e.memoizedProps, r.memoizedProps) : (a === null ? (t = r.stateNode, t === null || W || t.parentNode.removeChild(t)) : a.count--, n === null ? au || Km(o, e.type, e.stateNode) : Bm(o, n, e.memoizedProps));
 				}
 				break;
 			case 27:
-				Ou(t, e, n), ju(e), a & 512 && (W || r === null || El(r, r.return)), r !== null && a & 4 && Nl(e, e.memoizedProps, r.memoizedProps);
+				Ou(t, e, n), ju(e), a & 512 && (W || r === null || Dl(r, r.return)), r !== null && a & 4 && Pl(e, e.memoizedProps, r.memoizedProps);
 				break;
 			case 5:
-				if (o = ou, ou = !1, Ou(t, e, n), ou = o, ju(e), a & 512 && (W || r === null || El(r, r.return)), e.flags & 32) {
+				if (o = ou, ou = !1, Ou(t, e, n), ou = o, ju(e), a & 512 && (W || r === null || Dl(r, r.return)), e.flags & 32) {
 					t = e.stateNode;
 					try {
-						dn(t, ""), I = !0;
+						fn(t, ""), F = !0;
 					} catch (t) {
 						Z(e, e.return, t);
 					}
 				}
-				a & 4 && e.stateNode != null && (t = e.memoizedProps, Nl(e, t, r === null ? t : r.memoizedProps)), a & 1024 && (su = !0);
+				a & 4 && e.stateNode != null && (t = e.memoizedProps, Pl(e, t, r === null ? t : r.memoizedProps)), a & 1024 && (su = !0);
 				break;
 			case 6:
 				if (Ou(t, e, n), ju(e), a & 4) {
 					if (e.stateNode === null) throw Error(i(162));
 					t = e.memoizedProps, n = e.stateNode;
 					try {
-						n.nodeValue = t, I = !0;
+						n.nodeValue = t, F = !0;
 					} catch (t) {
 						Z(e, e.return, t);
 					}
 				}
 				break;
 			case 3:
-				if (I = !1, Wm = null, o = ku, ku = bm(t.containerInfo), Ou(t, e, n), ku = o, ju(e), a & 4 && r !== null && r.memoizedState.isDehydrated) try {
+				if (F = !1, Wm = null, o = ku, ku = bm(t.containerInfo), Ou(t, e, n), ku = o, ju(e), a & 4 && r !== null && r.memoizedState.isDehydrated) try {
 					Hh(t.containerInfo);
 				} catch (t) {
 					Z(e, e.return, t);
 				}
-				su && (su = !1, Mu(e)), I = !1;
+				su && (su = !1, Mu(e)), F = !1;
 				break;
 			case 4:
-				a = ou, ou = au, r = qt(), o = ku, ku = bm(e.stateNode.containerInfo), Ou(t, e, n), ju(e), ku = o, I && du && (fu = !0), I = r, ou = a;
+				a = ou, ou = au, r = Jt(), o = ku, ku = bm(e.stateNode.containerInfo), Ou(t, e, n), ju(e), ku = o, F && du && (fu = !0), F = r, ou = a;
 				break;
 			case 12:
 				Ou(t, e, n), ju(e);
@@ -12421,7 +12431,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				Ou(t, e, n), ju(e), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, Du(e, t)));
 				break;
 			case 13:
-				Ou(t, e, n), ju(e), e.child.flags & 8192 && e.memoizedState !== null != (r !== null && r.memoizedState !== null) && (md = Ve()), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, Du(e, t)));
+				Ou(t, e, n), ju(e), e.child.flags & 8192 && e.memoizedState !== null != (r !== null && r.memoizedState !== null) && (md = He()), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, Du(e, t)));
 				break;
 			case 22:
 				o = e.memoizedState !== null, s = r !== null && r.memoizedState !== null;
@@ -12432,10 +12442,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				Ou(t, e, n), ju(e), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, Du(e, t)));
 				break;
 			case 30:
-				a & 512 && (W || r === null || El(r, r.return)), a = qt(), o = du, s = (n & 335544064) === n, c = e.memoizedProps, du = s && vi(c.default, c.update) !== "none", Ou(t, e, n), ju(e), s && r !== null && I && (e.flags |= 4), du = o, I = a;
+				a & 512 && (W || r === null || Dl(r, r.return)), a = Jt(), o = du, s = (n & 335544064) === n, c = e.memoizedProps, du = s && yi(c.default, c.update) !== "none", Ou(t, e, n), ju(e), s && r !== null && F && (e.flags |= 4), du = o, F = a;
 				break;
 			case 21: break;
-			case 7: a & 512 && (W || r === null || El(r, r.return)), r && r.stateNode !== null && (r.stateNode._fragmentFiber = e);
+			case 7: a & 512 && (W || r === null || Dl(r, r.return)), r && r.stateNode !== null && (r.stateNode._fragmentFiber = e);
 			default: Ou(t, e, n), ju(e);
 		}
 	}
@@ -12444,7 +12454,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (t & 2) {
 			try {
 				for (var n, r = e.return; r !== null;) {
-					if (Pl(r)) {
+					if (Fl(r)) {
 						n = r;
 						break;
 					}
@@ -12452,11 +12462,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				r = null;
 				for (var a = e.return; a !== null;) {
-					if (jl(a)) {
+					if (Ml(a)) {
 						var o = a.stateNode;
 						r === null ? r = [o] : r.push(o);
 					}
-					if (Al(a)) break;
+					if (jl(a)) break;
 					a = a.return;
 				}
 				var s = r;
@@ -12464,16 +12474,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				switch (n.tag) {
 					case 27:
 						var c = n.stateNode;
-						Ll(e, Fl(e), c, s);
+						Rl(e, Il(e), c, s);
 						break;
 					case 5:
 						var l = n.stateNode;
-						n.flags & 32 && (dn(l, ""), n.flags &= -33), Ll(e, Fl(e), l, s);
+						n.flags & 32 && (fn(l, ""), n.flags &= -33), Rl(e, Il(e), l, s);
 						break;
 					case 3:
 					case 4:
 						var u = n.stateNode.containerInfo;
-						Il(e, Fl(e), u, s);
+						Ll(e, Il(e), u, s);
 						break;
 					default: throw Error(i(161));
 				}
@@ -12542,8 +12552,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case 30:
 				r = uu, i = Ul(), uu = !1, Nu(t, e), uu && (e.flags |= 4);
 				var a = e.memoizedProps, o = e.stateNode;
-				t = R(a, o), o = R(n.memoizedProps, o);
-				var s = vi(a.default, a.update);
+				t = L(a, o), o = L(n.memoizedProps, o);
+				var s = yi(a.default, a.update);
 				s === "none" ? t = !1 : (a = n.memoizedState, n.memoizedState = null, n = e.child, Wl = 0, t = ru(e, n, t, o, s, a, !0), Wl !== (a === null ? 0 : a.length) && (e.flags |= 32)), e.flags & 4 && t ? (Nd(e, e.memoizedProps.onUpdate), Hl = i) : i !== null && (i.push.apply(i, Hl), Hl = i), uu = e.flags & 32 ? !0 : r;
 				break;
 			default: Nu(t, e);
@@ -12560,30 +12570,30 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				case 11:
 				case 14:
 				case 15:
-					Sl(4, n, n.return), Iu(n, r);
+					Cl(4, n, n.return), Iu(n, r);
 					break;
 				case 1:
-					El(n, n.return);
+					Dl(n, n.return);
 					var i = n.stateNode;
-					typeof i.componentWillUnmount == "function" && wl(n, n.return, i), Iu(n, r);
+					typeof i.componentWillUnmount == "function" && Tl(n, n.return, i), Iu(n, r);
 					break;
 				case 27: r & 2 && gm(n.stateNode, n.type, n.memoizedProps);
 				case 5:
-					El(n, n.return), n.tag !== 5 && n.tag !== 27 || kl(n), Iu(n, r);
+					Dl(n, n.return), n.tag !== 5 && n.tag !== 27 || Al(n), Iu(n, r);
 					break;
 				case 6:
-					kl(n);
+					Al(n);
 					break;
 				case 26:
-					El(n, n.return), i = n.stateNode, n.memoizedState !== null || i === null || W || i.parentNode.removeChild(i), Iu(n, r);
+					Dl(n, n.return), i = n.stateNode, n.memoizedState !== null || i === null || W || i.parentNode.removeChild(i), Iu(n, r);
 					break;
 				case 22:
 					n.memoizedState === null && Iu(n, r);
 					break;
 				case 30:
-					El(n, n.return), Iu(n, r);
+					Dl(n, n.return), Iu(n, r);
 					break;
-				case 7: El(n, n.return);
+				case 7: Dl(n, n.return);
 				default: Iu(n, r);
 			}
 			e = e.sibling;
@@ -12596,7 +12606,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				case 0:
 				case 11:
 				case 15:
-					Lu(i, a, n), xl(4, a);
+					Lu(i, a, n), Sl(4, a);
 					break;
 				case 1:
 					if (Lu(i, a, n), r = a, i = r.stateNode, typeof i.componentDidMount == "function") try {
@@ -12608,22 +12618,22 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						var c = r.stateNode;
 						try {
 							var l = i.shared.hiddenCallbacks;
-							if (l !== null) for (i.shared.hiddenCallbacks = null, i = 0; i < l.length; i++) Co(l[i], c);
+							if (l !== null) for (i.shared.hiddenCallbacks = null, i = 0; i < l.length; i++) wo(l[i], c);
 						} catch (e) {
 							Z(r, r.return, e);
 						}
 					}
-					s && o & 64 && Cl(a), Tl(a, a.return);
+					s && o & 64 && wl(a), El(a, a.return);
 					break;
-				case 27: n & 2 && Rl(a);
+				case 27: n & 2 && zl(a);
 				case 5:
-					a.tag !== 5 && a.tag !== 27 || Ol(a), Lu(i, a, n), s && r === null && o & 4 && Ml(a), Tl(a, a.return);
+					a.tag !== 5 && a.tag !== 27 || kl(a), Lu(i, a, n), s && r === null && o & 4 && Nl(a), El(a, a.return);
 					break;
 				case 6:
-					Ol(a);
+					kl(a);
 					break;
 				case 26:
-					c = a.stateNode, a.memoizedState !== null || c === null || au || Km(bm(c.ownerDocument), a.type, c), Lu(i, a, n), s && r === null && o & 4 && Ml(a), Tl(a, a.return);
+					c = a.stateNode, a.memoizedState !== null || c === null || au || Km(bm(c.ownerDocument), a.type, c), Lu(i, a, n), s && r === null && o & 4 && Nl(a), El(a, a.return);
 					break;
 				case 12:
 					Lu(i, a, n);
@@ -12635,12 +12645,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					Lu(i, a, n), s && o & 4 && Tu(i, a);
 					break;
 				case 22:
-					a.memoizedState === null && Lu(i, a, n), Tl(a, a.return);
+					a.memoizedState === null && Lu(i, a, n), El(a, a.return);
 					break;
 				case 30:
-					Lu(i, a, n), Tl(a, a.return);
+					Lu(i, a, n), El(a, a.return);
 					break;
-				case 7: Tl(a, a.return);
+				case 7: El(a, a.return);
 				default: Lu(i, a, n);
 			}
 			t = t.sibling;
@@ -12648,10 +12658,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function Ru(e, t) {
 		var n = null;
-		e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), e = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (e = t.memoizedState.cachePool.pool), e !== n && (e != null && e.refCount++, n != null && Ma(n));
+		e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), e = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (e = t.memoizedState.cachePool.pool), e !== n && (e != null && e.refCount++, n != null && Na(n));
 	}
 	function zu(e, t) {
-		e = null, t.alternate !== null && (e = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== e && (t.refCount++, e != null && Ma(e));
+		e = null, t.alternate !== null && (e = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== e && (t.refCount++, e != null && Na(e));
 	}
 	function Bu(e, t, n, r) {
 		var i = (n & 335544064) === n;
@@ -12666,13 +12676,13 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case 0:
 			case 11:
 			case 15:
-				Bu(e, t, n, r), a & 2048 && xl(9, t);
+				Bu(e, t, n, r), a & 2048 && Sl(9, t);
 				break;
 			case 1:
 				Bu(e, t, n, r);
 				break;
 			case 3:
-				Bu(e, t, n, r), i && pu && (e = e.containerInfo, e = e.nodeType === 9 ? e.body : e.nodeName === "HTML" ? e.ownerDocument.body : e, e.style.viewTransitionName === "root" && (e.style.viewTransitionName = ""), e = e.ownerDocument.documentElement, e !== null && e.style.viewTransitionName === "none" && (e.style.viewTransitionName = "")), a & 2048 && (a = null, t.alternate !== null && (a = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== a && (t.refCount++, a != null && Ma(a)));
+				Bu(e, t, n, r), i && pu && (e = e.containerInfo, e = e.nodeType === 9 ? e.body : e.nodeName === "HTML" ? e.ownerDocument.body : e, e.style.viewTransitionName === "root" && (e.style.viewTransitionName = ""), e = e.ownerDocument.documentElement, e !== null && e.style.viewTransitionName === "none" && (e.style.viewTransitionName = "")), a & 2048 && (a = null, t.alternate !== null && (a = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== a && (t.refCount++, a != null && Na(a)));
 				break;
 			case 12:
 				if (a & 2048) {
@@ -12711,7 +12721,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				case 0:
 				case 11:
 				case 15:
-					Hu(a, o, s, c, i), xl(8, o);
+					Hu(a, o, s, c, i), Sl(8, o);
 					break;
 				case 23: break;
 				case 22:
@@ -12764,7 +12774,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case 30:
 				if ((e.flags & Wu) !== 0 && (r = e.memoizedProps.name, r != null && r !== "auto")) {
 					var i = e.stateNode;
-					i.paired = null, Bl === null && (Bl = /* @__PURE__ */ new Map()), Bl.set(r, i);
+					i.paired = null, U === null && (U = /* @__PURE__ */ new Map()), U.set(r, i);
 				}
 				Gu(e, t, n);
 				break;
@@ -12796,7 +12806,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case 0:
 			case 11:
 			case 15:
-				Ju(e), e.flags & 2048 && Sl(9, e, e.return);
+				Ju(e), e.flags & 2048 && Cl(9, e, e.return);
 				break;
 			case 3:
 				Ju(e);
@@ -12825,7 +12835,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				case 0:
 				case 11:
 				case 15:
-					Sl(8, t, t.return), Xu(t);
+					Cl(8, t, t.return), Xu(t);
 					break;
 				case 22:
 					n = t.stateNode, n._visibility & 2 && (n._visibility &= -3, Xu(t));
@@ -12842,7 +12852,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				case 0:
 				case 11:
 				case 15:
-					Sl(8, n, t);
+					Cl(8, n, t);
 					break;
 				case 23:
 				case 22:
@@ -12851,7 +12861,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						r != null && r.refCount++;
 					}
 					break;
-				case 24: Ma(n.memoizedState.cache);
+				case 24: Na(n.memoizedState.cache);
 			}
 			if (r = n.child, r !== null) r.return = n, lu = r;
 			else a: for (n = e; lu !== null;) {
@@ -12871,37 +12881,37 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	var Qu = {
 		getCacheForType: function(e) {
-			var t = wa(Aa), n = t.data.get(e);
+			var t = Ta(ja), n = t.data.get(e);
 			return n === void 0 && (n = e(), t.data.set(e, n)), n;
 		},
 		cacheSignal: function() {
-			return wa(Aa).controller.signal;
+			return Ta(ja).controller.signal;
 		}
 	}, $u = typeof WeakMap == "function" ? WeakMap : Map, K = 0, q = null, J = null, Y = 0, X = 0, ed = null, td = !1, nd = !1, rd = !1, id = 0, ad = 0, od = 0, sd = 0, cd = 0, ld = 0, ud = 0, dd = null, fd = null, pd = !1, md = 0, hd = 0, gd = Infinity, _d = null, vd = null, yd = 0, bd = null, xd = null, Sd = 0, Cd = 0, wd = null, Td = null, Ed = null, Dd = null, Od = null, kd = 0, Ad = null;
 	function jd() {
-		return K & 2 && Y !== 0 ? Y & -Y : N.T === null ? bt() : Pf();
+		return K & 2 && Y !== 0 ? Y & -Y : M.T === null ? xt() : Pf();
 	}
 	function Md() {
 		if (ld === 0) {
-			if (!(Y & 536870912) || B) {
-				var e = it;
-				it <<= 1, !(it & 3932160) && (it = 262144), ld = e;
+			if (!(Y & 536870912) || z) {
+				var e = at;
+				at <<= 1, !(at & 3932160) && (at = 262144), ld = e;
 			} else ld = 536870912;
 		}
-		return e = Ao.current, e !== null && (e.flags |= 32), ld;
+		return e = jo.current, e !== null && (e.flags |= 32), ld;
 	}
 	function Nd(e, t) {
 		if (t != null) {
 			var n = e.stateNode, r = n.ref;
-			r === null && (r = n.ref = Pp(R(e.memoizedProps, n))), Dd === null && (Dd = []), Dd.push(t.bind(null, r));
+			r === null && (r = n.ref = Pp(L(e.memoizedProps, n))), Dd === null && (Dd = []), Dd.push(t.bind(null, r));
 		}
 	}
 	function Pd(e, t, n) {
-		(e === q && (X === 2 || X === 9) || e.cancelPendingCommit !== null) && (Vd(e, 0), Rd(e, Y, ld, !1)), pt(e, n), (!(K & 2) || e !== q) && (e === q && (!(K & 2) && (sd |= n), ad === 4 && Rd(e, Y, ld, !1)), Ef(e));
+		(e === q && (X === 2 || X === 9) || e.cancelPendingCommit !== null) && (Vd(e, 0), Rd(e, Y, ld, !1)), mt(e, n), (!(K & 2) || e !== q) && (e === q && (!(K & 2) && (sd |= n), ad === 4 && Rd(e, Y, ld, !1)), Ef(e));
 	}
 	function Fd(e, t, n) {
 		if (K & 6) throw Error(i(327));
-		var r = !n && !(t & 127) && (t & e.expiredLanes) === 0 || ct(e, t), a = r ? Yd(e, t) : qd(e, t, !0), o = r;
+		var r = !n && !(t & 127) && (t & e.expiredLanes) === 0 || lt(e, t), a = r ? Yd(e, t) : qd(e, t, !0), o = r;
 		do {
 			if (a === 0) {
 				nd && !r && Rd(e, t, 0, !1);
@@ -12951,8 +12961,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					case 5: break;
 					default: throw Error(i(329));
 				}
-				if ((t & 62914560) === t && (a = md + 300 - Ve(), 10 < a)) {
-					if (Rd(r, t, ld, !td), st(r, 0, !0) !== 0) break a;
+				if ((t & 62914560) === t && (a = md + 300 - He(), 10 < a)) {
+					if (Rd(r, t, ld, !td), ct(r, 0, !0) !== 0) break a;
 					Sd = t, r.timeoutHandle = gp(Id.bind(null, r, n, fd, _d, pd, t, ld, sd, ud, td, o, "Throttled", -0, 0), a);
 					break a;
 				}
@@ -12973,8 +12983,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			suspenseyImages: [],
 			waitingForImages: !0,
 			waitingForViewTransition: !1,
-			unsuspend: yn
-		}, Bl = null, Ku(t, a, d), h && (m = d, h = e.containerInfo, h = (h.nodeType === 9 ? h : h.ownerDocument).__reactViewTransition, h != null && (m.count++, m.waitingForViewTransition = !0, m = nh.bind(m), h.finished.then(m, m))), m = (a & 62914560) === a ? md - Ve() : (a & 4194048) === a ? hd - Ve() : 0, m = eh(d, m), m !== null)) {
+			unsuspend: bn
+		}, U = null, Ku(t, a, d), h && (m = d, h = e.containerInfo, h = (h.nodeType === 9 ? h : h.ownerDocument).__reactViewTransition, h != null && (m.count++, m.waitingForViewTransition = !0, m = nh.bind(m), h.finished.then(m, m))), m = (a & 62914560) === a ? md - He() : (a & 4194048) === a ? hd - He() : 0, m = eh(d, m), m !== null)) {
 			Sd = a, e.cancelPendingCommit = m(nf.bind(null, e, t, a, n, r, i, o, s, c, l, u, d, null, f, p)), Rd(e, a, o, !l);
 			return;
 		}
@@ -12987,7 +12997,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				var i = n[r], a = i.getSnapshot;
 				i = i.value;
 				try {
-					if (!Vr(a(), i)) return !1;
+					if (!Hr(a(), i)) return !1;
 				} catch {
 					return !1;
 				}
@@ -13005,12 +13015,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		return !0;
 	}
 	function Rd(e, t, n, r) {
-		t = lt(e, t), t &= ~cd, t &= ~sd, e.suspendedLanes |= t, e.pingedLanes &= ~t, r && (e.warmLanes |= t), r = e.expirationTimes;
+		t = ut(e, t), t &= ~cd, t &= ~sd, e.suspendedLanes |= t, e.pingedLanes &= ~t, r && (e.warmLanes |= t), r = e.expirationTimes;
 		for (var i = t; 0 < i;) {
-			var a = 31 - $e(i), o = 1 << a;
+			var a = 31 - et(i), o = 1 << a;
 			r[a] = -1, i &= ~o;
 		}
-		n !== 0 && ht(e, n, t);
+		n !== 0 && gt(e, n, t);
 	}
 	function zd() {
 		return K & 6 ? !0 : (Df(0, !1), !1);
@@ -13018,32 +13028,32 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	function Bd() {
 		if (J !== null) {
 			if (X === 0) var e = J.return;
-			else e = J, ha = ma = null, is(e), io = null, ao = 0, e = J;
-			for (; e !== null;) bl(e.alternate, e), e = e.return;
+			else e = J, ga = ha = null, as(e), ao = null, oo = 0, e = J;
+			for (; e !== null;) xl(e.alternate, e), e = e.return;
 			J = null;
 		}
 	}
 	function Vd(e, t) {
 		var n = e.timeoutHandle;
-		return n !== -1 && (e.timeoutHandle = -1, _p(n)), n = e.cancelPendingCommit, n !== null && (e.cancelPendingCommit = null, n()), Sd = 0, Bd(), q = e, J = n = Ni(e.current, null), Y = t, X = 0, ed = null, td = !1, nd = ct(e, t), rd = !1, ud = ld = cd = sd = od = ad = 0, fd = dd = null, pd = !1, id = lt(e, t), Ci(), n;
+		return n !== -1 && (e.timeoutHandle = -1, _p(n)), n = e.cancelPendingCommit, n !== null && (e.cancelPendingCommit = null, n()), Sd = 0, Bd(), q = e, J = n = Pi(e.current, null), Y = t, X = 0, ed = null, td = !1, nd = lt(e, t), rd = !1, ud = ld = cd = sd = od = ad = 0, fd = dd = null, pd = !1, id = ut(e, t), wi(), n;
 	}
 	function Hd(e, t) {
-		V = null, N.H = mc, t === Ja || t === Xa ? (t = no(), X = 3) : t === Ya ? (t = no(), X = 4) : X = t === Mc ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, ed = t, J === null && (ad = 1, Ec(e, Vi(t, e.current)));
+		B = null, M.H = hc, t === Ya || t === Za ? (t = ro(), X = 3) : t === Xa ? (t = ro(), X = 4) : X = t === Nc ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, ed = t, J === null && (ad = 1, Dc(e, Hi(t, e.current)));
 	}
 	function Ud() {
-		var e = Ao.current;
-		return e === null ? !0 : (Y & 4194048) === Y ? jo === null : (Y & 62914560) === Y || Y & 536870912 ? e === jo : !1;
+		var e = jo.current;
+		return e === null ? !0 : (Y & 4194048) === Y ? Mo === null : (Y & 62914560) === Y || Y & 536870912 ? e === Mo : !1;
 	}
 	function Wd() {
-		var e = N.H;
-		return N.H = mc, e === null ? mc : e;
+		var e = M.H;
+		return M.H = hc, e === null ? hc : e;
 	}
 	function Gd() {
-		var e = N.A;
-		return N.A = Qu, e;
+		var e = M.A;
+		return M.A = Qu, e;
 	}
 	function Kd() {
-		ad = 4, td || (Y & 4194048) !== Y && Ao.current !== null || (nd = !0), !(od & 134217727) && !(sd & 134217727) || q === null || Rd(q, Y, ld, !1);
+		ad = 4, td || (Y & 4194048) !== Y && jo.current !== null || (nd = !0), !(od & 134217727) && !(sd & 134217727) || q === null || Rd(q, Y, ld, !1);
 	}
 	function qd(e, t, n) {
 		var r = K;
@@ -13063,7 +13073,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						case 2:
 						case 9:
 						case 6:
-							Ao.current === null && (t = !0);
+							jo.current === null && (t = !0);
 							var l = X;
 							if (X = 0, ed = null, $d(e, s, c, l), n && nd) {
 								o = 0;
@@ -13079,7 +13089,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				Hd(e, t);
 			}
 		while (1);
-		return t && e.shellSuspendCounter++, ha = ma = null, K = r, N.H = i, N.A = a, J === null && (q = null, Y = 0, Ci()), o;
+		return t && e.shellSuspendCounter++, ga = ha = null, K = r, M.H = i, M.A = a, J === null && (q = null, Y = 0, wi()), o;
 	}
 	function Jd() {
 		for (; J !== null;) Zd(J);
@@ -13088,7 +13098,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		var n = K;
 		K |= 2;
 		var r = Wd(), a = Gd();
-		q !== e || Y !== t ? (_d = null, gd = Ve() + 500, Vd(e, t)) : nd = ct(e, t);
+		q !== e || Y !== t ? (_d = null, gd = He() + 500, Vd(e, t)) : nd = lt(e, t);
 		a: do
 			try {
 				if (X !== 0 && J !== null) {
@@ -13100,7 +13110,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 							break;
 						case 2:
 						case 9:
-							if (Qa(o)) {
+							if ($a(o)) {
 								X = 0, ed = null, Qd(t);
 								break;
 							}
@@ -13115,7 +13125,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 							X = 5;
 							break a;
 						case 7:
-							Qa(o) ? (X = 0, ed = null, Qd(t)) : (X = 0, ed = null, $d(e, t, o, 7));
+							$a(o) ? (X = 0, ed = null, Qd(t)) : (X = 0, ed = null, $d(e, t, o, 7));
 							break;
 						case 5:
 							var s = null;
@@ -13152,13 +13162,13 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				Hd(e, t);
 			}
 		while (1);
-		return ha = ma = null, N.H = r, N.A = a, K = n, J === null ? (q = null, Y = 0, Ci(), ad) : 0;
+		return ga = ha = null, M.H = r, M.A = a, K = n, J === null ? (q = null, Y = 0, wi(), ad) : 0;
 	}
 	function Xd() {
-		for (; J !== null && !ze();) Zd(J);
+		for (; J !== null && !Be();) Zd(J);
 	}
 	function Zd(e) {
-		var t = fl(e.alternate, e, id);
+		var t = pl(e.alternate, e, id);
 		e.memoizedProps = e.pendingProps, t === null ? ef(e) : J = t;
 	}
 	function Qd(e) {
@@ -13166,33 +13176,33 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		switch (t.tag) {
 			case 15:
 			case 0:
-				t = Kc(n, t, t.pendingProps, t.type, void 0, Y);
+				t = qc(n, t, t.pendingProps, t.type, void 0, Y);
 				break;
 			case 11:
-				t = Kc(n, t, t.pendingProps, t.type.render, t.ref, Y);
+				t = qc(n, t, t.pendingProps, t.type.render, t.ref, Y);
 				break;
 			case 5:
-				is(t);
+				as(t);
 				var r = t;
-				r === na && (B ? (ca(r), r.tag === 5 && r.stateNode != null && (z = r.stateNode)) : (ca(r), B = !0));
-			default: bl(n, t), t = J = Pi(t, id), t = fl(n, t, id);
+				r === ra && (z ? (la(r), r.tag === 5 && r.stateNode != null && (R = r.stateNode)) : (la(r), z = !0));
+			default: xl(n, t), t = J = Fi(t, id), t = pl(n, t, id);
 		}
 		e.memoizedProps = e.pendingProps, t === null ? ef(e) : J = t;
 	}
 	function $d(e, t, n, r) {
-		ha = ma = null, is(t), io = null, ao = 0;
+		ga = ha = null, as(t), ao = null, oo = 0;
 		var i = t.return;
 		try {
-			if (jc(e, i, t, n, Y)) {
-				ad = 1, Ec(e, Vi(n, e.current)), J = null;
+			if (Mc(e, i, t, n, Y)) {
+				ad = 1, Dc(e, Hi(n, e.current)), J = null;
 				return;
 			}
 		} catch (t) {
 			if (i !== null) throw J = i, t;
-			ad = 1, Ec(e, Vi(n, e.current)), J = null;
+			ad = 1, Dc(e, Hi(n, e.current)), J = null;
 			return;
 		}
-		t.flags & 32768 ? (B || r === 1 ? e = !0 : nd || Y & 536870912 ? e = !1 : (td = e = !0, (r === 2 || r === 9 || r === 3 || r === 6) && (r = Ao.current, r !== null && r.tag === 13 && (r.flags |= 16384))), tf(t, e)) : ef(t);
+		t.flags & 32768 ? (z || r === 1 ? e = !0 : nd || Y & 536870912 ? e = !1 : (td = e = !0, (r === 2 || r === 9 || r === 3 || r === 6) && (r = jo.current, r !== null && r.tag === 13 && (r.flags |= 16384))), tf(t, e)) : ef(t);
 	}
 	function ef(e) {
 		var t = e;
@@ -13202,7 +13212,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				return;
 			}
 			e = t.return;
-			var n = vl(t.alternate, t, id);
+			var n = yl(t.alternate, t, id);
 			if (n !== null) {
 				J = n;
 				return;
@@ -13217,7 +13227,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function tf(e, t) {
 		do {
-			var n = yl(e.alternate, e);
+			var n = bl(e.alternate, e);
 			if (n !== null) {
 				n.flags &= 32767, J = n;
 				return;
@@ -13243,17 +13253,17 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function rf(e, t, n, r, i, a, o) {
 		var s = t.lanes | t.childLanes;
-		if (Cd = s, s |= Si, mt(e, n, s, r, i, a), Dd = null, (n & 335544064) === n ? (Od = Fa(e), r = 10262) : (Od = null, r = 10256), (t.subtreeFlags & r) !== 0 || (t.flags & r) !== 0 ? (e.callbackNode = null, e.callbackPriority = 0, yf(Ge, function() {
+		if (Cd = s, s |= Ci, ht(e, n, s, r, i, a), Dd = null, (n & 335544064) === n ? (Od = Ia(e), r = 10262) : (Od = null, r = 10256), (t.subtreeFlags & r) !== 0 || (t.flags & r) !== 0 ? (e.callbackNode = null, e.callbackPriority = 0, yf(Ke, function() {
 			return ff(), null;
-		})) : (e.callbackNode = null, e.callbackPriority = 0), zl = !1, r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
-			r = N.T, N.T = null, i = P.p, P.p = 2, a = K, K |= 4;
+		})) : (e.callbackNode = null, e.callbackPriority = 0), Bl = !1, r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
+			r = M.T, M.T = null, i = N.p, N.p = 2, a = K, K |= 4;
 			try {
 				mu(e, t, n);
 			} finally {
-				K = a, P.p = i, N.T = r;
+				K = a, N.p = i, M.T = r;
 			}
 		}
-		yd = 1, zl ? Ed = Mp(o, e.containerInfo, Od, sf, cf, of, lf, ff, af, null, null) : (sf(), cf(), lf());
+		yd = 1, Bl ? Ed = Mp(o, e.containerInfo, Od, sf, cf, of, lf, ff, af, null, null) : (sf(), cf(), lf());
 	}
 	function af(e) {
 		if (yd !== 0) {
@@ -13269,16 +13279,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			yd = 0;
 			var e = bd, t = xd, n = Sd, r = !!(t.flags & 13878);
 			if (t.subtreeFlags & 13878 || r) {
-				r = N.T, N.T = null;
-				var i = P.p;
-				P.p = 2;
+				r = M.T, M.T = null;
+				var i = N.p;
+				N.p = 2;
 				var a = K;
 				K |= 4;
 				try {
 					du = fu = !1, Au(t, e, n), n = cp;
-					var o = qr(e.containerInfo), s = n.focusedElem, c = n.selectionRange;
-					if (o !== s && s && s.ownerDocument && Kr(s.ownerDocument.documentElement, s)) {
-						if (c !== null && Jr(s)) {
+					var o = Jr(e.containerInfo), s = n.focusedElem, c = n.selectionRange;
+					if (o !== s && s && s.ownerDocument && qr(s.ownerDocument.documentElement, s)) {
+						if (c !== null && Yr(s)) {
 							var l = c.start, u = c.end;
 							if (u === void 0 && (u = l), "selectionStart" in s) s.selectionStart = l, s.selectionEnd = Math.min(u, s.value.length);
 							else {
@@ -13286,7 +13296,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								if (f.getSelection) {
 									var p = f.getSelection(), m = s.textContent.length, h = Math.min(c.start, m), g = c.end === void 0 ? h : Math.min(c.end, m);
 									!p.extend && h > g && (o = g, g = h, h = o);
-									var _ = Gr(s, h), v = Gr(s, g);
+									var _ = Kr(s, h), v = Kr(s, g);
 									if (_ && v && (p.rangeCount !== 1 || p.anchorNode !== _.node || p.anchorOffset !== _.offset || p.focusNode !== v.node || p.focusOffset !== v.offset)) {
 										var y = d.createRange();
 										y.setStart(_.node, _.offset), p.removeAllRanges(), h > g ? (p.addRange(y), p.extend(v.node, v.offset)) : (y.setEnd(v.node, v.offset), p.addRange(y));
@@ -13306,7 +13316,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					}
 					gh = !!sp, cp = sp = null;
 				} finally {
-					K = a, P.p = i, N.T = r;
+					K = a, N.p = i, M.T = r;
 				}
 			}
 			e.current = t, yd = 2;
@@ -13317,15 +13327,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			yd = 0;
 			var e = bd, t = xd, n = !!(t.flags & 8772);
 			if (t.subtreeFlags & 8772 || n) {
-				n = N.T, N.T = null;
-				var r = P.p;
-				P.p = 2;
+				n = M.T, M.T = null;
+				var r = N.p;
+				N.p = 2;
 				var i = K;
 				K |= 4;
 				try {
 					G(e, t.alternate, t);
 				} finally {
-					K = i, P.p = r, N.T = n;
+					K = i, N.p = r, M.T = n;
 				}
 			}
 			yd = 3;
@@ -13335,20 +13345,20 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (yd === 4 || yd === 3) {
 			yd = 0;
 			var e = Ed;
-			Ed = null, Be();
+			Ed = null, Ve();
 			var t = bd, n = xd, r = Sd, i = Td, a = (r & 335544064) === r ? 10262 : 10256;
-			if ((n.subtreeFlags & a) !== 0 || (n.flags & a) !== 0 ? yd = 5 : (yd = 0, xd = bd = null, uf(t, t.pendingLanes)), a = t.pendingLanes, a === 0 && (vd = null), yt(r), n = n.stateNode, Ze && typeof Ze.onCommitFiberRoot == "function") try {
-				Ze.onCommitFiberRoot(Xe, n, void 0, (n.current.flags & 128) == 128);
+			if ((n.subtreeFlags & a) !== 0 || (n.flags & a) !== 0 ? yd = 5 : (yd = 0, xd = bd = null, uf(t, t.pendingLanes)), a = t.pendingLanes, a === 0 && (vd = null), bt(r), n = n.stateNode, Qe && typeof Qe.onCommitFiberRoot == "function") try {
+				Qe.onCommitFiberRoot(Ze, n, void 0, (n.current.flags & 128) == 128);
 			} catch {}
 			if (i !== null) {
-				n = N.T, a = P.p, P.p = 2, N.T = null;
+				n = M.T, a = N.p, N.p = 2, M.T = null;
 				try {
 					for (var o = t.onRecoverableError, s = 0; s < i.length; s++) {
 						var c = i[s];
 						o(c.value, { componentStack: c.stack });
 					}
 				} finally {
-					N.T = n, P.p = a;
+					M.T = n, N.p = a;
 				}
 			}
 			if (i = Dd, o = Od, Od = null, i !== null && (Dd = null, o === null && (o = []), e !== null)) for (c = 0; c < i.length; c++) n = (0, i[c])(o), n !== void 0 && e.finished.finally(n);
@@ -13356,7 +13366,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function uf(e, t) {
-		(e.pooledCacheLanes &= t) === 0 && (t = e.pooledCache, t != null && (e.pooledCache = null, Ma(t)));
+		(e.pooledCacheLanes &= t) === 0 && (t = e.pooledCache, t != null && (e.pooledCache = null, Na(t)));
 	}
 	function df() {
 		return Ed !== null && (Ed.skipTransition(), Ed = null), sf(), cf(), lf(), ff();
@@ -13365,22 +13375,22 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (yd !== 5) return !1;
 		var e = bd, t = Cd;
 		Cd = 0;
-		var n = yt(Sd), r = N.T, a = P.p;
+		var n = bt(Sd), r = M.T, a = N.p;
 		try {
-			P.p = 32 > n ? 32 : n, N.T = null, n = wd, wd = null;
+			N.p = 32 > n ? 32 : n, M.T = null, n = wd, wd = null;
 			var o = bd, s = Sd;
 			if (yd = 0, xd = bd = null, Sd = 0, K & 6) throw Error(i(331));
 			var c = K;
-			if (K |= 4, Yu(o.current), Vu(o, o.current, s, n), K = c, Df(0, !1), Ze && typeof Ze.onPostCommitFiberRoot == "function") try {
-				Ze.onPostCommitFiberRoot(Xe, o);
+			if (K |= 4, Yu(o.current), Vu(o, o.current, s, n), K = c, Df(0, !1), Qe && typeof Qe.onPostCommitFiberRoot == "function") try {
+				Qe.onPostCommitFiberRoot(Ze, o);
 			} catch {}
 			return !0;
 		} finally {
-			P.p = a, N.T = r, uf(e, t);
+			N.p = a, M.T = r, uf(e, t);
 		}
 	}
 	function pf(e, t, n) {
-		t = Vi(n, t), t = Oc(e.stateNode, t, 2), e = _o(e, t, 2), e !== null && (pt(e, 2), Ef(e));
+		t = Hi(n, t), t = kc(e.stateNode, t, 2), e = vo(e, t, 2), e !== null && (mt(e, 2), Ef(e));
 	}
 	function Z(e, t, n) {
 		if (e.tag === 3) pf(e, e, n);
@@ -13392,7 +13402,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			if (t.tag === 1) {
 				var r = t.stateNode;
 				if (typeof t.type.getDerivedStateFromError == "function" || typeof r.componentDidCatch == "function" && (vd === null || !vd.has(r))) {
-					e = Vi(n, e), n = kc(2), r = _o(t, n, 2), r !== null && (Ac(n, r, t, e), pt(r, 2), Ef(r));
+					e = Hi(n, e), n = Ac(2), r = vo(t, n, 2), r !== null && (jc(n, r, t, e), mt(r, 2), Ef(r));
 					break;
 				}
 			}
@@ -13410,10 +13420,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function hf(e, t, n) {
 		var r = e.pingCache;
-		r !== null && r.delete(t), e.pingedLanes |= e.suspendedLanes & n, e.warmLanes &= ~n, q === e && (Y & n) === n && (ad === 4 || ad === 3 && (Y & 62914560) === Y && 300 > Ve() - md ? K & 2 ? cd |= n : Vd(e, 0) : cd |= n, ud === Y && (ud = 0)), Ef(e);
+		r !== null && r.delete(t), e.pingedLanes |= e.suspendedLanes & n, e.warmLanes &= ~n, q === e && (Y & n) === n && (ad === 4 || ad === 3 && (Y & 62914560) === Y && 300 > He() - md ? K & 2 ? cd |= n : Vd(e, 0) : cd |= n, ud === Y && (ud = 0)), Ef(e);
 	}
 	function gf(e, t) {
-		t === 0 && (t = dt()), e = Ei(e, t), e !== null && (pt(e, t), Ef(e));
+		t === 0 && (t = ft()), e = Di(e, t), e !== null && (mt(e, t), Ef(e));
 	}
 	function _f(e) {
 		var t = e.memoizedState, n = 0;
@@ -13438,7 +13448,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		r !== null && r.delete(t), gf(e, n);
 	}
 	function yf(e, t) {
-		return Le(e, t);
+		return Re(e, t);
 	}
 	var bf = null, xf = null, Sf = !1, Cf = !1, wf = !1, Tf = 0;
 	function Ef(e) {
@@ -13455,10 +13465,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 							if (i === 0) var a = 0;
 							else {
 								var o = r.suspendedLanes, s = r.pingedLanes;
-								a = (1 << 31 - $e(42 | e) + 1) - 1, a &= i & ~(o & ~s), a = a & 201326741 ? a & 201326741 | 1 : a ? a | 2 : 0;
+								a = (1 << 31 - et(42 | e) + 1) - 1, a &= i & ~(o & ~s), a = a & 201326741 ? a & 201326741 | 1 : a ? a | 2 : 0;
 							}
 							a !== 0 && (n = !0, Mf(r, a));
-						} else a = Y, a = st(r, r === q ? a : 0, r.cancelPendingCommit !== null || r.timeoutHandle !== -1), !(a & 3) || ct(r, a) || (n = !0, Mf(r, a));
+						} else a = Y, a = ct(r, r === q ? a : 0, r.cancelPendingCommit !== null || r.timeoutHandle !== -1), !(a & 3) || lt(r, a) || (n = !0, Mf(r, a));
 					}
 					r = r.next;
 				}
@@ -13473,7 +13483,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		Cf = Sf = !1;
 		var e = 0;
 		Tf !== 0 && hp() && (e = Tf);
-		for (var t = Ve(), n = null, r = bf; r !== null;) {
+		for (var t = He(), n = null, r = bf; r !== null;) {
 			var i = r.next, a = Af(r, t);
 			a === 0 ? (r.next = null, n === null ? bf = i : n.next = i, i === null && (xf = n)) : (n = r, (e !== 0 || a & 3) && (Cf = !0)), r = i;
 		}
@@ -13481,35 +13491,35 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function Af(e, t) {
 		for (var n = e.suspendedLanes, r = e.pingedLanes, i = e.expirationTimes, a = e.pendingLanes & -62914561; 0 < a;) {
-			var o = 31 - $e(a), s = 1 << o, c = i[o];
-			c === -1 ? ((s & n) === 0 || (s & r) !== 0) && (i[o] = ut(s, t)) : c <= t && (e.expiredLanes |= s), a &= ~s;
+			var o = 31 - et(a), s = 1 << o, c = i[o];
+			c === -1 ? ((s & n) === 0 || (s & r) !== 0) && (i[o] = dt(s, t)) : c <= t && (e.expiredLanes |= s), a &= ~s;
 		}
-		if (t = q, n = Y, n = st(e, e === t ? n : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r = e.callbackNode, n === 0 || e === t && (X === 2 || X === 9) || e.cancelPendingCommit !== null) return r !== null && r !== null && Re(r), e.callbackNode = null, e.callbackPriority = 0;
-		if (!(n & 3) || ct(e, n)) {
+		if (t = q, n = Y, n = ct(e, e === t ? n : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r = e.callbackNode, n === 0 || e === t && (X === 2 || X === 9) || e.cancelPendingCommit !== null) return r !== null && r !== null && ze(r), e.callbackNode = null, e.callbackPriority = 0;
+		if (!(n & 3) || lt(e, n)) {
 			if (t = n & -n, t === e.callbackPriority) return t;
-			switch (r !== null && Re(r), yt(n)) {
+			switch (r !== null && ze(r), bt(n)) {
 				case 2:
 				case 8:
-					n = We;
-					break;
-				case 32:
 					n = Ge;
 					break;
-				case 268435456:
-					n = qe;
+				case 32:
+					n = Ke;
 					break;
-				default: n = Ge;
+				case 268435456:
+					n = Je;
+					break;
+				default: n = Ke;
 			}
-			return r = jf.bind(null, e), n = Le(n, r), e.callbackPriority = t, e.callbackNode = n, t;
+			return r = jf.bind(null, e), n = Re(n, r), e.callbackPriority = t, e.callbackNode = n, t;
 		}
-		return r !== null && r !== null && Re(r), e.callbackPriority = 2, e.callbackNode = null, 2;
+		return r !== null && r !== null && ze(r), e.callbackPriority = 2, e.callbackNode = null, 2;
 	}
 	function jf(e, t) {
 		if (yd !== 0 && yd !== 5) return e.callbackNode = null, e.callbackPriority = 0, null;
 		var n = e.callbackNode;
 		if (df() && e.callbackNode !== n) return null;
 		var r = Y;
-		return r = st(e, e === q ? r : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r === 0 ? null : (Fd(e, r, t), Af(e, Ve()), e.callbackNode != null && e.callbackNode === n ? jf.bind(null, e) : null);
+		return r = ct(e, e === q ? r : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r === 0 ? null : (Fd(e, r, t), Af(e, He()), e.callbackNode != null && e.callbackNode === n ? jf.bind(null, e) : null);
 	}
 	function Mf(e, t) {
 		if (df()) return null;
@@ -13517,24 +13527,24 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function Nf() {
 		bp(function() {
-			K & 6 ? Le(Ue, Of) : kf();
+			K & 6 ? Re(We, Of) : kf();
 		});
 	}
 	function Pf() {
 		if (Tf === 0) {
-			var e = Ra;
-			e === 0 && (e = rt, rt <<= 1, !(rt & 261888) && (rt = 256)), Tf = e;
+			var e = za;
+			e === 0 && (e = it, it <<= 1, !(it & 261888) && (it = 256)), Tf = e;
 		}
 		return Tf;
 	}
 	function Ff(e) {
-		return e == null || typeof e == "symbol" || typeof e == "boolean" ? null : typeof e == "function" ? e : vn(e);
+		return e == null || typeof e == "symbol" || typeof e == "boolean" ? null : typeof e == "function" ? e : yn(e);
 	}
 	function If(e, t, n, r, i) {
 		if (t === "submit" && n && n.stateNode === i) {
-			var a = Ff((i[wt] || null).action), o = r.submitter;
-			o && (t = (t = o[wt] || null) ? Ff(t.formAction) : o.getAttribute("formAction"), t !== null && (a = t, o = null));
-			var s = new Bn("action", "action", null, r, i);
+			var a = Ff((i[Tt] || null).action), o = r.submitter;
+			o && (t = (t = o[Tt] || null) ? Ff(t.formAction) : o.getAttribute("formAction"), t !== null && (a = t, o = null));
+			var s = new Vn("action", "action", null, r, i);
 			e.push({
 				event: s,
 				listeners: [{
@@ -13543,14 +13553,14 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						if (r.defaultPrevented) {
 							if (Tf !== 0) {
 								var e = new FormData(i, o);
-								ec(n, {
+								tc(n, {
 									pending: !0,
 									data: e,
 									method: i.method,
 									action: a
 								}, null, e);
 							}
-						} else typeof a == "function" && (s.preventDefault(), e = new FormData(i, o), ec(n, {
+						} else typeof a == "function" && (s.preventDefault(), e = new FormData(i, o), tc(n, {
 							pending: !0,
 							data: e,
 							method: i.method,
@@ -13562,16 +13572,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			});
 		}
 	}
-	for (var Lf = 0; Lf < mi.length; Lf++) {
-		var Rf = mi[Lf];
-		hi(Rf.toLowerCase(), "on" + (Rf[0].toUpperCase() + Rf.slice(1)));
+	for (var Lf = 0; Lf < hi.length; Lf++) {
+		var Rf = hi[Lf];
+		gi(Rf.toLowerCase(), "on" + (Rf[0].toUpperCase() + Rf.slice(1)));
 	}
-	hi(oi, "onAnimationEnd"), hi(si, "onAnimationIteration"), hi(ci, "onAnimationStart"), hi("dblclick", "onDoubleClick"), hi("focusin", "onFocus"), hi("focusout", "onBlur"), hi(li, "onTransitionRun"), hi(ui, "onTransitionStart"), hi(di, "onTransitionCancel"), hi(fi, "onTransitionEnd"), Ht("onMouseEnter", ["mouseout", "mouseover"]), Ht("onMouseLeave", ["mouseout", "mouseover"]), Ht("onPointerEnter", ["pointerout", "pointerover"]), Ht("onPointerLeave", ["pointerout", "pointerover"]), Vt("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")), Vt("onSelect", "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")), Vt("onBeforeInput", [
+	gi(si, "onAnimationEnd"), gi(ci, "onAnimationIteration"), gi(li, "onAnimationStart"), gi("dblclick", "onDoubleClick"), gi("focusin", "onFocus"), gi("focusout", "onBlur"), gi(ui, "onTransitionRun"), gi(di, "onTransitionStart"), gi(fi, "onTransitionCancel"), gi(pi, "onTransitionEnd"), Ut("onMouseEnter", ["mouseout", "mouseover"]), Ut("onMouseLeave", ["mouseout", "mouseover"]), Ut("onPointerEnter", ["pointerout", "pointerover"]), Ut("onPointerLeave", ["pointerout", "pointerover"]), Ht("onChange", "change click focusin focusout input keydown keyup selectionchange".split(" ")), Ht("onSelect", "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(" ")), Ht("onBeforeInput", [
 		"compositionend",
 		"keypress",
 		"textInput",
 		"paste"
-	]), Vt("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")), Vt("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")), Vt("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
+	]), Ht("onCompositionEnd", "compositionend focusout keydown keypress keyup mousedown".split(" ")), Ht("onCompositionStart", "compositionstart focusout keydown keypress keyup mousedown".split(" ")), Ht("onCompositionUpdate", "compositionupdate focusout keydown keypress keyup mousedown".split(" "));
 	var zf = "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(" "), Bf = new Set("beforetoggle cancel close invalid load scroll scrollend toggle".split(" ").concat(zf));
 	function Vf(e, t) {
 		t = !!(t & 4);
@@ -13587,7 +13597,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					try {
 						a(i);
 					} catch (e) {
-						yi(e);
+						bi(e);
 					}
 					i.currentTarget = null, a = c;
 				}
@@ -13597,7 +13607,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					try {
 						a(i);
 					} catch (e) {
-						yi(e);
+						bi(e);
 					}
 					i.currentTarget = null, a = c;
 				}
@@ -13605,8 +13615,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function Q(e, t) {
-		var n = t[Et];
-		n === void 0 && (n = t[Et] = /* @__PURE__ */ new Set());
+		var n = t[Dt];
+		n === void 0 && (n = t[Dt] = /* @__PURE__ */ new Set());
 		var r = e + "__bubble";
 		n.has(r) || (Gf(t, e, 2, !1), n.add(r));
 	}
@@ -13617,7 +13627,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	var Uf = "_reactListening" + Math.random().toString(36).slice(2);
 	function Wf(e) {
 		if (!e[Uf]) {
-			e[Uf] = !0, zt.forEach(function(t) {
+			e[Uf] = !0, Bt.forEach(function(t) {
 				t !== "selectionchange" && (Bf.has(t) || Hf(t, !1, e), Hf(t, !0, e));
 			});
 			var t = e.nodeType === 9 ? e : e.ownerDocument;
@@ -13634,7 +13644,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				break;
 			default: i = yh;
 		}
-		n = i.bind(null, t, n, e), i = void 0, !kn || t !== "touchstart" && t !== "touchmove" && t !== "wheel" || (i = !0), r ? i === void 0 ? e.addEventListener(t, n, !0) : e.addEventListener(t, n, {
+		n = i.bind(null, t, n, e), i = void 0, !An || t !== "touchstart" && t !== "touchmove" && t !== "wheel" || (i = !0), r ? i === void 0 ? e.addEventListener(t, n, !0) : e.addEventListener(t, n, {
 			capture: !0,
 			passive: i
 		}) : i === void 0 ? e.addEventListener(t, n, !1) : e.addEventListener(t, n, { passive: i });
@@ -13653,7 +13663,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					s = s.return;
 				}
 				for (; c !== null;) {
-					if (s = Nt(c), s === null) return;
+					if (s = Pt(c), s === null) return;
 					if (l = s.tag, l === 5 || l === 6 || l === 26 || l === 27) {
 						r = a = s;
 						continue a;
@@ -13663,27 +13673,27 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 			r = r.return;
 		}
-		En(function() {
-			var r = a, i = xn(n), s = [];
+		Dn(function() {
+			var r = a, i = Sn(n), s = [];
 			a: {
-				var c = pi.get(e);
+				var c = mi.get(e);
 				if (c !== void 0) {
-					var l = Bn, u = e;
+					var l = Vn, u = e;
 					switch (e) {
-						case "keypress": if (Fn(n) === 0) break a;
+						case "keypress": if (In(n) === 0) break a;
 						case "keydown":
 						case "keyup":
-							l = ir;
+							l = ar;
 							break;
 						case "focusin":
-							u = "focus", l = Yn;
+							u = "focus", l = Xn;
 							break;
 						case "focusout":
-							u = "blur", l = Yn;
+							u = "blur", l = Xn;
 							break;
 						case "beforeblur":
 						case "afterblur":
-							l = Yn;
+							l = Xn;
 							break;
 						case "click": if (n.button === 2) break a;
 						case "auxclick":
@@ -13694,7 +13704,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						case "mouseout":
 						case "mouseover":
 						case "contextmenu":
-							l = qn;
+							l = Jn;
 							break;
 						case "drag":
 						case "dragend":
@@ -13704,33 +13714,33 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						case "dragover":
 						case "dragstart":
 						case "drop":
-							l = Jn;
+							l = Yn;
 							break;
 						case "touchcancel":
 						case "touchend":
 						case "touchmove":
 						case "touchstart":
-							l = sr;
+							l = cr;
 							break;
-						case oi:
 						case si:
 						case ci:
-							l = Xn;
+						case li:
+							l = Zn;
 							break;
-						case fi:
-							l = cr;
+						case pi:
+							l = lr;
 							break;
 						case "scroll":
 						case "scrollend":
-							l = Hn;
+							l = Un;
 							break;
 						case "wheel":
-							l = lr;
+							l = ur;
 							break;
 						case "copy":
 						case "cut":
 						case "paste":
-							l = Zn;
+							l = Qn;
 							break;
 						case "gotpointercapture":
 						case "lostpointercapture":
@@ -13740,19 +13750,19 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						case "pointerout":
 						case "pointerover":
 						case "pointerup":
-							l = ar;
-							break;
-						case "submit":
 							l = or;
 							break;
+						case "submit":
+							l = sr;
+							break;
 						case "toggle":
-						case "beforetoggle": l = ur;
+						case "beforetoggle": l = dr;
 					}
 					var d = !!(t & 4), f = !d && (e === "scroll" || e === "scrollend"), p = d ? c === null ? null : c + "Capture" : c;
 					d = [];
 					for (var m = r, h; m !== null;) {
 						var g = m;
-						if (h = g.stateNode, g = g.tag, g !== 5 && g !== 26 && g !== 27 || h === null || p === null || (g = Dn(m, p), g != null && d.push(qf(m, g, h))), f) break;
+						if (h = g.stateNode, g = g.tag, g !== 5 && g !== 26 && g !== 27 || h === null || p === null || (g = On(m, p), g != null && d.push(qf(m, g, h))), f) break;
 						m = m.return;
 					}
 					0 < d.length && (c = new l(c, u, null, n, i), s.push({
@@ -13763,45 +13773,45 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}
 			if (!(t & 7)) {
 				a: {
-					if (l = e === "mouseover" || e === "pointerover", c = e === "mouseout" || e === "pointerout", l && n !== bn && (u = n.relatedTarget || n.fromElement) && (Nt(u) || u[Tt])) break a;
-					(c || l) && (u = i.window === i ? i : (l = i.ownerDocument) ? l.defaultView || l.parentWindow : window, c ? (l = n.relatedTarget || n.toElement, c = r, l = l ? Nt(l) : null, l !== null && (f = o(l), d = l.tag, l !== f || d !== 5 && d !== 27 && d !== 6) && (l = null)) : (c = null, l = r), c !== l && (d = qn, g = "onMouseLeave", p = "onMouseEnter", m = "mouse", (e === "pointerout" || e === "pointerover") && (d = ar, g = "onPointerLeave", p = "onPointerEnter", m = "pointer"), f = c == null ? u : Ft(c), h = l == null ? u : Ft(l), u = new d(g, m + "leave", c, n, i), u.target = f, u.relatedTarget = h, g = null, Nt(i) === r && (d = new d(p, m + "enter", l, n, i), d.target = h, d.relatedTarget = f, g = d), f = g, d = c && l ? w(c, l, Yf) : null, c !== null && Xf(s, u, c, d, !1), l !== null && f !== null && Xf(s, f, l, d, !0)));
+					if (l = e === "mouseover" || e === "pointerover", c = e === "mouseout" || e === "pointerout", l && n !== xn && (u = n.relatedTarget || n.fromElement) && (Pt(u) || u[Et])) break a;
+					(c || l) && (u = i.window === i ? i : (l = i.ownerDocument) ? l.defaultView || l.parentWindow : window, c ? (l = n.relatedTarget || n.toElement, c = r, l = l ? Pt(l) : null, l !== null && (f = o(l), d = l.tag, l !== f || d !== 5 && d !== 27 && d !== 6) && (l = null)) : (c = null, l = r), c !== l && (d = Jn, g = "onMouseLeave", p = "onMouseEnter", m = "mouse", (e === "pointerout" || e === "pointerover") && (d = or, g = "onPointerLeave", p = "onPointerEnter", m = "pointer"), f = c == null ? u : It(c), h = l == null ? u : It(l), u = new d(g, m + "leave", c, n, i), u.target = f, u.relatedTarget = h, g = null, Pt(i) === r && (d = new d(p, m + "enter", l, n, i), d.target = h, d.relatedTarget = f, g = d), f = g, d = c && l ? w(c, l, Yf) : null, c !== null && Xf(s, u, c, d, !1), l !== null && f !== null && Xf(s, f, l, d, !0)));
 				}
 				a: {
-					if (c = r ? Ft(r) : window, l = c.nodeName && c.nodeName.toLowerCase(), l === "select" || l === "input" && c.type === "file") var _ = kr;
-					else if (Cr(c)) {
-						if (Ar) _ = zr;
+					if (c = r ? It(r) : window, l = c.nodeName && c.nodeName.toLowerCase(), l === "select" || l === "input" && c.type === "file") var _ = Ar;
+					else if (wr(c)) {
+						if (jr) _ = Br;
 						else {
-							_ = Lr;
-							var v = Ir;
+							_ = Rr;
+							var v = Lr;
 						}
-					} else l = c.nodeName, !l || l.toLowerCase() !== "input" || c.type !== "checkbox" && c.type !== "radio" ? r && hn(r.elementType) && (_ = kr) : _ = Rr;
+					} else l = c.nodeName, !l || l.toLowerCase() !== "input" || c.type !== "checkbox" && c.type !== "radio" ? r && gn(r.elementType) && (_ = Ar) : _ = zr;
 					if (_ &&= _(e, r)) {
-						wr(s, _, n, i);
+						Tr(s, _, n, i);
 						break a;
 					}
 					v && v(e, c, r);
 				}
-				switch (v = r ? Ft(r) : window, e) {
+				switch (v = r ? It(r) : window, e) {
 					case "focusin":
-						(Cr(v) || v.contentEditable === "true") && (Xr = v, Zr = r, Qr = null);
+						(wr(v) || v.contentEditable === "true") && (Zr = v, Qr = r, $r = null);
 						break;
 					case "focusout":
-						Qr = Zr = Xr = null;
+						$r = Qr = Zr = null;
 						break;
 					case "mousedown":
-						$r = !0;
+						ei = !0;
 						break;
 					case "contextmenu":
 					case "mouseup":
 					case "dragend":
-						$r = !1, ei(s, n, i);
+						ei = !1, ti(s, n, i);
 						break;
-					case "selectionchange": if (Yr) break;
+					case "selectionchange": if (Xr) break;
 					case "keydown":
-					case "keyup": ei(s, n, i);
+					case "keyup": ti(s, n, i);
 				}
 				var y;
-				if (L) b: {
+				if (I) b: {
 					switch (e) {
 						case "compositionstart":
 							var b = "onCompositionStart";
@@ -13815,11 +13825,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					}
 					b = void 0;
 				}
-				else yr ? _r(e, n) && (b = "onCompositionEnd") : e === "keydown" && n.keyCode === 229 && (b = "onCompositionStart");
-				b && (mr && n.locale !== "ko" && (yr || b !== "onCompositionStart" ? b === "onCompositionEnd" && yr && (y = Pn()) : (jn = i, Mn = "value" in jn ? jn.value : jn.textContent, yr = !0)), v = Jf(r, b), 0 < v.length && (b = new Qn(b, e, null, n, i), s.push({
+				else br ? vr(e, n) && (b = "onCompositionEnd") : e === "keydown" && n.keyCode === 229 && (b = "onCompositionStart");
+				b && (hr && n.locale !== "ko" && (br || b !== "onCompositionStart" ? b === "onCompositionEnd" && br && (y = Fn()) : (Mn = i, Nn = "value" in Mn ? Mn.value : Mn.textContent, br = !0)), v = Jf(r, b), 0 < v.length && (b = new $n(b, e, null, n, i), s.push({
 					event: b,
 					listeners: v
-				}), y ? b.data = y : (y = vr(n), y !== null && (b.data = y)))), (y = pr ? br(e, n) : xr(e, n)) && (b = Jf(r, "onBeforeInput"), 0 < b.length && (v = new Qn("onBeforeInput", "beforeinput", null, n, i), s.push({
+				}), y ? b.data = y : (y = yr(n), y !== null && (b.data = y)))), (y = mr ? xr(e, n) : Sr(e, n)) && (b = Jf(r, "onBeforeInput"), 0 < b.length && (v = new $n("onBeforeInput", "beforeinput", null, n, i), s.push({
 					event: v,
 					listeners: b
 				}), v.data = y)), If(s, e, r, n, i);
@@ -13837,7 +13847,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	function Jf(e, t) {
 		for (var n = t + "Capture", r = []; e !== null;) {
 			var i = e, a = i.stateNode;
-			if (i = i.tag, i !== 5 && i !== 26 && i !== 27 || a === null || (i = Dn(e, n), i != null && r.unshift(qf(e, i, a)), i = Dn(e, t), i != null && r.push(qf(e, i, a))), e.tag === 3) return r;
+			if (i = i.tag, i !== 5 && i !== 26 && i !== 27 || a === null || (i = On(e, n), i != null && r.unshift(qf(e, i, a)), i = On(e, t), i != null && r.push(qf(e, i, a))), e.tag === 3) return r;
 			e = e.return;
 		}
 		return [];
@@ -13853,7 +13863,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		for (var a = t._reactName, o = []; n !== null && n !== r;) {
 			var s = n, c = s.alternate, l = s.stateNode;
 			if (s = s.tag, c !== null && c === r) break;
-			s !== 5 && s !== 26 && s !== 27 || l === null || (c = l, i ? (l = Dn(n, a), l != null && o.unshift(qf(n, l, c))) : i || (l = Dn(n, a), l != null && o.push(qf(n, l, c)))), n = n.return;
+			s !== 5 && s !== 26 && s !== 27 || l === null || (c = l, i ? (l = On(n, a), l != null && o.unshift(qf(n, l, c))) : i || (l = On(n, a), l != null && o.push(qf(n, l, c)))), n = n.return;
 		}
 		o.length !== 0 && e.push({
 			event: t,
@@ -13870,28 +13880,28 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	function $(e, t, n, r, a, o) {
 		switch (n) {
 			case "children":
-				if (typeof r == "string") t === "body" || t === "textarea" && r === "" || dn(e, r);
-				else if (typeof r == "number" || typeof r == "bigint") t !== "body" && dn(e, "" + r);
+				if (typeof r == "string") t === "body" || t === "textarea" && r === "" || fn(e, r);
+				else if (typeof r == "number" || typeof r == "bigint") t !== "body" && fn(e, "" + r);
 				else return;
 				break;
 			case "className":
-				Yt(e, "class", r);
+				Xt(e, "class", r);
 				break;
 			case "tabIndex":
-				Yt(e, "tabindex", r);
+				Xt(e, "tabindex", r);
 				break;
 			case "dir":
 			case "role":
 			case "viewBox":
 			case "width":
 			case "height":
-				Yt(e, n, r);
+				Xt(e, n, r);
 				break;
 			case "style":
-				mn(e, r, o);
+				hn(e, r, o);
 				return;
 			case "data": if (t !== "object") {
-				Yt(e, "data", r);
+				Xt(e, "data", r);
 				break;
 			}
 			case "src":
@@ -13904,7 +13914,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					e.removeAttribute(n);
 					break;
 				}
-				r = vn(r), e.setAttribute(n, r);
+				r = yn(r), e.setAttribute(n, r);
 				break;
 			case "action":
 			case "formAction":
@@ -13916,10 +13926,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					e.removeAttribute(n);
 					break;
 				}
-				r = vn(r), e.setAttribute(n, r);
+				r = yn(r), e.setAttribute(n, r);
 				break;
 			case "onClick":
-				r != null && (e.onclick = yn);
+				r != null && (e.onclick = bn);
 				return;
 			case "onScroll":
 				r != null && Q("scroll", e);
@@ -13954,7 +13964,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					e.removeAttribute("xlink:href");
 					break;
 				}
-				n = vn(r), e.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", n);
+				n = yn(r), e.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", n);
 				break;
 			case "contentEditable":
 			case "spellCheck":
@@ -14007,49 +14017,49 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				r == null || typeof r == "function" || typeof r == "symbol" || isNaN(r) ? e.removeAttribute(n) : e.setAttribute(n, r);
 				break;
 			case "popover":
-				Q("beforetoggle", e), Q("toggle", e), Jt(e, "popover", r);
+				Q("beforetoggle", e), Q("toggle", e), Yt(e, "popover", r);
 				break;
 			case "xlinkActuate":
-				Xt(e, "http://www.w3.org/1999/xlink", "xlink:actuate", r);
+				Zt(e, "http://www.w3.org/1999/xlink", "xlink:actuate", r);
 				break;
 			case "xlinkArcrole":
-				Xt(e, "http://www.w3.org/1999/xlink", "xlink:arcrole", r);
+				Zt(e, "http://www.w3.org/1999/xlink", "xlink:arcrole", r);
 				break;
 			case "xlinkRole":
-				Xt(e, "http://www.w3.org/1999/xlink", "xlink:role", r);
+				Zt(e, "http://www.w3.org/1999/xlink", "xlink:role", r);
 				break;
 			case "xlinkShow":
-				Xt(e, "http://www.w3.org/1999/xlink", "xlink:show", r);
+				Zt(e, "http://www.w3.org/1999/xlink", "xlink:show", r);
 				break;
 			case "xlinkTitle":
-				Xt(e, "http://www.w3.org/1999/xlink", "xlink:title", r);
+				Zt(e, "http://www.w3.org/1999/xlink", "xlink:title", r);
 				break;
 			case "xlinkType":
-				Xt(e, "http://www.w3.org/1999/xlink", "xlink:type", r);
+				Zt(e, "http://www.w3.org/1999/xlink", "xlink:type", r);
 				break;
 			case "xmlBase":
-				Xt(e, "http://www.w3.org/XML/1998/namespace", "xml:base", r);
+				Zt(e, "http://www.w3.org/XML/1998/namespace", "xml:base", r);
 				break;
 			case "xmlLang":
-				Xt(e, "http://www.w3.org/XML/1998/namespace", "xml:lang", r);
+				Zt(e, "http://www.w3.org/XML/1998/namespace", "xml:lang", r);
 				break;
 			case "xmlSpace":
-				Xt(e, "http://www.w3.org/XML/1998/namespace", "xml:space", r);
+				Zt(e, "http://www.w3.org/XML/1998/namespace", "xml:space", r);
 				break;
 			case "is":
-				Jt(e, "is", r);
+				Yt(e, "is", r);
 				break;
 			case "innerText":
 			case "textContent": return;
-			default: if (!(2 < n.length) || n[0] !== "o" && n[0] !== "O" || n[1] !== "n" && n[1] !== "N") n = gn.get(n) || n, Jt(e, n, r);
+			default: if (!(2 < n.length) || n[0] !== "o" && n[0] !== "O" || n[1] !== "n" && n[1] !== "N") n = _n.get(n) || n, Yt(e, n, r);
 			else return;
 		}
-		I = !0;
+		F = !0;
 	}
 	function tp(e, t, n, r, a, o) {
 		switch (n) {
 			case "style":
-				mn(e, r, o);
+				hn(e, r, o);
 				return;
 			case "dangerouslySetInnerHTML":
 				if (r != null) {
@@ -14061,8 +14071,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				break;
 			case "children":
-				if (typeof r == "string") dn(e, r);
-				else if (typeof r == "number" || typeof r == "bigint") dn(e, "" + r);
+				if (typeof r == "string") fn(e, r);
+				else if (typeof r == "number" || typeof r == "bigint") fn(e, "" + r);
 				else return;
 				break;
 			case "onScroll":
@@ -14072,7 +14082,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				r != null && Q("scrollend", e);
 				return;
 			case "onClick":
-				r != null && (e.onclick = yn);
+				r != null && (e.onclick = bn);
 				return;
 			case "suppressContentEditableWarning":
 			case "suppressHydrationWarning":
@@ -14081,16 +14091,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case "innerText":
 			case "textContent": return;
 			default:
-				if (!Bt.hasOwnProperty(n)) a: {
-					if (n[0] === "o" && n[1] === "n" && (a = n.endsWith("Capture"), o = n.slice(2, a ? n.length - 7 : void 0), t = e[wt] || null, t = t == null ? null : t[n], typeof t == "function" && e.removeEventListener(o, t, a), typeof r == "function")) {
+				if (!Vt.hasOwnProperty(n)) a: {
+					if (n[0] === "o" && n[1] === "n" && (a = n.endsWith("Capture"), o = n.slice(2, a ? n.length - 7 : void 0), t = e[Tt] || null, t = t == null ? null : t[n], typeof t == "function" && e.removeEventListener(o, t, a), typeof r == "function")) {
 						typeof t != "function" && t !== null && (n in e ? e[n] = null : e.hasAttribute(n) && e.removeAttribute(n)), e.addEventListener(o, r, a);
 						break a;
 					}
-					I = !0, n in e ? e[n] = r : !0 === r ? e.setAttribute(n, "") : Jt(e, n, r);
+					F = !0, n in e ? e[n] = r : !0 === r ? e.setAttribute(n, "") : Yt(e, n, r);
 				}
 				return;
 		}
-		I = !0;
+		F = !0;
 	}
 	function np(e, t, n) {
 		switch (t) {
@@ -14152,7 +14162,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						default: $(e, t, r, d, n, null);
 					}
 				}
-				on(e, o, c, l, u, s, a, !1);
+				sn(e, o, c, l, u, s, a, !1);
 				return;
 			case "select":
 				for (a in Q("invalid", e), r = s = o = null, n) if (n.hasOwnProperty(a) && (c = n[a], c != null)) switch (a) {
@@ -14165,7 +14175,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					case "multiple": r = c;
 					default: $(e, t, a, c, n, null);
 				}
-				t = o, n = s, e.multiple = !!r, t == null ? n != null && cn(e, !!r, n, !0) : cn(e, !!r, t, !1);
+				t = o, n = s, e.multiple = !!r, t == null ? n != null && ln(e, !!r, n, !0) : ln(e, !!r, t, !1);
 				return;
 			case "textarea":
 				for (s in Q("invalid", e), o = a = r = null, n) if (n.hasOwnProperty(s) && (c = n[s], c != null)) switch (s) {
@@ -14183,7 +14193,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						break;
 					default: $(e, t, s, c, n, null);
 				}
-				un(e, r, a, o);
+				dn(e, r, a, o);
 				return;
 			case "option":
 				for (l in n) if (n.hasOwnProperty(l) && (r = n[l], r != null)) switch (l) {
@@ -14230,7 +14240,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					default: $(e, t, u, r, n, null);
 				}
 				return;
-			default: if (hn(t)) {
+			default: if (gn(t)) {
 				for (d in n) n.hasOwnProperty(d) && (r = n[d], r !== void 0 && tp(e, t, d, r, n, void 0));
 				return;
 			}
@@ -14263,22 +14273,22 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					var m = r[p];
 					if (f = n[p], r.hasOwnProperty(p) && (m != null || f != null)) switch (p) {
 						case "type":
-							m !== f && (I = !0), o = m;
+							m !== f && (F = !0), o = m;
 							break;
 						case "name":
-							m !== f && (I = !0), a = m;
+							m !== f && (F = !0), a = m;
 							break;
 						case "checked":
-							m !== f && (I = !0), u = m;
+							m !== f && (F = !0), u = m;
 							break;
 						case "defaultChecked":
-							m !== f && (I = !0), d = m;
+							m !== f && (F = !0), d = m;
 							break;
 						case "value":
-							m !== f && (I = !0), s = m;
+							m !== f && (F = !0), s = m;
 							break;
 						case "defaultValue":
-							m !== f && (I = !0), c = m;
+							m !== f && (F = !0), c = m;
 							break;
 						case "children":
 						case "dangerouslySetInnerHTML":
@@ -14287,7 +14297,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						default: m !== f && $(e, t, p, m, r, f);
 					}
 				}
-				an(e, s, c, l, u, d, o, a);
+				on(e, s, c, l, u, d, o, a);
 				return;
 			case "select":
 				for (o in m = s = c = p = null, n) if (l = n[o], n.hasOwnProperty(o) && l != null) switch (o) {
@@ -14297,15 +14307,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				for (a in r) if (o = r[a], l = n[a], r.hasOwnProperty(a) && (o != null || l != null)) switch (a) {
 					case "value":
-						o !== l && (I = !0), p = o;
+						o !== l && (F = !0), p = o;
 						break;
 					case "defaultValue":
-						o !== l && (I = !0), c = o;
+						o !== l && (F = !0), c = o;
 						break;
-					case "multiple": o !== l && (I = !0), s = o;
+					case "multiple": o !== l && (F = !0), s = o;
 					default: o !== l && $(e, t, a, o, r, l);
 				}
-				t = c, n = s, r = m, p == null ? !!r != !!n && (t == null ? cn(e, !!n, n ? [] : "", !1) : cn(e, !!n, t, !0)) : cn(e, !!n, p, !1);
+				t = c, n = s, r = m, p == null ? !!r != !!n && (t == null ? ln(e, !!n, n ? [] : "", !1) : ln(e, !!n, t, !0)) : ln(e, !!n, p, !1);
 				return;
 			case "textarea":
 				for (c in m = p = null, n) if (a = n[c], n.hasOwnProperty(c) && a != null && !r.hasOwnProperty(c)) switch (c) {
@@ -14315,10 +14325,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				for (s in r) if (a = r[s], o = n[s], r.hasOwnProperty(s) && (a != null || o != null)) switch (s) {
 					case "value":
-						a !== o && (I = !0), p = a;
+						a !== o && (F = !0), p = a;
 						break;
 					case "defaultValue":
-						a !== o && (I = !0), m = a;
+						a !== o && (F = !0), m = a;
 						break;
 					case "children": break;
 					case "dangerouslySetInnerHTML":
@@ -14326,7 +14336,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						break;
 					default: a !== o && $(e, t, s, a, r, o);
 				}
-				ln(e, p, m);
+				un(e, p, m);
 				return;
 			case "option":
 				for (var h in n) if (p = n[h], n.hasOwnProperty(h) && p != null && !r.hasOwnProperty(h)) switch (h) {
@@ -14337,7 +14347,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				for (l in r) if (p = r[l], m = n[l], r.hasOwnProperty(l) && p !== m && (p != null || m != null)) switch (l) {
 					case "selected":
-						p !== m && (I = !0), e.selected = p && typeof p != "function" && typeof p != "symbol";
+						p !== m && (F = !0), e.selected = p && typeof p != "function" && typeof p != "symbol";
 						break;
 					default: $(e, t, l, p, r, m);
 				}
@@ -14366,7 +14376,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					default: $(e, t, u, p, r, m);
 				}
 				return;
-			default: if (hn(t)) {
+			default: if (gn(t)) {
 				for (var _ in n) p = n[_], n.hasOwnProperty(_) && p !== void 0 && !r.hasOwnProperty(_) && tp(e, t, _, void 0, r, p);
 				for (d in r) p = r[d], m = n[d], !r.hasOwnProperty(d) || p === m || p === void 0 && m === void 0 || tp(e, t, d, p, r, m);
 				return;
@@ -14425,7 +14435,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		return e === 1 && t === "foreignObject" ? 0 : e;
 	}
 	function fp(e, t, n, r) {
-		return n = lp(n).createElement(e), n[Ct] = r, n[wt] = t, np(n, e, t), Lt(n), n;
+		return n = lp(n).createElement(e), n[wt] = r, n[Tt] = t, np(n, e, t), Rt(n), n;
 	}
 	function pp(e, t) {
 		return e === "textarea" || e === "noscript" || typeof t.children == "string" || typeof t.children == "number" || typeof t.children == "bigint" || typeof t.dangerouslySetInnerHTML == "object" && t.dangerouslySetInnerHTML !== null && t.dangerouslySetInnerHTML.__html != null;
@@ -14463,7 +14473,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					n = e.ownerDocument.head, _m(n);
 					for (var a = n.firstChild; a;) {
 						var o = a.nextSibling, s = a.nodeName;
-						a[At] || s === "SCRIPT" || s === "STYLE" || s === "LINK" && a.rel.toLowerCase() === "stylesheet" || n.removeChild(a), a = o;
+						a[jt] || s === "SCRIPT" || s === "STYLE" || s === "LINK" && a.rel.toLowerCase() === "stylesheet" || n.removeChild(a), a = o;
 					}
 				} else n === "body" && _m(e.ownerDocument.body);
 			}
@@ -14794,7 +14804,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		return s = r && a && o & Node.DOCUMENT_POSITION_FOLLOWING && s & Node.DOCUMENT_POSITION_PRECEDING, t = r && t === e || a && i === e || c || s ? Node.DOCUMENT_POSITION_CONTAINED_BY : !r && t === e || !a && i === e ? Node.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC : o, t & Node.DOCUMENT_POSITION_DISCONNECTED || t & Node.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC || Xp(t, this._fragmentFiber, n[0], n[n.length - 1], e) ? t : Node.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC;
 	};
 	function Xp(e, t, n, r, i) {
-		var a = Nt(i);
+		var a = Pt(i);
 		if (e & Node.DOCUMENT_POSITION_CONTAINED_BY) {
 			if (n = !!a) a: {
 				for (; a !== null;) {
@@ -14891,7 +14901,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				case "HTML":
 				case "HEAD":
 				case "BODY":
-					nm(n), Mt(n);
+					nm(n), Nt(n);
 					continue;
 				case "SCRIPT":
 				case "STYLE": continue;
@@ -14910,7 +14920,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					var a = i.name == null ? null : "" + i.name;
 					if (i.type === "hidden" && e.getAttribute("name") === a) return e;
 				} else return e;
-			} else if (!e[At]) switch (t) {
+			} else if (!e[jt]) switch (t) {
 				case "meta":
 					if (!e.hasAttribute("itemprop")) break;
 					return e;
@@ -15034,11 +15044,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			var i = n[r];
 			n.hasOwnProperty(r) && i != null && $(e, t, r, null, rp, i);
 		}
-		n.dangerouslySetInnerHTML != null && (e.textContent = ""), e.onclick === yn && (e.onclick = null), Mt(e);
+		n.dangerouslySetInnerHTML != null && (e.textContent = ""), e.onclick === bn && (e.onclick = null), Nt(e);
 	}
 	function _m(e) {
 		for (var t = e.attributes; t.length;) e.removeAttributeNode(t[0]);
-		Mt(e);
+		Nt(e);
 	}
 	var vm = /* @__PURE__ */ new Map(), ym = /* @__PURE__ */ new Set();
 	function bm(e) {
@@ -15048,8 +15058,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		return e.nodeType === 9 ? e : e.ownerDocument;
 	}
-	var xm = P.d;
-	P.d = {
+	var xm = N.d;
+	N.d = {
 		f: Sm,
 		r: Cm,
 		D: Em,
@@ -15065,19 +15075,19 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		return e || t;
 	}
 	function Cm(e) {
-		var t = Pt(e);
-		t !== null && t.tag === 5 && t.type === "form" ? nc(t) : xm.r(e);
+		var t = Ft(e);
+		t !== null && t.tag === 5 && t.type === "form" ? rc(t) : xm.r(e);
 	}
 	var wm = typeof document > "u" ? null : document;
 	function Tm(e, t, n) {
 		var r = wm;
 		if (r && typeof t == "string" && t) {
-			var i = rn(t);
+			var i = an(t);
 			i = "link[rel=\"" + e + "\"][href=\"" + i + "\"]", typeof n == "string" && (i += "[crossorigin=\"" + n + "\"]"), ym.has(i) || (ym.add(i), e = {
 				rel: e,
 				crossOrigin: n,
 				href: t
-			}, r.querySelector(i) === null && (t = r.createElement("link"), np(t, "link", e), Lt(t), r.head.appendChild(t)));
+			}, r.querySelector(i) === null && (t = r.createElement("link"), np(t, "link", e), Rt(t), r.head.appendChild(t)));
 		}
 	}
 	function Em(e) {
@@ -15090,8 +15100,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		xm.L(e, t, n);
 		var r = wm;
 		if (r && e && t) {
-			var i = "link[rel=\"preload\"][as=\"" + rn(t) + "\"]";
-			t === "image" && n && n.imageSrcSet ? (i += "[imagesrcset=\"" + rn(n.imageSrcSet) + "\"]", typeof n.imageSizes == "string" && (i += "[imagesizes=\"" + rn(n.imageSizes) + "\"]")) : i += "[href=\"" + rn(e) + "\"]";
+			var i = "link[rel=\"preload\"][as=\"" + an(t) + "\"]";
+			t === "image" && n && n.imageSrcSet ? (i += "[imagesrcset=\"" + an(n.imageSrcSet) + "\"]", typeof n.imageSizes == "string" && (i += "[imagesizes=\"" + an(n.imageSizes) + "\"]")) : i += "[href=\"" + an(e) + "\"]";
 			var a = i;
 			switch (t) {
 				case "style":
@@ -15105,9 +15115,9 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				as: t
 			}, n), vm.set(a, e), r.querySelector(i) !== null || t === "style" && r.querySelector(Fm(a)) || t === "script" && r.querySelector(zm(a))))) {
 				var o = r.createElement("link");
-				np(o, "link", e), t === "style" && (o[jt] = !0, o.onload = o.onerror = function() {
-					Rt(o);
-				}), Lt(o), r.head.appendChild(o);
+				np(o, "link", e), t === "style" && (o[Mt] = !0, o.onload = o.onerror = function() {
+					zt(o);
+				}), Rt(o), r.head.appendChild(o);
 			}
 		}
 	}
@@ -15115,7 +15125,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		xm.m(e, t);
 		var n = wm;
 		if (n && e) {
-			var r = t && typeof t.as == "string" ? t.as : "script", i = "link[rel=\"modulepreload\"][as=\"" + rn(r) + "\"][href=\"" + rn(e) + "\"]", a = i;
+			var r = t && typeof t.as == "string" ? t.as : "script", i = "link[rel=\"modulepreload\"][as=\"" + an(r) + "\"][href=\"" + an(e) + "\"]", a = i;
 			switch (r) {
 				case "audioworklet":
 				case "paintworklet":
@@ -15136,7 +15146,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					case "worker":
 					case "script": if (n.querySelector(zm(a))) return;
 				}
-				r = n.createElement("link"), np(r, "link", e), Lt(r), n.head.appendChild(r);
+				r = n.createElement("link"), np(r, "link", e), Rt(r), n.head.appendChild(r);
 			}
 		}
 	}
@@ -15144,7 +15154,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		xm.S(e, t, n);
 		var r = wm;
 		if (r && e) {
-			var i = It(r).hoistableStyles, a = Pm(e);
+			var i = Lt(r).hoistableStyles, a = Pm(e);
 			t ||= "default";
 			var o = i.get(a);
 			if (!o) {
@@ -15160,7 +15170,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 						"data-precedence": t
 					}, n), (n = vm.get(a)) && Hm(e, n);
 					var c = o = r.createElement("link");
-					Lt(c), np(c, "link", e), c._p = new Promise(function(e, t) {
+					Rt(c), np(c, "link", e), c._p = new Promise(function(e, t) {
 						c.onload = e, c.onerror = t;
 					}), c.addEventListener("load", function() {
 						s.loading |= 1;
@@ -15181,11 +15191,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		xm.X(e, t);
 		var n = wm;
 		if (n && e) {
-			var r = It(n).hoistableScripts, i = Rm(e), a = r.get(i);
+			var r = Lt(n).hoistableScripts, i = Rm(e), a = r.get(i);
 			a || (a = n.querySelector(zm(i)), a || (e = T({
 				src: e,
 				async: !0
-			}, t), (t = vm.get(i)) && Um(e, t), a = n.createElement("script"), Lt(a), np(a, "link", e), n.head.appendChild(a)), a = {
+			}, t), (t = vm.get(i)) && Um(e, t), a = n.createElement("script"), Rt(a), np(a, "link", e), n.head.appendChild(a)), a = {
 				type: "script",
 				instance: a,
 				count: 1,
@@ -15197,12 +15207,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		xm.M(e, t);
 		var n = wm;
 		if (n && e) {
-			var r = It(n).hoistableScripts, i = Rm(e), a = r.get(i);
+			var r = Lt(n).hoistableScripts, i = Rm(e), a = r.get(i);
 			a || (a = n.querySelector(zm(i)), a || (e = T({
 				src: e,
 				async: !0,
 				type: "module"
-			}, t), (t = vm.get(i)) && Um(e, t), a = n.createElement("script"), Lt(a), np(a, "link", e), n.head.appendChild(a)), a = {
+			}, t), (t = vm.get(i)) && Um(e, t), a = n.createElement("script"), Rt(a), np(a, "link", e), n.head.appendChild(a)), a = {
 				type: "script",
 				instance: a,
 				count: 1,
@@ -15211,12 +15221,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function Nm(e, t, n, r) {
-		var a = (a = Ce.current) ? bm(a) : null;
+		var a = (a = we.current) ? bm(a) : null;
 		if (!a) throw Error(i(446));
 		switch (e) {
 			case "meta":
 			case "title": return null;
-			case "style": return typeof n.precedence == "string" && typeof n.href == "string" ? (n = Pm(n.href), t = It(a).hoistableStyles, r = t.get(n), r || (r = {
+			case "style": return typeof n.precedence == "string" && typeof n.href == "string" ? (n = Pm(n.href), t = Lt(a).hoistableStyles, r = t.get(n), r || (r = {
 				type: "style",
 				instance: null,
 				count: 0,
@@ -15230,7 +15240,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case "link":
 				if (n.rel === "stylesheet" && typeof n.href == "string" && typeof n.precedence == "string") {
 					e = Pm(n.href);
-					var o = It(a).hoistableStyles, s = o.get(e);
+					var o = Lt(a).hoistableStyles, s = o.get(e);
 					if (s || (a = a.ownerDocument || a, s = {
 						type: "stylesheet",
 						instance: null,
@@ -15253,7 +15263,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 				}
 				if (t && r !== null) throw Error(i(529, ""));
 				return null;
-			case "script": return t = n.async, n = n.src, typeof n == "string" && t && typeof t != "function" && typeof t != "symbol" ? (n = Rm(n), t = It(a).hoistableScripts, r = t.get(n), r || (r = {
+			case "script": return t = n.async, n = n.src, typeof n == "string" && t && typeof t != "function" && typeof t != "symbol" ? (n = Rm(n), t = Lt(a).hoistableScripts, r = t.get(n), r || (r = {
 				type: "script",
 				instance: null,
 				count: 0,
@@ -15268,7 +15278,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function Pm(e) {
-		return "href=\"" + rn(e) + "\"";
+		return "href=\"" + an(e) + "\"";
 	}
 	function Fm(e) {
 		return "link[rel=\"stylesheet\"][" + e + "]";
@@ -15281,11 +15291,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function Lm(e, t, n, r) {
 		if (t = e.querySelector("link[rel=\"preload\"][as=\"style\"][" + t + "]")) {
-			if (!0 !== t[jt]) {
+			if (!0 !== t[Mt]) {
 				r.loading = 1;
 				return;
 			}
-		} else t = e.createElement("link"), t[jt] = !0, t.onload = t.onerror = Rt.bind(null, t), np(t, "link", n), Lt(t), e.head.appendChild(t);
+		} else t = e.createElement("link"), t[Mt] = !0, t.onload = t.onerror = zt.bind(null, t), np(t, "link", n), Rt(t), e.head.appendChild(t);
 		r.preload = t, t.addEventListener("load", function() {
 			return r.loading |= 1;
 		}), t.addEventListener("error", function() {
@@ -15293,7 +15303,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		});
 	}
 	function Rm(e) {
-		return "[src=\"" + rn(e) + "\"]";
+		return "[src=\"" + an(e) + "\"]";
 	}
 	function zm(e) {
 		return "script[async]" + e;
@@ -15301,25 +15311,25 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	function Bm(e, t, n) {
 		if (t.count++, t.instance === null) switch (t.type) {
 			case "style":
-				var r = e.querySelector("style[data-href~=\"" + rn(n.href) + "\"]");
-				if (r) return t.instance = r, Lt(r), r;
+				var r = e.querySelector("style[data-href~=\"" + an(n.href) + "\"]");
+				if (r) return t.instance = r, Rt(r), r;
 				var a = T({}, n, {
 					"data-href": n.href,
 					"data-precedence": n.precedence,
 					href: null,
 					precedence: null
 				});
-				return r = (e.ownerDocument || e).createElement("style"), Lt(r), np(r, "style", a), Vm(r, n.precedence, e), t.instance = r;
+				return r = (e.ownerDocument || e).createElement("style"), Rt(r), np(r, "style", a), Vm(r, n.precedence, e), t.instance = r;
 			case "stylesheet":
 				a = Pm(n.href);
 				var o = e.querySelector(Fm(a));
-				if (o) return t.state.loading |= 4, t.instance = o, Lt(o), o;
-				r = Im(n), (a = vm.get(a)) && Hm(r, a), o = (e.ownerDocument || e).createElement("link"), Lt(o);
+				if (o) return t.state.loading |= 4, t.instance = o, Rt(o), o;
+				r = Im(n), (a = vm.get(a)) && Hm(r, a), o = (e.ownerDocument || e).createElement("link"), Rt(o);
 				var s = o;
 				return s._p = new Promise(function(e, t) {
 					s.onload = e, s.onerror = t;
 				}), np(o, "link", r), t.state.loading |= 4, Vm(o, n.precedence, e), t.instance = o;
-			case "script": return o = Rm(n.src), (a = e.querySelector(zm(o))) ? (t.instance = a, Lt(a), a) : (r = n, (a = vm.get(o)) && (r = T({}, n), Um(r, a)), e = e.ownerDocument || e, a = e.createElement("script"), Lt(a), np(a, "link", r), e.head.appendChild(a), t.instance = a);
+			case "script": return o = Rm(n.src), (a = e.querySelector(zm(o))) ? (t.instance = a, Rt(a), a) : (r = n, (a = vm.get(o)) && (r = T({}, n), Um(r, a)), e = e.ownerDocument || e, a = e.createElement("script"), Rt(a), np(a, "link", r), e.head.appendChild(a), t.instance = a);
 			case "void": return null;
 			default: throw Error(i(443, t.type));
 		}
@@ -15349,7 +15359,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (r.has(e)) return r;
 		for (r.set(e, null), n = n.getElementsByTagName(e), i = 0; i < n.length; i++) {
 			var a = n[i];
-			if (!(a[At] || a[Ct] || e === "link" && a.getAttribute("rel") === "stylesheet") && a.namespaceURI !== "http://www.w3.org/2000/svg") {
+			if (!(a[jt] || a[wt] || e === "link" && a.getAttribute("rel") === "stylesheet") && a.namespaceURI !== "http://www.w3.org/2000/svg") {
 				var o = a.getAttribute(t) || "";
 				o = e + o;
 				var s = r.get(o);
@@ -15396,10 +15406,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			if (n.instance === null) {
 				var i = Pm(r.href), a = t.querySelector(Fm(i));
 				if (a) {
-					t = a._p, typeof t == "object" && t && typeof t.then == "function" && (e.count++, e = nh.bind(e), t.then(e, e)), n.state.loading |= 4, n.instance = a, Lt(a);
+					t = a._p, typeof t == "object" && t && typeof t.then == "function" && (e.count++, e = nh.bind(e), t.then(e, e)), n.state.loading |= 4, n.instance = a, Rt(a);
 					return;
 				}
-				a = t.ownerDocument || t, r = Im(r), (i = vm.get(i)) && Hm(r, i), a = a.createElement("link"), Lt(a);
+				a = t.ownerDocument || t, r = Im(r), (i = vm.get(i)) && Hm(r, i), a = a.createElement("link"), Rt(a);
 				var o = a;
 				o._p = new Promise(function(e, t) {
 					o.onload = e, o.onerror = t;
@@ -15467,25 +15477,25 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		$$typeof: ae,
 		Provider: null,
 		Consumer: null,
-		_currentValue: ge,
-		_currentValue2: ge,
+		_currentValue: _e,
+		_currentValue2: _e,
 		_threadCount: 0
 	};
 	function ch(e, t, n, r, i, a, o, s, c) {
-		this.tag = 1, this.containerInfo = e, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = ft(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = ft(0), this.hiddenUpdates = ft(null), this.identifierPrefix = r, this.onUncaughtError = i, this.onCaughtError = a, this.onRecoverableError = o, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = c, this.transitionTypes = null, this.incompleteTransitions = /* @__PURE__ */ new Map();
+		this.tag = 1, this.containerInfo = e, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = -1, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = pt(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = pt(0), this.hiddenUpdates = pt(null), this.identifierPrefix = r, this.onUncaughtError = i, this.onCaughtError = a, this.onRecoverableError = o, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = c, this.transitionTypes = null, this.incompleteTransitions = /* @__PURE__ */ new Map();
 	}
 	function lh(e, t, n, r, i, a, o, s, c, l, u, d) {
-		return e = new ch(e, t, n, o, c, l, u, d, s), t = 1, !0 === a && (t |= 24), a = ji(3, null, null, t), e.current = a, a.stateNode = e, t = ja(), t.refCount++, e.pooledCache = t, t.refCount++, a.memoizedState = {
+		return e = new ch(e, t, n, o, c, l, u, d, s), t = 1, !0 === a && (t |= 24), a = Mi(3, null, null, t), e.current = a, a.stateNode = e, t = Ma(), t.refCount++, e.pooledCache = t, t.refCount++, a.memoizedState = {
 			element: r,
 			isDehydrated: n,
 			cache: t
-		}, mo(a), e;
+		}, ho(a), e;
 	}
 	function uh(e) {
-		return e ? (e = ki, e) : ki;
+		return e ? (e = Ai, e) : Ai;
 	}
 	function dh(e, t, n, r, i, a) {
-		i = uh(i), r.context === null ? r.context = i : r.pendingContext = i, r = go(t), r.payload = { element: n }, a = a === void 0 ? null : a, a !== null && (r.callback = a), n = _o(e, r, t), n !== null && (Pd(n, e, t), vo(n, e, t));
+		i = uh(i), r.context === null ? r.context = i : r.pendingContext = i, r = _o(t), r.payload = { element: n }, a = a === void 0 ? null : a, a !== null && (r.callback = a), n = vo(e, r, t), n !== null && (Pd(n, e, t), yo(n, e, t));
 	}
 	function fh(e, t) {
 		if (e = e.memoizedState, e !== null && e.dehydrated !== null) {
@@ -15498,37 +15508,37 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function mh(e) {
 		if (e.tag === 13 || e.tag === 31) {
-			var t = Ei(e, 67108864);
+			var t = Di(e, 67108864);
 			t !== null && Pd(t, e, 67108864), ph(e, 67108864);
 		}
 	}
 	function hh(e) {
 		if (e.tag === 13 || e.tag === 31) {
 			var t = jd();
-			t = vt(t);
-			var n = Ei(e, t);
+			t = yt(t);
+			var n = Di(e, t);
 			n !== null && Pd(n, e, t), ph(e, t);
 		}
 	}
 	var gh = !0;
 	function _h(e, t, n, r) {
-		var i = N.T;
-		N.T = null;
-		var a = P.p;
+		var i = M.T;
+		M.T = null;
+		var a = N.p;
 		try {
-			P.p = 2, yh(e, t, n, r);
+			N.p = 2, yh(e, t, n, r);
 		} finally {
-			P.p = a, N.T = i;
+			N.p = a, M.T = i;
 		}
 	}
 	function vh(e, t, n, r) {
-		var i = N.T;
-		N.T = null;
-		var a = P.p;
+		var i = M.T;
+		M.T = null;
+		var a = N.p;
 		try {
-			P.p = 8, yh(e, t, n, r);
+			N.p = 8, yh(e, t, n, r);
 		} finally {
-			P.p = a, N.T = i;
+			N.p = a, M.T = i;
 		}
 	}
 	function yh(e, t, n, r) {
@@ -15538,23 +15548,23 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			else if (Ph(i, e, t, n, r)) r.stopPropagation();
 			else if (Mh(e, r), t & 4 && -1 < jh.indexOf(e)) {
 				for (; i !== null;) {
-					var a = Pt(i);
+					var a = Ft(i);
 					if (a !== null) switch (a.tag) {
 						case 3:
 							if (a = a.stateNode, a.current.memoizedState.isDehydrated) {
-								var o = ot(a.pendingLanes);
+								var o = st(a.pendingLanes);
 								if (o !== 0) {
 									var s = a;
 									for (s.pendingLanes |= 2, s.entangledLanes |= 2; o;) {
-										var c = 1 << 31 - $e(o);
+										var c = 1 << 31 - et(o);
 										s.entanglements[1] |= c, o &= ~c;
 									}
-									Ef(a), !(K & 6) && (gd = Ve() + 500, Df(0, !1));
+									Ef(a), !(K & 6) && (gd = He() + 500, Df(0, !1));
 								}
 							}
 							break;
 						case 31:
-						case 13: s = Ei(a, 2), s !== null && Pd(s, a, 2), zd(), ph(a, 2);
+						case 13: s = Di(a, 2), s !== null && Pd(s, a, 2), zd(), ph(a, 2);
 					}
 					if (a = bh(r), a === null && Kf(e, t, r, xh, n), a === i) break;
 					i = a;
@@ -15564,11 +15574,11 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	function bh(e) {
-		return e = xn(e), Sh(e);
+		return e = Sn(e), Sh(e);
 	}
 	var xh = null;
 	function Sh(e) {
-		if (xh = null, e = Nt(e), e !== null) {
+		if (xh = null, e = Pt(e), e !== null) {
 			var t = o(e);
 			if (t === null) e = null;
 			else {
@@ -15661,12 +15671,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			case "mouseleave":
 			case "pointerenter":
 			case "pointerleave": return 8;
-			case "message": switch (He()) {
-				case Ue: return 2;
-				case We: return 8;
-				case Ge:
-				case Ke: return 32;
-				case qe: return 268435456;
+			case "message": switch (Ue()) {
+				case We: return 2;
+				case Ge: return 8;
+				case Ke:
+				case qe: return 32;
+				case Je: return 268435456;
 				default: return 32;
 			}
 			default: return 32;
@@ -15702,7 +15712,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			eventSystemFlags: r,
 			nativeEvent: a,
 			targetContainers: [i]
-		}, t !== null && (t = Pt(t), t !== null && mh(t)), e) : (e.eventSystemFlags |= r, t = e.targetContainers, i !== null && t.indexOf(i) === -1 && t.push(i), e);
+		}, t !== null && (t = Ft(t), t !== null && mh(t)), e) : (e.eventSystemFlags |= r, t = e.targetContainers, i !== null && t.indexOf(i) === -1 && t.push(i), e);
 	}
 	function Ph(e, t, n, r, i) {
 		switch (t) {
@@ -15717,20 +15727,20 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		return !1;
 	}
 	function Fh(e) {
-		var t = Nt(e.target);
+		var t = Pt(e.target);
 		if (t !== null) {
 			var n = o(t);
 			if (n !== null) {
 				if (t = n.tag, t === 13) {
 					if (t = s(n), t !== null) {
-						e.blockedOn = t, xt(e.priority, function() {
+						e.blockedOn = t, St(e.priority, function() {
 							hh(n);
 						});
 						return;
 					}
 				} else if (t === 31) {
 					if (t = c(n), t !== null) {
-						e.blockedOn = t, xt(e.priority, function() {
+						e.blockedOn = t, St(e.priority, function() {
 							hh(n);
 						});
 						return;
@@ -15750,8 +15760,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			if (n === null) {
 				n = e.nativeEvent;
 				var r = new n.constructor(n.type, n);
-				bn = r, n.target.dispatchEvent(r), bn = null;
-			} else return t = Pt(n), t !== null && mh(t), e.blockedOn = n, !1;
+				xn = r, n.target.dispatchEvent(r), xn = null;
+			} else return t = Ft(n), t !== null && mh(t), e.blockedOn = n, !1;
 			t.shift();
 		}
 		return !0;
@@ -15775,8 +15785,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					if (Sh(r || n) === null) continue;
 					break;
 				}
-				var a = Pt(n);
-				a !== null && (e.splice(t, 3), t -= 3, ec(a, {
+				var a = Ft(n);
+				a !== null && (e.splice(t, 3), t -= 3, tc(a, {
 					pending: !0,
 					data: i,
 					method: n.method,
@@ -15796,12 +15806,12 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		for (; 0 < Ah.length && (n = Ah[0], n.blockedOn === null);) Fh(n), n.blockedOn === null && Ah.shift();
 		if (n = (e.ownerDocument || e).$$reactFormReplay, n != null) for (r = 0; r < n.length; r += 3) {
-			var i = n[r], a = n[r + 1], o = i[wt] || null;
+			var i = n[r], a = n[r + 1], o = i[Tt] || null;
 			if (typeof a == "function") o || Vh(n);
 			else if (o) {
 				var s = null;
 				if (a && a.hasAttribute("formAction")) {
-					if (i = a, o = a[wt] || null) s = o.formAction;
+					if (i = a, o = a[Tt] || null) s = o.formAction;
 					else if (Sh(i) !== null) continue;
 				} else s = o.action;
 				typeof s == "function" ? n[r + 1] = s : (n.splice(r, 3), r -= 3), Vh(n);
@@ -15853,7 +15863,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (e !== null) {
 			this._internalRoot = null;
 			var t = e.containerInfo;
-			dh(e.current, 2, null, e, null, null), zd(), t[Tt] = null;
+			dh(e.current, 2, null, e, null, null), zd(), t[Et] = null;
 		}
 	};
 	function Gh(e) {
@@ -15861,7 +15871,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	Gh.prototype.unstable_scheduleHydration = function(e) {
 		if (e) {
-			var t = bt();
+			var t = xt();
 			e = {
 				blockedOn: null,
 				target: e,
@@ -15873,7 +15883,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	};
 	var Kh = n.version;
 	if (Kh !== "19.3.0") throw Error(i(527, Kh, "19.3.0"));
-	P.findDOMNode = function(e) {
+	N.findDOMNode = function(e) {
 		var t = e._reactInternals;
 		if (t === void 0) throw typeof e.render == "function" ? Error(i(188)) : (e = Object.keys(e).join(","), Error(i(268, e)));
 		return e = d(t), e = e === null ? null : f(e), e = e === null ? null : e.stateNode, e;
@@ -15882,19 +15892,19 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		bundleType: 0,
 		version: "19.3.0",
 		rendererPackageName: "react-dom",
-		currentDispatcherRef: N,
+		currentDispatcherRef: M,
 		reconcilerVersion: "19.3.0"
 	};
 	if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ < "u") {
 		var Jh = __REACT_DEVTOOLS_GLOBAL_HOOK__;
 		if (!Jh.isDisabled && Jh.supportsFiber) try {
-			Xe = Jh.inject(qh), Ze = Jh;
+			Ze = Jh.inject(qh), Qe = Jh;
 		} catch {}
 	}
 	e.createRoot = function(e, t) {
 		if (!a(e)) throw Error(i(299));
-		var n = !1, r = "", o = Cc, s = wc, c = Tc;
-		return t != null && (!0 === t.unstable_strictMode && (n = !0), t.identifierPrefix !== void 0 && (r = t.identifierPrefix), t.onUncaughtError !== void 0 && (o = t.onUncaughtError), t.onCaughtError !== void 0 && (s = t.onCaughtError), t.onRecoverableError !== void 0 && (c = t.onRecoverableError)), t = lh(e, 1, !1, null, null, n, r, null, o, s, c, Uh), e[Tt] = t.current, Wf(e), new Wh(t);
+		var n = !1, r = "", o = wc, s = Tc, c = Ec;
+		return t != null && (!0 === t.unstable_strictMode && (n = !0), t.identifierPrefix !== void 0 && (r = t.identifierPrefix), t.onUncaughtError !== void 0 && (o = t.onUncaughtError), t.onCaughtError !== void 0 && (s = t.onCaughtError), t.onRecoverableError !== void 0 && (c = t.onRecoverableError)), t = lh(e, 1, !1, null, null, n, r, null, o, s, c, Uh), e[Et] = t.current, Wf(e), new Wh(t);
 	};
 })), Yl = (/* @__PURE__ */ o(((e, t) => {
 	function n() {
@@ -15907,18 +15917,18 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	n(), t.exports = Jl();
 })))();
 function Xl({ product: e, size: t }) {
-	let { identity: n } = gr(), r = Oi(e), i = ki(r.map, t || r.recommended || "");
+	let { identity: n } = _r(), r = ki(e), i = Ai(r.map, t || r.recommended || "");
 	return /* @__PURE__ */ (0, y.jsxs)("div", {
 		className: "automatic-fit-summary",
 		"aria-live": "polite",
-		children: [ni(e.sizes) ? /* @__PURE__ */ (0, y.jsx)("p", { children: "One size · See product details for dimensions." }) : n ? r.recommended ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsx)("strong", { children: r.recommendationSource === "simulated" ? `Demo model reference size: ${r.recommended}.` : r.recommendationSource === "twin" ? `${n.name}’s reference size is ${r.recommended}.` : `Our recommended size for ${n.kind === "twin" ? n.name : "you"} is ${r.recommended}.` }), /* @__PURE__ */ (0, y.jsx)("p", { children: r.recommendationSource === "simulated" ? "Demo guidance based on your model’s reference size. Select any size below and compare its generated silhouette. This is not calibrated garment-specific sizing." : i.length ? i.map((e) => `${e.point}: ${e.label.toLowerCase()}`).join(" · ") : r.recommendationSource === "twin" ? "Based on the twin’s saved size; a garment-specific recommendation is not available." : r.fitNote || "Based on your profile and this garment’s sizing data." })] }) : /* @__PURE__ */ (0, y.jsx)("p", { children: r.status === "error" ? r.error : "Finding your recommended size…" }) : /* @__PURE__ */ (0, y.jsx)(Dn, {
+		children: [ri(e.sizes) ? /* @__PURE__ */ (0, y.jsx)("p", { children: "One size · See product details for dimensions." }) : n ? r.recommended ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsx)("strong", { children: r.recommendationSource === "simulated" ? `Demo model reference size: ${r.recommended}.` : r.recommendationSource === "twin" ? `${n.name}’s reference size is ${r.recommended}.` : `Our recommended size for ${n.kind === "twin" ? n.name : "you"} is ${r.recommended}.` }), /* @__PURE__ */ (0, y.jsx)("p", { children: r.recommendationSource === "simulated" ? "Demo guidance based on your model’s reference size. Select any size below and compare its generated silhouette. This is not calibrated garment-specific sizing." : i.length ? i.map((e) => `${e.point}: ${e.label.toLowerCase()}`).join(" · ") : r.recommendationSource === "twin" ? "Based on the twin’s saved size; a garment-specific recommendation is not available." : r.fitNote || "Based on your profile and this garment’s sizing data." })] }) : /* @__PURE__ */ (0, y.jsx)("p", { children: r.status === "error" ? r.error : "Finding your recommended size…" }) : /* @__PURE__ */ (0, y.jsx)(On, {
 			to: "/account",
 			children: "My Account · Discover your fit"
-		}), !ni(e.sizes) && /* @__PURE__ */ (0, y.jsx)(rl, {})]
+		}), !ri(e.sizes) && /* @__PURE__ */ (0, y.jsx)(il, {})]
 	});
 }
 function Zl({ product: e, size: t, onSize: n }) {
-	let r = Oi(e);
+	let r = ki(e);
 	return /* @__PURE__ */ (0, y.jsxs)("div", {
 		className: "fit-options",
 		children: [/* @__PURE__ */ (0, y.jsx)("div", {
@@ -15926,11 +15936,11 @@ function Zl({ product: e, size: t, onSize: n }) {
 			role: "group",
 			"aria-label": "Garment sizes",
 			children: e.sizes.map((i) => {
-				let a = r.recommended ? mi(e.sizes, i, r.recommended, r.map) : "";
+				let a = r.recommended ? hi(e.sizes, i, r.recommended, r.map) : "";
 				return /* @__PURE__ */ (0, y.jsxs)("button", {
 					"aria-pressed": t === i,
 					onClick: () => n(i),
-					children: [/* @__PURE__ */ (0, y.jsx)("span", { children: ri(i) }), a && /* @__PURE__ */ (0, y.jsx)("small", { children: i === r.recommended && r.recommendationSource === "twin" ? "Starting size" : a })]
+					children: [/* @__PURE__ */ (0, y.jsx)("span", { children: ii(i) }), a && /* @__PURE__ */ (0, y.jsx)("small", { children: i === r.recommended && r.recommendationSource === "twin" ? "Starting size" : a })]
 				}, i);
 			})
 		}), r.recommended && /* @__PURE__ */ (0, y.jsx)("p", {
@@ -15940,7 +15950,7 @@ function Zl({ product: e, size: t, onSize: n }) {
 	});
 }
 function Ql({ product: e, size: t, onSize: n }) {
-	let { identity: r } = gr(), i = Oi(e), a = t || i.recommended || "", o = Ai(e, a), s = ki(i.map, a);
+	let { identity: r } = _r(), i = ki(e), a = t || i.recommended || "", o = ji(e, a), s = Ai(i.map, a);
 	return /* @__PURE__ */ (0, y.jsxs)("div", {
 		className: "fit-shopping",
 		children: [/* @__PURE__ */ (0, y.jsxs)("div", {
@@ -15956,14 +15966,14 @@ function Ql({ product: e, size: t, onSize: n }) {
 				className: "fit-preview-caption",
 				children: o.status === "loading" ? /* @__PURE__ */ (0, y.jsx)(b, { label: "Preparing your selected size" }) : o.status === "error" ? /* @__PURE__ */ (0, y.jsx)("p", { children: "Size preview temporarily unavailable." }) : o.url ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
 					/* @__PURE__ */ (0, y.jsxs)("small", { children: ["ON ", r?.name.toUpperCase()] }),
-					o.selected && /* @__PURE__ */ (0, y.jsxs)("strong", { children: ["Size ", ri(o.selected)] }),
+					o.selected && /* @__PURE__ */ (0, y.jsxs)("strong", { children: ["Size ", ii(o.selected)] }),
 					o.fitNote && /* @__PURE__ */ (0, y.jsx)("p", { children: o.fitNote })
 				] }) : /* @__PURE__ */ (0, y.jsx)("p", { children: o.reason || "Original collection photography" })
 			})]
 		}), /* @__PURE__ */ (0, y.jsxs)("div", {
 			className: "fit-shopping-copy",
 			children: [
-				o.url && /* @__PURE__ */ (0, y.jsx)(il, {}),
+				o.url && /* @__PURE__ */ (0, y.jsx)(al, {}),
 				/* @__PURE__ */ (0, y.jsx)("p", {
 					className: "eyebrow",
 					children: e.name
@@ -15997,7 +16007,7 @@ function Ql({ product: e, size: t, onSize: n }) {
 //#endregion
 //#region src/partner-demo/SimulatedSizePreview.tsx
 function $l({ product: e, size: t }) {
-	let { identity: n } = gr(), r = Oi(e), i = Di([e]), a = Math.max(0, e.sizes.indexOf(r.recommended || e.sizes[Math.floor(e.sizes.length / 2)])), o = e.sizes.indexOf(t) - a, s = window.PARTNER_DEMO?.theme === "ch" ? 1 + Ni(e.sizes, t) : Math.max(.64, Math.min(1.8, 1 + o * .16)), c = Math.max(.85, Math.min(1.24, 1 + o * .045));
+	let { identity: n } = _r(), r = ki(e), i = Oi([e]), a = Math.max(0, e.sizes.indexOf(r.recommended || e.sizes[Math.floor(e.sizes.length / 2)])), o = e.sizes.indexOf(t) - a, s = window.PARTNER_DEMO?.theme === "ch" ? 1 + Pi(e.sizes, t) : Math.max(.64, Math.min(1.8, 1 + o * .16)), c = Math.max(.85, Math.min(1.24, 1 + o * .045));
 	return /* @__PURE__ */ (0, y.jsxs)("div", {
 		className: "simulated-size-view",
 		"data-size": t,
@@ -16006,7 +16016,7 @@ function $l({ product: e, size: t }) {
 		children: [
 			/* @__PURE__ */ (0, y.jsx)("div", {
 				className: "simulated-size-canvas",
-				children: i.url ? window.PARTNER_DEMO?.theme === "ch" ? /* @__PURE__ */ (0, y.jsx)(Pi, {
+				children: i.url ? window.PARTNER_DEMO?.theme === "ch" ? /* @__PURE__ */ (0, y.jsx)(Fi, {
 					product: e,
 					src: i.url,
 					size: t
@@ -16038,71 +16048,71 @@ function $l({ product: e, size: t }) {
 //#endregion
 //#region src/always-on/FitCompare.tsx
 function eu({ product: e, size: t }) {
-	let [n, r] = (0, d.useState)(0), [i, a] = (0, d.useState)(!1), o = Ai(e, t, n);
+	let [n, r] = (0, d.useState)(0), [i, a] = (0, d.useState)(!1), o = ji(e, t, n);
 	return /* @__PURE__ */ (0, y.jsx)("div", {
 		className: "fit-compare-image",
 		"aria-live": "polite",
-		children: o.url ? /* @__PURE__ */ (0, y.jsxs)(oc, {
+		children: o.url ? /* @__PURE__ */ (0, y.jsxs)(sc, {
 			open: i,
 			onOpenChange: a,
-			children: [/* @__PURE__ */ (0, y.jsxs)(cc, {
+			children: [/* @__PURE__ */ (0, y.jsxs)(lc, {
 				className: "fit-compare-zoom-trigger",
-				"aria-label": `Enlarge size ${ri(t)} preview`,
+				"aria-label": `Enlarge size ${ii(t)} preview`,
 				children: [/* @__PURE__ */ (0, y.jsx)("img", {
 					src: o.url,
-					alt: `${e.name} — size ${ri(t)}`
+					alt: `${e.name} — size ${ii(t)}`
 				}), /* @__PURE__ */ (0, y.jsx)("span", {
 					className: "fit-compare-zoom-hint",
 					children: "View closer"
 				})]
-			}), /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "fit-compare-overlay fit-compare-zoom-overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+			}), /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "fit-compare-overlay fit-compare-zoom-overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 				className: "fit-compare-zoom",
 				children: [
-					/* @__PURE__ */ (0, y.jsxs)("header", { children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)(Cc, { children: e.name }), /* @__PURE__ */ (0, y.jsxs)(Tc, { children: [
+					/* @__PURE__ */ (0, y.jsxs)("header", { children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)(wc, { children: e.name }), /* @__PURE__ */ (0, y.jsxs)(Ec, { children: [
 						"Size ",
-						ri(t),
+						ii(t),
 						" · Personal fit preview"
-					] })] }), /* @__PURE__ */ (0, y.jsx)(Dc, {
+					] })] }), /* @__PURE__ */ (0, y.jsx)(Oc, {
 						"aria-label": "Close enlarged fit preview",
 						children: "×"
 					})] }),
-					/* @__PURE__ */ (0, y.jsx)(al, {
+					/* @__PURE__ */ (0, y.jsx)(ol, {
 						allowOriginal: !0,
 						src: o.url,
-						alt: `${e.name} — size ${ri(t)}`
+						alt: `${e.name} — size ${ii(t)}`
 					}, o.url),
-					/* @__PURE__ */ (0, y.jsx)(il, {})
+					/* @__PURE__ */ (0, y.jsx)(al, {})
 				]
 			})] })]
 		}) : o.status === "error" ? /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("p", { children: "We couldn’t load this fit." }), /* @__PURE__ */ (0, y.jsxs)("button", {
 			onClick: () => r((e) => e + 1),
-			children: ["Retry size ", ri(t)]
+			children: ["Retry size ", ii(t)]
 		})] }) : o.reason ? /* @__PURE__ */ (0, y.jsx)("p", { children: o.reason }) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [window.PARTNER_DEMO && /* @__PURE__ */ (0, y.jsx)("img", {
 			className: "partner-loading-photo",
 			src: e.model,
 			alt: ""
-		}), /* @__PURE__ */ (0, y.jsx)(b, { label: `Generating your look… Size ${ri(t)}` })] })
+		}), /* @__PURE__ */ (0, y.jsx)(b, { label: `Generating your look… Size ${ii(t)}` })] })
 	});
 }
 function tu({ product: e, selected: t, onSize: n, onClose: r }) {
-	let { identity: i } = gr(), a = Oi(e), o = window.PARTNER_DEMO ? e.sizes : e.sizes.filter((t) => !pi(e.sizes, t, a.recommended || "").reason), [s, c] = (0, d.useState)(""), [l, u] = (0, d.useState)(""), f = s || a.recommended || e.sizes[0], p = l || (t !== f && o.includes(t) ? t : o[o.indexOf(f) + 1] || o.find((e) => e !== f)) || f, m = i ? e.environment === "prod" ? "Size-specific previews aren’t available for this piece yet. Your standard try-on is available in the gallery." : a.recommended ? "" : a.status === "error" ? "Fit comparison is unavailable for this piece." : "Finding your starting size…" : "Add a photo or Twin to your profile to compare fits.";
+	let { identity: i } = _r(), a = ki(e), o = window.PARTNER_DEMO ? e.sizes : e.sizes.filter((t) => !mi(e.sizes, t, a.recommended || "").reason), [s, c] = (0, d.useState)(""), [l, u] = (0, d.useState)(""), f = s || a.recommended || e.sizes[0], p = l || (t !== f && o.includes(t) ? t : o[o.indexOf(f) + 1] || o.find((e) => e !== f)) || f, m = i ? e.environment === "prod" ? "Size-specific previews aren’t available for this piece yet. Your standard try-on is available in the gallery." : a.recommended ? "" : a.status === "error" ? "Fit comparison is unavailable for this piece." : "Finding your starting size…" : "Add a photo or Twin to your profile to compare fits.";
 	return /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
 		/* @__PURE__ */ (0, y.jsxs)("div", {
 			className: "fit-compare-header",
 			children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [
 				/* @__PURE__ */ (0, y.jsx)("small", { children: "ALWAYS ON · VISUAL FIT" }),
-				/* @__PURE__ */ (0, y.jsx)(Cc, { children: "See the difference." }),
-				/* @__PURE__ */ (0, y.jsx)(Tc, { children: e.name }),
+				/* @__PURE__ */ (0, y.jsx)(wc, { children: "See the difference." }),
+				/* @__PURE__ */ (0, y.jsx)(Ec, { children: e.name }),
 				/* @__PURE__ */ (0, y.jsx)("p", {
 					className: "fit-compare-subtitle",
 					children: "One look. Two fits. Find the one that feels like you."
 				})
-			] }), /* @__PURE__ */ (0, y.jsx)(Dc, {
+			] }), /* @__PURE__ */ (0, y.jsx)(Oc, {
 				"aria-label": "Close fit comparison",
 				children: "×"
 			})]
 		}),
-		/* @__PURE__ */ (0, y.jsx)(il, {}),
+		/* @__PURE__ */ (0, y.jsx)(al, {}),
 		window.PARTNER_DEMO && /* @__PURE__ */ (0, y.jsx)("p", {
 			className: "fit-compare-subtitle",
 			children: "The base image is a real AI try-on. Size changes are illustrative silhouette mockups, not generated size-specific fits or calibrated sizing."
@@ -16122,7 +16132,7 @@ function tu({ product: e, selected: t, onSize: n, onClose: r }) {
 				set: u,
 				name: "Right"
 			}].map((t) => {
-				let i = window.PARTNER_DEMO ? "" : pi(e.sizes, t.value, a.recommended || "").reason;
+				let i = window.PARTNER_DEMO ? "" : mi(e.sizes, t.value, a.recommended || "").reason;
 				return /* @__PURE__ */ (0, y.jsxs)("section", {
 					className: t.value === a.recommended ? "fit-compare-card is-recommended" : "fit-compare-card",
 					children: [
@@ -16134,11 +16144,11 @@ function tu({ product: e, selected: t, onSize: n, onClose: r }) {
 								onChange: (e) => t.set(e.target.value),
 								children: e.sizes.map((t) => /* @__PURE__ */ (0, y.jsxs)("option", {
 									value: t,
-									children: [ri(t), !window.PARTNER_DEMO && pi(e.sizes, t, a.recommended || "").reason ? " · Preview unavailable" : ""]
+									children: [ii(t), !window.PARTNER_DEMO && mi(e.sizes, t, a.recommended || "").reason ? " · Preview unavailable" : ""]
 								}, t))
 							})] }), /* @__PURE__ */ (0, y.jsx)("p", {
 								className: "fit-compare-label",
-								children: window.PARTNER_DEMO ? t.value === a.recommended ? "Reference view" : "Simulated size" : t.value === a.recommended && a.recommendationSource === "twin" ? "Starting size" : mi(e.sizes, t.value, a.recommended || "", a.map)
+								children: window.PARTNER_DEMO ? t.value === a.recommended ? "Reference view" : "Simulated size" : t.value === a.recommended && a.recommendationSource === "twin" ? "Starting size" : hi(e.sizes, t.value, a.recommended || "", a.map)
 							})]
 						}),
 						i ? /* @__PURE__ */ (0, y.jsx)("div", {
@@ -16159,7 +16169,7 @@ function tu({ product: e, selected: t, onSize: n, onClose: r }) {
 							},
 							children: [/* @__PURE__ */ (0, y.jsxs)("span", {
 								className: "fit-compare-use-label",
-								children: ["Choose size ", ri(t.value)]
+								children: ["Choose size ", ii(t.value)]
 							}), /* @__PURE__ */ (0, y.jsx)("span", { "aria-hidden": "true" })]
 						})
 					]
@@ -16172,14 +16182,14 @@ function tu({ product: e, selected: t, onSize: n, onClose: r }) {
 	] });
 }
 function nu({ product: e, selected: t = "", onSize: n }) {
-	let [r, i] = (0, d.useState)(!1), { version: a } = gr();
-	return ni(e.sizes) || e.sizes.length < 2 ? null : /* @__PURE__ */ (0, y.jsxs)(oc, {
+	let [r, i] = (0, d.useState)(!1), { version: a } = _r();
+	return ri(e.sizes) || e.sizes.length < 2 ? null : /* @__PURE__ */ (0, y.jsxs)(sc, {
 		open: r,
 		onOpenChange: i,
-		children: [/* @__PURE__ */ (0, y.jsx)(cc, {
+		children: [/* @__PURE__ */ (0, y.jsx)(lc, {
 			className: "fit-compare-trigger",
 			children: "Compare sizes "
-		}), /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "fit-compare-overlay" }), /* @__PURE__ */ (0, y.jsx)(vc, {
+		}), /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "fit-compare-overlay" }), /* @__PURE__ */ (0, y.jsx)(yc, {
 			className: "fit-compare-modal",
 			children: r && /* @__PURE__ */ (0, y.jsx)(tu, {
 				product: e,
@@ -16196,7 +16206,7 @@ function ru(e, t) {
 //#endregion
 //#region src/always-on/CompareLooks.tsx
 function iu({ product: e, onRemove: t, onReady: n }) {
-	let { identity: r } = gr(), [i, a] = (0, d.useState)(0), o = Di([e], "", "", i);
+	let { identity: r } = _r(), [i, a] = (0, d.useState)(0), o = Oi([e], "", "", i);
 	return (0, d.useEffect)(() => {
 		o.url && n(o.url);
 	}, [o.url]), /* @__PURE__ */ (0, y.jsxs)("article", {
@@ -16218,7 +16228,7 @@ function iu({ product: e, onRemove: t, onReady: n }) {
 						src: e.model,
 						alt: ""
 					})
-				}) : /* @__PURE__ */ (0, y.jsx)(kl, {
+				}) : /* @__PURE__ */ (0, y.jsx)(Al, {
 					exportPerson: o.url ? r?.name : void 0,
 					isTryOn: !!o.url,
 					images: [o.url || e.model],
@@ -16246,7 +16256,7 @@ function iu({ product: e, onRemove: t, onReady: n }) {
 	});
 }
 function au({ initial: e, onChange: t, product: n, selectedSize: r, onSize: i }) {
-	let [a, o] = (0, d.useState)(!1), [s, c] = (0, d.useState)([...new Set(e)].slice(0, 3)), [l, u] = (0, d.useState)(!1), [f, p] = (0, d.useState)(""), { identity: m, version: h } = gr(), g = (0, d.useMemo)(() => Zn(m?.id || ""), [
+	let [a, o] = (0, d.useState)(!1), [s, c] = (0, d.useState)([...new Set(e)].slice(0, 3)), [l, u] = (0, d.useState)(!1), [f, p] = (0, d.useState)(""), { identity: m, version: h } = _r(), g = (0, d.useMemo)(() => Qn(m?.id || ""), [
 		m?.id,
 		h,
 		s.join("|")
@@ -16256,13 +16266,13 @@ function au({ initial: e, onChange: t, product: n, selectedSize: r, onSize: i })
 	}, [s.join("|")]);
 	let [_, v] = (0, d.useState)({});
 	return (0, d.useEffect)(() => v({}), [h]), (0, d.useEffect)(() => {
-		m && s.length > 1 && s.every((e) => _[h + ":" + e]) && nr({
+		m && s.length > 1 && s.every((e) => _[h + ":" + e]) && rr({
 			id: h + ":compare:" + s.join("|"),
 			kind: "comparison",
 			identityId: m.id,
 			identityName: m.name,
 			pieces: s.map((e) => {
-				let t = Bl.find((t) => t.id === e);
+				let t = U.find((t) => t.id === e);
 				return {
 					id: t.id,
 					name: t.name,
@@ -16298,7 +16308,7 @@ function au({ initial: e, onChange: t, product: n, selectedSize: r, onSize: i })
 					onSize: i
 				})]
 			}),
-			a && n && i && /* @__PURE__ */ (0, y.jsx)(Fi, {
+			a && n && i && /* @__PURE__ */ (0, y.jsx)(Ii, {
 				product: n,
 				size: r || "",
 				onSize: i
@@ -16306,7 +16316,7 @@ function au({ initial: e, onChange: t, product: n, selectedSize: r, onSize: i })
 			!a && /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
 				/* @__PURE__ */ (0, y.jsx)("h2", { children: "Compare on you." }),
 				/* @__PURE__ */ (0, y.jsx)("p", { children: m ? `Your selection, seen on ${m.name}. Compare up to three garments side by side.` : "Select up to three pieces, then add your profile to see yourself in each." }),
-				!m && /* @__PURE__ */ (0, y.jsx)(Dn, {
+				!m && /* @__PURE__ */ (0, y.jsx)(On, {
 					className: "text-link",
 					to: "/account",
 					children: "Set up My Account"
@@ -16326,7 +16336,7 @@ function au({ initial: e, onChange: t, product: n, selectedSize: r, onSize: i })
 					className: "compare-looks",
 					hidden: l,
 					children: [s.map((e) => {
-						let t = Bl.find((t) => t.id === e);
+						let t = U.find((t) => t.id === e);
 						return t ? /* @__PURE__ */ (0, y.jsx)(iu, {
 							product: t,
 							onReady: (t) => v((n) => n[h + ":" + e] === t ? n : {
@@ -16343,7 +16353,7 @@ function au({ initial: e, onChange: t, product: n, selectedSize: r, onSize: i })
 						children: [/* @__PURE__ */ (0, y.jsx)("span", { children: "＋" }), "Add a piece"]
 					})]
 				}),
-				m && !l && /* @__PURE__ */ (0, y.jsx)(il, {}),
+				m && !l && /* @__PURE__ */ (0, y.jsx)(al, {}),
 				l && /* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "compare-picker",
 					role: "region",
@@ -16363,7 +16373,7 @@ function au({ initial: e, onChange: t, product: n, selectedSize: r, onSize: i })
 							value: f,
 							onChange: (e) => p(e.target.value)
 						}),
-						/* @__PURE__ */ (0, y.jsx)("div", { children: Bl.filter((e) => e.previewAvailable !== !1 && !s.includes(e.id) && e.name.toLowerCase().includes(f.toLowerCase())).map((e) => /* @__PURE__ */ (0, y.jsx)("article", {
+						/* @__PURE__ */ (0, y.jsx)("div", { children: U.filter((e) => e.previewAvailable !== !1 && !s.includes(e.id) && e.name.toLowerCase().includes(f.toLowerCase())).map((e) => /* @__PURE__ */ (0, y.jsx)("article", {
 							className: "compare-picker-piece",
 							children: /* @__PURE__ */ (0, y.jsxs)("button", {
 								disabled: s.length >= 3,
@@ -16501,7 +16511,7 @@ function ou({ theme: e, brand: t, onPanel: n, count: r, onNav: i }) {
 					onClick: () => n("menu"),
 					children: [/* @__PURE__ */ (0, y.jsx)(W, { name: "menu" }), e === "mk" && "MENU"]
 				}),
-				/* @__PURE__ */ (0, y.jsx)(Dn, {
+				/* @__PURE__ */ (0, y.jsx)(On, {
 					to: "/",
 					className: "retail-logo",
 					children: e === "ch" ? /* @__PURE__ */ (0, y.jsx)("img", {
@@ -16581,7 +16591,7 @@ function cu({ g: e, wished: t, toggleWish: n, compare: r, picked: i, onAction: a
 						className: "ch-runway",
 						children: "STYLE DU DÉFILÉ"
 					}),
-					/* @__PURE__ */ (0, y.jsx)(Dn, {
+					/* @__PURE__ */ (0, y.jsx)(On, {
 						to: "/product/" + e.id,
 						"aria-label": "View " + e.name,
 						children: /* @__PURE__ */ (0, y.jsx)("img", {
@@ -16602,7 +16612,7 @@ function cu({ g: e, wished: t, toggleWish: n, compare: r, picked: i, onAction: a
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, y.jsx)(Dn, {
+			/* @__PURE__ */ (0, y.jsx)(On, {
 				to: "/product/" + e.id,
 				children: /* @__PURE__ */ (0, y.jsx)("h3", { children: e.name })
 			}),
@@ -17138,7 +17148,7 @@ function hu({ g: e }) {
 }
 //#endregion
 //#region src/partner-demo/main.tsx
-var G = window.PARTNER_DEMO, gu = Bl;
+var G = window.PARTNER_DEMO, gu = U;
 function _u(e, t) {
 	try {
 		return JSON.parse(localStorage.getItem(G.slug + e) || "null") ?? t;
@@ -17147,9 +17157,9 @@ function _u(e, t) {
 	}
 }
 function vu() {
-	let [e, t] = (0, d.useState)(1), [n, r] = (0, d.useState)(""), [i, a] = (0, d.useState)(""), [o, s] = (0, d.useState)(0), [c, l] = (0, d.useState)([]), [u, f] = (0, d.useState)({}), [p, m] = (0, d.useState)(() => _u("wishlist", [])), [h, g] = (0, d.useState)(() => _u("bag", [])), [_, v] = (0, d.useState)(""), [b, S] = (0, d.useState)("All"), [C, w] = (0, d.useState)("All"), [T, ee] = (0, d.useState)("All"), [te, E] = (0, d.useState)("Featured"), [D, ne] = (0, d.useState)(0), [re, ie] = (0, d.useState)("/"), [ae, O] = (0, d.useState)("vto"), [oe, se] = (0, d.useState)(!1), [ce, k] = (0, d.useState)(""), { identity: le } = gr(), ue = vt(), de = xt(), A = ue.pathname.startsWith("/product/") ? ue.pathname.split("/")[2] : "", j = gu.find((e) => e.id === A), M = gu[o], fe = u[M.id] || "";
+	let [e, t] = (0, d.useState)(1), [n, r] = (0, d.useState)(""), [i, a] = (0, d.useState)(""), [o, s] = (0, d.useState)(0), [c, l] = (0, d.useState)([]), [u, f] = (0, d.useState)({}), [p, m] = (0, d.useState)(() => _u("wishlist", [])), [h, g] = (0, d.useState)(() => _u("bag", [])), [_, v] = (0, d.useState)(""), [b, S] = (0, d.useState)("All"), [C, w] = (0, d.useState)("All"), [T, ee] = (0, d.useState)("All"), [te, E] = (0, d.useState)("Featured"), [D, ne] = (0, d.useState)(0), [re, ie] = (0, d.useState)("/"), [ae, O] = (0, d.useState)("vto"), [oe, se] = (0, d.useState)(!1), [ce, k] = (0, d.useState)(""), { identity: le } = _r(), ue = yt(), de = St(), A = ue.pathname.startsWith("/product/") ? ue.pathname.split("/")[2] : "", fe = gu.find((e) => e.id === A), j = gu[o], pe = u[j.id] || "";
 	(0, d.useEffect)(() => {
-		ue.pathname === "/account" ? r("profile") : (ie(ue.pathname), window.scrollTo(0, 0)), j && s(gu.findIndex((e) => e.id === j.id));
+		ue.pathname === "/account" ? r("profile") : (ie(ue.pathname), window.scrollTo(0, 0)), fe && s(gu.findIndex((e) => e.id === fe.id));
 	}, [ue.pathname]), (0, d.useEffect)(() => {
 		[
 			"vto",
@@ -17162,20 +17172,20 @@ function vu() {
 	}, [p]), (0, d.useEffect)(() => {
 		localStorage.setItem(G.slug + "bag", JSON.stringify(h));
 	}, [h]);
-	let pe = (e) => f((t) => ({
+	let me = (e) => f((t) => ({
 		...t,
-		[M.id]: e
+		[j.id]: e
 	}));
-	function me() {
+	function he() {
 		r(""), ue.pathname === "/account" && de(re);
 	}
-	function he(e) {
+	function ge(e) {
 		l((t) => t.includes(e) ? t.filter((t) => t !== e) : t.length < 3 ? [...t, e] : t);
 	}
-	function N(e) {
+	function M(e) {
 		m((t) => t.includes(e) ? t.filter((t) => t !== e) : [...t, e]);
 	}
-	function P(e) {
+	function N(e) {
 		[
 			"vto",
 			"size",
@@ -17200,11 +17210,11 @@ function vu() {
 			"look"
 		].includes(n)) return;
 		let e = !0;
-		return se(!0), k(""), Dr().then((t) => {
+		return se(!0), k(""), Or().then((t) => {
 			if (!e) return;
 			let n = (G.theme === "kitsune" ? t.find((e) => e.name === "Lucas") : null) || t.find((e) => e.name === "Isabella") || t.find((e) => e.sex === "F") || t[0];
 			if (!n) throw Error("No demo models are available.");
-			yr(Or(n));
+			br(kr(n));
 		}).catch((t) => {
 			e && k(t.message || "Unable to connect to the live fitting room.");
 		}).finally(() => {
@@ -17213,26 +17223,26 @@ function vu() {
 			e = !1;
 		};
 	}, [n, le?.id]);
-	function ge(e) {
+	function _e(e) {
 		l((t) => {
 			let n = t.includes(e) ? t : [e, ...t].slice(0, 3), r = gu.find((t) => t.id !== e && t.previewAvailable !== !1 && !n.includes(t.id));
 			return n.length < 2 && r ? [...n, r.id] : n;
-		}), P("compare");
+		}), N("compare");
 	}
-	function _e(e) {
+	function ve(e) {
 		g((t) => {
-			let n = t.find((e) => e.id === M.id && e.size === fe);
+			let n = t.find((e) => e.id === j.id && e.size === pe);
 			return n ? t.map((t) => t === n ? {
 				...t,
 				quantity: t.quantity + e
 			} : t) : [...t, {
-				id: M.id,
-				size: fe,
+				id: j.id,
+				size: pe,
 				quantity: e
 			}];
 		}), a("bag");
 	}
-	function ve(e) {
+	function ye(e) {
 		if (G.theme === "ch") {
 			if (e === "MODE") {
 				ee("All"), de("/");
@@ -17255,82 +17265,82 @@ function vu() {
 		}
 		ee(e === "DRESSES" ? "Dresses" : "All"), a(""), de("/");
 	}
-	let ye = gu.filter((e) => (T === "All" || e.category === T) && (G.theme !== "kitsune" || (b === "All" || e.fit === b) && (C === "All" || e.collection === C)) && (!_ || e.name.toLowerCase().includes(_.toLowerCase())));
-	te === "Price: low to high" && (ye = [...ye].sort((e, t) => e.price - t.price)), te === "Price: high to low" && (ye = [...ye].sort((e, t) => t.price - e.price));
-	let be = (e) => /* @__PURE__ */ (0, y.jsx)(cu, {
+	let be = gu.filter((e) => (T === "All" || e.category === T) && (G.theme !== "kitsune" || (b === "All" || e.fit === b) && (C === "All" || e.collection === C)) && (!_ || e.name.toLowerCase().includes(_.toLowerCase())));
+	te === "Price: low to high" && (be = [...be].sort((e, t) => e.price - t.price)), te === "Price: high to low" && (be = [...be].sort((e, t) => t.price - e.price));
+	let xe = (e) => /* @__PURE__ */ (0, y.jsx)(cu, {
 		g: e,
 		wished: p.includes(e.id),
-		toggleWish: () => N(e.id),
+		toggleWish: () => M(e.id),
 		compare: () => {
-			s(gu.findIndex((t) => t.id === e.id)), ge(e.id);
+			s(gu.findIndex((t) => t.id === e.id)), _e(e.id);
 		},
 		picked: c.includes(e.id),
 		onAction: (t) => {
-			s(gu.findIndex((t) => t.id === e.id)), P(t);
+			s(gu.findIndex((t) => t.id === e.id)), N(t);
 		}
 	}, e.id);
 	return /* @__PURE__ */ (0, y.jsxs)("div", {
-		className: `partner-page retail-page ${G.theme} ${j && G.theme === "ch" ? "ch-product-page" : ""}`,
+		className: `partner-page retail-page ${G.theme} ${fe && G.theme === "ch" ? "ch-product-page" : ""}`,
 		children: [
 			/* @__PURE__ */ (0, y.jsx)(ou, {
 				theme: G.theme,
 				brand: G.brand,
-				onPanel: P,
+				onPanel: N,
 				count: h.reduce((e, t) => e + t.quantity, 0),
-				onNav: ve
+				onNav: ye
 			}),
-			/* @__PURE__ */ (0, y.jsxs)("main", { children: [!j && G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)("div", {
+			/* @__PURE__ */ (0, y.jsxs)("main", { children: [!fe && G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)("div", {
 				className: "ch-hero",
 				children: /* @__PURE__ */ (0, y.jsx)("img", {
 					src: "./assets/5d70fbbb2227e4d3.jpg",
 					alt: "Collection Carolina Herrera"
 				})
-			}), j ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
+			}), fe ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
 				/* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "retail-breadcrumb",
 					children: [
-						/* @__PURE__ */ (0, y.jsx)(Dn, {
+						/* @__PURE__ */ (0, y.jsx)(On, {
 							to: "/",
 							children: "Home"
 						}),
 						/* @__PURE__ */ (0, y.jsx)("span", { children: "/" }),
-						/* @__PURE__ */ (0, y.jsx)(Dn, {
+						/* @__PURE__ */ (0, y.jsx)(On, {
 							to: "/",
-							children: j.category
+							children: fe.category
 						}),
 						/* @__PURE__ */ (0, y.jsx)("span", { children: "/" }),
-						/* @__PURE__ */ (0, y.jsx)("span", { children: j.name.split(" - ")[0] })
+						/* @__PURE__ */ (0, y.jsx)("span", { children: fe.name.split(" - ")[0] })
 					]
 				}),
 				/* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "retail-pdp",
 					children: [/* @__PURE__ */ (0, y.jsx)(du, {
-						g: j,
+						g: fe,
 						onZoom: (e) => {
 							ne(e), t(1), a("zoom");
 						}
 					}), /* @__PURE__ */ (0, y.jsx)(pu, {
-						g: j,
+						g: fe,
 						theme: G.theme,
-						size: u[j.id] || "",
+						size: u[fe.id] || "",
 						onSize: (e) => f((t) => ({
 							...t,
-							[j.id]: e
+							[fe.id]: e
 						})),
-						onPanel: P,
-						onBag: _e,
-						wished: p.includes(j.id),
-						onWish: () => N(j.id),
-						picked: c.includes(j.id),
-						onCompare: () => ge(j.id)
+						onPanel: N,
+						onBag: ve,
+						wished: p.includes(fe.id),
+						onWish: () => M(fe.id),
+						picked: c.includes(fe.id),
+						onCompare: () => _e(fe.id)
 					})]
 				}),
-				G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)(hu, { g: j }),
+				G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)(hu, { g: fe }),
 				/* @__PURE__ */ (0, y.jsxs)("section", {
 					className: "retail-related",
 					children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: G.theme === "sh" ? "RELATED PRODUCTS" : G.theme === "ch" ? "Compléter la silhouette." : "YOU MAY ALSO LIKE" }), /* @__PURE__ */ (0, y.jsx)("div", {
 						className: "retail-grid",
-						children: gu.filter((e) => e.id !== j.id).map(be)
+						children: gu.filter((e) => e.id !== fe.id).map(xe)
 					})]
 				})
 			] }) : /* @__PURE__ */ (0, y.jsxs)("section", {
@@ -17388,7 +17398,7 @@ function vu() {
 								className: "ch-count",
 								children: [
 									"Filtre · ",
-									ye.length,
+									be.length,
 									" Produits"
 								]
 							}),
@@ -17411,7 +17421,7 @@ function vu() {
 					}),
 					/* @__PURE__ */ (0, y.jsx)("div", {
 						className: "retail-grid",
-						children: ye.map(be)
+						children: be.map(xe)
 					})
 				]
 			})] }),
@@ -17421,7 +17431,7 @@ function vu() {
 					/* @__PURE__ */ (0, y.jsxs)("span", { children: [c.length, " / 3 pieces selected"] }),
 					/* @__PURE__ */ (0, y.jsx)("div", { children: c.map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
 						"aria-label": "Remove " + gu.find((t) => t.id === e).name,
-						onClick: () => he(e),
+						onClick: () => ge(e),
 						children: [/* @__PURE__ */ (0, y.jsx)("img", {
 							src: gu.find((t) => t.id === e).model,
 							alt: ""
@@ -17444,7 +17454,7 @@ function vu() {
 					}) : G.brand }),
 					/* @__PURE__ */ (0, y.jsx)("p", { children: "INDEPENDENT CONCEPT · POWERED BY SPREEAI" }),
 					/* @__PURE__ */ (0, y.jsx)("p", { children: "Product photographs and names belong to their brands. Shopping bag interactions are a local preview; no orders or payments are collected. AI previews may vary. SPREEAI staging access may require VPN. Sizing recommendations are clearly labeled simulations; calibrated garment sizing is unavailable. Live try-on depends on garment processing and staging connectivity. Size visualization uses labeled image simulations." }),
-					/* @__PURE__ */ (0, y.jsx)(Dn, {
+					/* @__PURE__ */ (0, y.jsx)(On, {
 						to: "/",
 						children: "Explore the collection"
 					}),
@@ -17454,20 +17464,20 @@ function vu() {
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, y.jsx)(oc, {
+			/* @__PURE__ */ (0, y.jsx)(sc, {
 				open: !!n,
 				onOpenChange: (e) => {
-					e || me();
+					e || he();
 				},
-				children: /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "partner-overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+				children: /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "partner-overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 					className: "partner-dialog " + (G.theme === "ch" ? "ch-fitting-room" : ""),
 					children: [/* @__PURE__ */ (0, y.jsxs)("header", {
 						className: "partner-dialog-head",
-						children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsxs)(Cc, { children: [
+						children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsxs)(wc, { children: [
 							G.brand,
 							" / ",
-							n === "profile" ? "Your fitting room" : n === "compare" ? "Compare looks" : n === "look" ? "Build a look" : M.name
-						] }), /* @__PURE__ */ (0, y.jsx)(Tc, { children: "Your personal perspective, throughout the edit." })] }), /* @__PURE__ */ (0, y.jsx)(Dc, {
+							n === "profile" ? "Your fitting room" : n === "compare" ? "Compare looks" : n === "look" ? "Build a look" : j.name
+						] }), /* @__PURE__ */ (0, y.jsx)(Ec, { children: "Your personal perspective, throughout the edit." })] }), /* @__PURE__ */ (0, y.jsx)(Oc, {
 							"aria-label": "Close fitting room",
 							children: "×"
 						})]
@@ -17493,23 +17503,23 @@ function vu() {
 								},
 								children: "Choose a model or photo"
 							})] }) : null
-						}), n === "profile" ? /* @__PURE__ */ (0, y.jsx)(Nl, {
+						}), n === "profile" ? /* @__PURE__ */ (0, y.jsx)(Pl, {
 							saveOnly: G.theme === "ch",
 							initialSource: le?.kind === "twin" ? "twin" : "photo",
 							savedLooks: G.theme === "ch" ? /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: "Saved pieces." }), p.length ? /* @__PURE__ */ (0, y.jsx)("div", {
 								className: "retail-mini-grid",
-								children: gu.filter((e) => p.includes(e.id)).map((e) => /* @__PURE__ */ (0, y.jsxs)(Dn, {
+								children: gu.filter((e) => p.includes(e.id)).map((e) => /* @__PURE__ */ (0, y.jsxs)(On, {
 									to: "/product/" + e.id,
-									onClick: me,
+									onClick: he,
 									children: [/* @__PURE__ */ (0, y.jsx)("img", {
 										src: e.image,
 										alt: e.name
 									}), /* @__PURE__ */ (0, y.jsx)("h3", { children: e.name })]
 								}, e.id))
 							}) : /* @__PURE__ */ (0, y.jsx)("p", { children: "Tap a heart on a garment to save it here." })] }) : /* @__PURE__ */ (0, y.jsx)(Hl, {
-								product: M,
-								selectedSize: fe,
-								onSize: pe,
+								product: j,
+								selectedSize: pe,
+								onSize: me,
 								onBag: (e) => {
 									g((t) => [...t, ...e.map((e) => ({
 										...e,
@@ -17518,12 +17528,12 @@ function vu() {
 								}
 							}),
 							onDone: () => {
-								G.theme === "ch" ? me() : (de(re), r(ae));
+								G.theme === "ch" ? he() : (de(re), r(ae));
 							}
 						}) : n === "look" ? /* @__PURE__ */ (0, y.jsx)(Hl, {
-							product: M,
-							selectedSize: fe,
-							onSize: pe,
+							product: j,
+							selectedSize: pe,
+							onSize: me,
 							onBag: (e) => {
 								g((t) => [...t, ...e.map((e) => ({
 									...e,
@@ -17533,9 +17543,9 @@ function vu() {
 						}) : n === "compare" ? /* @__PURE__ */ (0, y.jsx)(au, {
 							initial: c,
 							onChange: l,
-							product: M,
-							selectedSize: fe,
-							onSize: pe
+							product: j,
+							selectedSize: pe,
+							onSize: me
 						}) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [G.theme !== "ch" && /* @__PURE__ */ (0, y.jsxs)("nav", {
 							className: "partner-tabs",
 							children: [
@@ -17550,7 +17560,7 @@ function vu() {
 									children: "Find my size"
 								}),
 								/* @__PURE__ */ (0, y.jsx)("button", {
-									onClick: () => ge(M.id),
+									onClick: () => _e(j.id),
 									children: "Compare on you"
 								}),
 								/* @__PURE__ */ (0, y.jsx)("button", {
@@ -17560,30 +17570,30 @@ function vu() {
 							]
 						}), n === "size" ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
 							/* @__PURE__ */ (0, y.jsx)(Ul, {
-								product: M,
-								size: fe,
-								onSize: pe
+								product: j,
+								size: pe,
+								onSize: me
 							}),
-							G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)(Fi, {
-								product: M,
-								size: fe,
-								onSize: pe
-							}, M.id),
+							G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)(Ii, {
+								product: j,
+								size: pe,
+								onSize: me
+							}, j.id),
 							G.theme !== "ch" && /* @__PURE__ */ (0, y.jsx)(Ql, {
-								product: M,
-								size: fe,
-								onSize: pe
+								product: j,
+								size: pe,
+								onSize: me
 							}),
 							G.theme !== "ch" && /* @__PURE__ */ (0, y.jsx)(nu, {
-								product: M,
-								selected: fe,
-								onSize: pe
+								product: j,
+								selected: pe,
+								onSize: me
 							})
 						] }) : /* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "partner-product-view",
-							children: [le ? /* @__PURE__ */ (0, y.jsx)(Mi, {
-								product: M,
-								selectedSize: fe
+							children: [le ? /* @__PURE__ */ (0, y.jsx)(Ni, {
+								product: j,
+								selectedSize: pe
 							}) : /* @__PURE__ */ (0, y.jsxs)("div", {
 								className: "ch-tryon-connecting",
 								role: "status",
@@ -17592,11 +17602,11 @@ function vu() {
 								className: "partner-product-copy",
 								children: [
 									/* @__PURE__ */ (0, y.jsx)("small", { children: "YOUR PERSPECTIVE" }),
-									/* @__PURE__ */ (0, y.jsx)("h2", { children: M.name }),
+									/* @__PURE__ */ (0, y.jsx)("h2", { children: j.name }),
 									/* @__PURE__ */ (0, y.jsxs)("p", { children: [
-										M.priceLabel,
+										j.priceLabel,
 										" / ",
-										M.color
+										j.color
 									] }),
 									/* @__PURE__ */ (0, y.jsx)("p", { children: "See this piece on your photo or a Twin. Keep your favorites together and explore your fit." }),
 									/* @__PURE__ */ (0, y.jsx)("button", {
@@ -17611,7 +17621,7 @@ function vu() {
 									}),
 									/* @__PURE__ */ (0, y.jsx)("button", {
 										className: "secondary",
-										onClick: () => ge(M.id),
+										onClick: () => _e(j.id),
 										children: "Compare on you"
 									}),
 									/* @__PURE__ */ (0, y.jsx)("button", {
@@ -17620,7 +17630,7 @@ function vu() {
 										children: "Build a look"
 									}),
 									/* @__PURE__ */ (0, y.jsx)("a", {
-										href: M.retailerUrl,
+										href: j.retailerUrl,
 										target: "_blank",
 										rel: "noopener noreferrer",
 										children: "View official product "
@@ -17631,22 +17641,22 @@ function vu() {
 					})]
 				})] })
 			}),
-			/* @__PURE__ */ (0, y.jsx)(oc, {
+			/* @__PURE__ */ (0, y.jsx)(sc, {
 				open: !!i,
 				onOpenChange: (e) => {
 					e || a("");
 				},
-				children: /* @__PURE__ */ (0, y.jsxs)(fc, { children: [/* @__PURE__ */ (0, y.jsx)(mc, { className: "partner-overlay" }), /* @__PURE__ */ (0, y.jsxs)(vc, {
+				children: /* @__PURE__ */ (0, y.jsxs)(pc, { children: [/* @__PURE__ */ (0, y.jsx)(hc, { className: "partner-overlay" }), /* @__PURE__ */ (0, y.jsxs)(yc, {
 					className: "retail-drawer " + (i === "zoom" ? "retail-lightbox" : ""),
 					children: [
 						/* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "retail-drawer-head",
-							children: [/* @__PURE__ */ (0, y.jsx)(Cc, { children: i === "bag" ? "Your shopping bag" : i === "guide" ? "Size guide" : i === "zoom" ? M.name : i === "favorites" ? "Your favorites" : i === "search" ? "Search the edit" : "Explore the collection" }), /* @__PURE__ */ (0, y.jsx)(Dc, {
+							children: [/* @__PURE__ */ (0, y.jsx)(wc, { children: i === "bag" ? "Your shopping bag" : i === "guide" ? "Size guide" : i === "zoom" ? j.name : i === "favorites" ? "Your favorites" : i === "search" ? "Search the edit" : "Explore the collection" }), /* @__PURE__ */ (0, y.jsx)(Oc, {
 								"aria-label": "Close shopping panel",
 								children: "×"
 							})]
 						}),
-						/* @__PURE__ */ (0, y.jsx)(Tc, {
+						/* @__PURE__ */ (0, y.jsx)(Ec, {
 							className: "retail-drawer-caption",
 							children: i === "bag" ? "A local shopping preview. Orders are placed only on the official brand website." : i === "guide" ? "Brand sizes and your personal fitting room." : i === "zoom" ? "Explore the product photographs." : gu.length + " current pieces, one personal perspective."
 						}),
@@ -17681,24 +17691,24 @@ function vu() {
 											transform: `scale(${e})`,
 											transformOrigin: "center"
 										},
-										src: M.gallery?.[D] || M.model,
-										alt: M.name + " image " + (D + 1)
+										src: j.gallery?.[D] || j.model,
+										alt: j.name + " image " + (D + 1)
 									})
 								}),
 								/* @__PURE__ */ (0, y.jsxs)("div", { children: [
 									/* @__PURE__ */ (0, y.jsx)("button", {
 										"aria-label": "Previous enlarged image",
-										onClick: () => ne((e) => (e + (M.gallery?.length || 1) - 1) % (M.gallery?.length || 1)),
+										onClick: () => ne((e) => (e + (j.gallery?.length || 1) - 1) % (j.gallery?.length || 1)),
 										children: "Previous"
 									}),
 									/* @__PURE__ */ (0, y.jsxs)("span", { children: [
 										D + 1,
 										" / ",
-										M.gallery?.length || 1
+										j.gallery?.length || 1
 									] }),
 									/* @__PURE__ */ (0, y.jsx)("button", {
 										"aria-label": "Next enlarged image",
-										onClick: () => ne((e) => (e + 1) % (M.gallery?.length || 1)),
+										onClick: () => ne((e) => (e + 1) % (j.gallery?.length || 1)),
 										children: "Next"
 									})
 								] })
@@ -17769,10 +17779,10 @@ function vu() {
 								children: "CONTINUE EXPLORING"
 							})
 						] }) : i === "guide" ? /* @__PURE__ */ (0, y.jsx)(Gl, {
-							product: M,
-							onSize: pe,
+							product: j,
+							onSize: me,
 							onExplore: () => {
-								a(""), P("size");
+								a(""), N("size");
 							}
 						}) : i === "menu" ? /* @__PURE__ */ (0, y.jsx)("nav", {
 							className: "retail-menu-links",
@@ -17793,7 +17803,7 @@ function vu() {
 							}),
 							/* @__PURE__ */ (0, y.jsx)("div", {
 								className: "retail-mini-grid",
-								children: gu.filter((e) => i === "favorites" ? p.includes(e.id) : e.name.toLowerCase().includes(_.toLowerCase())).map((e) => /* @__PURE__ */ (0, y.jsxs)(Dn, {
+								children: gu.filter((e) => i === "favorites" ? p.includes(e.id) : e.name.toLowerCase().includes(_.toLowerCase())).map((e) => /* @__PURE__ */ (0, y.jsxs)(On, {
 									to: "/product/" + e.id,
 									onClick: () => a(""),
 									children: [
@@ -17815,5 +17825,5 @@ function vu() {
 		]
 	});
 }
-(0, Yl.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, y.jsx)(En, { children: /* @__PURE__ */ (0, y.jsx)(vu, {}) }));
+(0, Yl.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, y.jsx)(Dn, { children: /* @__PURE__ */ (0, y.jsx)(vu, {}) }));
 //#endregion
