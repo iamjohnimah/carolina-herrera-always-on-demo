@@ -45,7 +45,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		T: null,
 		S: null
 	}, ee = Object.prototype.hasOwnProperty;
-	function E(e, n, r) {
+	function te(e, n, r) {
 		var i = r.ref;
 		return {
 			$$typeof: t,
@@ -55,13 +55,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			props: r
 		};
 	}
-	function D(e, t) {
-		return E(e.type, t, e.props);
+	function E(e, t) {
+		return te(e.type, t, e.props);
 	}
-	function O(e) {
+	function D(e) {
 		return typeof e == "object" && !!e && e.$$typeof === t;
 	}
-	function te(e) {
+	function ne(e) {
 		var t = {
 			"=": "=0",
 			":": "=2"
@@ -70,11 +70,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			return t[e];
 		});
 	}
-	var k = /\/+/g;
-	function ne(e, t) {
-		return typeof e == "object" && e && e.key != null ? te("" + e.key) : t.toString(36);
+	var re = /\/+/g;
+	function ie(e, t) {
+		return typeof e == "object" && e && e.key != null ? ne("" + e.key) : t.toString(36);
 	}
-	function re(e) {
+	function ae(e) {
 		switch (e.status) {
 			case "fulfilled": return e.value;
 			case "rejected": throw e.reason;
@@ -89,7 +89,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		throw e;
 	}
-	function A(e, r, i, a, o) {
+	function O(e, r, i, a, o) {
 		var s = typeof e;
 		(s === "undefined" || s === "boolean") && (e = null);
 		var c = !1;
@@ -105,30 +105,30 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				case n:
 					c = !0;
 					break;
-				case d: return c = e._init, A(c(e._payload), r, i, a, o);
+				case d: return c = e._init, O(c(e._payload), r, i, a, o);
 			}
 		}
-		if (c) return o = o(e), c = a === "" ? "." + ne(e, 0) : a, C(o) ? (i = "", c != null && (i = c.replace(k, "$&/") + "/"), A(o, r, i, "", function(e) {
+		if (c) return o = o(e), c = a === "" ? "." + ie(e, 0) : a, C(o) ? (i = "", c != null && (i = c.replace(re, "$&/") + "/"), O(o, r, i, "", function(e) {
 			return e;
-		})) : o != null && (O(o) && (o = D(o, i + (o.key == null || e && e.key === o.key ? "" : ("" + o.key).replace(k, "$&/") + "/") + c)), r.push(o)), 1;
+		})) : o != null && (D(o) && (o = E(o, i + (o.key == null || e && e.key === o.key ? "" : ("" + o.key).replace(re, "$&/") + "/") + c)), r.push(o)), 1;
 		c = 0;
 		var l = a === "" ? "." : a + ":";
-		if (C(e)) for (var u = 0; u < e.length; u++) a = e[u], s = l + ne(a, u), c += A(a, r, i, s, o);
-		else if (u = h(e), typeof u == "function") for (e = u.call(e), u = 0; !(a = e.next()).done;) a = a.value, s = l + ne(a, u++), c += A(a, r, i, s, o);
+		if (C(e)) for (var u = 0; u < e.length; u++) a = e[u], s = l + ie(a, u), c += O(a, r, i, s, o);
+		else if (u = h(e), typeof u == "function") for (e = u.call(e), u = 0; !(a = e.next()).done;) a = a.value, s = l + ie(a, u++), c += O(a, r, i, s, o);
 		else if (s === "object") {
-			if (typeof e.then == "function") return A(re(e), r, i, a, o);
+			if (typeof e.then == "function") return O(ae(e), r, i, a, o);
 			throw r = String(e), Error("Objects are not valid as a React child (found: " + (r === "[object Object]" ? "object with keys {" + Object.keys(e).join(", ") + "}" : r) + "). If you meant to render a collection of children, use an array instead.");
 		}
 		return c;
 	}
-	function ie(e, t, n) {
+	function oe(e, t, n) {
 		if (e == null) return e;
 		var r = [], i = 0;
-		return A(e, r, "", "", function(e) {
+		return O(e, r, "", "", function(e) {
 			return t.call(n, e, i++);
 		}), r;
 	}
-	function ae(e) {
+	function se(e) {
 		if (e._status === -1) {
 			var t = e._result, n = t();
 			n.then(function(t) {
@@ -140,7 +140,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		if (e._status === 1) return e._result.default;
 		throw e._result;
 	}
-	var oe = typeof reportError == "function" ? reportError : function(e) {
+	var ce = typeof reportError == "function" ? reportError : function(e) {
 		if (typeof window == "object" && typeof window.ErrorEvent == "function") {
 			var t = new window.ErrorEvent("error", {
 				bubbles: !0,
@@ -155,54 +155,54 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		console.error(e);
 	};
-	function se(e) {
+	function k(e) {
 		var t = T.T, n = {};
 		n.types = t === null ? null : t.types, T.T = n;
 		try {
 			var r = e(), i = T.S;
-			i !== null && i(n, r), typeof r == "object" && r && typeof r.then == "function" && r.then(w, oe);
+			i !== null && i(n, r), typeof r == "object" && r && typeof r.then == "function" && r.then(w, ce);
 		} catch (e) {
-			oe(e);
+			ce(e);
 		} finally {
 			t !== null && n.types !== null && (t.types = n.types), T.T = t;
 		}
 	}
-	function ce(e) {
+	function le(e) {
 		var t = T.T;
 		if (t !== null) {
 			var n = t.types;
 			n === null ? t.types = [e] : n.indexOf(e) === -1 && n.push(e);
-		} else se(ce.bind(null, e));
+		} else k(le.bind(null, e));
 	}
-	var le = {
-		map: ie,
+	var ue = {
+		map: oe,
 		forEach: function(e, t, n) {
-			ie(e, function() {
+			oe(e, function() {
 				t.apply(this, arguments);
 			}, n);
 		},
 		count: function(e) {
 			var t = 0;
-			return ie(e, function() {
+			return oe(e, function() {
 				t++;
 			}), t;
 		},
 		toArray: function(e) {
-			return ie(e, function(e) {
+			return oe(e, function(e) {
 				return e;
 			}) || [];
 		},
 		only: function(e) {
-			if (!O(e)) throw Error("React.Children.only expected to receive a single React element child.");
+			if (!D(e)) throw Error("React.Children.only expected to receive a single React element child.");
 			return e;
 		}
 	};
-	e.Activity = f, e.Children = le, e.Component = y, e.Fragment = r, e.Profiler = a, e.PureComponent = x, e.StrictMode = i, e.Suspense = l, e.ViewTransition = p, e.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = T, e.__COMPILER_RUNTIME = {
+	e.Activity = f, e.Children = ue, e.Component = y, e.Fragment = r, e.Profiler = a, e.PureComponent = x, e.StrictMode = i, e.Suspense = l, e.ViewTransition = p, e.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = T, e.__COMPILER_RUNTIME = {
 		__proto__: null,
 		c: function(e) {
 			return T.H.useMemoCache(e);
 		}
-	}, e.addTransitionType = ce, e.cache = function(e) {
+	}, e.addTransitionType = le, e.cache = function(e) {
 		return function() {
 			return e.apply(null, arguments);
 		};
@@ -218,7 +218,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			for (var o = Array(a), s = 0; s < a; s++) o[s] = arguments[s + 2];
 			r.children = o;
 		}
-		return E(e.type, i, r);
+		return te(e.type, i, r);
 	}, e.createContext = function(e) {
 		return e = {
 			$$typeof: s,
@@ -241,7 +241,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			i.children = s;
 		}
 		if (e && e.defaultProps) for (r in o = e.defaultProps, o) i[r] === void 0 && (i[r] = o[r]);
-		return E(e, a, i);
+		return te(e, a, i);
 	}, e.createRef = function() {
 		return { current: null };
 	}, e.forwardRef = function(e) {
@@ -249,14 +249,14 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			$$typeof: c,
 			render: e
 		};
-	}, e.isValidElement = O, e.lazy = function(e) {
+	}, e.isValidElement = D, e.lazy = function(e) {
 		return {
 			$$typeof: d,
 			_payload: {
 				_status: -1,
 				_result: e
 			},
-			_init: ae
+			_init: se
 		};
 	}, e.memo = function(e, t) {
 		return {
@@ -264,7 +264,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			type: e,
 			compare: t === void 0 ? null : t
 		};
-	}, e.startTransition = se, e.unstable_useCacheRefresh = function() {
+	}, e.startTransition = k, e.unstable_useCacheRefresh = function() {
 		return T.H.useCacheRefresh();
 	}, e.use = function(e) {
 		return T.H.use(e);
@@ -437,7 +437,7 @@ T.displayName = "MagnifyingGlassPlusIcon";
 var ee = T;
 //#endregion
 //#region src/always-on/InlineImageZoom.tsx
-function E({ src: e, alt: t }) {
+function te({ src: e, alt: t }) {
 	let [n, r] = (0, d.useState)(1), [i, a] = (0, d.useState)({
 		x: 0,
 		y: 0
@@ -518,18 +518,18 @@ function E({ src: e, alt: t }) {
 }
 //#endregion
 //#region ../../../../2026-09-21/referenced-chatgpt-conversation-this-is-an/work/always-on/storefront-source/node_modules/.pnpm/react-router@7.18.4_react-dom@19.3.0_react@19.3.0__react@19.3.0/node_modules/react-router/dist/development/chunk-OB3PAWPO.mjs
-var D = /^(?:[a-z][a-z0-9+.-]*:|[\\/]{2})/i, O = /^[\\/]{2}/;
-function te(e, t) {
+var E = /^(?:[a-z][a-z0-9+.-]*:|[\\/]{2})/i, D = /^[\\/]{2}/;
+function ne(e, t) {
 	return t + e.replace(/\\/g, "/");
 }
-var k = "popstate";
-function ne(e) {
+var re = "popstate";
+function ie(e) {
 	return typeof e == "object" && !!e && "pathname" in e && "search" in e && "hash" in e && "state" in e && "key" in e;
 }
-function re(e = {}) {
+function ae(e = {}) {
 	function t(e, t) {
-		let { pathname: n = "/", search: r = "", hash: i = "" } = le(e.location.hash.substring(1));
-		return !n.startsWith("/") && !n.startsWith(".") && (n = "/" + n), se("", {
+		let { pathname: n = "/", search: r = "", hash: i = "" } = ue(e.location.hash.substring(1));
+		return !n.startsWith("/") && !n.startsWith(".") && (n = "/" + n), k("", {
 			pathname: n,
 			search: r,
 			hash: i
@@ -541,17 +541,17 @@ function re(e = {}) {
 			let t = e.location.href, n = t.indexOf("#");
 			r = n === -1 ? t : t.slice(0, n);
 		}
-		return r + "#" + (typeof t == "string" ? t : ce(t));
+		return r + "#" + (typeof t == "string" ? t : le(t));
 	}
 	function r(e, t) {
-		ie(e.pathname.charAt(0) === "/", `relative pathnames are not supported in hash history.push(${JSON.stringify(t)})`);
+		oe(e.pathname.charAt(0) === "/", `relative pathnames are not supported in hash history.push(${JSON.stringify(t)})`);
 	}
-	return j(t, n, r, e);
+	return de(t, n, r, e);
 }
-function A(e, t) {
+function O(e, t) {
 	if (e === !1 || e == null) throw Error(t);
 }
-function ie(e, t) {
+function oe(e, t) {
 	if (!e) {
 		typeof console < "u" && console.warn(t);
 		try {
@@ -559,10 +559,10 @@ function ie(e, t) {
 		} catch {}
 	}
 }
-function ae() {
+function se() {
 	return Math.random().toString(36).substring(2, 10);
 }
-function oe(e, t) {
+function ce(e, t) {
 	return {
 		usr: e.state,
 		key: e.key,
@@ -574,21 +574,21 @@ function oe(e, t) {
 		} : void 0
 	};
 }
-function se(e, t, n = null, r, i) {
+function k(e, t, n = null, r, i) {
 	return {
 		pathname: typeof e == "string" ? e : e.pathname,
 		search: "",
 		hash: "",
-		...typeof t == "string" ? le(t) : t,
+		...typeof t == "string" ? ue(t) : t,
 		state: n,
-		key: t && t.key || r || ae(),
+		key: t && t.key || r || se(),
 		mask: i
 	};
 }
-function ce({ pathname: e = "/", search: t = "", hash: n = "" }) {
+function le({ pathname: e = "/", search: t = "", hash: n = "" }) {
 	return t && t !== "?" && (e += t.charAt(0) === "?" ? t : "?" + t), n && n !== "#" && (e += n.charAt(0) === "#" ? n : "#" + n), e;
 }
-function le(e) {
+function ue(e) {
 	let t = {};
 	if (e) {
 		let n = e.indexOf("#");
@@ -598,7 +598,7 @@ function le(e) {
 	}
 	return t;
 }
-function j(e, t, n, r = {}) {
+function de(e, t, n, r = {}) {
 	let { window: i = document.defaultView, v5Compat: a = !1 } = r, o = i.history, s = "POP", c = null, l = u();
 	l ?? (l = 0, o.replaceState({
 		...o.state,
@@ -618,9 +618,9 @@ function j(e, t, n, r = {}) {
 	}
 	function f(e, t) {
 		s = "PUSH";
-		let r = ne(e) ? e : se(h.location, e, t);
+		let r = ie(e) ? e : k(h.location, e, t);
 		n && n(r, e), l = u() + 1;
-		let d = oe(r, l), f = h.createHref(r.mask || r);
+		let d = ce(r, l), f = h.createHref(r.mask || r);
 		try {
 			o.pushState(d, "", f);
 		} catch (e) {
@@ -635,9 +635,9 @@ function j(e, t, n, r = {}) {
 	}
 	function p(e, t) {
 		s = "REPLACE";
-		let r = ne(e) ? e : se(h.location, e, t);
+		let r = ie(e) ? e : k(h.location, e, t);
 		n && n(r, e), l = u();
-		let i = oe(r, l), d = h.createHref(r.mask || r);
+		let i = ce(r, l), d = h.createHref(r.mask || r);
 		o.replaceState(i, "", d), a && c && c({
 			action: s,
 			location: h.location,
@@ -645,7 +645,7 @@ function j(e, t, n, r = {}) {
 		});
 	}
 	function m(e) {
-		return ue(i, e);
+		return A(i, e);
 	}
 	let h = {
 		get action() {
@@ -656,8 +656,8 @@ function j(e, t, n, r = {}) {
 		},
 		listen(e) {
 			if (c) throw Error("A history only accepts one active listener");
-			return i.addEventListener(k, d), c = e, () => {
-				i.removeEventListener(k, d), c = null;
+			return i.addEventListener(re, d), c = e, () => {
+				i.removeEventListener(re, d), c = null;
 			};
 		},
 		createHref(e) {
@@ -680,17 +680,17 @@ function j(e, t, n, r = {}) {
 	};
 	return h;
 }
-function ue(e, t, n = !1) {
+function A(e, t, n = !1) {
 	let r = "http://localhost";
-	e && (r = e.location.origin === "null" ? e.location.href : e.location.origin), A(r, "No window.location.(origin|href) available to create URL");
-	let i = typeof t == "string" ? t : ce(t);
-	return i = i.replace(/ $/, "%20"), !n && O.test(i) && (i = r + i), new URL(i, r);
+	e && (r = e.location.origin === "null" ? e.location.href : e.location.origin), O(r, "No window.location.(origin|href) available to create URL");
+	let i = typeof t == "string" ? t : le(t);
+	return i = i.replace(/ $/, "%20"), !n && D.test(i) && (i = r + i), new URL(i, r);
 }
-function de(e, t, n = "/") {
+function j(e, t, n = "/") {
 	return M(e, t, n, !1);
 }
 function M(e, t, n, r, i) {
-	let a = De((typeof t == "string" ? le(t) : t).pathname || "/", n);
+	let a = De((typeof t == "string" ? ue(t) : t).pathname || "/", n);
 	if (a == null) return null;
 	let o = i ?? fe(e), s = null, c = Ee(a);
 	for (let e = 0; s == null && e < o.length; ++e) s = Se(o[e], c, r);
@@ -710,10 +710,10 @@ function pe(e, t = [], n = [], r = "", i = !1) {
 		};
 		if (c.relativePath.startsWith("/")) {
 			if (!c.relativePath.startsWith(r) && o) return;
-			A(c.relativePath.startsWith(r), `Absolute route path "${c.relativePath}" nested under path "${r}" is not valid. An absolute child route path must start with the combined path of all its parent routes.`), c.relativePath = c.relativePath.slice(r.length);
+			O(c.relativePath.startsWith(r), `Absolute route path "${c.relativePath}" nested under path "${r}" is not valid. An absolute child route path must start with the combined path of all its parent routes.`), c.relativePath = c.relativePath.slice(r.length);
 		}
 		let l = Fe([r, c.relativePath]), u = n.concat(c);
-		e.children && e.children.length > 0 && (A(e.index !== !0, `Index routes must not have child routes. Please remove all child routes from route path "${l}".`), pe(e.children, t, u, l, o)), (e.path != null || e.index) && t.push({
+		e.children && e.children.length > 0 && (O(e.index !== !0, `Index routes must not have child routes. Please remove all child routes from route path "${l}".`), pe(e.children, t, u, l, o)), (e.path != null || e.index) && t.push({
 			path: l,
 			score: F(l, e.index),
 			routesMeta: u.map((e, t) => {
@@ -800,7 +800,7 @@ function we(e, t, n, r) {
 	};
 }
 function Te(e, t = !1, n = !0) {
-	ie(e === "*" || !e.endsWith("*") || e.endsWith("/*"), `Route path "${e}" will be treated as if it were "${e.replace(/\*$/, "/*")}" because the \`*\` character must always follow a \`/\` in the pattern. To get rid of this warning, please change the route path to "${e.replace(/\*$/, "/*")}".`);
+	oe(e === "*" || !e.endsWith("*") || e.endsWith("/*"), `Route path "${e}" will be treated as if it were "${e.replace(/\*$/, "/*")}" because the \`*\` character must always follow a \`/\` in the pattern. To get rid of this warning, please change the route path to "${e.replace(/\*$/, "/*")}".`);
 	let r = [], i = "^" + e.replace(/\/*\*?$/, "").replace(/^\/*/, "/").replace(/[\\.*+^${}|()[\]]/g, "\\$&").replace(/\/:([\w-]+)(\?)?/g, (e, t, n, i, a) => {
 		if (r.push({
 			paramName: t,
@@ -817,7 +817,7 @@ function Ee(e) {
 	try {
 		return e.split("/").map((e) => decodeURIComponent(e).replace(/\//g, "%2F")).join("/");
 	} catch (t) {
-		return ie(!1, `The URL path "${e}" could not be decoded because it is a malformed URL segment. This is probably due to a bad percent encoding (${t}).`), e;
+		return oe(!1, `The URL path "${e}" could not be decoded because it is a malformed URL segment. This is probably due to a bad percent encoding (${t}).`), e;
 	}
 }
 function De(e, t) {
@@ -827,7 +827,7 @@ function De(e, t) {
 	return r && r !== "/" ? null : e.slice(n) || "/";
 }
 function Oe(e, t = "/") {
-	let { pathname: n, search: r = "", hash: i = "" } = typeof e == "string" ? le(e) : e, a;
+	let { pathname: n, search: r = "", hash: i = "" } = typeof e == "string" ? ue(e) : e, a;
 	return n ? (n = Pe(n), a = n.startsWith("/") || n.startsWith("\\") ? ke(n.substring(1), "/") : ke(n, t)) : a = t, {
 		pathname: a,
 		search: Re(r),
@@ -852,7 +852,7 @@ function Me(e) {
 }
 function Ne(e, t, n, r = !1) {
 	let i;
-	typeof e == "string" ? i = le(e) : (i = { ...e }, A(!i.pathname || !i.pathname.includes("?"), Ae("?", "pathname", "search", i)), A(!i.pathname || !i.pathname.includes("#"), Ae("#", "pathname", "hash", i)), A(!i.search || !i.search.includes("#"), Ae("#", "search", "hash", i)));
+	typeof e == "string" ? i = ue(e) : (i = { ...e }, O(!i.pathname || !i.pathname.includes("?"), Ae("?", "pathname", "search", i)), O(!i.pathname || !i.pathname.includes("#"), Ae("#", "pathname", "hash", i)), O(!i.search || !i.search.includes("#"), Ae("#", "search", "hash", i)));
 	let a = e === "" || i.pathname === "", o = a ? "/" : i.pathname, s;
 	if (o == null) s = n;
 	else {
@@ -887,17 +887,17 @@ function He(e) {
 var Ue = typeof window < "u" && window.document !== void 0 && window.document.createElement !== void 0;
 function We(e, t) {
 	let n = e;
-	if (typeof n != "string" || !D.test(n)) return {
+	if (typeof n != "string" || !E.test(n)) return {
 		absoluteURL: void 0,
 		isExternal: !1,
 		to: n
 	};
 	let r = n, i = !1;
 	if (Ue) try {
-		let e = new URL(window.location.href), r = O.test(n) ? new URL(te(n, e.protocol)) : new URL(n), a = De(r.pathname, t);
+		let e = new URL(window.location.href), r = D.test(n) ? new URL(ne(n, e.protocol)) : new URL(n), a = De(r.pathname, t);
 		r.origin === e.origin && a != null ? n = a + r.search + r.hash : i = !0;
 	} catch {
-		ie(!1, `<Link to="${n}"> contains an invalid URL which will probably break when clicked - please update to a valid URL path.`);
+		oe(!1, `<Link to="${n}"> contains an invalid URL which will probably break when clicked - please update to a valid URL path.`);
 	}
 	return {
 		absoluteURL: r,
@@ -1001,7 +1001,7 @@ function ht(e) {
 	} catch {}
 }
 function gt(e, { relative: t } = {}) {
-	A(_t(), "useHref() may be used only in the context of a <Router> component.");
+	O(_t(), "useHref() may be used only in the context of a <Router> component.");
 	let { basename: n, navigator: r } = d.useContext(st), { hash: i, pathname: a, search: o } = Ct(e, { relative: t }), s = a;
 	return n !== "/" && (s = a === "/" ? n : Fe([n, a])), r.createHref({
 		pathname: s,
@@ -1013,7 +1013,7 @@ function _t() {
 	return d.useContext(ct) != null;
 }
 function vt() {
-	return A(_t(), "useLocation() may be used only in the context of a <Router> component."), d.useContext(ct).location;
+	return O(_t(), "useLocation() may be used only in the context of a <Router> component."), d.useContext(ct).location;
 }
 var yt = "You should call navigate() in a React.useEffect(), not when your component is first rendered.";
 function bt(e) {
@@ -1024,18 +1024,18 @@ function xt() {
 	return e ? zt() : St();
 }
 function St() {
-	A(_t(), "useNavigate() may be used only in the context of a <Router> component.");
+	O(_t(), "useNavigate() may be used only in the context of a <Router> component.");
 	let e = d.useContext(et), { basename: t, navigator: n } = d.useContext(st), { matches: r } = d.useContext(lt), { pathname: i } = vt(), a = JSON.stringify(Me(r)), o = d.useRef(!1);
 	return bt(() => {
 		o.current = !0;
 	}), d.useCallback((r, s = {}) => {
-		if (ie(o.current, yt), !o.current) return;
+		if (oe(o.current, yt), !o.current) return;
 		if (typeof r == "number") {
 			n.go(r);
 			return;
 		}
 		let c = Ne(r, JSON.parse(a), i, s.relative === "path");
-		e == null && t !== "/" && (c.pathname = c.pathname === "/" ? t : Fe([t, c.pathname])), Ye(typeof r == "string" ? r : ce(r), n.createHref(c), Ke(n), "reject"), (s.replace ? n.replace : n.push)(c, s.state, s);
+		e == null && t !== "/" && (c.pathname = c.pathname === "/" ? t : Fe([t, c.pathname])), Ye(typeof r == "string" ? r : le(r), n.createHref(c), Ke(n), "reject"), (s.replace ? n.replace : n.push)(c, s.state, s);
 	}, [
 		t,
 		n,
@@ -1055,7 +1055,7 @@ function Ct(e, { relative: t } = {}) {
 	]);
 }
 function wt(e, t, n) {
-	A(_t(), "useRoutes() may be used only in the context of a <Router> component.");
+	O(_t(), "useRoutes() may be used only in the context of a <Router> component.");
 	let { navigator: r } = d.useContext(st), { matches: i } = d.useContext(lt), a = i[i.length - 1], o = a ? a.params : {}, s = a ? a.pathname : "/", c = a ? a.pathnameBase : "/", l = a && a.route;
 	{
 		let e = l && l.path || "";
@@ -1065,16 +1065,16 @@ Please change the parent <Route path="${e}"> to <Route path="${e === "/" ? "*" :
 	}
 	let u = vt(), f;
 	if (t) {
-		let e = typeof t == "string" ? le(t) : t;
-		A(c === "/" || e.pathname?.startsWith(c), `When overriding the location using \`<Routes location>\` or \`useRoutes(routes, location)\`, the location pathname must begin with the portion of the URL pathname that was matched by all parent routes. The current pathname base is "${c}" but pathname "${e.pathname}" was given in the \`location\` prop.`), f = e;
+		let e = typeof t == "string" ? ue(t) : t;
+		O(c === "/" || e.pathname?.startsWith(c), `When overriding the location using \`<Routes location>\` or \`useRoutes(routes, location)\`, the location pathname must begin with the portion of the URL pathname that was matched by all parent routes. The current pathname base is "${c}" but pathname "${e.pathname}" was given in the \`location\` prop.`), f = e;
 	} else f = u;
 	let p = f.pathname || "/", m = p;
 	if (c !== "/") {
 		let e = c.replace(/^\//, "").split("/");
 		m = "/" + p.replace(/^\//, "").split("/").slice(e.length).join("/");
 	}
-	let h = n && n.state.matches.length ? n.state.matches.map((e) => Object.assign(e, { route: n.manifest[e.route.id] || e.route })) : de(e, { pathname: m });
-	ie(l || h != null, `No routes matched location "${f.pathname}${f.search}${f.hash}" `), ie(h == null || h[h.length - 1].route.element !== void 0 || h[h.length - 1].route.Component !== void 0 || h[h.length - 1].route.lazy !== void 0, `Matched leaf route at location "${f.pathname}${f.search}${f.hash}" does not have an element or Component. This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.`);
+	let h = n && n.state.matches.length ? n.state.matches.map((e) => Object.assign(e, { route: n.manifest[e.route.id] || e.route })) : j(e, { pathname: m });
+	oe(l || h != null, `No routes matched location "${f.pathname}${f.search}${f.hash}" `), oe(h == null || h[h.length - 1].route.element !== void 0 || h[h.length - 1].route.Component !== void 0 || h[h.length - 1].route.lazy !== void 0, `Matched leaf route at location "${f.pathname}${f.search}${f.hash}" does not have an element or Component. This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.`);
 	let g = jt(h && h.map((e) => Object.assign({}, e, {
 		params: Object.assign({}, o, e.params),
 		pathname: Fe([c, r.encodeLocation ? r.encodeLocation(e.pathname.replace(/%/g, "%25").replace(/\?/g, "%3F").replace(/#/g, "%23")).pathname : e.pathname]),
@@ -1182,7 +1182,7 @@ function jt(e, t = [], n) {
 	let i = e, a = r?.errors;
 	if (a != null) {
 		let e = i.findIndex((e) => e.route.id && a?.[e.route.id] !== void 0);
-		A(e >= 0, `Could not find a matching route for errors on route IDs: ${Object.keys(a).join(",")}`), i = i.slice(0, Math.min(i.length, e + 1));
+		O(e >= 0, `Could not find a matching route for errors on route IDs: ${Object.keys(a).join(",")}`), i = i.slice(0, Math.min(i.length, e + 1));
 	}
 	let o = !1, s = -1;
 	if (n && r) {
@@ -1241,19 +1241,19 @@ function Mt(e) {
 }
 function Nt(e) {
 	let t = d.useContext(et);
-	return A(t, Mt(e)), t;
+	return O(t, Mt(e)), t;
 }
 function Pt(e) {
 	let t = d.useContext(tt);
-	return A(t, Mt(e)), t;
+	return O(t, Mt(e)), t;
 }
 function Ft(e) {
 	let t = d.useContext(lt);
-	return A(t, Mt(e)), t;
+	return O(t, Mt(e)), t;
 }
 function It(e) {
 	let t = Ft(e), n = t.matches[t.matches.length - 1];
-	return A(n.route.id, `${e} can only be used on routes that contain a unique "id"`), n.route.id;
+	return O(n.route.id, `${e} can only be used on routes that contain a unique "id"`), n.route.id;
 }
 function Lt() {
 	return It("useRouteId");
@@ -1267,7 +1267,7 @@ function zt() {
 	return bt(() => {
 		n.current = !0;
 	}), d.useCallback(async (r, i = {}) => {
-		ie(n.current, yt), n.current && (typeof r == "number" ? await e.navigate(r) : await e.navigate(r, {
+		oe(n.current, yt), n.current && (typeof r == "number" ? await e.navigate(r) : await e.navigate(r, {
 			fromRouteId: t,
 			...i
 		}));
@@ -1275,7 +1275,7 @@ function zt() {
 }
 var Bt = {};
 function Vt(e, t, n) {
-	!t && !Bt[e] && (Bt[e] = !0, ie(!1, n));
+	!t && !Bt[e] && (Bt[e] = !0, oe(!1, n));
 }
 d.memo(Ht);
 function Ht({ routes: e, manifest: t, future: n, state: r, isStatic: i, onError: a }) {
@@ -1288,7 +1288,7 @@ function Ht({ routes: e, manifest: t, future: n, state: r, isStatic: i, onError:
 	});
 }
 function Ut({ basename: e = "/", children: t = null, location: n, navigationType: r = "POP", navigator: i, static: a = !1, useTransitions: o }) {
-	A(!_t(), "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.");
+	O(!_t(), "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.");
 	let s = e.replace(/^\/*/, "/"), c = d.useMemo(() => ({
 		basename: s,
 		navigator: i,
@@ -1301,7 +1301,7 @@ function Ut({ basename: e = "/", children: t = null, location: n, navigationType
 		a,
 		o
 	]);
-	typeof n == "string" && (n = le(n));
+	typeof n == "string" && (n = ue(n));
 	let { pathname: l = "/", search: u = "", hash: f = "", state: p = null, key: m = "default", mask: h } = n, g = d.useMemo(() => {
 		let e = De(l, s);
 		return e == null ? null : {
@@ -1325,7 +1325,7 @@ function Ut({ basename: e = "/", children: t = null, location: n, navigationType
 		r,
 		h
 	]);
-	return ie(g != null, `<Router basename="${s}"> is not able to match the URL "${l}${u}${f}" because it does not start with the basename, so the <Router> won't render anything.`), g == null ? null : /* @__PURE__ */ d.createElement(st.Provider, { value: c }, /* @__PURE__ */ d.createElement(ct.Provider, {
+	return oe(g != null, `<Router basename="${s}"> is not able to match the URL "${l}${u}${f}" because it does not start with the basename, so the <Router> won't render anything.`), g == null ? null : /* @__PURE__ */ d.createElement(st.Provider, { value: c }, /* @__PURE__ */ d.createElement(ct.Provider, {
 		children: t,
 		value: g
 	}));
@@ -1365,7 +1365,7 @@ var $t = /* @__PURE__ */ new Set([
 	"text/plain"
 ]);
 function en(e) {
-	return e != null && !$t.has(e) ? (ie(!1, `"${e}" is not a valid \`encType\` for \`<Form>\`/\`<fetcher.Form>\` and will default to "${Gt}"`), null) : e;
+	return e != null && !$t.has(e) ? (oe(!1, `"${e}" is not a valid \`encType\` for \`<Form>\`/\`<fetcher.Form>\` and will default to "${Gt}"`), null) : e;
 }
 function tn(e, t) {
 	let n, r, i, a, o;
@@ -1551,7 +1551,7 @@ function yn(e, t) {
 	};
 }
 function bn({ page: e, ...t }) {
-	let n = rt(), { nonce: r } = _n(), { router: i } = mn(), a = d.useMemo(() => de(i.routes, e, i.basename), [
+	let n = rt(), { nonce: r } = _n(), { router: i } = mn(), a = d.useMemo(() => j(i.routes, e, i.basename), [
 		i.routes,
 		e,
 		i.basename
@@ -1670,7 +1670,7 @@ try {
 } catch {}
 function En({ basename: e, children: t, useTransitions: n, window: r }) {
 	let i = d.useRef();
-	i.current ??= re({
+	i.current ??= ae({
 		window: r,
 		v5Compat: !0
 	});
@@ -1690,14 +1690,14 @@ function En({ basename: e, children: t, useTransitions: n, window: r }) {
 	});
 }
 var Dn = d.forwardRef(function({ onClick: e, discover: t = "render", prefetch: n = "none", relative: r, reloadDocument: i, replace: a, mask: o, state: s, target: c, to: l, preventScrollReset: u, viewTransition: f, defaultShouldRevalidate: p, ...m }, h) {
-	let { basename: g, navigator: _, useTransitions: v } = d.useContext(st), y = typeof l == "string" && D.test(l), b = We(l, g);
+	let { basename: g, navigator: _, useTransitions: v } = d.useContext(st), y = typeof l == "string" && E.test(l), b = We(l, g);
 	l = b.to;
 	let x = gt(l, { relative: r }), S = vt(), C = null;
 	if (o) {
 		let e = Ne(o, [], S.mask ? S.mask.pathname : "/", !0);
 		g !== "/" && (e.pathname = e.pathname === "/" ? g : Fe([g, e.pathname])), C = _.createHref(e);
 	}
-	let [w, T, ee] = vn(n, m), E = Mn(l, {
+	let [w, T, ee] = vn(n, m), te = Mn(l, {
 		replace: a,
 		mask: o,
 		state: s,
@@ -1708,19 +1708,19 @@ var Dn = d.forwardRef(function({ onClick: e, discover: t = "render", prefetch: n
 		defaultShouldRevalidate: p,
 		useTransitions: v
 	});
-	function O(t) {
-		e && e(t), t.defaultPrevented || E(t);
+	function D(t) {
+		e && e(t), t.defaultPrevented || te(t);
 	}
-	let te = !(b.isExternal || i), k = /* @__PURE__ */ d.createElement("a", {
+	let ne = !(b.isExternal || i), re = /* @__PURE__ */ d.createElement("a", {
 		...m,
 		...ee,
-		href: (te ? C : void 0) || b.absoluteURL || x,
-		onClick: te ? O : e,
+		href: (ne ? C : void 0) || b.absoluteURL || x,
+		onClick: ne ? D : e,
 		ref: wn(h, T),
 		target: c,
 		"data-discover": !y && t === "render" ? "true" : void 0
 	});
-	return w && !y ? /* @__PURE__ */ d.createElement(d.Fragment, null, k, /* @__PURE__ */ d.createElement(bn, { page: x })) : k;
+	return w && !y ? /* @__PURE__ */ d.createElement(d.Fragment, null, re, /* @__PURE__ */ d.createElement(bn, { page: x })) : re;
 });
 Dn.displayName = "Link";
 var On = d.forwardRef(function({ "aria-current": e = "page", caseSensitive: t = !1, className: n = "", end: r = !1, style: i, to: a, viewTransition: o, children: s, ...c }, l) {
@@ -1750,7 +1750,7 @@ var On = d.forwardRef(function({ "aria-current": e = "page", caseSensitive: t = 
 });
 On.displayName = "NavLink";
 var kn = d.forwardRef(({ discover: e = "render", fetcherKey: t, navigate: n, reloadDocument: r, replace: i, state: a, method: o = Wt, action: s, onSubmit: c, relative: l, preventScrollReset: u, viewTransition: f, defaultShouldRevalidate: p, ...m }, h) => {
-	let { useTransitions: g } = d.useContext(st), _ = Fn(), v = In(s, { relative: l }), y = o.toLowerCase() === "get" ? "get" : "post", b = typeof s == "string" && D.test(s);
+	let { useTransitions: g } = d.useContext(st), _ = Fn(), v = In(s, { relative: l }), y = o.toLowerCase() === "get" ? "get" : "post", b = typeof s == "string" && E.test(s);
 	return /* @__PURE__ */ d.createElement("form", {
 		ref: h,
 		method: y,
@@ -1781,14 +1781,14 @@ function An(e) {
 }
 function jn(e) {
 	let t = d.useContext(et);
-	return A(t, An(e)), t;
+	return O(t, An(e)), t;
 }
 function Mn(e, { target: t, replace: n, mask: r, state: i, preventScrollReset: a, relative: o, viewTransition: s, defaultShouldRevalidate: c, useTransitions: l } = {}) {
 	let u = xt(), f = vt(), p = Ct(e, { relative: o });
 	return d.useCallback((m) => {
 		if (Xt(m, t)) {
 			m.preventDefault();
-			let t = n === void 0 ? ce(f) === ce(p) : n, h = () => u(e, {
+			let t = n === void 0 ? le(f) === le(p) : n, h = () => u(e, {
 				replace: t,
 				mask: r,
 				state: i,
@@ -1853,7 +1853,7 @@ function Fn() {
 }
 function In(e, { relative: t } = {}) {
 	let { basename: n } = d.useContext(st), r = d.useContext(lt);
-	A(r, "useFormAction must be used inside a RouteContext");
+	O(r, "useFormAction must be used inside a RouteContext");
 	let [i] = r.matches.slice(-1), a = { ...Ct(e || ".", { relative: t }) }, o = vt();
 	if (e == null) {
 		a.search = o.search;
@@ -1864,11 +1864,11 @@ function In(e, { relative: t } = {}) {
 			a.search = n ? `?${n}` : "";
 		}
 	}
-	return (!e || e === ".") && i.route.index && (a.search = a.search ? a.search.replace(/^\?/, "?index&") : "?index"), n !== "/" && (a.pathname = a.pathname === "/" ? n : Fe([n, a.pathname])), ce(a);
+	return (!e || e === ".") && i.route.index && (a.search = a.search ? a.search.replace(/^\?/, "?index&") : "?index"), n !== "/" && (a.pathname = a.pathname === "/" ? n : Fe([n, a.pathname])), le(a);
 }
 function Ln(e, { relative: t } = {}) {
 	let n = d.useContext(it);
-	A(n != null, "`useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?");
+	O(n != null, "`useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?");
 	let { basename: r } = jn("useViewTransitionState"), i = Ct(e, { relative: t });
 	if (!n.isTransitioning) return !1;
 	let a = De(n.currentLocation.pathname, r) || n.currentLocation.pathname, o = De(n.nextLocation.pathname, r) || n.nextLocation.pathname;
@@ -2723,7 +2723,7 @@ function Mi({ product: e, selectedSize: t = "" }) {
 				className: "preview-person-chip",
 				children: [i.name, a.selected ? ` · Size ${a.selected}` : ""]
 			}),
-			a.url ? /* @__PURE__ */ (0, y.jsx)(E, {
+			a.url ? /* @__PURE__ */ (0, y.jsx)(te, {
 				src: a.url,
 				alt: `${i.name} wearing ${e.name}`
 			}, a.url) : /* @__PURE__ */ (0, y.jsxs)("div", {
@@ -3478,15 +3478,15 @@ var Ha = Object.defineProperty, Ua = (e, t) => Ha(e, "name", {
 		if (r && w.current) return;
 		let t = e.target;
 		[...u.branches].some((e) => e.contains(t)) || (o?.(e), s?.(e), e.defaultPrevented || c?.());
-	}, m), E = f ? x === _.length - 1 : !1, D = Va((e) => {
+	}, m), te = f ? x === _.length - 1 : !1, E = Va((e) => {
 		e.key === "Escape" && (i?.(e), !e.defaultPrevented && c && (e.preventDefault(), c()));
 	});
 	return d.useEffect(() => {
-		if (E) return m.addEventListener("keydown", D, { capture: !0 }), () => m.removeEventListener("keydown", D, { capture: !0 });
+		if (te) return m.addEventListener("keydown", E, { capture: !0 }), () => m.removeEventListener("keydown", E, { capture: !0 });
 	}, [
 		m,
-		E,
-		D
+		te,
+		E
 	]), d.useEffect(() => {
 		if (f) return n && (u.layersWithOutsidePointerEventsDisabled.size === 0 && (qa = m.body.style.pointerEvents, m.body.style.pointerEvents = "none"), u.layersWithOutsidePointerEventsDisabled.add(f)), u.layers.add(f), eo(), () => {
 			n && (u.layersWithOutsidePointerEventsDisabled.delete(f), u.layersWithOutsidePointerEventsDisabled.size === 0 && (m.body.style.pointerEvents = qa));
@@ -4721,7 +4721,7 @@ function Lc({ file: e, savedPhotoUrl: t, busy: n, onChange: r, onRemove: i, onEr
 			}
 		}), l ? /* @__PURE__ */ (0, y.jsxs)("div", {
 			className: "upload-preview",
-			children: [/* @__PURE__ */ (0, y.jsx)(E, {
+			children: [/* @__PURE__ */ (0, y.jsx)(te, {
 				src: l,
 				alt: "Your selected photo"
 			}, l), /* @__PURE__ */ (0, y.jsxs)("div", {
@@ -4918,7 +4918,7 @@ function Uc({ checks: e, onChange: t, busy: n, saved: r }) {
 				id: "photo-permission-title",
 				children: "Your photo. Your choice."
 			}),
-			/* @__PURE__ */ (0, y.jsx)("p", { children: "Your photo is sent to SPREEAI when you save, to create AI-generated try-on previews. Appearance and fit may vary." }),
+			/* @__PURE__ */ (0, y.jsx)("p", { children: window.PARTNER_DEMO?.theme === "ch" ? "Saving uploads your photo to SPREEAI and saves it to your profile. A preview is generated only when you launch Try On from a garment. Appearance and fit may vary." : "Your photo is sent to SPREEAI when you save, to create AI-generated try-on previews. Appearance and fit may vary." }),
 			/* @__PURE__ */ (0, y.jsxs)("p", { children: [
 				"Deleting here removes the photo from this demo only. It does not delete the server copy. For storage information or deletion requests, read the ",
 				/* @__PURE__ */ (0, y.jsx)("a", {
@@ -5369,7 +5369,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 			v(!1);
 		}
 	}
-	async function E() {
+	async function te() {
 		g("");
 		try {
 			if (navigator.share) {
@@ -5515,7 +5515,7 @@ function kl({ images: e, title: t, pieces: n, children: r, detail: i, onProduct:
 										})
 									}),
 									/* @__PURE__ */ (0, y.jsx)("button", {
-										onClick: () => void E(),
+										onClick: () => void te(),
 										"aria-label": "Share to TikTok",
 										title: "Choose TikTok in your device share menu, or copy the link",
 										children: /* @__PURE__ */ (0, y.jsx)(yl, {
@@ -5710,70 +5710,78 @@ function Al({ onProduct: e }) {
 //#endregion
 //#region src/always-on/ConnectedAccount.tsx
 var jl = () => navigator.language.toLowerCase() === "en-us" ? "imperial" : "metric", Ml = (e, t) => t === "metric" ? `${Math.round(e.height)} cm · ${Math.round(e.weight)} kg` : `${Math.floor(e.height / 2.54 / 12)}′ ${Math.round(e.height / 2.54 % 12)}″ · ${Math.round(e.weight / .453592)} lb`;
-function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: r, initialTab: i, onSaved: a, showMeasurements: o = !1 }) {
-	let s = gr(), [c, l] = (0, d.useState)(i || r || s.identity?.kind || "photo"), [u, f] = (0, d.useState)([]), [p, m] = (0, d.useState)(s.identity), [h, g] = (0, d.useState)(null), [_, v] = (0, d.useState)(!1), [x, S] = (0, d.useState)(""), [C, w] = (0, d.useState)(""), [T, ee] = (0, d.useState)([
+function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: r, initialTab: i, onSaved: a, showMeasurements: o = !1, saveOnly: s = !1 }) {
+	let c = gr(), [l, u] = (0, d.useState)(i || r || c.identity?.kind || "photo"), [f, p] = (0, d.useState)([]), [m, h] = (0, d.useState)(c.identity), [g, _] = (0, d.useState)(null), [v, x] = (0, d.useState)(!1), [S, C] = (0, d.useState)(""), [w, T] = (0, d.useState)(""), [ee, te] = (0, d.useState)([
 		!1,
 		!1,
 		!1
-	]), [E, D] = (0, d.useState)("All"), [O, te] = (0, d.useState)("All"), [k, ne] = (0, d.useState)("All"), [re, A] = (0, d.useState)("All"), [ie, ae] = (0, d.useState)(1), [oe, se] = zn("profile-unit", jl), [ce, le] = zn("personal-fit-details", {}), [j, ue] = zn("personal-measures", {
+	]), [E, D] = (0, d.useState)("All"), [ne, re] = (0, d.useState)("All"), [ie, ae] = (0, d.useState)("All"), [O, oe] = (0, d.useState)("All"), [se, ce] = (0, d.useState)(1), [k, le] = zn("profile-unit", jl), [ue, de] = zn("personal-fit-details", {}), [A, j] = zn("personal-measures", {
 		height: 0,
 		weight: 0,
 		bodyType: "Feminine"
-	}), [de, M] = (0, d.useState)(!1);
-	(0, d.useEffect)(() => ee([
+	}), [M, fe] = (0, d.useState)(!1);
+	(0, d.useEffect)(() => te([
 		!1,
 		!1,
 		!1
-	]), [h, p?.id]), (0, d.useEffect)(() => {
+	]), [g, m?.id]), (0, d.useEffect)(() => {
 		let e = !0;
 		return Dr().then((t) => {
-			e && f([...t].sort((e, t) => e.name.localeCompare(t.name)));
+			e && p([...t].sort((e, t) => e.name.localeCompare(t.name)));
 		}).catch((t) => {
-			e && S(t.message);
+			e && C(t.message);
 		}), () => {
 			e = !1;
 		};
 	}, []);
-	async function fe(e) {
-		if (!_) {
-			v(!0), S("");
+	async function pe(e) {
+		if (!v) {
+			x(!0), C("");
 			try {
 				await e();
 			} catch (e) {
-				S(e instanceof Error ? e.message : "Please try again.");
+				C(e instanceof Error ? e.message : "Please try again.");
 			} finally {
-				v(!1);
+				x(!1);
 			}
 		}
 	}
-	function pe(e) {
+	function me(e) {
+		if (s) {
+			T(e + ". Saved for this browser session.");
+			return;
+		}
 		window.dispatchEvent(new CustomEvent("spree-feedback-toast", { detail: e })), a ? a() : t();
 	}
-	async function me(e) {
-		await fe(async () => {
+	async function he(e) {
+		if (s) {
+			h(Or(e)), T("");
+			return;
+		}
+		await pe(async () => {
 			let t = Or(e);
-			await kr(t), m(t), pe(`${t.name} selected`);
+			await kr(t), h(t), me(`${t.name} selected`);
 		});
 	}
-	async function he() {
-		if (h && !T.every(Boolean)) throw Error("Confirm your photo permissions before saving.");
-		if ((j.height || j.weight) && (!Number.isFinite(j.height) || j.height < 100 || j.height > 230 || !Number.isFinite(j.weight) || j.weight < 30 || j.weight > 250)) throw Error("Enter height from 100–230 cm and weight from 30–250 kg, or leave both blank.");
-		if ((j.bodyType === "Feminine" ? [
-			ce.bustCm,
-			ce.waistCm,
-			ce.hipsCm
-		] : [ce.chestCm, ce.waistCm]).some((e) => e !== void 0 && (!Number.isFinite(e) || e < 50 || e > 200))) throw Error("Use body measurements from 50–200 cm (19.7–78.7 in), or leave them blank.");
-		let e = vr(), t = _r().version, n = p?.kind === "photo" ? p : null;
-		if (h) {
-			let e = URL.createObjectURL(h);
+	async function N() {
+		if (g && !ee.every(Boolean)) throw Error("Confirm your photo permissions before saving.");
+		if ((A.height || A.weight) && (!Number.isFinite(A.height) || A.height < 100 || A.height > 230 || !Number.isFinite(A.weight) || A.weight < 30 || A.weight > 250)) throw Error("Enter height from 100–230 cm and weight from 30–250 kg, or leave both blank.");
+		if ((A.bodyType === "Feminine" ? [
+			ue.bustCm,
+			ue.waistCm,
+			ue.hipsCm
+		] : [ue.chestCm, ue.waistCm]).some((e) => e !== void 0 && (!Number.isFinite(e) || e < 50 || e > 200))) throw Error("Use body measurements from 50–200 cm (19.7–78.7 in), or leave them blank.");
+		let e = vr(), t = _r().version, n = m?.kind === "photo" ? m : null;
+		if (g) {
+			let e = URL.createObjectURL(g);
 			try {
 				await Yr(e);
 			} finally {
 				URL.revokeObjectURL(e);
 			}
 			n = {
-				...await Ar(h),
-				...j,
+				...await Ar(g),
+				...A,
 				kind: "photo",
 				name: "Your photo"
 			};
@@ -5782,25 +5790,25 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 			if (!e) throw Error("This photo cannot be verified in this session. Choose it from your device again.");
 			n = {
 				...n,
-				...j,
+				...A,
 				url: e.url
 			};
 		}
 		if (e !== vr() || t !== _r().version) throw Error("Your session changed. Choose your photo again.");
 		if (!n) throw Error("Choose a photo first.");
-		if (j.height || j.weight) {
-			if (!j.height || !j.weight) throw Error("Add both height and weight for sizing, or leave both blank.");
+		if (A.height || A.weight) {
+			if (!A.height || !A.weight) throw Error("Add both height and weight for sizing, or leave both blank.");
 			await kr(n);
 		} else yr(n);
-		pe("Your photo is ready");
+		s && (h(n), _(null)), me("Your photo is ready");
 	}
-	let N = p?.kind === "photo" && !h && p.id === s.identity?.id, P = N && (j.height !== p.height || j.weight !== p.weight || j.bodyType !== p.bodyType);
-	function ge() {
-		yr(null), Sr(), m(null), g(null), w("Photo removed from this demo. For server deletion, use the Privacy Notice request process.");
+	let P = m?.kind === "photo" && !g && m.id === c.identity?.id, ge = P && (A.height !== m.height || A.weight !== m.weight || A.bodyType !== m.bodyType);
+	function _e() {
+		yr(null), Sr(), h(null), _(null), T("Photo removed from this demo. For server deletion, use the Privacy Notice request process.");
 	}
-	let _e = u.filter((e) => (E === "All" || e.sex === E) && (O === "All" || (O === "short" ? e.user_height_centimeters < 170 : e.user_height_centimeters >= 170)) && (k === "All" || (k === "light" ? e.user_weight_kilograms < 70 : e.user_weight_kilograms >= 70)) && (re === "All" || e.user_tshirt_size === re)), ve = Math.floor(j.height / 2.54 / 12), ye = Math.round(j.height / 2.54 % 12 * 10) / 10;
-	function be(e) {
-		l(e), S(""), w(""), e === "photo" && m(s.identity?.kind === "photo" ? s.identity : null);
+	let ve = f.filter((e) => (E === "All" || e.sex === E) && (ne === "All" || (ne === "short" ? e.user_height_centimeters < 170 : e.user_height_centimeters >= 170)) && (ie === "All" || (ie === "light" ? e.user_weight_kilograms < 70 : e.user_weight_kilograms >= 70)) && (O === "All" || e.user_tshirt_size === O)), ye = Math.floor(A.height / 2.54 / 12), be = Math.round(A.height / 2.54 % 12 * 10) / 10;
+	function F(e) {
+		u(e), C(""), T(""), e === "photo" && h(c.identity?.kind === "photo" ? c.identity : null);
 	}
 	return /* @__PURE__ */ (0, y.jsxs)("section", {
 		className: `connected-account account-studio feedback-fit ${n ? "perspective-editor" : ""}`,
@@ -5814,9 +5822,9 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					}),
 					/* @__PURE__ */ (0, y.jsx)("h1", { children: "Make the collection yours." }),
 					/* @__PURE__ */ (0, y.jsx)("p", { children: "No account needed. Your selection stays in this browser session." })
-				] }), s.identity && /* @__PURE__ */ (0, y.jsxs)("div", {
+				] }), c.identity && /* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "account-status",
-					children: [/* @__PURE__ */ (0, y.jsx)(Fc, { identity: s.identity }), /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("strong", { children: s.identity.name }), /* @__PURE__ */ (0, y.jsx)("small", { children: s.identity.kind === "twin" ? "Active Twin" : "Your uploaded photo" })] })]
+					children: [/* @__PURE__ */ (0, y.jsx)(Fc, { identity: c.identity }), /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("strong", { children: c.identity.name }), /* @__PURE__ */ (0, y.jsx)("small", { children: c.identity.kind === "twin" ? "Active Twin" : "Your uploaded photo" })] })]
 				})]
 			}),
 			/* @__PURE__ */ (0, y.jsxs)("nav", {
@@ -5824,37 +5832,37 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 				"aria-label": "Profile sections",
 				children: [
 					/* @__PURE__ */ (0, y.jsx)("button", {
-						"aria-pressed": c === "photo" || c === "twin",
-						onClick: () => be(s.identity?.kind || "photo"),
+						"aria-pressed": l === "photo" || l === "twin",
+						onClick: () => F(c.identity?.kind || "photo"),
 						children: "Profile"
 					}),
 					/* @__PURE__ */ (0, y.jsx)("button", {
-						"aria-pressed": c === "history",
-						onClick: () => l("history"),
+						"aria-pressed": l === "history",
+						onClick: () => u("history"),
 						children: "Activity"
 					}),
 					/* @__PURE__ */ (0, y.jsx)("button", {
-						"aria-pressed": c === "saved",
-						onClick: () => l("saved"),
+						"aria-pressed": l === "saved",
+						onClick: () => u("saved"),
 						children: "Saved looks"
 					})
 				]
 			}),
-			c === "history" ? /* @__PURE__ */ (0, y.jsx)(Al, { onProduct: t }) : c === "saved" ? /* @__PURE__ */ (0, y.jsx)("div", {
+			l === "history" ? /* @__PURE__ */ (0, y.jsx)(Al, { onProduct: t }) : l === "saved" ? /* @__PURE__ */ (0, y.jsx)("div", {
 				className: "account-contained",
 				children: e
 			}) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("div", {
 				className: "identity-methods",
 				children: [/* @__PURE__ */ (0, y.jsxs)("button", {
-					"aria-pressed": c === "photo",
-					onClick: () => be("photo"),
+					"aria-pressed": l === "photo",
+					onClick: () => F("photo"),
 					children: [/* @__PURE__ */ (0, y.jsx)(jc, { size: 24 }), /* @__PURE__ */ (0, y.jsxs)("span", { children: ["Add your photo", /* @__PURE__ */ (0, y.jsx)("small", { children: "See the collection on you" })] })]
 				}), /* @__PURE__ */ (0, y.jsxs)("button", {
-					"aria-pressed": c === "twin",
-					onClick: () => be("twin"),
+					"aria-pressed": l === "twin",
+					onClick: () => F("twin"),
 					children: [/* @__PURE__ */ (0, y.jsx)(Kc, { size: 24 }), /* @__PURE__ */ (0, y.jsxs)("span", { children: ["Use a Twin", /* @__PURE__ */ (0, y.jsx)("small", { children: "Try pieces on a model" })] })]
 				})]
-			}), c === "twin" ? /* @__PURE__ */ (0, y.jsxs)("section", {
+			}), l === "twin" ? /* @__PURE__ */ (0, y.jsxs)("section", {
 				className: "twin-browser",
 				children: [
 					/* @__PURE__ */ (0, y.jsxs)("div", {
@@ -5862,12 +5870,12 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 						children: [/* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: "Choose your Twin." }), /* @__PURE__ */ (0, y.jsx)("p", { children: "Choose a model to see the collection on them." })] }), /* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "unit-toggle",
 							children: [/* @__PURE__ */ (0, y.jsx)("button", {
-								onClick: () => se("metric"),
-								"aria-pressed": oe === "metric",
+								onClick: () => le("metric"),
+								"aria-pressed": k === "metric",
 								children: "cm / kg"
 							}), /* @__PURE__ */ (0, y.jsx)("button", {
-								onClick: () => se("imperial"),
-								"aria-pressed": oe === "imperial",
+								onClick: () => le("imperial"),
+								"aria-pressed": k === "imperial",
 								children: "ft / lb"
 							})]
 						})]
@@ -5875,26 +5883,26 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					/* @__PURE__ */ (0, y.jsxs)("button", {
 						type: "button",
 						className: "twin-filter-trigger",
-						"aria-expanded": de,
+						"aria-expanded": M,
 						"aria-controls": "twin-filters",
-						onClick: () => M(!de),
+						onClick: () => fe(!M),
 						children: [
 							/* @__PURE__ */ (0, y.jsx)(Qc, { size: 20 }),
 							"Filters",
 							[
 								E,
-								O,
-								k,
-								re
+								ne,
+								ie,
+								O
 							].filter((e) => e !== "All").length > 0 && /* @__PURE__ */ (0, y.jsx)("span", { children: [
 								E,
-								O,
-								k,
-								re
+								ne,
+								ie,
+								O
 							].filter((e) => e !== "All").length })
 						]
 					}),
-					de && /* @__PURE__ */ (0, y.jsxs)("div", {
+					M && /* @__PURE__ */ (0, y.jsxs)("div", {
 						className: "twin-filters",
 						id: "twin-filters",
 						children: [
@@ -5902,7 +5910,7 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 								"aria-label": "Gender",
 								value: E,
 								onChange: (e) => {
-									D(e.target.value), ae(1);
+									D(e.target.value), ce(1);
 								},
 								children: [
 									/* @__PURE__ */ (0, y.jsx)("option", {
@@ -5921,53 +5929,53 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 							})] }),
 							/* @__PURE__ */ (0, y.jsxs)("label", { children: ["Height", /* @__PURE__ */ (0, y.jsxs)("select", {
 								"aria-label": "Height",
-								value: O,
+								value: ne,
 								onChange: (e) => {
-									te(e.target.value), ae(1);
+									re(e.target.value), ce(1);
 								},
 								children: [
 									/* @__PURE__ */ (0, y.jsx)("option", { children: "All" }),
 									/* @__PURE__ */ (0, y.jsxs)("option", {
 										value: "short",
-										children: ["Under ", oe === "metric" ? "170 cm" : "5′ 7″"]
+										children: ["Under ", k === "metric" ? "170 cm" : "5′ 7″"]
 									}),
 									/* @__PURE__ */ (0, y.jsxs)("option", {
 										value: "tall",
-										children: [oe === "metric" ? "170 cm" : "5′ 7″", " and above"]
+										children: [k === "metric" ? "170 cm" : "5′ 7″", " and above"]
 									})
 								]
 							})] }),
 							/* @__PURE__ */ (0, y.jsxs)("label", { children: ["Weight", /* @__PURE__ */ (0, y.jsxs)("select", {
 								"aria-label": "Weight",
-								value: k,
+								value: ie,
 								onChange: (e) => {
-									ne(e.target.value), ae(1);
+									ae(e.target.value), ce(1);
 								},
 								children: [
 									/* @__PURE__ */ (0, y.jsx)("option", { children: "All" }),
 									/* @__PURE__ */ (0, y.jsxs)("option", {
 										value: "light",
-										children: ["Under ", oe === "metric" ? "70 kg" : "154 lb"]
+										children: ["Under ", k === "metric" ? "70 kg" : "154 lb"]
 									}),
 									/* @__PURE__ */ (0, y.jsxs)("option", {
 										value: "heavy",
-										children: [oe === "metric" ? "70 kg" : "154 lb", " and above"]
+										children: [k === "metric" ? "70 kg" : "154 lb", " and above"]
 									})
 								]
 							})] }),
 							/* @__PURE__ */ (0, y.jsxs)("label", { children: ["Reference size", /* @__PURE__ */ (0, y.jsxs)("select", {
 								"aria-label": "Reference size",
-								value: re,
+								value: O,
 								onChange: (e) => {
-									A(e.target.value), ae(1);
+									oe(e.target.value), ce(1);
 								},
-								children: [/* @__PURE__ */ (0, y.jsx)("option", { children: "All" }), [...new Set(u.map((e) => e.user_tshirt_size))].filter(Boolean).map((e) => /* @__PURE__ */ (0, y.jsx)("option", { children: e }, e))]
+								children: [/* @__PURE__ */ (0, y.jsx)("option", { children: "All" }), [...new Set(f.map((e) => e.user_tshirt_size))].filter(Boolean).map((e) => /* @__PURE__ */ (0, y.jsx)("option", { children: e }, e))]
 							})] }),
 							/* @__PURE__ */ (0, y.jsx)("button", {
 								type: "button",
 								className: "text-link twin-clear-filters",
 								onClick: () => {
-									D("All"), te("All"), ne("All"), A("All"), ae(1);
+									D("All"), re("All"), ae("All"), oe("All"), ce(1);
 								},
 								children: "Clear filters"
 							})
@@ -5975,44 +5983,55 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 					}),
 					/* @__PURE__ */ (0, y.jsx)("div", {
 						className: "connected-twins",
-						children: _e.slice((ie - 1) * 8, ie * 8).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
-							disabled: _,
-							"aria-pressed": s.identity?.id === e.id,
-							onClick: () => void me(e),
+						children: ve.slice((se - 1) * 8, se * 8).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
+							disabled: v,
+							"aria-pressed": (s ? m?.id : c.identity?.id) === e.id,
+							onClick: () => void he(e),
 							children: [
 								/* @__PURE__ */ (0, y.jsx)("img", {
 									loading: "lazy",
 									src: e.url,
 									alt: e.name
 								}),
-								/* @__PURE__ */ (0, y.jsxs)("strong", { children: [e.name, s.identity?.id === e.id && /* @__PURE__ */ (0, y.jsx)(Yc, { size: 18 })] }),
-								/* @__PURE__ */ (0, y.jsx)("small", { children: Ml(Or(e), oe) }),
+								/* @__PURE__ */ (0, y.jsxs)("strong", { children: [e.name, c.identity?.id === e.id && /* @__PURE__ */ (0, y.jsx)(Yc, { size: 18 })] }),
+								/* @__PURE__ */ (0, y.jsx)("small", { children: Ml(Or(e), k) }),
 								/* @__PURE__ */ (0, y.jsx)("small", { children: e.user_tshirt_size ? `Reference size ${e.user_tshirt_size}` : "Preset measurements" })
 							]
 						}, e.id))
 					}),
-					!u.length && !x && /* @__PURE__ */ (0, y.jsx)(b, { label: "Loading Twins…" }),
-					!_e.length && !!u.length && /* @__PURE__ */ (0, y.jsx)("p", { children: "No Twins match these filters. Try a broader selection." }),
+					!f.length && !S && /* @__PURE__ */ (0, y.jsx)(b, { label: "Loading Twins…" }),
+					!ve.length && !!f.length && /* @__PURE__ */ (0, y.jsx)("p", { children: "No Twins match these filters. Try a broader selection." }),
 					/* @__PURE__ */ (0, y.jsxs)("nav", {
 						className: "review-pagination",
 						"aria-label": "Twin pages",
 						children: [
 							/* @__PURE__ */ (0, y.jsx)("button", {
-								disabled: ie === 1,
-								onClick: () => ae(ie - 1),
+								disabled: se === 1,
+								onClick: () => ce(se - 1),
 								children: "Previous"
 							}),
 							/* @__PURE__ */ (0, y.jsxs)("span", { children: [
-								ie,
+								se,
 								" / ",
-								Math.max(1, Math.ceil(_e.length / 8))
+								Math.max(1, Math.ceil(ve.length / 8))
 							] }),
 							/* @__PURE__ */ (0, y.jsx)("button", {
-								disabled: ie * 8 >= _e.length,
-								onClick: () => ae(ie + 1),
+								disabled: se * 8 >= ve.length,
+								onClick: () => ce(se + 1),
 								children: "Next"
 							})
 						]
+					}),
+					s && /* @__PURE__ */ (0, y.jsxs)("div", {
+						className: "account-save-selection",
+						children: [/* @__PURE__ */ (0, y.jsx)("button", {
+							className: "primary",
+							disabled: v || m?.kind !== "twin",
+							onClick: () => void pe(async () => {
+								m?.kind === "twin" && (await kr(m), me(m.name + " selected"));
+							}),
+							children: "Save Twin"
+						}), /* @__PURE__ */ (0, y.jsx)("p", { children: "Save your selection for your next try-on. No preview is generated here." })]
 					})
 				]
 			}) : /* @__PURE__ */ (0, y.jsxs)("div", {
@@ -6023,20 +6042,20 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 						/* @__PURE__ */ (0, y.jsx)("h2", { children: "Your photo." }),
 						/* @__PURE__ */ (0, y.jsx)("p", { children: "Choose a clear, full-body photo from your phone or computer." }),
 						/* @__PURE__ */ (0, y.jsx)(Lc, {
-							file: h,
-							savedPhotoUrl: p?.kind === "photo" ? p.url : void 0,
-							busy: _,
-							onError: S,
-							onRemove: ge,
+							file: g,
+							savedPhotoUrl: m?.kind === "photo" ? m.url : void 0,
+							busy: v,
+							onError: C,
+							onRemove: _e,
 							onChange: (e) => {
-								g(e), m(null), S(""), w("");
+								_(e), h(null), C(""), T("");
 							}
 						})
 					]
 				}), /* @__PURE__ */ (0, y.jsxs)("form", {
 					className: "connected-measures",
 					onSubmit: (e) => {
-						e.preventDefault(), N && !P ? t() : fe(he);
+						e.preventDefault(), P && !ge ? s ? me("Your photo is ready") : t() : pe(N);
 					},
 					children: [
 						/* @__PURE__ */ (0, y.jsx)("h2", { children: "Make it yours." }),
@@ -6050,68 +6069,68 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 									className: "unit-toggle",
 									children: [/* @__PURE__ */ (0, y.jsx)("button", {
 										type: "button",
-										"aria-pressed": oe === "metric",
-										onClick: () => se("metric"),
+										"aria-pressed": k === "metric",
+										onClick: () => le("metric"),
 										children: "cm / kg"
 									}), /* @__PURE__ */ (0, y.jsx)("button", {
 										type: "button",
-										"aria-pressed": oe === "imperial",
-										onClick: () => se("imperial"),
+										"aria-pressed": k === "imperial",
+										onClick: () => le("imperial"),
 										children: "ft / lb"
 									})]
 								}),
 								/* @__PURE__ */ (0, y.jsxs)("div", {
 									className: "form-row",
-									children: [oe === "metric" ? /* @__PURE__ */ (0, y.jsxs)("label", { children: ["Height (cm)", /* @__PURE__ */ (0, y.jsx)("input", {
+									children: [k === "metric" ? /* @__PURE__ */ (0, y.jsxs)("label", { children: ["Height (cm)", /* @__PURE__ */ (0, y.jsx)("input", {
 										type: "number",
 										step: "any",
 										min: "100",
 										max: "230",
-										value: j.height || "",
-										onChange: (e) => ue({
-											...j,
+										value: A.height || "",
+										onChange: (e) => j({
+											...A,
 											height: Number(e.target.value)
 										})
 									})] }) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("label", { children: ["Height (feet)", /* @__PURE__ */ (0, y.jsx)("input", {
 										type: "number",
 										min: "3",
 										max: "7",
-										value: ve || "",
-										onChange: (e) => ue({
-											...j,
-											height: (Number(e.target.value) * 12 + ye) * 2.54
+										value: ye || "",
+										onChange: (e) => j({
+											...A,
+											height: (Number(e.target.value) * 12 + be) * 2.54
 										})
 									})] }), /* @__PURE__ */ (0, y.jsxs)("label", { children: ["Height (inches)", /* @__PURE__ */ (0, y.jsx)("input", {
 										type: "number",
 										min: "0",
 										max: "11.9",
 										step: "0.1",
-										value: ye || "",
-										onChange: (e) => ue({
-											...j,
-											height: (ve * 12 + Number(e.target.value)) * 2.54
+										value: be || "",
+										onChange: (e) => j({
+											...A,
+											height: (ye * 12 + Number(e.target.value)) * 2.54
 										})
 									})] })] }), /* @__PURE__ */ (0, y.jsxs)("label", { children: [
 										"Weight (",
-										oe === "metric" ? "kg" : "lb",
+										k === "metric" ? "kg" : "lb",
 										")",
 										/* @__PURE__ */ (0, y.jsx)("input", {
 											type: "number",
 											step: "any",
-											min: oe === "metric" ? 30 : 66,
-											max: oe === "metric" ? 250 : 551,
-											value: j.weight ? Math.round(j.weight / (oe === "metric" ? 1 : .453592) * 10) / 10 : "",
-											onChange: (e) => ue({
-												...j,
-												weight: Number(e.target.value) * (oe === "metric" ? 1 : .453592)
+											min: k === "metric" ? 30 : 66,
+											max: k === "metric" ? 250 : 551,
+											value: A.weight ? Math.round(A.weight / (k === "metric" ? 1 : .453592) * 10) / 10 : "",
+											onChange: (e) => j({
+												...A,
+												weight: Number(e.target.value) * (k === "metric" ? 1 : .453592)
 											})
 										})
 									] })]
 								}),
 								/* @__PURE__ */ (0, y.jsxs)("label", { children: ["Sizing profile", /* @__PURE__ */ (0, y.jsxs)("select", {
-									value: j.bodyType,
-									onChange: (e) => ue({
-										...j,
+									value: A.bodyType,
+									onChange: (e) => j({
+										...A,
 										bodyType: e.target.value
 									}),
 									children: [/* @__PURE__ */ (0, y.jsx)("option", { children: "Feminine" }), /* @__PURE__ */ (0, y.jsx)("option", { children: "Masculine" })]
@@ -6121,10 +6140,10 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 						/* @__PURE__ */ (0, y.jsxs)("details", { children: [
 							/* @__PURE__ */ (0, y.jsx)("summary", { children: "Body measurements & preferred fit" }),
 							/* @__PURE__ */ (0, y.jsx)(Hc, {
-								value: ce,
-								onChange: le,
-								bodyType: j.bodyType,
-								unit: oe
+								value: ue,
+								onChange: de,
+								bodyType: A.bodyType,
+								unit: k
 							}),
 							/* @__PURE__ */ (0, y.jsx)("p", {
 								className: "fine",
@@ -6132,29 +6151,29 @@ function Nl({ savedLooks: e, onDone: t, perspectiveOnly: n = !1, initialSource: 
 							})
 						] }),
 						/* @__PURE__ */ (0, y.jsx)(Uc, {
-							checks: T,
-							onChange: ee,
-							busy: _,
-							saved: N
+							checks: ee,
+							onChange: te,
+							busy: v,
+							saved: P
 						}),
 						/* @__PURE__ */ (0, y.jsx)("button", {
 							className: "primary",
-							disabled: _ || !h && p?.kind !== "photo" || !N && !T.every(Boolean),
-							children: N ? P ? "Save changes" : "Done" : "Agree & save photo"
+							disabled: v || !g && m?.kind !== "photo" || !P && !ee.every(Boolean),
+							children: P ? ge ? "Save changes" : s ? "Save profile" : "Done" : "Agree & save photo"
 						})
 					]
 				})]
 			})] }),
-			_ && /* @__PURE__ */ (0, y.jsx)(b, { label: "Saving your selection…" }),
-			x && /* @__PURE__ */ (0, y.jsx)("p", {
+			v && /* @__PURE__ */ (0, y.jsx)(b, { label: "Saving your selection…" }),
+			S && /* @__PURE__ */ (0, y.jsx)("p", {
 				role: "alert",
 				className: "connection-error",
-				children: x
+				children: S
 			}),
-			C && /* @__PURE__ */ (0, y.jsx)("p", {
+			w && /* @__PURE__ */ (0, y.jsx)("p", {
 				role: "status",
 				className: "connection-success",
-				children: C
+				children: w
 			})
 		]
 	});
@@ -6525,33 +6544,33 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 			[e.id]: r
 		});
 	}, [e?.id, r]);
-	let ee = !!window.PARTNER_DEMO, E = [];
+	let ee = !!window.PARTNER_DEMO, te = [];
 	try {
-		E = JSON.parse(sessionStorage.getItem("ao-looks:" + (a?.id || "guest")) || "[]").filter((e) => e.items?.every((e) => Bl.some((t) => t.id === e)));
+		te = JSON.parse(sessionStorage.getItem("ao-looks:" + (a?.id || "guest")) || "[]").filter((e) => e.items?.every((e) => Bl.some((t) => t.id === e)));
 	} catch {}
-	let D = s.map((e) => Bl.find((t) => t.id === e)).filter(Boolean), O = Di(D, "", "", l), te = (0, d.useMemo)(() => Zn(a?.id || ""), [
+	let E = s.map((e) => Bl.find((t) => t.id === e)).filter(Boolean), D = Di(E, "", "", l), ne = (0, d.useMemo)(() => Zn(a?.id || ""), [
 		a?.id,
 		o,
 		s.join("|"),
 		JSON.stringify(w)
-	]), k = D.find((e) => e.id === S), ne = O.url || e?.model || D[0]?.model;
+	]), re = E.find((e) => e.id === S), ie = D.url || e?.model || E[0]?.model;
 	return (0, d.useEffect)(() => {
 		C(""), x(!1);
 	}, [o]), (0, d.useEffect)(() => {
-		let e = D.filter((e) => w[e.id]);
+		let e = E.filter((e) => w[e.id]);
 		a && e.length && nr({
 			id: o + ":outfit-sizes:" + s.join("|") + ":" + JSON.stringify(w),
 			kind: "sizing",
 			identityId: a.id,
 			identityName: a.name,
-			pieces: D.map((e) => ({
+			pieces: E.map((e) => ({
 				id: e.id,
 				name: e.name,
 				image: e.image
 			})),
 			images: [],
 			guidance: "Selected outfit sizes: " + e.map((e) => e.name + " — " + w[e.id]).join(" · ")
-		}, te);
+		}, ne);
 	}, [
 		JSON.stringify(w),
 		s.join("|"),
@@ -6570,12 +6589,12 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 					"Make the rest of the look yours."
 				] })]
 			}),
-			ee && E.length > 0 && /* @__PURE__ */ (0, y.jsxs)("div", {
+			ee && te.length > 0 && /* @__PURE__ */ (0, y.jsxs)("div", {
 				className: "partner-saved-looks",
 				children: [/* @__PURE__ */ (0, y.jsx)("p", {
 					className: "eyebrow",
 					children: "SAVED LOOKS / THIS SESSION"
-				}), E.map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
+				}), te.map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
 					className: "secondary",
 					onClick: () => {
 						c(e.items), e.sizes && T(e.sizes), C(""), _("Saved look restored.");
@@ -6595,7 +6614,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 					children: [
 						/* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "outfit-view-heading",
-							children: [/* @__PURE__ */ (0, y.jsx)("span", { children: k ? `SIZE PREVIEW · ${k.name}` : "YOUR COMPLETE LOOK" }), k && /* @__PURE__ */ (0, y.jsx)("button", {
+							children: [/* @__PURE__ */ (0, y.jsx)("span", { children: re ? `SIZE PREVIEW · ${re.name}` : "YOUR COMPLETE LOOK" }), re && /* @__PURE__ */ (0, y.jsx)("button", {
 								className: "text-link",
 								onClick: () => C(""),
 								children: "View full look"
@@ -6604,29 +6623,29 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 						/* @__PURE__ */ (0, y.jsx)(Pl, {}),
 						/* @__PURE__ */ (0, y.jsx)("div", {
 							className: "complete-editorial",
-							children: k ? /* @__PURE__ */ (0, y.jsx)(Mi, {
-								product: k,
-								selectedSize: w[k.id]
-							}, k.id) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsx)("button", {
+							children: re ? /* @__PURE__ */ (0, y.jsx)(Mi, {
+								product: re,
+								selectedSize: w[re.id]
+							}, re.id) : /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsx)("button", {
 								className: "complete-image-zoom",
-								disabled: !ne || !!a && !O.url,
+								disabled: !ie || !!a && !D.url,
 								"aria-label": "Enlarge your complete look",
 								onClick: () => x(!0),
 								children: /* @__PURE__ */ (0, y.jsx)("img", {
-									className: a && s.length > 0 && !O.url && O.status !== "error" ? "awaiting-view" : "",
-									src: ne,
-									alt: O.url ? `Your selected look on ${a?.name}` : "Original collection model photography"
+									className: a && s.length > 0 && !D.url && D.status !== "error" ? "awaiting-view" : "",
+									src: ie,
+									alt: D.url ? `Your selected look on ${a?.name}` : "Original collection model photography"
 								})
-							}), a && s.length > 0 && !O.url && O.status !== "error" ? /* @__PURE__ */ (0, y.jsx)("div", {
+							}), a && s.length > 0 && !D.url && D.status !== "error" ? /* @__PURE__ */ (0, y.jsx)("div", {
 								className: "complete-loading",
 								children: /* @__PURE__ */ (0, y.jsx)(b, { label: "Generating your look…" })
 							}) : null] })
 						}),
-						a && !k && /* @__PURE__ */ (0, y.jsx)("div", {
+						a && !re && /* @__PURE__ */ (0, y.jsx)("div", {
 							className: "complete-photo-caption",
 							children: /* @__PURE__ */ (0, y.jsx)("span", {
 								className: "complete-photo-credit",
-								children: O.url ? "ON " + a.name.toUpperCase() : O.status === "error" ? "PERSONAL VIEW UNAVAILABLE" : "YOUR PERSONAL LOOK"
+								children: D.url ? "ON " + a.name.toUpperCase() : D.status === "error" ? "PERSONAL VIEW UNAVAILABLE" : "YOUR PERSONAL LOOK"
 							})
 						})
 					]
@@ -6642,7 +6661,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 								s.length === 1 ? "PIECE" : "PIECES"
 							]
 						}),
-						D.map((t) => /* @__PURE__ */ (0, y.jsxs)("article", { children: [
+						E.map((t) => /* @__PURE__ */ (0, y.jsxs)("article", { children: [
 							/* @__PURE__ */ (0, y.jsx)("img", {
 								src: t.image,
 								alt: t.name
@@ -6678,9 +6697,9 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 							},
 							children: [/* @__PURE__ */ (0, y.jsx)("span", { children: "＋" }), "Find the finishing piece"]
 						}),
-						O.status === "error" && /* @__PURE__ */ (0, y.jsxs)("div", {
+						D.status === "error" && /* @__PURE__ */ (0, y.jsxs)("div", {
 							role: "status",
-							children: [/* @__PURE__ */ (0, y.jsx)("p", { children: O.error || "This look could not be generated. Your pieces are still selected." }), /* @__PURE__ */ (0, y.jsx)("button", {
+							children: [/* @__PURE__ */ (0, y.jsx)("p", { children: D.error || "This look could not be generated. Your pieces are still selected." }), /* @__PURE__ */ (0, y.jsx)("button", {
 								className: "secondary",
 								onClick: () => u((e) => e + 1),
 								children: "Retry this look"
@@ -6696,7 +6715,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 								className: "primary",
 								disabled: !s.length,
 								onClick: () => {
-									if (D.some((e) => !w[e.id])) {
+									if (E.some((e) => !w[e.id])) {
 										_("Select a size for each piece to add your look to the bag.");
 										return;
 									}
@@ -6718,7 +6737,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 											items: s,
 											sizes: { ...w },
 											person: 1,
-											previewId: O.url ? Ci(D.map((e) => e.garmentId), "", "", D[0]?.environment || "dev") : void 0
+											previewId: D.url ? Ci(E.map((e) => e.garmentId), "", "", E[0]?.environment || "dev") : void 0
 										}])), _("Saved in this browser session.");
 									} catch {
 										_("Saving is unavailable in this browser.");
@@ -6748,7 +6767,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 						/* @__PURE__ */ (0, y.jsx)(Tc, {
 							id: "outfit-zoom-description",
 							className: "sr-only",
-							children: O.url ? "Your personalized outfit preview." : "Original collection model photography."
+							children: D.url ? "Your personalized outfit preview." : "Original collection model photography."
 						}),
 						/* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "zoom-toolbar tryon-viewer-toolbar",
@@ -6757,9 +6776,9 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 								children: [/* @__PURE__ */ (0, y.jsx)("small", { children: "THE FINISHING TOUCHES" }), /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: "Your complete look" }), /* @__PURE__ */ (0, y.jsxs)("span", {
 									className: "tryon-viewer-size",
 									children: [
-										D.length,
+										E.length,
 										" ",
-										D.length === 1 ? "piece" : "pieces"
+										E.length === 1 ? "piece" : "pieces"
 									]
 								})] })]
 							}), /* @__PURE__ */ (0, y.jsx)(Dc, {
@@ -6768,11 +6787,11 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 							})]
 						}),
 						/* @__PURE__ */ (0, y.jsx)(al, {
-							allowOriginal: !!O.url,
-							src: ne,
-							alt: O.url ? `Your selected look on ${a?.name}` : "Original collection model photography"
-						}, ne),
-						O.url && /* @__PURE__ */ (0, y.jsx)(il, {})
+							allowOriginal: !!D.url,
+							src: ie,
+							alt: D.url ? `Your selected look on ${a?.name}` : "Original collection model photography"
+						}, ie),
+						D.url && /* @__PURE__ */ (0, y.jsx)(il, {})
 					]
 				})] })
 			}),
@@ -6796,7 +6815,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 						/* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "outfit-picker",
 							children: [
-								ee && !Bl.some((e) => e.previewAvailable !== !1 && !s.includes(e.id) && !D.some((t) => t.category === e.category || t.category === "Dresses" || e.category === "Dresses")) && /* @__PURE__ */ (0, y.jsx)("p", {
+								ee && !Bl.some((e) => e.previewAvailable !== !1 && !s.includes(e.id) && !E.some((t) => t.category === e.category || t.category === "Dresses" || e.category === "Dresses")) && /* @__PURE__ */ (0, y.jsx)("p", {
 									role: "status",
 									children: "No complementary garments are loaded for this selection yet. You can save this look, choose another piece, or compare alternatives in Compare looks."
 								}),
@@ -6812,7 +6831,7 @@ function Hl({ product: e, initialProducts: t, onBag: n, selectedSize: r, onSize:
 									className: "eyebrow",
 									children: "MAKE IT YOURS"
 								}),
-								/* @__PURE__ */ (0, y.jsx)("div", { children: Bl.filter((t) => t.previewAvailable !== !1 && !s.includes(t.id) && (!ee || !D.some((e) => e.category === t.category || e.category === "Dresses" || t.category === "Dresses")) && t.name.toLowerCase().includes(f.toLowerCase()) && (t.environment || "dev") === (e?.environment || D[0]?.environment || "dev")).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
+								/* @__PURE__ */ (0, y.jsx)("div", { children: Bl.filter((t) => t.previewAvailable !== !1 && !s.includes(t.id) && (!ee || !E.some((e) => e.category === t.category || e.category === "Dresses" || t.category === "Dresses")) && t.name.toLowerCase().includes(f.toLowerCase()) && (t.environment || "dev") === (e?.environment || E[0]?.environment || "dev")).map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
 									onClick: () => {
 										c([...s, e.id]), h(!1);
 									},
@@ -7318,10 +7337,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	}
 	function x(e) {
 		if (h = !1, b(e), !m) {
-			if (n(c) !== null) m = !0, S || (S = !0, D());
+			if (n(c) !== null) m = !0, S || (S = !0, E());
 			else {
 				var t = n(l);
-				t !== null && k(x, t.startTime - e);
+				t !== null && re(x, t.startTime - e);
 			}
 		}
 	}
@@ -7329,7 +7348,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	function ee() {
 		return g ? !0 : !(e.unstable_now() - T < w);
 	}
-	function E() {
+	function te() {
 		if (g = !1, S) {
 			var t = e.unstable_now();
 			T = t;
@@ -7356,7 +7375,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 							if (d !== null) i = !0;
 							else {
 								var u = n(l);
-								u !== null && k(x, u.startTime - t), i = !1;
+								u !== null && re(x, u.startTime - t), i = !1;
 							}
 						}
 						break a;
@@ -7366,23 +7385,23 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					i = void 0;
 				}
 			} finally {
-				i ? D() : S = !1;
+				i ? E() : S = !1;
 			}
 		}
 	}
-	var D;
-	if (typeof y == "function") D = function() {
-		y(E);
+	var E;
+	if (typeof y == "function") E = function() {
+		y(te);
 	};
 	else if (typeof MessageChannel < "u") {
-		var O = new MessageChannel(), te = O.port2;
-		O.port1.onmessage = E, D = function() {
-			te.postMessage(null);
+		var D = new MessageChannel(), ne = D.port2;
+		D.port1.onmessage = te, E = function() {
+			ne.postMessage(null);
 		};
-	} else D = function() {
-		_(E, 0);
+	} else E = function() {
+		_(te, 0);
 	};
-	function k(t, n) {
+	function re(t, n) {
 		C = _(function() {
 			t(e.unstable_now());
 		}, n);
@@ -7451,7 +7470,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			startTime: a,
 			expirationTime: s,
 			sortIndex: -1
-		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(C), C = -1) : h = !0, k(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, S || (S = !0, D()))), r;
+		}, a > o ? (r.sortIndex = a, t(l, r), n(c) === null && r === n(l) && (h ? (v(C), C = -1) : h = !0, re(x, a - o))) : (r.sortIndex = s, t(c, r), m || p || (m = !0, S || (S = !0, E()))), r;
 	}, e.unstable_shouldYield = ee, e.unstable_wrapCallback = function(e) {
 		var t = f;
 		return function() {
@@ -7637,7 +7656,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		return null;
 	}
-	var T = Object.assign, ee = Symbol.for("react.element"), E = Symbol.for("react.transitional.element"), D = Symbol.for("react.portal"), O = Symbol.for("react.fragment"), te = Symbol.for("react.strict_mode"), k = Symbol.for("react.profiler"), ne = Symbol.for("react.consumer"), re = Symbol.for("react.context"), A = Symbol.for("react.forward_ref"), ie = Symbol.for("react.suspense"), ae = Symbol.for("react.suspense_list"), oe = Symbol.for("react.memo"), se = Symbol.for("react.lazy"), ce = Symbol.for("react.activity"), le = Symbol.for("react.legacy_hidden"), j = Symbol.for("react.memo_cache_sentinel"), ue = Symbol.for("react.view_transition"), de = Symbol.for("react.recoverable"), M = Symbol.iterator;
+	var T = Object.assign, ee = Symbol.for("react.element"), te = Symbol.for("react.transitional.element"), E = Symbol.for("react.portal"), D = Symbol.for("react.fragment"), ne = Symbol.for("react.strict_mode"), re = Symbol.for("react.profiler"), ie = Symbol.for("react.consumer"), ae = Symbol.for("react.context"), O = Symbol.for("react.forward_ref"), oe = Symbol.for("react.suspense"), se = Symbol.for("react.suspense_list"), ce = Symbol.for("react.memo"), k = Symbol.for("react.lazy"), le = Symbol.for("react.activity"), ue = Symbol.for("react.legacy_hidden"), de = Symbol.for("react.memo_cache_sentinel"), A = Symbol.for("react.view_transition"), j = Symbol.for("react.recoverable"), M = Symbol.iterator;
 	function fe(e) {
 		return typeof e != "object" || !e ? null : (e = M && e[M] || e["@@iterator"], typeof e == "function" ? e : null);
 	}
@@ -7647,23 +7666,23 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (typeof e == "function") return e.$$typeof === pe ? null : e.displayName || e.name || null;
 		if (typeof e == "string") return e;
 		switch (e) {
-			case O: return "Fragment";
-			case k: return "Profiler";
-			case te: return "StrictMode";
-			case ie: return "Suspense";
-			case ae: return "SuspenseList";
-			case ce: return "Activity";
-			case ue: return "ViewTransition";
+			case D: return "Fragment";
+			case re: return "Profiler";
+			case ne: return "StrictMode";
+			case oe: return "Suspense";
+			case se: return "SuspenseList";
+			case le: return "Activity";
+			case A: return "ViewTransition";
 		}
 		if (typeof e == "object") switch (e.$$typeof) {
-			case D: return "Portal";
-			case re: return e.displayName || "Context";
-			case ne: return (e._context.displayName || "Context") + ".Consumer";
-			case A:
+			case E: return "Portal";
+			case ae: return e.displayName || "Context";
+			case ie: return (e._context.displayName || "Context") + ".Consumer";
+			case O:
 				var t = e.render;
 				return e = e.displayName, e ||= (e = t.displayName || t.name || "", e === "" ? "ForwardRef" : "ForwardRef(" + e + ")"), e;
-			case oe: return t = e.displayName || null, t === null ? me(e.type) || "Memo" : t;
-			case se:
+			case ce: return t = e.displayName || null, t === null ? me(e.type) || "Memo" : t;
+			case k:
 				t = e._payload, e = e._init;
 				try {
 					return me(e(t));
@@ -8992,16 +9011,16 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (r = e, typeof r == "function") Mi(r) && (s = 1);
 		else if (typeof r == "string") s = qm(e, n, xe.current) ? 26 : e === "html" || e === "head" || e === "body" ? 27 : 5;
 		else a: switch (r) {
-			case ce: return e = ji(31, n, t, a), e.elementType = ce, e.lanes = o, e;
-			case O: return Ii(n.children, a, o, t);
-			case te:
+			case le: return e = ji(31, n, t, a), e.elementType = le, e.lanes = o, e;
+			case D: return Ii(n.children, a, o, t);
+			case ne:
 				s = 8, a |= 24;
 				break;
-			case k: return e = ji(12, n, t, a | 2), e.elementType = k, e.lanes = o, e;
-			case ie: return e = ji(13, n, t, a), e.elementType = ie, e.lanes = o, e;
-			case ae: return e = ji(19, n, t, a), e.elementType = ae, e.lanes = o, e;
-			case le:
-			case ue: return e = a | 32, e = ji(30, n, t, e), e.elementType = ue, e.lanes = o, e.stateNode = {
+			case re: return e = ji(12, n, t, a | 2), e.elementType = re, e.lanes = o, e;
+			case oe: return e = ji(13, n, t, a), e.elementType = oe, e.lanes = o, e;
+			case se: return e = ji(19, n, t, a), e.elementType = se, e.lanes = o, e;
+			case ue:
+			case A: return e = a | 32, e = ji(30, n, t, e), e.elementType = A, e.lanes = o, e.stateNode = {
 				autoName: null,
 				paired: null,
 				clones: null,
@@ -9009,19 +9028,19 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}, e;
 			default:
 				if (typeof r == "object" && r) switch (r.$$typeof) {
-					case re:
+					case ae:
 						s = 10;
 						break a;
-					case ne:
+					case ie:
 						s = 9;
 						break a;
-					case A:
+					case O:
 						s = 11;
 						break a;
-					case oe:
+					case ce:
 						s = 14;
 						break a;
-					case se:
+					case k:
 						s = 16, r = null;
 						break a;
 				}
@@ -9280,7 +9299,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			});
 		};
 	}, Oa = t.unstable_scheduleCallback, ka = t.unstable_NormalPriority, Aa = {
-		$$typeof: re,
+		$$typeof: ae,
 		Consumer: null,
 		Provider: null,
 		_currentValue: null,
@@ -9470,7 +9489,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 		function l(e, t, n, r) {
 			var i = n.type;
-			return i === O ? (e = d(e, t, n.props.children, r, n.key), so(e, n), e) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === se && eo(i) === t.type) ? (t = a(t, n.props), so(t, n), t.return = e, t) : (t = Fi(n.type, n.key, n.props, null, e.mode, r), so(t, n), t.return = e, t);
+			return i === D ? (e = d(e, t, n.props.children, r, n.key), so(e, n), e) : t !== null && (t.elementType === i || typeof i == "object" && i && i.$$typeof === k && eo(i) === t.type) ? (t = a(t, n.props), so(t, n), t.return = e, t) : (t = Fi(n.type, n.key, n.props, null, e.mode, r), so(t, n), t.return = e, t);
 		}
 		function u(e, t, n, r) {
 			return t === null || t.tag !== 4 || t.stateNode.containerInfo !== n.containerInfo || t.stateNode.implementation !== n.implementation ? (t = zi(n, e.mode, r), t.return = e, t) : (t = a(t, n.children || []), t.return = e, t);
@@ -9482,13 +9501,13 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			if (typeof t == "string" && t !== "" || typeof t == "number" || typeof t == "bigint") return t = Li("" + t, e.mode, n), t.return = e, t;
 			if (typeof t == "object" && t) {
 				switch (t.$$typeof) {
-					case E: return n = Fi(t.type, t.key, t.props, null, e.mode, n), so(n, t), n.return = e, n;
-					case D: return t = zi(t, e.mode, n), t.return = e, t;
-					case se: return t = eo(t), f(e, t, n);
+					case te: return n = Fi(t.type, t.key, t.props, null, e.mode, n), so(n, t), n.return = e, n;
+					case E: return t = zi(t, e.mode, n), t.return = e, t;
+					case k: return t = eo(t), f(e, t, n);
 				}
 				if (he(t) || fe(t)) return t = Ii(t, e.mode, n, null), t.return = e, t;
 				if (typeof t.then == "function") return f(e, oo(t), n);
-				if (t.$$typeof === re) return f(e, Ta(e, t), n);
+				if (t.$$typeof === ae) return f(e, Ta(e, t), n);
 				co(e, t);
 			}
 			return null;
@@ -9498,13 +9517,13 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			if (typeof n == "string" && n !== "" || typeof n == "number" || typeof n == "bigint") return i === null ? c(e, t, "" + n, r) : null;
 			if (typeof n == "object" && n) {
 				switch (n.$$typeof) {
-					case E: return n.key === i ? l(e, t, n, r) : null;
-					case D: return n.key === i ? u(e, t, n, r) : null;
-					case se: return n = eo(n), p(e, t, n, r);
+					case te: return n.key === i ? l(e, t, n, r) : null;
+					case E: return n.key === i ? u(e, t, n, r) : null;
+					case k: return n = eo(n), p(e, t, n, r);
 				}
 				if (he(n) || fe(n)) return i === null ? d(e, t, n, r, null) : null;
 				if (typeof n.then == "function") return p(e, t, oo(n), r);
-				if (n.$$typeof === re) return p(e, t, Ta(e, n), r);
+				if (n.$$typeof === ae) return p(e, t, Ta(e, n), r);
 				co(e, n);
 			}
 			return null;
@@ -9513,13 +9532,13 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			if (typeof r == "string" && r !== "" || typeof r == "number" || typeof r == "bigint") return e = e.get(n) || null, c(t, e, "" + r, i);
 			if (typeof r == "object" && r) {
 				switch (r.$$typeof) {
-					case E: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
-					case D: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
-					case se: return r = eo(r), m(e, t, n, r, i);
+					case te: return e = e.get(r.key === null ? n : r.key) || null, l(t, e, r, i);
+					case E: return e = e.get(r.key === null ? n : r.key) || null, u(t, e, r, i);
+					case k: return r = eo(r), m(e, t, n, r, i);
 				}
 				if (he(r) || fe(r)) return e = e.get(n) || null, d(t, e, r, i, null);
 				if (typeof r.then == "function") return m(e, t, n, oo(r), i);
-				if (r.$$typeof === re) return m(e, t, n, Ta(t, r), i);
+				if (r.$$typeof === ae) return m(e, t, n, Ta(t, r), i);
 				co(t, r);
 			}
 			return null;
@@ -9566,18 +9585,18 @@ var Kl = /* @__PURE__ */ o(((e) => {
 			}), B && Zi(a, g), u;
 		}
 		function _(e, r, o, c) {
-			if (typeof o == "object" && o && o.type === O && o.key === null && o.props.ref === void 0 && (o = o.props.children), typeof o == "object" && o) {
+			if (typeof o == "object" && o && o.type === D && o.key === null && o.props.ref === void 0 && (o = o.props.children), typeof o == "object" && o) {
 				switch (o.$$typeof) {
-					case E:
+					case te:
 						a: {
 							for (var l = o.key; r !== null;) {
 								if (r.key === l) {
-									if (l = o.type, l === O) {
+									if (l = o.type, l === D) {
 										if (r.tag === 7) {
 											n(e, r.sibling), c = a(r, o.props.children), so(c, o), c.return = e, e = c;
 											break a;
 										}
-									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === se && eo(l) === r.type) {
+									} else if (r.elementType === l || typeof l == "object" && l && l.$$typeof === k && eo(l) === r.type) {
 										n(e, r.sibling), c = a(r, o.props), so(c, o), c.return = e, e = c;
 										break a;
 									}
@@ -9586,10 +9605,10 @@ var Kl = /* @__PURE__ */ o(((e) => {
 								}
 								t(e, r), r = r.sibling;
 							}
-							o.type === O ? (c = Ii(o.props.children, e.mode, c, o.key), so(c, o), c.return = e, e = c) : (c = Fi(o.type, o.key, o.props, null, e.mode, c), so(c, o), c.return = e, e = c);
+							o.type === D ? (c = Ii(o.props.children, e.mode, c, o.key), so(c, o), c.return = e, e = c) : (c = Fi(o.type, o.key, o.props, null, e.mode, c), so(c, o), c.return = e, e = c);
 						}
 						return s(e);
-					case D:
+					case E:
 						a: {
 							for (l = o.key; r !== null;) {
 								if (r.key === l) {
@@ -9605,7 +9624,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 							c = zi(o, e.mode, c), c.return = e, e = c;
 						}
 						return s(e);
-					case se: return o = eo(o), _(e, r, o, c);
+					case k: return o = eo(o), _(e, r, o, c);
 				}
 				if (he(o)) return h(e, r, o, c);
 				if (fe(o)) {
@@ -9613,7 +9632,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					return o = l.call(o), g(e, r, o, c);
 				}
 				if (typeof o.then == "function") return _(e, r, oo(o), c);
-				if (o.$$typeof === re) return _(e, r, Ta(e, o), c);
+				if (o.$$typeof === ae) return _(e, r, Ta(e, o), c);
 				co(e, o);
 			}
 			return typeof o == "string" && o !== "" || typeof o == "number" || typeof o == "bigint" ? (o = "" + o, r !== null && r.tag === 6 ? (n(e, r.sibling), c = a(r, o), c.return = e, e = c) : (n(e, r), c = Li(o, e.mode, c), c.return = e, e = c), s(e)) : n(e, r);
@@ -9931,8 +9950,8 @@ var Kl = /* @__PURE__ */ o(((e) => {
 	function ls(e) {
 		if (typeof e == "object" && e) {
 			if (typeof e.then == "function") return cs(e);
-			if (e.$$typeof === de) return;
-			if (e.$$typeof === re) return wa(e);
+			if (e.$$typeof === j) return;
+			if (e.$$typeof === ae) return wa(e);
 		}
 		throw Error(i(438, String(e)));
 	}
@@ -9950,7 +9969,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		if (t ??= {
 			data: [],
 			index: 0
-		}, n === null && (n = ss(), V.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = j;
+		}, n === null && (n = ss(), V.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = de;
 		return t.index++, n;
 	}
 	function ds(e, t) {
@@ -11227,15 +11246,15 @@ var Kl = /* @__PURE__ */ o(((e) => {
 					else {
 						if (e != null) {
 							var a = e.$$typeof;
-							if (a === A) {
+							if (a === O) {
 								t.tag = 11, t = Fc(null, t, e, r, n);
 								break a;
 							}
-							if (a === oe) {
+							if (a === ce) {
 								t.tag = 14, t = Ic(null, t, e, r, n);
 								break a;
 							}
-							if (a === re) {
+							if (a === ae) {
 								t.tag = 10, t.type = e, t = cl(null, t, n);
 								break a;
 							}
@@ -15445,7 +15464,7 @@ var Kl = /* @__PURE__ */ o(((e) => {
 		}
 	}
 	var sh = {
-		$$typeof: re,
+		$$typeof: ae,
 		Provider: null,
 		Consumer: null,
 		_currentValue: ge,
@@ -17128,16 +17147,16 @@ function _u(e, t) {
 	}
 }
 function vu() {
-	let [e, t] = (0, d.useState)(1), [n, r] = (0, d.useState)(""), [i, a] = (0, d.useState)(""), [o, s] = (0, d.useState)(0), [c, l] = (0, d.useState)([]), [u, f] = (0, d.useState)({}), [p, m] = (0, d.useState)(() => _u("wishlist", [])), [h, g] = (0, d.useState)(() => _u("bag", [])), [_, v] = (0, d.useState)(""), [b, S] = (0, d.useState)("All"), [C, w] = (0, d.useState)("All"), [T, ee] = (0, d.useState)("All"), [E, D] = (0, d.useState)("Featured"), [O, te] = (0, d.useState)(0), [k, ne] = (0, d.useState)("/"), [re, A] = (0, d.useState)("vto"), [ie, ae] = (0, d.useState)(!1), [oe, se] = (0, d.useState)(""), { identity: ce } = gr(), le = vt(), j = xt(), ue = le.pathname.startsWith("/product/") ? le.pathname.split("/")[2] : "", de = gu.find((e) => e.id === ue), M = gu[o], fe = u[M.id] || "";
+	let [e, t] = (0, d.useState)(1), [n, r] = (0, d.useState)(""), [i, a] = (0, d.useState)(""), [o, s] = (0, d.useState)(0), [c, l] = (0, d.useState)([]), [u, f] = (0, d.useState)({}), [p, m] = (0, d.useState)(() => _u("wishlist", [])), [h, g] = (0, d.useState)(() => _u("bag", [])), [_, v] = (0, d.useState)(""), [b, S] = (0, d.useState)("All"), [C, w] = (0, d.useState)("All"), [T, ee] = (0, d.useState)("All"), [te, E] = (0, d.useState)("Featured"), [D, ne] = (0, d.useState)(0), [re, ie] = (0, d.useState)("/"), [ae, O] = (0, d.useState)("vto"), [oe, se] = (0, d.useState)(!1), [ce, k] = (0, d.useState)(""), { identity: le } = gr(), ue = vt(), de = xt(), A = ue.pathname.startsWith("/product/") ? ue.pathname.split("/")[2] : "", j = gu.find((e) => e.id === A), M = gu[o], fe = u[M.id] || "";
 	(0, d.useEffect)(() => {
-		le.pathname === "/account" ? r("profile") : (ne(le.pathname), window.scrollTo(0, 0)), de && s(gu.findIndex((e) => e.id === de.id));
-	}, [le.pathname]), (0, d.useEffect)(() => {
+		ue.pathname === "/account" ? r("profile") : (ie(ue.pathname), window.scrollTo(0, 0)), j && s(gu.findIndex((e) => e.id === j.id));
+	}, [ue.pathname]), (0, d.useEffect)(() => {
 		[
 			"vto",
 			"size",
 			"compare",
 			"look"
-		].includes(n) && A(n);
+		].includes(n) && O(n);
 	}, [n]), (0, d.useEffect)(() => {
 		localStorage.setItem(G.slug + "wishlist", JSON.stringify(p));
 	}, [p]), (0, d.useEffect)(() => {
@@ -17148,7 +17167,7 @@ function vu() {
 		[M.id]: e
 	}));
 	function me() {
-		r(""), le.pathname === "/account" && j(k);
+		r(""), ue.pathname === "/account" && de(re);
 	}
 	function he(e) {
 		l((t) => t.includes(e) ? t.filter((t) => t !== e) : t.length < 3 ? [...t, e] : t);
@@ -17162,7 +17181,7 @@ function vu() {
 			"size",
 			"compare",
 			"look"
-		].includes(e) && A(e), [
+		].includes(e) && O(e), [
 			"profile",
 			"vto",
 			"size",
@@ -17171,8 +17190,8 @@ function vu() {
 		].includes(e) ? r(e) : a(e);
 	}
 	(0, d.useEffect)(() => {
-		if (ce) {
-			ae(!1);
+		if (le) {
+			se(!1);
 			return;
 		}
 		if (![
@@ -17181,19 +17200,19 @@ function vu() {
 			"look"
 		].includes(n)) return;
 		let e = !0;
-		return ae(!0), se(""), Dr().then((t) => {
+		return se(!0), k(""), Dr().then((t) => {
 			if (!e) return;
 			let n = (G.theme === "kitsune" ? t.find((e) => e.name === "Lucas") : null) || t.find((e) => e.name === "Isabella") || t.find((e) => e.sex === "F") || t[0];
 			if (!n) throw Error("No demo models are available.");
 			yr(Or(n));
 		}).catch((t) => {
-			e && se(t.message || "Unable to connect to the live fitting room.");
+			e && k(t.message || "Unable to connect to the live fitting room.");
 		}).finally(() => {
-			e && ae(!1);
+			e && se(!1);
 		}), () => {
 			e = !1;
 		};
-	}, [n, ce?.id]);
+	}, [n, le?.id]);
 	function ge(e) {
 		l((t) => {
 			let n = t.includes(e) ? t : [e, ...t].slice(0, 3), r = gu.find((t) => t.id !== e && t.previewAvailable !== !1 && !n.includes(t.id));
@@ -17216,7 +17235,7 @@ function vu() {
 	function ve(e) {
 		if (G.theme === "ch") {
 			if (e === "MODE") {
-				ee("All"), j("/");
+				ee("All"), de("/");
 				return;
 			}
 			a("menu");
@@ -17224,20 +17243,20 @@ function vu() {
 		}
 		if (G.theme === "kitsune") {
 			if (e === "NEW IN" || e === "ICONICS") {
-				w(e === "NEW IN" ? "FW26" : "ICONICS"), j("/");
+				w(e === "NEW IN" ? "FW26" : "ICONICS"), de("/");
 				return;
 			}
 			if (e === "MEN") {
-				w("All"), j("/");
+				w("All"), de("/");
 				return;
 			}
 			window.open("https://maisonkitsune.com/fr/" + (e === "WOMEN" ? "woman.html" : e === "ACCESSORIES" ? "accessories-mk.html" : "kitsune-insider"), "_blank", "noopener");
 			return;
 		}
-		ee(e === "DRESSES" ? "Dresses" : "All"), a(""), j("/");
+		ee(e === "DRESSES" ? "Dresses" : "All"), a(""), de("/");
 	}
 	let ye = gu.filter((e) => (T === "All" || e.category === T) && (G.theme !== "kitsune" || (b === "All" || e.fit === b) && (C === "All" || e.collection === C)) && (!_ || e.name.toLowerCase().includes(_.toLowerCase())));
-	E === "Price: low to high" && (ye = [...ye].sort((e, t) => e.price - t.price)), E === "Price: high to low" && (ye = [...ye].sort((e, t) => t.price - e.price));
+	te === "Price: low to high" && (ye = [...ye].sort((e, t) => e.price - t.price)), te === "Price: high to low" && (ye = [...ye].sort((e, t) => t.price - e.price));
 	let be = (e) => /* @__PURE__ */ (0, y.jsx)(cu, {
 		g: e,
 		wished: p.includes(e.id),
@@ -17251,7 +17270,7 @@ function vu() {
 		}
 	}, e.id);
 	return /* @__PURE__ */ (0, y.jsxs)("div", {
-		className: `partner-page retail-page ${G.theme} ${de && G.theme === "ch" ? "ch-product-page" : ""}`,
+		className: `partner-page retail-page ${G.theme} ${j && G.theme === "ch" ? "ch-product-page" : ""}`,
 		children: [
 			/* @__PURE__ */ (0, y.jsx)(ou, {
 				theme: G.theme,
@@ -17260,13 +17279,13 @@ function vu() {
 				count: h.reduce((e, t) => e + t.quantity, 0),
 				onNav: ve
 			}),
-			/* @__PURE__ */ (0, y.jsxs)("main", { children: [!de && G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)("div", {
+			/* @__PURE__ */ (0, y.jsxs)("main", { children: [!j && G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)("div", {
 				className: "ch-hero",
 				children: /* @__PURE__ */ (0, y.jsx)("img", {
 					src: "./assets/5d70fbbb2227e4d3.jpg",
 					alt: "Collection Carolina Herrera"
 				})
-			}), de ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
+			}), j ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [
 				/* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "retail-breadcrumb",
 					children: [
@@ -17277,41 +17296,41 @@ function vu() {
 						/* @__PURE__ */ (0, y.jsx)("span", { children: "/" }),
 						/* @__PURE__ */ (0, y.jsx)(Dn, {
 							to: "/",
-							children: de.category
+							children: j.category
 						}),
 						/* @__PURE__ */ (0, y.jsx)("span", { children: "/" }),
-						/* @__PURE__ */ (0, y.jsx)("span", { children: de.name.split(" - ")[0] })
+						/* @__PURE__ */ (0, y.jsx)("span", { children: j.name.split(" - ")[0] })
 					]
 				}),
 				/* @__PURE__ */ (0, y.jsxs)("div", {
 					className: "retail-pdp",
 					children: [/* @__PURE__ */ (0, y.jsx)(du, {
-						g: de,
+						g: j,
 						onZoom: (e) => {
-							te(e), t(1), a("zoom");
+							ne(e), t(1), a("zoom");
 						}
 					}), /* @__PURE__ */ (0, y.jsx)(pu, {
-						g: de,
+						g: j,
 						theme: G.theme,
-						size: u[de.id] || "",
+						size: u[j.id] || "",
 						onSize: (e) => f((t) => ({
 							...t,
-							[de.id]: e
+							[j.id]: e
 						})),
 						onPanel: P,
 						onBag: _e,
-						wished: p.includes(de.id),
-						onWish: () => N(de.id),
-						picked: c.includes(de.id),
-						onCompare: () => ge(de.id)
+						wished: p.includes(j.id),
+						onWish: () => N(j.id),
+						picked: c.includes(j.id),
+						onCompare: () => ge(j.id)
 					})]
 				}),
-				G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)(hu, { g: de }),
+				G.theme === "ch" && /* @__PURE__ */ (0, y.jsx)(hu, { g: j }),
 				/* @__PURE__ */ (0, y.jsxs)("section", {
 					className: "retail-related",
 					children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: G.theme === "sh" ? "RELATED PRODUCTS" : G.theme === "ch" ? "Compléter la silhouette." : "YOU MAY ALSO LIKE" }), /* @__PURE__ */ (0, y.jsx)("div", {
 						className: "retail-grid",
-						children: gu.filter((e) => e.id !== de.id).map(be)
+						children: gu.filter((e) => e.id !== j.id).map(be)
 					})]
 				})
 			] }) : /* @__PURE__ */ (0, y.jsxs)("section", {
@@ -17380,8 +17399,8 @@ function vu() {
 							}, e)) }),
 							/* @__PURE__ */ (0, y.jsxs)("label", { children: ["Sort ", /* @__PURE__ */ (0, y.jsx)("select", {
 								"aria-label": "Sort products",
-								value: E,
-								onChange: (e) => D(e.target.value),
+								value: te,
+								onChange: (e) => E(e.target.value),
 								children: [
 									"Featured",
 									"Price: low to high",
@@ -17456,27 +17475,38 @@ function vu() {
 						className: "partner-dialog-body",
 						children: [n !== "profile" && n !== "vto" && n !== "size" && /* @__PURE__ */ (0, y.jsx)("div", {
 							className: "partner-connection-status",
-							children: ie ? "Connecting your live demo model…" : ce ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("span", { children: [
+							children: oe ? "Connecting your live demo model…" : le ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("span", { children: [
 								"Viewing on ",
-								ce.name,
+								le.name,
 								" · SPREEAI model"
 							] }), /* @__PURE__ */ (0, y.jsx)("button", {
 								onClick: () => {
-									A(n), r("profile");
+									O(n), r("profile");
 								},
 								children: "Change model / add my photo"
-							})] }) : oe ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("p", {
+							})] }) : ce ? /* @__PURE__ */ (0, y.jsxs)(y.Fragment, { children: [/* @__PURE__ */ (0, y.jsxs)("p", {
 								role: "alert",
-								children: [oe, " Live previews require a connection to SPREEAI staging."]
+								children: [ce, " Live previews require a connection to SPREEAI staging."]
 							}), /* @__PURE__ */ (0, y.jsx)("button", {
 								onClick: () => {
-									A(n), r("profile");
+									O(n), r("profile");
 								},
 								children: "Choose a model or photo"
 							})] }) : null
 						}), n === "profile" ? /* @__PURE__ */ (0, y.jsx)(Nl, {
-							initialSource: ce?.kind === "twin" ? "twin" : "photo",
-							savedLooks: /* @__PURE__ */ (0, y.jsx)(Hl, {
+							saveOnly: G.theme === "ch",
+							initialSource: le?.kind === "twin" ? "twin" : "photo",
+							savedLooks: G.theme === "ch" ? /* @__PURE__ */ (0, y.jsxs)("div", { children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: "Saved pieces." }), p.length ? /* @__PURE__ */ (0, y.jsx)("div", {
+								className: "retail-mini-grid",
+								children: gu.filter((e) => p.includes(e.id)).map((e) => /* @__PURE__ */ (0, y.jsxs)(Dn, {
+									to: "/product/" + e.id,
+									onClick: me,
+									children: [/* @__PURE__ */ (0, y.jsx)("img", {
+										src: e.image,
+										alt: e.name
+									}), /* @__PURE__ */ (0, y.jsx)("h3", { children: e.name })]
+								}, e.id))
+							}) : /* @__PURE__ */ (0, y.jsx)("p", { children: "Tap a heart on a garment to save it here." })] }) : /* @__PURE__ */ (0, y.jsx)(Hl, {
 								product: M,
 								selectedSize: fe,
 								onSize: pe,
@@ -17488,7 +17518,7 @@ function vu() {
 								}
 							}),
 							onDone: () => {
-								j(k), r(re);
+								G.theme === "ch" ? me() : (de(re), r(ae));
 							}
 						}) : n === "look" ? /* @__PURE__ */ (0, y.jsx)(Hl, {
 							product: M,
@@ -17551,13 +17581,13 @@ function vu() {
 							})
 						] }) : /* @__PURE__ */ (0, y.jsxs)("div", {
 							className: "partner-product-view",
-							children: [ce ? /* @__PURE__ */ (0, y.jsx)(Mi, {
+							children: [le ? /* @__PURE__ */ (0, y.jsx)(Mi, {
 								product: M,
 								selectedSize: fe
 							}) : /* @__PURE__ */ (0, y.jsxs)("div", {
 								className: "ch-tryon-connecting",
 								role: "status",
-								children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: "Preparing your try-on…" }), /* @__PURE__ */ (0, y.jsx)("p", { children: oe || "Connecting your demo model." })]
+								children: [/* @__PURE__ */ (0, y.jsx)("h2", { children: "Preparing your try-on…" }), /* @__PURE__ */ (0, y.jsx)("p", { children: ce || "Connecting your demo model." })]
 							}), G.theme !== "ch" && /* @__PURE__ */ (0, y.jsxs)("div", {
 								className: "partner-product-copy",
 								children: [
@@ -17651,24 +17681,24 @@ function vu() {
 											transform: `scale(${e})`,
 											transformOrigin: "center"
 										},
-										src: M.gallery?.[O] || M.model,
-										alt: M.name + " image " + (O + 1)
+										src: M.gallery?.[D] || M.model,
+										alt: M.name + " image " + (D + 1)
 									})
 								}),
 								/* @__PURE__ */ (0, y.jsxs)("div", { children: [
 									/* @__PURE__ */ (0, y.jsx)("button", {
 										"aria-label": "Previous enlarged image",
-										onClick: () => te((e) => (e + (M.gallery?.length || 1) - 1) % (M.gallery?.length || 1)),
+										onClick: () => ne((e) => (e + (M.gallery?.length || 1) - 1) % (M.gallery?.length || 1)),
 										children: "Previous"
 									}),
 									/* @__PURE__ */ (0, y.jsxs)("span", { children: [
-										O + 1,
+										D + 1,
 										" / ",
 										M.gallery?.length || 1
 									] }),
 									/* @__PURE__ */ (0, y.jsx)("button", {
 										"aria-label": "Next enlarged image",
-										onClick: () => te((e) => (e + 1) % (M.gallery?.length || 1)),
+										onClick: () => ne((e) => (e + 1) % (M.gallery?.length || 1)),
 										children: "Next"
 									})
 								] })
@@ -17748,7 +17778,7 @@ function vu() {
 							className: "retail-menu-links",
 							children: ["All pieces", ...new Set(gu.map((e) => e.category))].map((e) => /* @__PURE__ */ (0, y.jsxs)("button", {
 								onClick: () => {
-									ee(e === "All pieces" ? "All" : e), j("/"), a("");
+									ee(e === "All pieces" ? "All" : e), de("/"), a("");
 								},
 								children: [e, " "]
 							}, e))
